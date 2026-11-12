@@ -29,11 +29,6 @@ export type Form = $Result.DefaultSelection<Prisma.$FormPayload>
  */
 export type FormSubmission = $Result.DefaultSelection<Prisma.$FormSubmissionPayload>
 /**
- * Model Task
- * 
- */
-export type Task = $Result.DefaultSelection<Prisma.$TaskPayload>
-/**
  * Model Record
  * 
  */
@@ -158,21 +153,6 @@ export type InitialStockEntry = $Result.DefaultSelection<Prisma.$InitialStockEnt
  * 
  */
 export type AuditLog = $Result.DefaultSelection<Prisma.$AuditLogPayload>
-/**
- * Model TaskTemplate
- * 
- */
-export type TaskTemplate = $Result.DefaultSelection<Prisma.$TaskTemplatePayload>
-/**
- * Model TaskInstance
- * 
- */
-export type TaskInstance = $Result.DefaultSelection<Prisma.$TaskInstancePayload>
-/**
- * Model TaskHistory
- * 
- */
-export type TaskHistory = $Result.DefaultSelection<Prisma.$TaskHistoryPayload>
 /**
  * Model StockAlertAcknowledgment
  * 
@@ -341,37 +321,6 @@ export const SubmissionStatus: {
 export type SubmissionStatus = (typeof SubmissionStatus)[keyof typeof SubmissionStatus]
 
 
-export const TaskStatus: {
-  PENDING: 'PENDING',
-  IN_PROGRESS: 'IN_PROGRESS',
-  COMPLETED: 'COMPLETED',
-  OVERDUE: 'OVERDUE',
-  CANCELLED: 'CANCELLED'
-};
-
-export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus]
-
-
-export const TaskPriority: {
-  LOW: 'LOW',
-  MEDIUM: 'MEDIUM',
-  HIGH: 'HIGH',
-  CRITICAL: 'CRITICAL'
-};
-
-export type TaskPriority = (typeof TaskPriority)[keyof typeof TaskPriority]
-
-
-export const RecurrenceType: {
-  NONE: 'NONE',
-  DAILY: 'DAILY',
-  WEEKLY: 'WEEKLY',
-  MONTHLY: 'MONTHLY'
-};
-
-export type RecurrenceType = (typeof RecurrenceType)[keyof typeof RecurrenceType]
-
-
 export const PreOpShift: {
   AM: 'AM',
   PM: 'PM'
@@ -446,73 +395,6 @@ export const RequirementType: {
 export type RequirementType = (typeof RequirementType)[keyof typeof RequirementType]
 
 
-export const TaskTemplateCategory: {
-  sanitation: 'sanitation',
-  inspection: 'inspection',
-  production: 'production',
-  receiving_inventory: 'receiving_inventory',
-  documentation_compliance: 'documentation_compliance',
-  facility_maintenance: 'facility_maintenance',
-  administrative: 'administrative'
-};
-
-export type TaskTemplateCategory = (typeof TaskTemplateCategory)[keyof typeof TaskTemplateCategory]
-
-
-export const TaskTemplatePriority: {
-  high: 'high',
-  normal: 'normal',
-  low: 'low'
-};
-
-export type TaskTemplatePriority = (typeof TaskTemplatePriority)[keyof typeof TaskTemplatePriority]
-
-
-export const TaskTemplateType: {
-  manual: 'manual',
-  form_linked: 'form_linked'
-};
-
-export type TaskTemplateType = (typeof TaskTemplateType)[keyof typeof TaskTemplateType]
-
-
-export const TaskRecurrenceType: {
-  one_time: 'one_time',
-  daily: 'daily',
-  weekly: 'weekly',
-  biweekly: 'biweekly',
-  monthly: 'monthly',
-  every_2_months: 'every_2_months',
-  quarterly: 'quarterly',
-  every_6_months: 'every_6_months',
-  annual: 'annual',
-  custom: 'custom'
-};
-
-export type TaskRecurrenceType = (typeof TaskRecurrenceType)[keyof typeof TaskRecurrenceType]
-
-
-export const TaskInstanceStatus: {
-  pending: 'pending',
-  complete: 'complete',
-  overdue: 'overdue',
-  skipped: 'skipped'
-};
-
-export type TaskInstanceStatus = (typeof TaskInstanceStatus)[keyof typeof TaskInstanceStatus]
-
-
-export const TaskHistoryAction: {
-  created: 'created',
-  completed: 'completed',
-  skipped: 'skipped',
-  overdue: 'overdue',
-  next_instance_generated: 'next_instance_generated'
-};
-
-export type TaskHistoryAction = (typeof TaskHistoryAction)[keyof typeof TaskHistoryAction]
-
-
 export const TaskRuleTriggerType: {
   RECURRING: 'RECURRING',
   PRODUCTION_DAY: 'PRODUCTION_DAY',
@@ -556,18 +438,6 @@ export type SubmissionStatus = $Enums.SubmissionStatus
 
 export const SubmissionStatus: typeof $Enums.SubmissionStatus
 
-export type TaskStatus = $Enums.TaskStatus
-
-export const TaskStatus: typeof $Enums.TaskStatus
-
-export type TaskPriority = $Enums.TaskPriority
-
-export const TaskPriority: typeof $Enums.TaskPriority
-
-export type RecurrenceType = $Enums.RecurrenceType
-
-export const RecurrenceType: typeof $Enums.RecurrenceType
-
 export type PreOpShift = $Enums.PreOpShift
 
 export const PreOpShift: typeof $Enums.PreOpShift
@@ -599,30 +469,6 @@ export const SupplierStatus: typeof $Enums.SupplierStatus
 export type RequirementType = $Enums.RequirementType
 
 export const RequirementType: typeof $Enums.RequirementType
-
-export type TaskTemplateCategory = $Enums.TaskTemplateCategory
-
-export const TaskTemplateCategory: typeof $Enums.TaskTemplateCategory
-
-export type TaskTemplatePriority = $Enums.TaskTemplatePriority
-
-export const TaskTemplatePriority: typeof $Enums.TaskTemplatePriority
-
-export type TaskTemplateType = $Enums.TaskTemplateType
-
-export const TaskTemplateType: typeof $Enums.TaskTemplateType
-
-export type TaskRecurrenceType = $Enums.TaskRecurrenceType
-
-export const TaskRecurrenceType: typeof $Enums.TaskRecurrenceType
-
-export type TaskInstanceStatus = $Enums.TaskInstanceStatus
-
-export const TaskInstanceStatus: typeof $Enums.TaskInstanceStatus
-
-export type TaskHistoryAction = $Enums.TaskHistoryAction
-
-export const TaskHistoryAction: typeof $Enums.TaskHistoryAction
 
 export type TaskRuleTriggerType = $Enums.TaskRuleTriggerType
 
@@ -788,16 +634,6 @@ export class PrismaClient<
     * ```
     */
   get formSubmission(): Prisma.FormSubmissionDelegate<ExtArgs>;
-
-  /**
-   * `prisma.task`: Exposes CRUD operations for the **Task** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Tasks
-    * const tasks = await prisma.task.findMany()
-    * ```
-    */
-  get task(): Prisma.TaskDelegate<ExtArgs>;
 
   /**
    * `prisma.record`: Exposes CRUD operations for the **Record** model.
@@ -1048,36 +884,6 @@ export class PrismaClient<
     * ```
     */
   get auditLog(): Prisma.AuditLogDelegate<ExtArgs>;
-
-  /**
-   * `prisma.taskTemplate`: Exposes CRUD operations for the **TaskTemplate** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more TaskTemplates
-    * const taskTemplates = await prisma.taskTemplate.findMany()
-    * ```
-    */
-  get taskTemplate(): Prisma.TaskTemplateDelegate<ExtArgs>;
-
-  /**
-   * `prisma.taskInstance`: Exposes CRUD operations for the **TaskInstance** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more TaskInstances
-    * const taskInstances = await prisma.taskInstance.findMany()
-    * ```
-    */
-  get taskInstance(): Prisma.TaskInstanceDelegate<ExtArgs>;
-
-  /**
-   * `prisma.taskHistory`: Exposes CRUD operations for the **TaskHistory** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more TaskHistories
-    * const taskHistories = await prisma.taskHistory.findMany()
-    * ```
-    */
-  get taskHistory(): Prisma.TaskHistoryDelegate<ExtArgs>;
 
   /**
    * `prisma.stockAlertAcknowledgment`: Exposes CRUD operations for the **StockAlertAcknowledgment** model.
@@ -1812,7 +1618,6 @@ export namespace Prisma {
     User: 'User',
     Form: 'Form',
     FormSubmission: 'FormSubmission',
-    Task: 'Task',
     Record: 'Record',
     PreOpInspection: 'PreOpInspection',
     BatchSheetTemplate: 'BatchSheetTemplate',
@@ -1838,9 +1643,6 @@ export namespace Prisma {
     CycleCount: 'CycleCount',
     InitialStockEntry: 'InitialStockEntry',
     AuditLog: 'AuditLog',
-    TaskTemplate: 'TaskTemplate',
-    TaskInstance: 'TaskInstance',
-    TaskHistory: 'TaskHistory',
     StockAlertAcknowledgment: 'StockAlertAcknowledgment',
     ForecastExclusion: 'ForecastExclusion',
     InventoryAuditExclusion: 'InventoryAuditExclusion',
@@ -1885,7 +1687,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "task" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "taskTemplate" | "taskInstance" | "taskHistory" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "notification"
+      modelProps: "user" | "form" | "formSubmission" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2096,76 +1898,6 @@ export namespace Prisma {
           count: {
             args: Prisma.FormSubmissionCountArgs<ExtArgs>
             result: $Utils.Optional<FormSubmissionCountAggregateOutputType> | number
-          }
-        }
-      }
-      Task: {
-        payload: Prisma.$TaskPayload<ExtArgs>
-        fields: Prisma.TaskFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.TaskFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.TaskFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
-          }
-          findFirst: {
-            args: Prisma.TaskFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.TaskFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
-          }
-          findMany: {
-            args: Prisma.TaskFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskPayload>[]
-          }
-          create: {
-            args: Prisma.TaskCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
-          }
-          createMany: {
-            args: Prisma.TaskCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.TaskCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskPayload>[]
-          }
-          delete: {
-            args: Prisma.TaskDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
-          }
-          update: {
-            args: Prisma.TaskUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
-          }
-          deleteMany: {
-            args: Prisma.TaskDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.TaskUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.TaskUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskPayload>
-          }
-          aggregate: {
-            args: Prisma.TaskAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateTask>
-          }
-          groupBy: {
-            args: Prisma.TaskGroupByArgs<ExtArgs>
-            result: $Utils.Optional<TaskGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.TaskCountArgs<ExtArgs>
-            result: $Utils.Optional<TaskCountAggregateOutputType> | number
           }
         }
       }
@@ -3916,216 +3648,6 @@ export namespace Prisma {
           count: {
             args: Prisma.AuditLogCountArgs<ExtArgs>
             result: $Utils.Optional<AuditLogCountAggregateOutputType> | number
-          }
-        }
-      }
-      TaskTemplate: {
-        payload: Prisma.$TaskTemplatePayload<ExtArgs>
-        fields: Prisma.TaskTemplateFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.TaskTemplateFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.TaskTemplateFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>
-          }
-          findFirst: {
-            args: Prisma.TaskTemplateFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.TaskTemplateFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>
-          }
-          findMany: {
-            args: Prisma.TaskTemplateFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>[]
-          }
-          create: {
-            args: Prisma.TaskTemplateCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>
-          }
-          createMany: {
-            args: Prisma.TaskTemplateCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.TaskTemplateCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>[]
-          }
-          delete: {
-            args: Prisma.TaskTemplateDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>
-          }
-          update: {
-            args: Prisma.TaskTemplateUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>
-          }
-          deleteMany: {
-            args: Prisma.TaskTemplateDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.TaskTemplateUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.TaskTemplateUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskTemplatePayload>
-          }
-          aggregate: {
-            args: Prisma.TaskTemplateAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateTaskTemplate>
-          }
-          groupBy: {
-            args: Prisma.TaskTemplateGroupByArgs<ExtArgs>
-            result: $Utils.Optional<TaskTemplateGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.TaskTemplateCountArgs<ExtArgs>
-            result: $Utils.Optional<TaskTemplateCountAggregateOutputType> | number
-          }
-        }
-      }
-      TaskInstance: {
-        payload: Prisma.$TaskInstancePayload<ExtArgs>
-        fields: Prisma.TaskInstanceFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.TaskInstanceFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskInstancePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.TaskInstanceFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskInstancePayload>
-          }
-          findFirst: {
-            args: Prisma.TaskInstanceFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskInstancePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.TaskInstanceFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskInstancePayload>
-          }
-          findMany: {
-            args: Prisma.TaskInstanceFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskInstancePayload>[]
-          }
-          create: {
-            args: Prisma.TaskInstanceCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskInstancePayload>
-          }
-          createMany: {
-            args: Prisma.TaskInstanceCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.TaskInstanceCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskInstancePayload>[]
-          }
-          delete: {
-            args: Prisma.TaskInstanceDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskInstancePayload>
-          }
-          update: {
-            args: Prisma.TaskInstanceUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskInstancePayload>
-          }
-          deleteMany: {
-            args: Prisma.TaskInstanceDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.TaskInstanceUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.TaskInstanceUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskInstancePayload>
-          }
-          aggregate: {
-            args: Prisma.TaskInstanceAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateTaskInstance>
-          }
-          groupBy: {
-            args: Prisma.TaskInstanceGroupByArgs<ExtArgs>
-            result: $Utils.Optional<TaskInstanceGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.TaskInstanceCountArgs<ExtArgs>
-            result: $Utils.Optional<TaskInstanceCountAggregateOutputType> | number
-          }
-        }
-      }
-      TaskHistory: {
-        payload: Prisma.$TaskHistoryPayload<ExtArgs>
-        fields: Prisma.TaskHistoryFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.TaskHistoryFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskHistoryPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.TaskHistoryFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskHistoryPayload>
-          }
-          findFirst: {
-            args: Prisma.TaskHistoryFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskHistoryPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.TaskHistoryFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskHistoryPayload>
-          }
-          findMany: {
-            args: Prisma.TaskHistoryFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskHistoryPayload>[]
-          }
-          create: {
-            args: Prisma.TaskHistoryCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskHistoryPayload>
-          }
-          createMany: {
-            args: Prisma.TaskHistoryCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.TaskHistoryCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskHistoryPayload>[]
-          }
-          delete: {
-            args: Prisma.TaskHistoryDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskHistoryPayload>
-          }
-          update: {
-            args: Prisma.TaskHistoryUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskHistoryPayload>
-          }
-          deleteMany: {
-            args: Prisma.TaskHistoryDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.TaskHistoryUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.TaskHistoryUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TaskHistoryPayload>
-          }
-          aggregate: {
-            args: Prisma.TaskHistoryAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateTaskHistory>
-          }
-          groupBy: {
-            args: Prisma.TaskHistoryGroupByArgs<ExtArgs>
-            result: $Utils.Optional<TaskHistoryGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.TaskHistoryCountArgs<ExtArgs>
-            result: $Utils.Optional<TaskHistoryCountAggregateOutputType> | number
           }
         }
       }
@@ -6323,8 +5845,6 @@ export namespace Prisma {
     createdForms: number
     submissions: number
     approvedSubmissions: number
-    assignedTasks: number
-    createdTasks: number
     records: number
     preOpInspections: number
     batchSheetSubmissions: number
@@ -6338,10 +5858,6 @@ export namespace Prisma {
     cycleCounts: number
     formTemplates: number
     initialStockEntries: number
-    createdTaskTemplates: number
-    completedTaskInstances: number
-    skippedTaskInstances: number
-    taskHistoryActions: number
     forecastExclusions: number
     auditExclusions: number
     stockAlertAcknowledgments: number
@@ -6366,8 +5882,6 @@ export namespace Prisma {
     createdForms?: boolean | UserCountOutputTypeCountCreatedFormsArgs
     submissions?: boolean | UserCountOutputTypeCountSubmissionsArgs
     approvedSubmissions?: boolean | UserCountOutputTypeCountApprovedSubmissionsArgs
-    assignedTasks?: boolean | UserCountOutputTypeCountAssignedTasksArgs
-    createdTasks?: boolean | UserCountOutputTypeCountCreatedTasksArgs
     records?: boolean | UserCountOutputTypeCountRecordsArgs
     preOpInspections?: boolean | UserCountOutputTypeCountPreOpInspectionsArgs
     batchSheetSubmissions?: boolean | UserCountOutputTypeCountBatchSheetSubmissionsArgs
@@ -6381,10 +5895,6 @@ export namespace Prisma {
     cycleCounts?: boolean | UserCountOutputTypeCountCycleCountsArgs
     formTemplates?: boolean | UserCountOutputTypeCountFormTemplatesArgs
     initialStockEntries?: boolean | UserCountOutputTypeCountInitialStockEntriesArgs
-    createdTaskTemplates?: boolean | UserCountOutputTypeCountCreatedTaskTemplatesArgs
-    completedTaskInstances?: boolean | UserCountOutputTypeCountCompletedTaskInstancesArgs
-    skippedTaskInstances?: boolean | UserCountOutputTypeCountSkippedTaskInstancesArgs
-    taskHistoryActions?: boolean | UserCountOutputTypeCountTaskHistoryActionsArgs
     forecastExclusions?: boolean | UserCountOutputTypeCountForecastExclusionsArgs
     auditExclusions?: boolean | UserCountOutputTypeCountAuditExclusionsArgs
     stockAlertAcknowledgments?: boolean | UserCountOutputTypeCountStockAlertAcknowledgmentsArgs
@@ -6435,20 +5945,6 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountApprovedSubmissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FormSubmissionWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountAssignedTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TaskWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountCreatedTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TaskWhereInput
   }
 
   /**
@@ -6540,34 +6036,6 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountInitialStockEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InitialStockEntryWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountCreatedTaskTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TaskTemplateWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountCompletedTaskInstancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TaskInstanceWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountSkippedTaskInstancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TaskInstanceWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountTaskHistoryActionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TaskHistoryWhereInput
   }
 
   /**
@@ -6703,12 +6171,10 @@ export namespace Prisma {
 
   export type FormCountOutputType = {
     submissions: number
-    tasks: number
   }
 
   export type FormCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     submissions?: boolean | FormCountOutputTypeCountSubmissionsArgs
-    tasks?: boolean | FormCountOutputTypeCountTasksArgs
   }
 
   // Custom InputTypes
@@ -6726,44 +6192,6 @@ export namespace Prisma {
    * FormCountOutputType without action
    */
   export type FormCountOutputTypeCountSubmissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FormSubmissionWhereInput
-  }
-
-  /**
-   * FormCountOutputType without action
-   */
-  export type FormCountOutputTypeCountTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TaskWhereInput
-  }
-
-
-  /**
-   * Count Type TaskCountOutputType
-   */
-
-  export type TaskCountOutputType = {
-    submissions: number
-  }
-
-  export type TaskCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    submissions?: boolean | TaskCountOutputTypeCountSubmissionsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * TaskCountOutputType without action
-   */
-  export type TaskCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskCountOutputType
-     */
-    select?: TaskCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * TaskCountOutputType without action
-   */
-  export type TaskCountOutputTypeCountSubmissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FormSubmissionWhereInput
   }
 
@@ -7278,68 +6706,6 @@ export namespace Prisma {
    */
   export type InventoryLotCountOutputTypeCountCycleCountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CycleCountWhereInput
-  }
-
-
-  /**
-   * Count Type TaskTemplateCountOutputType
-   */
-
-  export type TaskTemplateCountOutputType = {
-    instances: number
-  }
-
-  export type TaskTemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    instances?: boolean | TaskTemplateCountOutputTypeCountInstancesArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * TaskTemplateCountOutputType without action
-   */
-  export type TaskTemplateCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskTemplateCountOutputType
-     */
-    select?: TaskTemplateCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * TaskTemplateCountOutputType without action
-   */
-  export type TaskTemplateCountOutputTypeCountInstancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TaskInstanceWhereInput
-  }
-
-
-  /**
-   * Count Type TaskInstanceCountOutputType
-   */
-
-  export type TaskInstanceCountOutputType = {
-    history: number
-  }
-
-  export type TaskInstanceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    history?: boolean | TaskInstanceCountOutputTypeCountHistoryArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * TaskInstanceCountOutputType without action
-   */
-  export type TaskInstanceCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskInstanceCountOutputType
-     */
-    select?: TaskInstanceCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * TaskInstanceCountOutputType without action
-   */
-  export type TaskInstanceCountOutputTypeCountHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TaskHistoryWhereInput
   }
 
 
@@ -7919,8 +7285,6 @@ export namespace Prisma {
     createdForms?: boolean | User$createdFormsArgs<ExtArgs>
     submissions?: boolean | User$submissionsArgs<ExtArgs>
     approvedSubmissions?: boolean | User$approvedSubmissionsArgs<ExtArgs>
-    assignedTasks?: boolean | User$assignedTasksArgs<ExtArgs>
-    createdTasks?: boolean | User$createdTasksArgs<ExtArgs>
     records?: boolean | User$recordsArgs<ExtArgs>
     preOpInspections?: boolean | User$preOpInspectionsArgs<ExtArgs>
     batchSheetSubmissions?: boolean | User$batchSheetSubmissionsArgs<ExtArgs>
@@ -7934,10 +7298,6 @@ export namespace Prisma {
     cycleCounts?: boolean | User$cycleCountsArgs<ExtArgs>
     formTemplates?: boolean | User$formTemplatesArgs<ExtArgs>
     initialStockEntries?: boolean | User$initialStockEntriesArgs<ExtArgs>
-    createdTaskTemplates?: boolean | User$createdTaskTemplatesArgs<ExtArgs>
-    completedTaskInstances?: boolean | User$completedTaskInstancesArgs<ExtArgs>
-    skippedTaskInstances?: boolean | User$skippedTaskInstancesArgs<ExtArgs>
-    taskHistoryActions?: boolean | User$taskHistoryActionsArgs<ExtArgs>
     forecastExclusions?: boolean | User$forecastExclusionsArgs<ExtArgs>
     auditExclusions?: boolean | User$auditExclusionsArgs<ExtArgs>
     stockAlertAcknowledgments?: boolean | User$stockAlertAcknowledgmentsArgs<ExtArgs>
@@ -7987,8 +7347,6 @@ export namespace Prisma {
     createdForms?: boolean | User$createdFormsArgs<ExtArgs>
     submissions?: boolean | User$submissionsArgs<ExtArgs>
     approvedSubmissions?: boolean | User$approvedSubmissionsArgs<ExtArgs>
-    assignedTasks?: boolean | User$assignedTasksArgs<ExtArgs>
-    createdTasks?: boolean | User$createdTasksArgs<ExtArgs>
     records?: boolean | User$recordsArgs<ExtArgs>
     preOpInspections?: boolean | User$preOpInspectionsArgs<ExtArgs>
     batchSheetSubmissions?: boolean | User$batchSheetSubmissionsArgs<ExtArgs>
@@ -8002,10 +7360,6 @@ export namespace Prisma {
     cycleCounts?: boolean | User$cycleCountsArgs<ExtArgs>
     formTemplates?: boolean | User$formTemplatesArgs<ExtArgs>
     initialStockEntries?: boolean | User$initialStockEntriesArgs<ExtArgs>
-    createdTaskTemplates?: boolean | User$createdTaskTemplatesArgs<ExtArgs>
-    completedTaskInstances?: boolean | User$completedTaskInstancesArgs<ExtArgs>
-    skippedTaskInstances?: boolean | User$skippedTaskInstancesArgs<ExtArgs>
-    taskHistoryActions?: boolean | User$taskHistoryActionsArgs<ExtArgs>
     forecastExclusions?: boolean | User$forecastExclusionsArgs<ExtArgs>
     auditExclusions?: boolean | User$auditExclusionsArgs<ExtArgs>
     stockAlertAcknowledgments?: boolean | User$stockAlertAcknowledgmentsArgs<ExtArgs>
@@ -8034,8 +7388,6 @@ export namespace Prisma {
       createdForms: Prisma.$FormPayload<ExtArgs>[]
       submissions: Prisma.$FormSubmissionPayload<ExtArgs>[]
       approvedSubmissions: Prisma.$FormSubmissionPayload<ExtArgs>[]
-      assignedTasks: Prisma.$TaskPayload<ExtArgs>[]
-      createdTasks: Prisma.$TaskPayload<ExtArgs>[]
       records: Prisma.$RecordPayload<ExtArgs>[]
       preOpInspections: Prisma.$PreOpInspectionPayload<ExtArgs>[]
       batchSheetSubmissions: Prisma.$BatchSheetSubmissionPayload<ExtArgs>[]
@@ -8049,10 +7401,6 @@ export namespace Prisma {
       cycleCounts: Prisma.$CycleCountPayload<ExtArgs>[]
       formTemplates: Prisma.$FormTemplatePayload<ExtArgs>[]
       initialStockEntries: Prisma.$InitialStockEntryPayload<ExtArgs>[]
-      createdTaskTemplates: Prisma.$TaskTemplatePayload<ExtArgs>[]
-      completedTaskInstances: Prisma.$TaskInstancePayload<ExtArgs>[]
-      skippedTaskInstances: Prisma.$TaskInstancePayload<ExtArgs>[]
-      taskHistoryActions: Prisma.$TaskHistoryPayload<ExtArgs>[]
       forecastExclusions: Prisma.$ForecastExclusionPayload<ExtArgs>[]
       auditExclusions: Prisma.$InventoryAuditExclusionPayload<ExtArgs>[]
       stockAlertAcknowledgments: Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>[]
@@ -8449,8 +7797,6 @@ export namespace Prisma {
     createdForms<T extends User$createdFormsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdFormsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, "findMany"> | Null>
     submissions<T extends User$submissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormSubmissionPayload<ExtArgs>, T, "findMany"> | Null>
     approvedSubmissions<T extends User$approvedSubmissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$approvedSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormSubmissionPayload<ExtArgs>, T, "findMany"> | Null>
-    assignedTasks<T extends User$assignedTasksArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedTasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany"> | Null>
-    createdTasks<T extends User$createdTasksArgs<ExtArgs> = {}>(args?: Subset<T, User$createdTasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany"> | Null>
     records<T extends User$recordsArgs<ExtArgs> = {}>(args?: Subset<T, User$recordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecordPayload<ExtArgs>, T, "findMany"> | Null>
     preOpInspections<T extends User$preOpInspectionsArgs<ExtArgs> = {}>(args?: Subset<T, User$preOpInspectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreOpInspectionPayload<ExtArgs>, T, "findMany"> | Null>
     batchSheetSubmissions<T extends User$batchSheetSubmissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$batchSheetSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchSheetSubmissionPayload<ExtArgs>, T, "findMany"> | Null>
@@ -8464,10 +7810,6 @@ export namespace Prisma {
     cycleCounts<T extends User$cycleCountsArgs<ExtArgs> = {}>(args?: Subset<T, User$cycleCountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CycleCountPayload<ExtArgs>, T, "findMany"> | Null>
     formTemplates<T extends User$formTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$formTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormTemplatePayload<ExtArgs>, T, "findMany"> | Null>
     initialStockEntries<T extends User$initialStockEntriesArgs<ExtArgs> = {}>(args?: Subset<T, User$initialStockEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InitialStockEntryPayload<ExtArgs>, T, "findMany"> | Null>
-    createdTaskTemplates<T extends User$createdTaskTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$createdTaskTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, "findMany"> | Null>
-    completedTaskInstances<T extends User$completedTaskInstancesArgs<ExtArgs> = {}>(args?: Subset<T, User$completedTaskInstancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "findMany"> | Null>
-    skippedTaskInstances<T extends User$skippedTaskInstancesArgs<ExtArgs> = {}>(args?: Subset<T, User$skippedTaskInstancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "findMany"> | Null>
-    taskHistoryActions<T extends User$taskHistoryActionsArgs<ExtArgs> = {}>(args?: Subset<T, User$taskHistoryActionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskHistoryPayload<ExtArgs>, T, "findMany"> | Null>
     forecastExclusions<T extends User$forecastExclusionsArgs<ExtArgs> = {}>(args?: Subset<T, User$forecastExclusionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForecastExclusionPayload<ExtArgs>, T, "findMany"> | Null>
     auditExclusions<T extends User$auditExclusionsArgs<ExtArgs> = {}>(args?: Subset<T, User$auditExclusionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryAuditExclusionPayload<ExtArgs>, T, "findMany"> | Null>
     stockAlertAcknowledgments<T extends User$stockAlertAcknowledgmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$stockAlertAcknowledgmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockAlertAcknowledgmentPayload<ExtArgs>, T, "findMany"> | Null>
@@ -8898,46 +8240,6 @@ export namespace Prisma {
   }
 
   /**
-   * User.assignedTasks
-   */
-  export type User$assignedTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInclude<ExtArgs> | null
-    where?: TaskWhereInput
-    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
-    cursor?: TaskWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
-  }
-
-  /**
-   * User.createdTasks
-   */
-  export type User$createdTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInclude<ExtArgs> | null
-    where?: TaskWhereInput
-    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
-    cursor?: TaskWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
-  }
-
-  /**
    * User.records
    */
   export type User$recordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9195,86 +8497,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InitialStockEntryScalarFieldEnum | InitialStockEntryScalarFieldEnum[]
-  }
-
-  /**
-   * User.createdTaskTemplates
-   */
-  export type User$createdTaskTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskTemplate
-     */
-    select?: TaskTemplateSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskTemplateInclude<ExtArgs> | null
-    where?: TaskTemplateWhereInput
-    orderBy?: TaskTemplateOrderByWithRelationInput | TaskTemplateOrderByWithRelationInput[]
-    cursor?: TaskTemplateWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TaskTemplateScalarFieldEnum | TaskTemplateScalarFieldEnum[]
-  }
-
-  /**
-   * User.completedTaskInstances
-   */
-  export type User$completedTaskInstancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskInstance
-     */
-    select?: TaskInstanceSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInstanceInclude<ExtArgs> | null
-    where?: TaskInstanceWhereInput
-    orderBy?: TaskInstanceOrderByWithRelationInput | TaskInstanceOrderByWithRelationInput[]
-    cursor?: TaskInstanceWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TaskInstanceScalarFieldEnum | TaskInstanceScalarFieldEnum[]
-  }
-
-  /**
-   * User.skippedTaskInstances
-   */
-  export type User$skippedTaskInstancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskInstance
-     */
-    select?: TaskInstanceSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInstanceInclude<ExtArgs> | null
-    where?: TaskInstanceWhereInput
-    orderBy?: TaskInstanceOrderByWithRelationInput | TaskInstanceOrderByWithRelationInput[]
-    cursor?: TaskInstanceWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TaskInstanceScalarFieldEnum | TaskInstanceScalarFieldEnum[]
-  }
-
-  /**
-   * User.taskHistoryActions
-   */
-  export type User$taskHistoryActionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskHistory
-     */
-    select?: TaskHistorySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskHistoryInclude<ExtArgs> | null
-    where?: TaskHistoryWhereInput
-    orderBy?: TaskHistoryOrderByWithRelationInput | TaskHistoryOrderByWithRelationInput[]
-    cursor?: TaskHistoryWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TaskHistoryScalarFieldEnum | TaskHistoryScalarFieldEnum[]
   }
 
   /**
@@ -9888,7 +9110,6 @@ export namespace Prisma {
     createdById?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     submissions?: boolean | Form$submissionsArgs<ExtArgs>
-    tasks?: boolean | Form$tasksArgs<ExtArgs>
     _count?: boolean | FormCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["form"]>
 
@@ -9922,7 +9143,6 @@ export namespace Prisma {
   export type FormInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     submissions?: boolean | Form$submissionsArgs<ExtArgs>
-    tasks?: boolean | Form$tasksArgs<ExtArgs>
     _count?: boolean | FormCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FormIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9934,7 +9154,6 @@ export namespace Prisma {
     objects: {
       createdBy: Prisma.$UserPayload<ExtArgs>
       submissions: Prisma.$FormSubmissionPayload<ExtArgs>[]
-      tasks: Prisma.$TaskPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10313,7 +9532,6 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     submissions<T extends Form$submissionsArgs<ExtArgs> = {}>(args?: Subset<T, Form$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormSubmissionPayload<ExtArgs>, T, "findMany"> | Null>
-    tasks<T extends Form$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Form$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10691,26 +9909,6 @@ export namespace Prisma {
   }
 
   /**
-   * Form.tasks
-   */
-  export type Form$tasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInclude<ExtArgs> | null
-    where?: TaskWhereInput
-    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
-    cursor?: TaskWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
-  }
-
-  /**
    * Form without action
    */
   export type FormDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10744,7 +9942,6 @@ export namespace Prisma {
     updatedAt: Date | null
     submittedById: string | null
     approvedById: string | null
-    taskId: string | null
   }
 
   export type FormSubmissionMaxAggregateOutputType = {
@@ -10756,7 +9953,6 @@ export namespace Prisma {
     updatedAt: Date | null
     submittedById: string | null
     approvedById: string | null
-    taskId: string | null
   }
 
   export type FormSubmissionCountAggregateOutputType = {
@@ -10769,7 +9965,6 @@ export namespace Prisma {
     updatedAt: number
     submittedById: number
     approvedById: number
-    taskId: number
     _all: number
   }
 
@@ -10783,7 +9978,6 @@ export namespace Prisma {
     updatedAt?: true
     submittedById?: true
     approvedById?: true
-    taskId?: true
   }
 
   export type FormSubmissionMaxAggregateInputType = {
@@ -10795,7 +9989,6 @@ export namespace Prisma {
     updatedAt?: true
     submittedById?: true
     approvedById?: true
-    taskId?: true
   }
 
   export type FormSubmissionCountAggregateInputType = {
@@ -10808,7 +10001,6 @@ export namespace Prisma {
     updatedAt?: true
     submittedById?: true
     approvedById?: true
-    taskId?: true
     _all?: true
   }
 
@@ -10894,7 +10086,6 @@ export namespace Prisma {
     updatedAt: Date
     submittedById: string
     approvedById: string | null
-    taskId: string | null
     _count: FormSubmissionCountAggregateOutputType | null
     _min: FormSubmissionMinAggregateOutputType | null
     _max: FormSubmissionMaxAggregateOutputType | null
@@ -10924,11 +10115,9 @@ export namespace Prisma {
     updatedAt?: boolean
     submittedById?: boolean
     approvedById?: boolean
-    taskId?: boolean
     form?: boolean | FormDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
     approvedBy?: boolean | FormSubmission$approvedByArgs<ExtArgs>
-    task?: boolean | FormSubmission$taskArgs<ExtArgs>
   }, ExtArgs["result"]["formSubmission"]>
 
   export type FormSubmissionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10941,11 +10130,9 @@ export namespace Prisma {
     updatedAt?: boolean
     submittedById?: boolean
     approvedById?: boolean
-    taskId?: boolean
     form?: boolean | FormDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
     approvedBy?: boolean | FormSubmission$approvedByArgs<ExtArgs>
-    task?: boolean | FormSubmission$taskArgs<ExtArgs>
   }, ExtArgs["result"]["formSubmission"]>
 
   export type FormSubmissionSelectScalar = {
@@ -10958,20 +10145,17 @@ export namespace Prisma {
     updatedAt?: boolean
     submittedById?: boolean
     approvedById?: boolean
-    taskId?: boolean
   }
 
   export type FormSubmissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     form?: boolean | FormDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
     approvedBy?: boolean | FormSubmission$approvedByArgs<ExtArgs>
-    task?: boolean | FormSubmission$taskArgs<ExtArgs>
   }
   export type FormSubmissionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     form?: boolean | FormDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
     approvedBy?: boolean | FormSubmission$approvedByArgs<ExtArgs>
-    task?: boolean | FormSubmission$taskArgs<ExtArgs>
   }
 
   export type $FormSubmissionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10980,7 +10164,6 @@ export namespace Prisma {
       form: Prisma.$FormPayload<ExtArgs>
       submittedBy: Prisma.$UserPayload<ExtArgs>
       approvedBy: Prisma.$UserPayload<ExtArgs> | null
-      task: Prisma.$TaskPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10992,7 +10175,6 @@ export namespace Prisma {
       updatedAt: Date
       submittedById: string
       approvedById: string | null
-      taskId: string | null
     }, ExtArgs["result"]["formSubmission"]>
     composites: {}
   }
@@ -11360,7 +10542,6 @@ export namespace Prisma {
     form<T extends FormDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FormDefaultArgs<ExtArgs>>): Prisma__FormClient<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     submittedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     approvedBy<T extends FormSubmission$approvedByArgs<ExtArgs> = {}>(args?: Subset<T, FormSubmission$approvedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
-    task<T extends FormSubmission$taskArgs<ExtArgs> = {}>(args?: Subset<T, FormSubmission$taskArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11399,7 +10580,6 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"FormSubmission", 'DateTime'>
     readonly submittedById: FieldRef<"FormSubmission", 'String'>
     readonly approvedById: FieldRef<"FormSubmission", 'String'>
-    readonly taskId: FieldRef<"FormSubmission", 'String'>
   }
     
 
@@ -11733,21 +10913,6 @@ export namespace Prisma {
   }
 
   /**
-   * FormSubmission.task
-   */
-  export type FormSubmission$taskArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInclude<ExtArgs> | null
-    where?: TaskWhereInput
-  }
-
-  /**
    * FormSubmission without action
    */
   export type FormSubmissionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11759,1100 +10924,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FormSubmissionInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Task
-   */
-
-  export type AggregateTask = {
-    _count: TaskCountAggregateOutputType | null
-    _min: TaskMinAggregateOutputType | null
-    _max: TaskMaxAggregateOutputType | null
-  }
-
-  export type TaskMinAggregateOutputType = {
-    id: string | null
-    title: string | null
-    description: string | null
-    status: $Enums.TaskStatus | null
-    priority: $Enums.TaskPriority | null
-    dueDate: Date | null
-    completedAt: Date | null
-    recurrence: $Enums.RecurrenceType | null
-    location: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    formId: string | null
-    assignedToId: string | null
-    createdById: string | null
-  }
-
-  export type TaskMaxAggregateOutputType = {
-    id: string | null
-    title: string | null
-    description: string | null
-    status: $Enums.TaskStatus | null
-    priority: $Enums.TaskPriority | null
-    dueDate: Date | null
-    completedAt: Date | null
-    recurrence: $Enums.RecurrenceType | null
-    location: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-    formId: string | null
-    assignedToId: string | null
-    createdById: string | null
-  }
-
-  export type TaskCountAggregateOutputType = {
-    id: number
-    title: number
-    description: number
-    status: number
-    priority: number
-    dueDate: number
-    completedAt: number
-    recurrence: number
-    location: number
-    createdAt: number
-    updatedAt: number
-    formId: number
-    assignedToId: number
-    createdById: number
-    _all: number
-  }
-
-
-  export type TaskMinAggregateInputType = {
-    id?: true
-    title?: true
-    description?: true
-    status?: true
-    priority?: true
-    dueDate?: true
-    completedAt?: true
-    recurrence?: true
-    location?: true
-    createdAt?: true
-    updatedAt?: true
-    formId?: true
-    assignedToId?: true
-    createdById?: true
-  }
-
-  export type TaskMaxAggregateInputType = {
-    id?: true
-    title?: true
-    description?: true
-    status?: true
-    priority?: true
-    dueDate?: true
-    completedAt?: true
-    recurrence?: true
-    location?: true
-    createdAt?: true
-    updatedAt?: true
-    formId?: true
-    assignedToId?: true
-    createdById?: true
-  }
-
-  export type TaskCountAggregateInputType = {
-    id?: true
-    title?: true
-    description?: true
-    status?: true
-    priority?: true
-    dueDate?: true
-    completedAt?: true
-    recurrence?: true
-    location?: true
-    createdAt?: true
-    updatedAt?: true
-    formId?: true
-    assignedToId?: true
-    createdById?: true
-    _all?: true
-  }
-
-  export type TaskAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Task to aggregate.
-     */
-    where?: TaskWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Tasks to fetch.
-     */
-    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: TaskWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Tasks from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Tasks.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Tasks
-    **/
-    _count?: true | TaskCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: TaskMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: TaskMaxAggregateInputType
-  }
-
-  export type GetTaskAggregateType<T extends TaskAggregateArgs> = {
-        [P in keyof T & keyof AggregateTask]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateTask[P]>
-      : GetScalarType<T[P], AggregateTask[P]>
-  }
-
-
-
-
-  export type TaskGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TaskWhereInput
-    orderBy?: TaskOrderByWithAggregationInput | TaskOrderByWithAggregationInput[]
-    by: TaskScalarFieldEnum[] | TaskScalarFieldEnum
-    having?: TaskScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: TaskCountAggregateInputType | true
-    _min?: TaskMinAggregateInputType
-    _max?: TaskMaxAggregateInputType
-  }
-
-  export type TaskGroupByOutputType = {
-    id: string
-    title: string
-    description: string | null
-    status: $Enums.TaskStatus
-    priority: $Enums.TaskPriority
-    dueDate: Date
-    completedAt: Date | null
-    recurrence: $Enums.RecurrenceType
-    location: string | null
-    createdAt: Date
-    updatedAt: Date
-    formId: string | null
-    assignedToId: string
-    createdById: string
-    _count: TaskCountAggregateOutputType | null
-    _min: TaskMinAggregateOutputType | null
-    _max: TaskMaxAggregateOutputType | null
-  }
-
-  type GetTaskGroupByPayload<T extends TaskGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<TaskGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof TaskGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], TaskGroupByOutputType[P]>
-            : GetScalarType<T[P], TaskGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type TaskSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    title?: boolean
-    description?: boolean
-    status?: boolean
-    priority?: boolean
-    dueDate?: boolean
-    completedAt?: boolean
-    recurrence?: boolean
-    location?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    formId?: boolean
-    assignedToId?: boolean
-    createdById?: boolean
-    form?: boolean | Task$formArgs<ExtArgs>
-    assignedTo?: boolean | UserDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
-    submissions?: boolean | Task$submissionsArgs<ExtArgs>
-    _count?: boolean | TaskCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["task"]>
-
-  export type TaskSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    title?: boolean
-    description?: boolean
-    status?: boolean
-    priority?: boolean
-    dueDate?: boolean
-    completedAt?: boolean
-    recurrence?: boolean
-    location?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    formId?: boolean
-    assignedToId?: boolean
-    createdById?: boolean
-    form?: boolean | Task$formArgs<ExtArgs>
-    assignedTo?: boolean | UserDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["task"]>
-
-  export type TaskSelectScalar = {
-    id?: boolean
-    title?: boolean
-    description?: boolean
-    status?: boolean
-    priority?: boolean
-    dueDate?: boolean
-    completedAt?: boolean
-    recurrence?: boolean
-    location?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    formId?: boolean
-    assignedToId?: boolean
-    createdById?: boolean
-  }
-
-  export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    form?: boolean | Task$formArgs<ExtArgs>
-    assignedTo?: boolean | UserDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
-    submissions?: boolean | Task$submissionsArgs<ExtArgs>
-    _count?: boolean | TaskCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type TaskIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    form?: boolean | Task$formArgs<ExtArgs>
-    assignedTo?: boolean | UserDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
-  }
-
-  export type $TaskPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Task"
-    objects: {
-      form: Prisma.$FormPayload<ExtArgs> | null
-      assignedTo: Prisma.$UserPayload<ExtArgs>
-      createdBy: Prisma.$UserPayload<ExtArgs>
-      submissions: Prisma.$FormSubmissionPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      title: string
-      description: string | null
-      status: $Enums.TaskStatus
-      priority: $Enums.TaskPriority
-      dueDate: Date
-      completedAt: Date | null
-      recurrence: $Enums.RecurrenceType
-      location: string | null
-      createdAt: Date
-      updatedAt: Date
-      formId: string | null
-      assignedToId: string
-      createdById: string
-    }, ExtArgs["result"]["task"]>
-    composites: {}
-  }
-
-  type TaskGetPayload<S extends boolean | null | undefined | TaskDefaultArgs> = $Result.GetResult<Prisma.$TaskPayload, S>
-
-  type TaskCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<TaskFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: TaskCountAggregateInputType | true
-    }
-
-  export interface TaskDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Task'], meta: { name: 'Task' } }
-    /**
-     * Find zero or one Task that matches the filter.
-     * @param {TaskFindUniqueArgs} args - Arguments to find a Task
-     * @example
-     * // Get one Task
-     * const task = await prisma.task.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends TaskFindUniqueArgs>(args: SelectSubset<T, TaskFindUniqueArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
-
-    /**
-     * Find one Task that matches the filter or throw an error with `error.code='P2025'` 
-     * if no matches were found.
-     * @param {TaskFindUniqueOrThrowArgs} args - Arguments to find a Task
-     * @example
-     * // Get one Task
-     * const task = await prisma.task.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends TaskFindUniqueOrThrowArgs>(args: SelectSubset<T, TaskFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
-
-    /**
-     * Find the first Task that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskFindFirstArgs} args - Arguments to find a Task
-     * @example
-     * // Get one Task
-     * const task = await prisma.task.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends TaskFindFirstArgs>(args?: SelectSubset<T, TaskFindFirstArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
-
-    /**
-     * Find the first Task that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskFindFirstOrThrowArgs} args - Arguments to find a Task
-     * @example
-     * // Get one Task
-     * const task = await prisma.task.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends TaskFindFirstOrThrowArgs>(args?: SelectSubset<T, TaskFindFirstOrThrowArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
-
-    /**
-     * Find zero or more Tasks that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Tasks
-     * const tasks = await prisma.task.findMany()
-     * 
-     * // Get first 10 Tasks
-     * const tasks = await prisma.task.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const taskWithIdOnly = await prisma.task.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends TaskFindManyArgs>(args?: SelectSubset<T, TaskFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany">>
-
-    /**
-     * Create a Task.
-     * @param {TaskCreateArgs} args - Arguments to create a Task.
-     * @example
-     * // Create one Task
-     * const Task = await prisma.task.create({
-     *   data: {
-     *     // ... data to create a Task
-     *   }
-     * })
-     * 
-     */
-    create<T extends TaskCreateArgs>(args: SelectSubset<T, TaskCreateArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "create">, never, ExtArgs>
-
-    /**
-     * Create many Tasks.
-     * @param {TaskCreateManyArgs} args - Arguments to create many Tasks.
-     * @example
-     * // Create many Tasks
-     * const task = await prisma.task.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends TaskCreateManyArgs>(args?: SelectSubset<T, TaskCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Tasks and returns the data saved in the database.
-     * @param {TaskCreateManyAndReturnArgs} args - Arguments to create many Tasks.
-     * @example
-     * // Create many Tasks
-     * const task = await prisma.task.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Tasks and only return the `id`
-     * const taskWithIdOnly = await prisma.task.createManyAndReturn({ 
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends TaskCreateManyAndReturnArgs>(args?: SelectSubset<T, TaskCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "createManyAndReturn">>
-
-    /**
-     * Delete a Task.
-     * @param {TaskDeleteArgs} args - Arguments to delete one Task.
-     * @example
-     * // Delete one Task
-     * const Task = await prisma.task.delete({
-     *   where: {
-     *     // ... filter to delete one Task
-     *   }
-     * })
-     * 
-     */
-    delete<T extends TaskDeleteArgs>(args: SelectSubset<T, TaskDeleteArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "delete">, never, ExtArgs>
-
-    /**
-     * Update one Task.
-     * @param {TaskUpdateArgs} args - Arguments to update one Task.
-     * @example
-     * // Update one Task
-     * const task = await prisma.task.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends TaskUpdateArgs>(args: SelectSubset<T, TaskUpdateArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "update">, never, ExtArgs>
-
-    /**
-     * Delete zero or more Tasks.
-     * @param {TaskDeleteManyArgs} args - Arguments to filter Tasks to delete.
-     * @example
-     * // Delete a few Tasks
-     * const { count } = await prisma.task.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends TaskDeleteManyArgs>(args?: SelectSubset<T, TaskDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Tasks.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Tasks
-     * const task = await prisma.task.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends TaskUpdateManyArgs>(args: SelectSubset<T, TaskUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Task.
-     * @param {TaskUpsertArgs} args - Arguments to update or create a Task.
-     * @example
-     * // Update or create a Task
-     * const task = await prisma.task.upsert({
-     *   create: {
-     *     // ... data to create a Task
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Task we want to update
-     *   }
-     * })
-     */
-    upsert<T extends TaskUpsertArgs>(args: SelectSubset<T, TaskUpsertArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
-
-
-    /**
-     * Count the number of Tasks.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskCountArgs} args - Arguments to filter Tasks to count.
-     * @example
-     * // Count the number of Tasks
-     * const count = await prisma.task.count({
-     *   where: {
-     *     // ... the filter for the Tasks we want to count
-     *   }
-     * })
-    **/
-    count<T extends TaskCountArgs>(
-      args?: Subset<T, TaskCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], TaskCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Task.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends TaskAggregateArgs>(args: Subset<T, TaskAggregateArgs>): Prisma.PrismaPromise<GetTaskAggregateType<T>>
-
-    /**
-     * Group by Task.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends TaskGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: TaskGroupByArgs['orderBy'] }
-        : { orderBy?: TaskGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, TaskGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTaskGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Task model
-   */
-  readonly fields: TaskFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Task.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__TaskClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    form<T extends Task$formArgs<ExtArgs> = {}>(args?: Subset<T, Task$formArgs<ExtArgs>>): Prisma__FormClient<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
-    assignedTo<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    submissions<T extends Task$submissionsArgs<ExtArgs> = {}>(args?: Subset<T, Task$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormSubmissionPayload<ExtArgs>, T, "findMany"> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Task model
-   */ 
-  interface TaskFieldRefs {
-    readonly id: FieldRef<"Task", 'String'>
-    readonly title: FieldRef<"Task", 'String'>
-    readonly description: FieldRef<"Task", 'String'>
-    readonly status: FieldRef<"Task", 'TaskStatus'>
-    readonly priority: FieldRef<"Task", 'TaskPriority'>
-    readonly dueDate: FieldRef<"Task", 'DateTime'>
-    readonly completedAt: FieldRef<"Task", 'DateTime'>
-    readonly recurrence: FieldRef<"Task", 'RecurrenceType'>
-    readonly location: FieldRef<"Task", 'String'>
-    readonly createdAt: FieldRef<"Task", 'DateTime'>
-    readonly updatedAt: FieldRef<"Task", 'DateTime'>
-    readonly formId: FieldRef<"Task", 'String'>
-    readonly assignedToId: FieldRef<"Task", 'String'>
-    readonly createdById: FieldRef<"Task", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Task findUnique
-   */
-  export type TaskFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInclude<ExtArgs> | null
-    /**
-     * Filter, which Task to fetch.
-     */
-    where: TaskWhereUniqueInput
-  }
-
-  /**
-   * Task findUniqueOrThrow
-   */
-  export type TaskFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInclude<ExtArgs> | null
-    /**
-     * Filter, which Task to fetch.
-     */
-    where: TaskWhereUniqueInput
-  }
-
-  /**
-   * Task findFirst
-   */
-  export type TaskFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInclude<ExtArgs> | null
-    /**
-     * Filter, which Task to fetch.
-     */
-    where?: TaskWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Tasks to fetch.
-     */
-    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Tasks.
-     */
-    cursor?: TaskWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Tasks from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Tasks.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Tasks.
-     */
-    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
-  }
-
-  /**
-   * Task findFirstOrThrow
-   */
-  export type TaskFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInclude<ExtArgs> | null
-    /**
-     * Filter, which Task to fetch.
-     */
-    where?: TaskWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Tasks to fetch.
-     */
-    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Tasks.
-     */
-    cursor?: TaskWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Tasks from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Tasks.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Tasks.
-     */
-    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
-  }
-
-  /**
-   * Task findMany
-   */
-  export type TaskFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInclude<ExtArgs> | null
-    /**
-     * Filter, which Tasks to fetch.
-     */
-    where?: TaskWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Tasks to fetch.
-     */
-    orderBy?: TaskOrderByWithRelationInput | TaskOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Tasks.
-     */
-    cursor?: TaskWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Tasks from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Tasks.
-     */
-    skip?: number
-    distinct?: TaskScalarFieldEnum | TaskScalarFieldEnum[]
-  }
-
-  /**
-   * Task create
-   */
-  export type TaskCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Task.
-     */
-    data: XOR<TaskCreateInput, TaskUncheckedCreateInput>
-  }
-
-  /**
-   * Task createMany
-   */
-  export type TaskCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Tasks.
-     */
-    data: TaskCreateManyInput | TaskCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Task createManyAndReturn
-   */
-  export type TaskCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * The data used to create many Tasks.
-     */
-    data: TaskCreateManyInput | TaskCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Task update
-   */
-  export type TaskUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Task.
-     */
-    data: XOR<TaskUpdateInput, TaskUncheckedUpdateInput>
-    /**
-     * Choose, which Task to update.
-     */
-    where: TaskWhereUniqueInput
-  }
-
-  /**
-   * Task updateMany
-   */
-  export type TaskUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Tasks.
-     */
-    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyInput>
-    /**
-     * Filter which Tasks to update
-     */
-    where?: TaskWhereInput
-  }
-
-  /**
-   * Task upsert
-   */
-  export type TaskUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Task to update in case it exists.
-     */
-    where: TaskWhereUniqueInput
-    /**
-     * In case the Task found by the `where` argument doesn't exist, create a new Task with this data.
-     */
-    create: XOR<TaskCreateInput, TaskUncheckedCreateInput>
-    /**
-     * In case the Task was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<TaskUpdateInput, TaskUncheckedUpdateInput>
-  }
-
-  /**
-   * Task delete
-   */
-  export type TaskDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInclude<ExtArgs> | null
-    /**
-     * Filter which Task to delete.
-     */
-    where: TaskWhereUniqueInput
-  }
-
-  /**
-   * Task deleteMany
-   */
-  export type TaskDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Tasks to delete
-     */
-    where?: TaskWhereInput
-  }
-
-  /**
-   * Task.form
-   */
-  export type Task$formArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Form
-     */
-    select?: FormSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FormInclude<ExtArgs> | null
-    where?: FormWhereInput
-  }
-
-  /**
-   * Task.submissions
-   */
-  export type Task$submissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FormSubmission
-     */
-    select?: FormSubmissionSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FormSubmissionInclude<ExtArgs> | null
-    where?: FormSubmissionWhereInput
-    orderBy?: FormSubmissionOrderByWithRelationInput | FormSubmissionOrderByWithRelationInput[]
-    cursor?: FormSubmissionWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: FormSubmissionScalarFieldEnum | FormSubmissionScalarFieldEnum[]
-  }
-
-  /**
-   * Task without action
-   */
-  export type TaskDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Task
-     */
-    select?: TaskSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInclude<ExtArgs> | null
   }
 
 
@@ -40636,3246 +38707,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the AuditLog
      */
     select?: AuditLogSelect<ExtArgs> | null
-  }
-
-
-  /**
-   * Model TaskTemplate
-   */
-
-  export type AggregateTaskTemplate = {
-    _count: TaskTemplateCountAggregateOutputType | null
-    _min: TaskTemplateMinAggregateOutputType | null
-    _max: TaskTemplateMaxAggregateOutputType | null
-  }
-
-  export type TaskTemplateMinAggregateOutputType = {
-    id: string | null
-    title: string | null
-    description: string | null
-    category: $Enums.TaskTemplateCategory | null
-    priority: $Enums.TaskTemplatePriority | null
-    taskType: $Enums.TaskTemplateType | null
-    recurrenceType: $Enums.TaskRecurrenceType | null
-    firstDueDate: Date | null
-    isActive: boolean | null
-    createdById: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type TaskTemplateMaxAggregateOutputType = {
-    id: string | null
-    title: string | null
-    description: string | null
-    category: $Enums.TaskTemplateCategory | null
-    priority: $Enums.TaskTemplatePriority | null
-    taskType: $Enums.TaskTemplateType | null
-    recurrenceType: $Enums.TaskRecurrenceType | null
-    firstDueDate: Date | null
-    isActive: boolean | null
-    createdById: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type TaskTemplateCountAggregateOutputType = {
-    id: number
-    title: number
-    description: number
-    category: number
-    priority: number
-    assignedTo: number
-    taskType: number
-    formLink: number
-    recurrenceType: number
-    recurrenceConfig: number
-    firstDueDate: number
-    isActive: number
-    createdById: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type TaskTemplateMinAggregateInputType = {
-    id?: true
-    title?: true
-    description?: true
-    category?: true
-    priority?: true
-    taskType?: true
-    recurrenceType?: true
-    firstDueDate?: true
-    isActive?: true
-    createdById?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type TaskTemplateMaxAggregateInputType = {
-    id?: true
-    title?: true
-    description?: true
-    category?: true
-    priority?: true
-    taskType?: true
-    recurrenceType?: true
-    firstDueDate?: true
-    isActive?: true
-    createdById?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type TaskTemplateCountAggregateInputType = {
-    id?: true
-    title?: true
-    description?: true
-    category?: true
-    priority?: true
-    assignedTo?: true
-    taskType?: true
-    formLink?: true
-    recurrenceType?: true
-    recurrenceConfig?: true
-    firstDueDate?: true
-    isActive?: true
-    createdById?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type TaskTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which TaskTemplate to aggregate.
-     */
-    where?: TaskTemplateWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of TaskTemplates to fetch.
-     */
-    orderBy?: TaskTemplateOrderByWithRelationInput | TaskTemplateOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: TaskTemplateWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` TaskTemplates from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` TaskTemplates.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned TaskTemplates
-    **/
-    _count?: true | TaskTemplateCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: TaskTemplateMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: TaskTemplateMaxAggregateInputType
-  }
-
-  export type GetTaskTemplateAggregateType<T extends TaskTemplateAggregateArgs> = {
-        [P in keyof T & keyof AggregateTaskTemplate]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateTaskTemplate[P]>
-      : GetScalarType<T[P], AggregateTaskTemplate[P]>
-  }
-
-
-
-
-  export type TaskTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TaskTemplateWhereInput
-    orderBy?: TaskTemplateOrderByWithAggregationInput | TaskTemplateOrderByWithAggregationInput[]
-    by: TaskTemplateScalarFieldEnum[] | TaskTemplateScalarFieldEnum
-    having?: TaskTemplateScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: TaskTemplateCountAggregateInputType | true
-    _min?: TaskTemplateMinAggregateInputType
-    _max?: TaskTemplateMaxAggregateInputType
-  }
-
-  export type TaskTemplateGroupByOutputType = {
-    id: string
-    title: string
-    description: string | null
-    category: $Enums.TaskTemplateCategory
-    priority: $Enums.TaskTemplatePriority
-    assignedTo: JsonValue
-    taskType: $Enums.TaskTemplateType
-    formLink: JsonValue | null
-    recurrenceType: $Enums.TaskRecurrenceType
-    recurrenceConfig: JsonValue | null
-    firstDueDate: Date
-    isActive: boolean
-    createdById: string
-    createdAt: Date
-    updatedAt: Date
-    _count: TaskTemplateCountAggregateOutputType | null
-    _min: TaskTemplateMinAggregateOutputType | null
-    _max: TaskTemplateMaxAggregateOutputType | null
-  }
-
-  type GetTaskTemplateGroupByPayload<T extends TaskTemplateGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<TaskTemplateGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof TaskTemplateGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], TaskTemplateGroupByOutputType[P]>
-            : GetScalarType<T[P], TaskTemplateGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type TaskTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    title?: boolean
-    description?: boolean
-    category?: boolean
-    priority?: boolean
-    assignedTo?: boolean
-    taskType?: boolean
-    formLink?: boolean
-    recurrenceType?: boolean
-    recurrenceConfig?: boolean
-    firstDueDate?: boolean
-    isActive?: boolean
-    createdById?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
-    instances?: boolean | TaskTemplate$instancesArgs<ExtArgs>
-    _count?: boolean | TaskTemplateCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["taskTemplate"]>
-
-  export type TaskTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    title?: boolean
-    description?: boolean
-    category?: boolean
-    priority?: boolean
-    assignedTo?: boolean
-    taskType?: boolean
-    formLink?: boolean
-    recurrenceType?: boolean
-    recurrenceConfig?: boolean
-    firstDueDate?: boolean
-    isActive?: boolean
-    createdById?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["taskTemplate"]>
-
-  export type TaskTemplateSelectScalar = {
-    id?: boolean
-    title?: boolean
-    description?: boolean
-    category?: boolean
-    priority?: boolean
-    assignedTo?: boolean
-    taskType?: boolean
-    formLink?: boolean
-    recurrenceType?: boolean
-    recurrenceConfig?: boolean
-    firstDueDate?: boolean
-    isActive?: boolean
-    createdById?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type TaskTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
-    instances?: boolean | TaskTemplate$instancesArgs<ExtArgs>
-    _count?: boolean | TaskTemplateCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type TaskTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
-  }
-
-  export type $TaskTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "TaskTemplate"
-    objects: {
-      createdBy: Prisma.$UserPayload<ExtArgs>
-      instances: Prisma.$TaskInstancePayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      title: string
-      description: string | null
-      category: $Enums.TaskTemplateCategory
-      priority: $Enums.TaskTemplatePriority
-      assignedTo: Prisma.JsonValue
-      taskType: $Enums.TaskTemplateType
-      formLink: Prisma.JsonValue | null
-      recurrenceType: $Enums.TaskRecurrenceType
-      recurrenceConfig: Prisma.JsonValue | null
-      firstDueDate: Date
-      isActive: boolean
-      createdById: string
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["taskTemplate"]>
-    composites: {}
-  }
-
-  type TaskTemplateGetPayload<S extends boolean | null | undefined | TaskTemplateDefaultArgs> = $Result.GetResult<Prisma.$TaskTemplatePayload, S>
-
-  type TaskTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<TaskTemplateFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: TaskTemplateCountAggregateInputType | true
-    }
-
-  export interface TaskTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TaskTemplate'], meta: { name: 'TaskTemplate' } }
-    /**
-     * Find zero or one TaskTemplate that matches the filter.
-     * @param {TaskTemplateFindUniqueArgs} args - Arguments to find a TaskTemplate
-     * @example
-     * // Get one TaskTemplate
-     * const taskTemplate = await prisma.taskTemplate.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends TaskTemplateFindUniqueArgs>(args: SelectSubset<T, TaskTemplateFindUniqueArgs<ExtArgs>>): Prisma__TaskTemplateClient<$Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
-
-    /**
-     * Find one TaskTemplate that matches the filter or throw an error with `error.code='P2025'` 
-     * if no matches were found.
-     * @param {TaskTemplateFindUniqueOrThrowArgs} args - Arguments to find a TaskTemplate
-     * @example
-     * // Get one TaskTemplate
-     * const taskTemplate = await prisma.taskTemplate.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends TaskTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, TaskTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TaskTemplateClient<$Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
-
-    /**
-     * Find the first TaskTemplate that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskTemplateFindFirstArgs} args - Arguments to find a TaskTemplate
-     * @example
-     * // Get one TaskTemplate
-     * const taskTemplate = await prisma.taskTemplate.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends TaskTemplateFindFirstArgs>(args?: SelectSubset<T, TaskTemplateFindFirstArgs<ExtArgs>>): Prisma__TaskTemplateClient<$Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
-
-    /**
-     * Find the first TaskTemplate that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskTemplateFindFirstOrThrowArgs} args - Arguments to find a TaskTemplate
-     * @example
-     * // Get one TaskTemplate
-     * const taskTemplate = await prisma.taskTemplate.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends TaskTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, TaskTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__TaskTemplateClient<$Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
-
-    /**
-     * Find zero or more TaskTemplates that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all TaskTemplates
-     * const taskTemplates = await prisma.taskTemplate.findMany()
-     * 
-     * // Get first 10 TaskTemplates
-     * const taskTemplates = await prisma.taskTemplate.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const taskTemplateWithIdOnly = await prisma.taskTemplate.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends TaskTemplateFindManyArgs>(args?: SelectSubset<T, TaskTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, "findMany">>
-
-    /**
-     * Create a TaskTemplate.
-     * @param {TaskTemplateCreateArgs} args - Arguments to create a TaskTemplate.
-     * @example
-     * // Create one TaskTemplate
-     * const TaskTemplate = await prisma.taskTemplate.create({
-     *   data: {
-     *     // ... data to create a TaskTemplate
-     *   }
-     * })
-     * 
-     */
-    create<T extends TaskTemplateCreateArgs>(args: SelectSubset<T, TaskTemplateCreateArgs<ExtArgs>>): Prisma__TaskTemplateClient<$Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, "create">, never, ExtArgs>
-
-    /**
-     * Create many TaskTemplates.
-     * @param {TaskTemplateCreateManyArgs} args - Arguments to create many TaskTemplates.
-     * @example
-     * // Create many TaskTemplates
-     * const taskTemplate = await prisma.taskTemplate.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends TaskTemplateCreateManyArgs>(args?: SelectSubset<T, TaskTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many TaskTemplates and returns the data saved in the database.
-     * @param {TaskTemplateCreateManyAndReturnArgs} args - Arguments to create many TaskTemplates.
-     * @example
-     * // Create many TaskTemplates
-     * const taskTemplate = await prisma.taskTemplate.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many TaskTemplates and only return the `id`
-     * const taskTemplateWithIdOnly = await prisma.taskTemplate.createManyAndReturn({ 
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends TaskTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, TaskTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, "createManyAndReturn">>
-
-    /**
-     * Delete a TaskTemplate.
-     * @param {TaskTemplateDeleteArgs} args - Arguments to delete one TaskTemplate.
-     * @example
-     * // Delete one TaskTemplate
-     * const TaskTemplate = await prisma.taskTemplate.delete({
-     *   where: {
-     *     // ... filter to delete one TaskTemplate
-     *   }
-     * })
-     * 
-     */
-    delete<T extends TaskTemplateDeleteArgs>(args: SelectSubset<T, TaskTemplateDeleteArgs<ExtArgs>>): Prisma__TaskTemplateClient<$Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, "delete">, never, ExtArgs>
-
-    /**
-     * Update one TaskTemplate.
-     * @param {TaskTemplateUpdateArgs} args - Arguments to update one TaskTemplate.
-     * @example
-     * // Update one TaskTemplate
-     * const taskTemplate = await prisma.taskTemplate.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends TaskTemplateUpdateArgs>(args: SelectSubset<T, TaskTemplateUpdateArgs<ExtArgs>>): Prisma__TaskTemplateClient<$Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, "update">, never, ExtArgs>
-
-    /**
-     * Delete zero or more TaskTemplates.
-     * @param {TaskTemplateDeleteManyArgs} args - Arguments to filter TaskTemplates to delete.
-     * @example
-     * // Delete a few TaskTemplates
-     * const { count } = await prisma.taskTemplate.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends TaskTemplateDeleteManyArgs>(args?: SelectSubset<T, TaskTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more TaskTemplates.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskTemplateUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many TaskTemplates
-     * const taskTemplate = await prisma.taskTemplate.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends TaskTemplateUpdateManyArgs>(args: SelectSubset<T, TaskTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one TaskTemplate.
-     * @param {TaskTemplateUpsertArgs} args - Arguments to update or create a TaskTemplate.
-     * @example
-     * // Update or create a TaskTemplate
-     * const taskTemplate = await prisma.taskTemplate.upsert({
-     *   create: {
-     *     // ... data to create a TaskTemplate
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the TaskTemplate we want to update
-     *   }
-     * })
-     */
-    upsert<T extends TaskTemplateUpsertArgs>(args: SelectSubset<T, TaskTemplateUpsertArgs<ExtArgs>>): Prisma__TaskTemplateClient<$Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
-
-
-    /**
-     * Count the number of TaskTemplates.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskTemplateCountArgs} args - Arguments to filter TaskTemplates to count.
-     * @example
-     * // Count the number of TaskTemplates
-     * const count = await prisma.taskTemplate.count({
-     *   where: {
-     *     // ... the filter for the TaskTemplates we want to count
-     *   }
-     * })
-    **/
-    count<T extends TaskTemplateCountArgs>(
-      args?: Subset<T, TaskTemplateCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], TaskTemplateCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a TaskTemplate.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends TaskTemplateAggregateArgs>(args: Subset<T, TaskTemplateAggregateArgs>): Prisma.PrismaPromise<GetTaskTemplateAggregateType<T>>
-
-    /**
-     * Group by TaskTemplate.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskTemplateGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends TaskTemplateGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: TaskTemplateGroupByArgs['orderBy'] }
-        : { orderBy?: TaskTemplateGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, TaskTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTaskTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the TaskTemplate model
-   */
-  readonly fields: TaskTemplateFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for TaskTemplate.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__TaskTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    instances<T extends TaskTemplate$instancesArgs<ExtArgs> = {}>(args?: Subset<T, TaskTemplate$instancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "findMany"> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the TaskTemplate model
-   */ 
-  interface TaskTemplateFieldRefs {
-    readonly id: FieldRef<"TaskTemplate", 'String'>
-    readonly title: FieldRef<"TaskTemplate", 'String'>
-    readonly description: FieldRef<"TaskTemplate", 'String'>
-    readonly category: FieldRef<"TaskTemplate", 'TaskTemplateCategory'>
-    readonly priority: FieldRef<"TaskTemplate", 'TaskTemplatePriority'>
-    readonly assignedTo: FieldRef<"TaskTemplate", 'Json'>
-    readonly taskType: FieldRef<"TaskTemplate", 'TaskTemplateType'>
-    readonly formLink: FieldRef<"TaskTemplate", 'Json'>
-    readonly recurrenceType: FieldRef<"TaskTemplate", 'TaskRecurrenceType'>
-    readonly recurrenceConfig: FieldRef<"TaskTemplate", 'Json'>
-    readonly firstDueDate: FieldRef<"TaskTemplate", 'DateTime'>
-    readonly isActive: FieldRef<"TaskTemplate", 'Boolean'>
-    readonly createdById: FieldRef<"TaskTemplate", 'String'>
-    readonly createdAt: FieldRef<"TaskTemplate", 'DateTime'>
-    readonly updatedAt: FieldRef<"TaskTemplate", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * TaskTemplate findUnique
-   */
-  export type TaskTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskTemplate
-     */
-    select?: TaskTemplateSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskTemplateInclude<ExtArgs> | null
-    /**
-     * Filter, which TaskTemplate to fetch.
-     */
-    where: TaskTemplateWhereUniqueInput
-  }
-
-  /**
-   * TaskTemplate findUniqueOrThrow
-   */
-  export type TaskTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskTemplate
-     */
-    select?: TaskTemplateSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskTemplateInclude<ExtArgs> | null
-    /**
-     * Filter, which TaskTemplate to fetch.
-     */
-    where: TaskTemplateWhereUniqueInput
-  }
-
-  /**
-   * TaskTemplate findFirst
-   */
-  export type TaskTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskTemplate
-     */
-    select?: TaskTemplateSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskTemplateInclude<ExtArgs> | null
-    /**
-     * Filter, which TaskTemplate to fetch.
-     */
-    where?: TaskTemplateWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of TaskTemplates to fetch.
-     */
-    orderBy?: TaskTemplateOrderByWithRelationInput | TaskTemplateOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for TaskTemplates.
-     */
-    cursor?: TaskTemplateWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` TaskTemplates from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` TaskTemplates.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of TaskTemplates.
-     */
-    distinct?: TaskTemplateScalarFieldEnum | TaskTemplateScalarFieldEnum[]
-  }
-
-  /**
-   * TaskTemplate findFirstOrThrow
-   */
-  export type TaskTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskTemplate
-     */
-    select?: TaskTemplateSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskTemplateInclude<ExtArgs> | null
-    /**
-     * Filter, which TaskTemplate to fetch.
-     */
-    where?: TaskTemplateWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of TaskTemplates to fetch.
-     */
-    orderBy?: TaskTemplateOrderByWithRelationInput | TaskTemplateOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for TaskTemplates.
-     */
-    cursor?: TaskTemplateWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` TaskTemplates from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` TaskTemplates.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of TaskTemplates.
-     */
-    distinct?: TaskTemplateScalarFieldEnum | TaskTemplateScalarFieldEnum[]
-  }
-
-  /**
-   * TaskTemplate findMany
-   */
-  export type TaskTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskTemplate
-     */
-    select?: TaskTemplateSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskTemplateInclude<ExtArgs> | null
-    /**
-     * Filter, which TaskTemplates to fetch.
-     */
-    where?: TaskTemplateWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of TaskTemplates to fetch.
-     */
-    orderBy?: TaskTemplateOrderByWithRelationInput | TaskTemplateOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing TaskTemplates.
-     */
-    cursor?: TaskTemplateWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` TaskTemplates from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` TaskTemplates.
-     */
-    skip?: number
-    distinct?: TaskTemplateScalarFieldEnum | TaskTemplateScalarFieldEnum[]
-  }
-
-  /**
-   * TaskTemplate create
-   */
-  export type TaskTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskTemplate
-     */
-    select?: TaskTemplateSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskTemplateInclude<ExtArgs> | null
-    /**
-     * The data needed to create a TaskTemplate.
-     */
-    data: XOR<TaskTemplateCreateInput, TaskTemplateUncheckedCreateInput>
-  }
-
-  /**
-   * TaskTemplate createMany
-   */
-  export type TaskTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many TaskTemplates.
-     */
-    data: TaskTemplateCreateManyInput | TaskTemplateCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * TaskTemplate createManyAndReturn
-   */
-  export type TaskTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskTemplate
-     */
-    select?: TaskTemplateSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * The data used to create many TaskTemplates.
-     */
-    data: TaskTemplateCreateManyInput | TaskTemplateCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskTemplateIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * TaskTemplate update
-   */
-  export type TaskTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskTemplate
-     */
-    select?: TaskTemplateSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskTemplateInclude<ExtArgs> | null
-    /**
-     * The data needed to update a TaskTemplate.
-     */
-    data: XOR<TaskTemplateUpdateInput, TaskTemplateUncheckedUpdateInput>
-    /**
-     * Choose, which TaskTemplate to update.
-     */
-    where: TaskTemplateWhereUniqueInput
-  }
-
-  /**
-   * TaskTemplate updateMany
-   */
-  export type TaskTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update TaskTemplates.
-     */
-    data: XOR<TaskTemplateUpdateManyMutationInput, TaskTemplateUncheckedUpdateManyInput>
-    /**
-     * Filter which TaskTemplates to update
-     */
-    where?: TaskTemplateWhereInput
-  }
-
-  /**
-   * TaskTemplate upsert
-   */
-  export type TaskTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskTemplate
-     */
-    select?: TaskTemplateSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskTemplateInclude<ExtArgs> | null
-    /**
-     * The filter to search for the TaskTemplate to update in case it exists.
-     */
-    where: TaskTemplateWhereUniqueInput
-    /**
-     * In case the TaskTemplate found by the `where` argument doesn't exist, create a new TaskTemplate with this data.
-     */
-    create: XOR<TaskTemplateCreateInput, TaskTemplateUncheckedCreateInput>
-    /**
-     * In case the TaskTemplate was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<TaskTemplateUpdateInput, TaskTemplateUncheckedUpdateInput>
-  }
-
-  /**
-   * TaskTemplate delete
-   */
-  export type TaskTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskTemplate
-     */
-    select?: TaskTemplateSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskTemplateInclude<ExtArgs> | null
-    /**
-     * Filter which TaskTemplate to delete.
-     */
-    where: TaskTemplateWhereUniqueInput
-  }
-
-  /**
-   * TaskTemplate deleteMany
-   */
-  export type TaskTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which TaskTemplates to delete
-     */
-    where?: TaskTemplateWhereInput
-  }
-
-  /**
-   * TaskTemplate.instances
-   */
-  export type TaskTemplate$instancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskInstance
-     */
-    select?: TaskInstanceSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInstanceInclude<ExtArgs> | null
-    where?: TaskInstanceWhereInput
-    orderBy?: TaskInstanceOrderByWithRelationInput | TaskInstanceOrderByWithRelationInput[]
-    cursor?: TaskInstanceWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TaskInstanceScalarFieldEnum | TaskInstanceScalarFieldEnum[]
-  }
-
-  /**
-   * TaskTemplate without action
-   */
-  export type TaskTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskTemplate
-     */
-    select?: TaskTemplateSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskTemplateInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model TaskInstance
-   */
-
-  export type AggregateTaskInstance = {
-    _count: TaskInstanceCountAggregateOutputType | null
-    _avg: TaskInstanceAvgAggregateOutputType | null
-    _sum: TaskInstanceSumAggregateOutputType | null
-    _min: TaskInstanceMinAggregateOutputType | null
-    _max: TaskInstanceMaxAggregateOutputType | null
-  }
-
-  export type TaskInstanceAvgAggregateOutputType = {
-    instanceNumber: number | null
-  }
-
-  export type TaskInstanceSumAggregateOutputType = {
-    instanceNumber: number | null
-  }
-
-  export type TaskInstanceMinAggregateOutputType = {
-    id: string | null
-    templateId: string | null
-    title: string | null
-    description: string | null
-    category: string | null
-    priority: string | null
-    taskType: string | null
-    dueDate: Date | null
-    status: $Enums.TaskInstanceStatus | null
-    completedById: string | null
-    completedAt: Date | null
-    completionNote: string | null
-    skippedById: string | null
-    skippedAt: Date | null
-    skipReason: string | null
-    formSubmissionId: string | null
-    instanceNumber: number | null
-    createdAt: Date | null
-  }
-
-  export type TaskInstanceMaxAggregateOutputType = {
-    id: string | null
-    templateId: string | null
-    title: string | null
-    description: string | null
-    category: string | null
-    priority: string | null
-    taskType: string | null
-    dueDate: Date | null
-    status: $Enums.TaskInstanceStatus | null
-    completedById: string | null
-    completedAt: Date | null
-    completionNote: string | null
-    skippedById: string | null
-    skippedAt: Date | null
-    skipReason: string | null
-    formSubmissionId: string | null
-    instanceNumber: number | null
-    createdAt: Date | null
-  }
-
-  export type TaskInstanceCountAggregateOutputType = {
-    id: number
-    templateId: number
-    title: number
-    description: number
-    category: number
-    priority: number
-    assignedTo: number
-    taskType: number
-    formLink: number
-    dueDate: number
-    status: number
-    completedById: number
-    completedAt: number
-    completionNote: number
-    skippedById: number
-    skippedAt: number
-    skipReason: number
-    formSubmissionId: number
-    instanceNumber: number
-    createdAt: number
-    _all: number
-  }
-
-
-  export type TaskInstanceAvgAggregateInputType = {
-    instanceNumber?: true
-  }
-
-  export type TaskInstanceSumAggregateInputType = {
-    instanceNumber?: true
-  }
-
-  export type TaskInstanceMinAggregateInputType = {
-    id?: true
-    templateId?: true
-    title?: true
-    description?: true
-    category?: true
-    priority?: true
-    taskType?: true
-    dueDate?: true
-    status?: true
-    completedById?: true
-    completedAt?: true
-    completionNote?: true
-    skippedById?: true
-    skippedAt?: true
-    skipReason?: true
-    formSubmissionId?: true
-    instanceNumber?: true
-    createdAt?: true
-  }
-
-  export type TaskInstanceMaxAggregateInputType = {
-    id?: true
-    templateId?: true
-    title?: true
-    description?: true
-    category?: true
-    priority?: true
-    taskType?: true
-    dueDate?: true
-    status?: true
-    completedById?: true
-    completedAt?: true
-    completionNote?: true
-    skippedById?: true
-    skippedAt?: true
-    skipReason?: true
-    formSubmissionId?: true
-    instanceNumber?: true
-    createdAt?: true
-  }
-
-  export type TaskInstanceCountAggregateInputType = {
-    id?: true
-    templateId?: true
-    title?: true
-    description?: true
-    category?: true
-    priority?: true
-    assignedTo?: true
-    taskType?: true
-    formLink?: true
-    dueDate?: true
-    status?: true
-    completedById?: true
-    completedAt?: true
-    completionNote?: true
-    skippedById?: true
-    skippedAt?: true
-    skipReason?: true
-    formSubmissionId?: true
-    instanceNumber?: true
-    createdAt?: true
-    _all?: true
-  }
-
-  export type TaskInstanceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which TaskInstance to aggregate.
-     */
-    where?: TaskInstanceWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of TaskInstances to fetch.
-     */
-    orderBy?: TaskInstanceOrderByWithRelationInput | TaskInstanceOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: TaskInstanceWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` TaskInstances from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` TaskInstances.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned TaskInstances
-    **/
-    _count?: true | TaskInstanceCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: TaskInstanceAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: TaskInstanceSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: TaskInstanceMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: TaskInstanceMaxAggregateInputType
-  }
-
-  export type GetTaskInstanceAggregateType<T extends TaskInstanceAggregateArgs> = {
-        [P in keyof T & keyof AggregateTaskInstance]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateTaskInstance[P]>
-      : GetScalarType<T[P], AggregateTaskInstance[P]>
-  }
-
-
-
-
-  export type TaskInstanceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TaskInstanceWhereInput
-    orderBy?: TaskInstanceOrderByWithAggregationInput | TaskInstanceOrderByWithAggregationInput[]
-    by: TaskInstanceScalarFieldEnum[] | TaskInstanceScalarFieldEnum
-    having?: TaskInstanceScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: TaskInstanceCountAggregateInputType | true
-    _avg?: TaskInstanceAvgAggregateInputType
-    _sum?: TaskInstanceSumAggregateInputType
-    _min?: TaskInstanceMinAggregateInputType
-    _max?: TaskInstanceMaxAggregateInputType
-  }
-
-  export type TaskInstanceGroupByOutputType = {
-    id: string
-    templateId: string
-    title: string
-    description: string | null
-    category: string
-    priority: string
-    assignedTo: JsonValue
-    taskType: string
-    formLink: JsonValue | null
-    dueDate: Date
-    status: $Enums.TaskInstanceStatus
-    completedById: string | null
-    completedAt: Date | null
-    completionNote: string | null
-    skippedById: string | null
-    skippedAt: Date | null
-    skipReason: string | null
-    formSubmissionId: string | null
-    instanceNumber: number
-    createdAt: Date
-    _count: TaskInstanceCountAggregateOutputType | null
-    _avg: TaskInstanceAvgAggregateOutputType | null
-    _sum: TaskInstanceSumAggregateOutputType | null
-    _min: TaskInstanceMinAggregateOutputType | null
-    _max: TaskInstanceMaxAggregateOutputType | null
-  }
-
-  type GetTaskInstanceGroupByPayload<T extends TaskInstanceGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<TaskInstanceGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof TaskInstanceGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], TaskInstanceGroupByOutputType[P]>
-            : GetScalarType<T[P], TaskInstanceGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type TaskInstanceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    templateId?: boolean
-    title?: boolean
-    description?: boolean
-    category?: boolean
-    priority?: boolean
-    assignedTo?: boolean
-    taskType?: boolean
-    formLink?: boolean
-    dueDate?: boolean
-    status?: boolean
-    completedById?: boolean
-    completedAt?: boolean
-    completionNote?: boolean
-    skippedById?: boolean
-    skippedAt?: boolean
-    skipReason?: boolean
-    formSubmissionId?: boolean
-    instanceNumber?: boolean
-    createdAt?: boolean
-    template?: boolean | TaskTemplateDefaultArgs<ExtArgs>
-    completedBy?: boolean | TaskInstance$completedByArgs<ExtArgs>
-    skippedBy?: boolean | TaskInstance$skippedByArgs<ExtArgs>
-    history?: boolean | TaskInstance$historyArgs<ExtArgs>
-    _count?: boolean | TaskInstanceCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["taskInstance"]>
-
-  export type TaskInstanceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    templateId?: boolean
-    title?: boolean
-    description?: boolean
-    category?: boolean
-    priority?: boolean
-    assignedTo?: boolean
-    taskType?: boolean
-    formLink?: boolean
-    dueDate?: boolean
-    status?: boolean
-    completedById?: boolean
-    completedAt?: boolean
-    completionNote?: boolean
-    skippedById?: boolean
-    skippedAt?: boolean
-    skipReason?: boolean
-    formSubmissionId?: boolean
-    instanceNumber?: boolean
-    createdAt?: boolean
-    template?: boolean | TaskTemplateDefaultArgs<ExtArgs>
-    completedBy?: boolean | TaskInstance$completedByArgs<ExtArgs>
-    skippedBy?: boolean | TaskInstance$skippedByArgs<ExtArgs>
-  }, ExtArgs["result"]["taskInstance"]>
-
-  export type TaskInstanceSelectScalar = {
-    id?: boolean
-    templateId?: boolean
-    title?: boolean
-    description?: boolean
-    category?: boolean
-    priority?: boolean
-    assignedTo?: boolean
-    taskType?: boolean
-    formLink?: boolean
-    dueDate?: boolean
-    status?: boolean
-    completedById?: boolean
-    completedAt?: boolean
-    completionNote?: boolean
-    skippedById?: boolean
-    skippedAt?: boolean
-    skipReason?: boolean
-    formSubmissionId?: boolean
-    instanceNumber?: boolean
-    createdAt?: boolean
-  }
-
-  export type TaskInstanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    template?: boolean | TaskTemplateDefaultArgs<ExtArgs>
-    completedBy?: boolean | TaskInstance$completedByArgs<ExtArgs>
-    skippedBy?: boolean | TaskInstance$skippedByArgs<ExtArgs>
-    history?: boolean | TaskInstance$historyArgs<ExtArgs>
-    _count?: boolean | TaskInstanceCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type TaskInstanceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    template?: boolean | TaskTemplateDefaultArgs<ExtArgs>
-    completedBy?: boolean | TaskInstance$completedByArgs<ExtArgs>
-    skippedBy?: boolean | TaskInstance$skippedByArgs<ExtArgs>
-  }
-
-  export type $TaskInstancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "TaskInstance"
-    objects: {
-      template: Prisma.$TaskTemplatePayload<ExtArgs>
-      completedBy: Prisma.$UserPayload<ExtArgs> | null
-      skippedBy: Prisma.$UserPayload<ExtArgs> | null
-      history: Prisma.$TaskHistoryPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      templateId: string
-      title: string
-      description: string | null
-      category: string
-      priority: string
-      assignedTo: Prisma.JsonValue
-      taskType: string
-      formLink: Prisma.JsonValue | null
-      dueDate: Date
-      status: $Enums.TaskInstanceStatus
-      completedById: string | null
-      completedAt: Date | null
-      completionNote: string | null
-      skippedById: string | null
-      skippedAt: Date | null
-      skipReason: string | null
-      formSubmissionId: string | null
-      instanceNumber: number
-      createdAt: Date
-    }, ExtArgs["result"]["taskInstance"]>
-    composites: {}
-  }
-
-  type TaskInstanceGetPayload<S extends boolean | null | undefined | TaskInstanceDefaultArgs> = $Result.GetResult<Prisma.$TaskInstancePayload, S>
-
-  type TaskInstanceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<TaskInstanceFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: TaskInstanceCountAggregateInputType | true
-    }
-
-  export interface TaskInstanceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TaskInstance'], meta: { name: 'TaskInstance' } }
-    /**
-     * Find zero or one TaskInstance that matches the filter.
-     * @param {TaskInstanceFindUniqueArgs} args - Arguments to find a TaskInstance
-     * @example
-     * // Get one TaskInstance
-     * const taskInstance = await prisma.taskInstance.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends TaskInstanceFindUniqueArgs>(args: SelectSubset<T, TaskInstanceFindUniqueArgs<ExtArgs>>): Prisma__TaskInstanceClient<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
-
-    /**
-     * Find one TaskInstance that matches the filter or throw an error with `error.code='P2025'` 
-     * if no matches were found.
-     * @param {TaskInstanceFindUniqueOrThrowArgs} args - Arguments to find a TaskInstance
-     * @example
-     * // Get one TaskInstance
-     * const taskInstance = await prisma.taskInstance.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends TaskInstanceFindUniqueOrThrowArgs>(args: SelectSubset<T, TaskInstanceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TaskInstanceClient<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
-
-    /**
-     * Find the first TaskInstance that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskInstanceFindFirstArgs} args - Arguments to find a TaskInstance
-     * @example
-     * // Get one TaskInstance
-     * const taskInstance = await prisma.taskInstance.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends TaskInstanceFindFirstArgs>(args?: SelectSubset<T, TaskInstanceFindFirstArgs<ExtArgs>>): Prisma__TaskInstanceClient<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
-
-    /**
-     * Find the first TaskInstance that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskInstanceFindFirstOrThrowArgs} args - Arguments to find a TaskInstance
-     * @example
-     * // Get one TaskInstance
-     * const taskInstance = await prisma.taskInstance.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends TaskInstanceFindFirstOrThrowArgs>(args?: SelectSubset<T, TaskInstanceFindFirstOrThrowArgs<ExtArgs>>): Prisma__TaskInstanceClient<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
-
-    /**
-     * Find zero or more TaskInstances that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskInstanceFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all TaskInstances
-     * const taskInstances = await prisma.taskInstance.findMany()
-     * 
-     * // Get first 10 TaskInstances
-     * const taskInstances = await prisma.taskInstance.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const taskInstanceWithIdOnly = await prisma.taskInstance.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends TaskInstanceFindManyArgs>(args?: SelectSubset<T, TaskInstanceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "findMany">>
-
-    /**
-     * Create a TaskInstance.
-     * @param {TaskInstanceCreateArgs} args - Arguments to create a TaskInstance.
-     * @example
-     * // Create one TaskInstance
-     * const TaskInstance = await prisma.taskInstance.create({
-     *   data: {
-     *     // ... data to create a TaskInstance
-     *   }
-     * })
-     * 
-     */
-    create<T extends TaskInstanceCreateArgs>(args: SelectSubset<T, TaskInstanceCreateArgs<ExtArgs>>): Prisma__TaskInstanceClient<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "create">, never, ExtArgs>
-
-    /**
-     * Create many TaskInstances.
-     * @param {TaskInstanceCreateManyArgs} args - Arguments to create many TaskInstances.
-     * @example
-     * // Create many TaskInstances
-     * const taskInstance = await prisma.taskInstance.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends TaskInstanceCreateManyArgs>(args?: SelectSubset<T, TaskInstanceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many TaskInstances and returns the data saved in the database.
-     * @param {TaskInstanceCreateManyAndReturnArgs} args - Arguments to create many TaskInstances.
-     * @example
-     * // Create many TaskInstances
-     * const taskInstance = await prisma.taskInstance.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many TaskInstances and only return the `id`
-     * const taskInstanceWithIdOnly = await prisma.taskInstance.createManyAndReturn({ 
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends TaskInstanceCreateManyAndReturnArgs>(args?: SelectSubset<T, TaskInstanceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "createManyAndReturn">>
-
-    /**
-     * Delete a TaskInstance.
-     * @param {TaskInstanceDeleteArgs} args - Arguments to delete one TaskInstance.
-     * @example
-     * // Delete one TaskInstance
-     * const TaskInstance = await prisma.taskInstance.delete({
-     *   where: {
-     *     // ... filter to delete one TaskInstance
-     *   }
-     * })
-     * 
-     */
-    delete<T extends TaskInstanceDeleteArgs>(args: SelectSubset<T, TaskInstanceDeleteArgs<ExtArgs>>): Prisma__TaskInstanceClient<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "delete">, never, ExtArgs>
-
-    /**
-     * Update one TaskInstance.
-     * @param {TaskInstanceUpdateArgs} args - Arguments to update one TaskInstance.
-     * @example
-     * // Update one TaskInstance
-     * const taskInstance = await prisma.taskInstance.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends TaskInstanceUpdateArgs>(args: SelectSubset<T, TaskInstanceUpdateArgs<ExtArgs>>): Prisma__TaskInstanceClient<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "update">, never, ExtArgs>
-
-    /**
-     * Delete zero or more TaskInstances.
-     * @param {TaskInstanceDeleteManyArgs} args - Arguments to filter TaskInstances to delete.
-     * @example
-     * // Delete a few TaskInstances
-     * const { count } = await prisma.taskInstance.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends TaskInstanceDeleteManyArgs>(args?: SelectSubset<T, TaskInstanceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more TaskInstances.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskInstanceUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many TaskInstances
-     * const taskInstance = await prisma.taskInstance.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends TaskInstanceUpdateManyArgs>(args: SelectSubset<T, TaskInstanceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one TaskInstance.
-     * @param {TaskInstanceUpsertArgs} args - Arguments to update or create a TaskInstance.
-     * @example
-     * // Update or create a TaskInstance
-     * const taskInstance = await prisma.taskInstance.upsert({
-     *   create: {
-     *     // ... data to create a TaskInstance
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the TaskInstance we want to update
-     *   }
-     * })
-     */
-    upsert<T extends TaskInstanceUpsertArgs>(args: SelectSubset<T, TaskInstanceUpsertArgs<ExtArgs>>): Prisma__TaskInstanceClient<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
-
-
-    /**
-     * Count the number of TaskInstances.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskInstanceCountArgs} args - Arguments to filter TaskInstances to count.
-     * @example
-     * // Count the number of TaskInstances
-     * const count = await prisma.taskInstance.count({
-     *   where: {
-     *     // ... the filter for the TaskInstances we want to count
-     *   }
-     * })
-    **/
-    count<T extends TaskInstanceCountArgs>(
-      args?: Subset<T, TaskInstanceCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], TaskInstanceCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a TaskInstance.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskInstanceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends TaskInstanceAggregateArgs>(args: Subset<T, TaskInstanceAggregateArgs>): Prisma.PrismaPromise<GetTaskInstanceAggregateType<T>>
-
-    /**
-     * Group by TaskInstance.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskInstanceGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends TaskInstanceGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: TaskInstanceGroupByArgs['orderBy'] }
-        : { orderBy?: TaskInstanceGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, TaskInstanceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTaskInstanceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the TaskInstance model
-   */
-  readonly fields: TaskInstanceFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for TaskInstance.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__TaskInstanceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    template<T extends TaskTemplateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TaskTemplateDefaultArgs<ExtArgs>>): Prisma__TaskTemplateClient<$Result.GetResult<Prisma.$TaskTemplatePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    completedBy<T extends TaskInstance$completedByArgs<ExtArgs> = {}>(args?: Subset<T, TaskInstance$completedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
-    skippedBy<T extends TaskInstance$skippedByArgs<ExtArgs> = {}>(args?: Subset<T, TaskInstance$skippedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
-    history<T extends TaskInstance$historyArgs<ExtArgs> = {}>(args?: Subset<T, TaskInstance$historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskHistoryPayload<ExtArgs>, T, "findMany"> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the TaskInstance model
-   */ 
-  interface TaskInstanceFieldRefs {
-    readonly id: FieldRef<"TaskInstance", 'String'>
-    readonly templateId: FieldRef<"TaskInstance", 'String'>
-    readonly title: FieldRef<"TaskInstance", 'String'>
-    readonly description: FieldRef<"TaskInstance", 'String'>
-    readonly category: FieldRef<"TaskInstance", 'String'>
-    readonly priority: FieldRef<"TaskInstance", 'String'>
-    readonly assignedTo: FieldRef<"TaskInstance", 'Json'>
-    readonly taskType: FieldRef<"TaskInstance", 'String'>
-    readonly formLink: FieldRef<"TaskInstance", 'Json'>
-    readonly dueDate: FieldRef<"TaskInstance", 'DateTime'>
-    readonly status: FieldRef<"TaskInstance", 'TaskInstanceStatus'>
-    readonly completedById: FieldRef<"TaskInstance", 'String'>
-    readonly completedAt: FieldRef<"TaskInstance", 'DateTime'>
-    readonly completionNote: FieldRef<"TaskInstance", 'String'>
-    readonly skippedById: FieldRef<"TaskInstance", 'String'>
-    readonly skippedAt: FieldRef<"TaskInstance", 'DateTime'>
-    readonly skipReason: FieldRef<"TaskInstance", 'String'>
-    readonly formSubmissionId: FieldRef<"TaskInstance", 'String'>
-    readonly instanceNumber: FieldRef<"TaskInstance", 'Int'>
-    readonly createdAt: FieldRef<"TaskInstance", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * TaskInstance findUnique
-   */
-  export type TaskInstanceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskInstance
-     */
-    select?: TaskInstanceSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInstanceInclude<ExtArgs> | null
-    /**
-     * Filter, which TaskInstance to fetch.
-     */
-    where: TaskInstanceWhereUniqueInput
-  }
-
-  /**
-   * TaskInstance findUniqueOrThrow
-   */
-  export type TaskInstanceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskInstance
-     */
-    select?: TaskInstanceSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInstanceInclude<ExtArgs> | null
-    /**
-     * Filter, which TaskInstance to fetch.
-     */
-    where: TaskInstanceWhereUniqueInput
-  }
-
-  /**
-   * TaskInstance findFirst
-   */
-  export type TaskInstanceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskInstance
-     */
-    select?: TaskInstanceSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInstanceInclude<ExtArgs> | null
-    /**
-     * Filter, which TaskInstance to fetch.
-     */
-    where?: TaskInstanceWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of TaskInstances to fetch.
-     */
-    orderBy?: TaskInstanceOrderByWithRelationInput | TaskInstanceOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for TaskInstances.
-     */
-    cursor?: TaskInstanceWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` TaskInstances from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` TaskInstances.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of TaskInstances.
-     */
-    distinct?: TaskInstanceScalarFieldEnum | TaskInstanceScalarFieldEnum[]
-  }
-
-  /**
-   * TaskInstance findFirstOrThrow
-   */
-  export type TaskInstanceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskInstance
-     */
-    select?: TaskInstanceSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInstanceInclude<ExtArgs> | null
-    /**
-     * Filter, which TaskInstance to fetch.
-     */
-    where?: TaskInstanceWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of TaskInstances to fetch.
-     */
-    orderBy?: TaskInstanceOrderByWithRelationInput | TaskInstanceOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for TaskInstances.
-     */
-    cursor?: TaskInstanceWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` TaskInstances from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` TaskInstances.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of TaskInstances.
-     */
-    distinct?: TaskInstanceScalarFieldEnum | TaskInstanceScalarFieldEnum[]
-  }
-
-  /**
-   * TaskInstance findMany
-   */
-  export type TaskInstanceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskInstance
-     */
-    select?: TaskInstanceSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInstanceInclude<ExtArgs> | null
-    /**
-     * Filter, which TaskInstances to fetch.
-     */
-    where?: TaskInstanceWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of TaskInstances to fetch.
-     */
-    orderBy?: TaskInstanceOrderByWithRelationInput | TaskInstanceOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing TaskInstances.
-     */
-    cursor?: TaskInstanceWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` TaskInstances from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` TaskInstances.
-     */
-    skip?: number
-    distinct?: TaskInstanceScalarFieldEnum | TaskInstanceScalarFieldEnum[]
-  }
-
-  /**
-   * TaskInstance create
-   */
-  export type TaskInstanceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskInstance
-     */
-    select?: TaskInstanceSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInstanceInclude<ExtArgs> | null
-    /**
-     * The data needed to create a TaskInstance.
-     */
-    data: XOR<TaskInstanceCreateInput, TaskInstanceUncheckedCreateInput>
-  }
-
-  /**
-   * TaskInstance createMany
-   */
-  export type TaskInstanceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many TaskInstances.
-     */
-    data: TaskInstanceCreateManyInput | TaskInstanceCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * TaskInstance createManyAndReturn
-   */
-  export type TaskInstanceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskInstance
-     */
-    select?: TaskInstanceSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * The data used to create many TaskInstances.
-     */
-    data: TaskInstanceCreateManyInput | TaskInstanceCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInstanceIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * TaskInstance update
-   */
-  export type TaskInstanceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskInstance
-     */
-    select?: TaskInstanceSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInstanceInclude<ExtArgs> | null
-    /**
-     * The data needed to update a TaskInstance.
-     */
-    data: XOR<TaskInstanceUpdateInput, TaskInstanceUncheckedUpdateInput>
-    /**
-     * Choose, which TaskInstance to update.
-     */
-    where: TaskInstanceWhereUniqueInput
-  }
-
-  /**
-   * TaskInstance updateMany
-   */
-  export type TaskInstanceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update TaskInstances.
-     */
-    data: XOR<TaskInstanceUpdateManyMutationInput, TaskInstanceUncheckedUpdateManyInput>
-    /**
-     * Filter which TaskInstances to update
-     */
-    where?: TaskInstanceWhereInput
-  }
-
-  /**
-   * TaskInstance upsert
-   */
-  export type TaskInstanceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskInstance
-     */
-    select?: TaskInstanceSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInstanceInclude<ExtArgs> | null
-    /**
-     * The filter to search for the TaskInstance to update in case it exists.
-     */
-    where: TaskInstanceWhereUniqueInput
-    /**
-     * In case the TaskInstance found by the `where` argument doesn't exist, create a new TaskInstance with this data.
-     */
-    create: XOR<TaskInstanceCreateInput, TaskInstanceUncheckedCreateInput>
-    /**
-     * In case the TaskInstance was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<TaskInstanceUpdateInput, TaskInstanceUncheckedUpdateInput>
-  }
-
-  /**
-   * TaskInstance delete
-   */
-  export type TaskInstanceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskInstance
-     */
-    select?: TaskInstanceSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInstanceInclude<ExtArgs> | null
-    /**
-     * Filter which TaskInstance to delete.
-     */
-    where: TaskInstanceWhereUniqueInput
-  }
-
-  /**
-   * TaskInstance deleteMany
-   */
-  export type TaskInstanceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which TaskInstances to delete
-     */
-    where?: TaskInstanceWhereInput
-  }
-
-  /**
-   * TaskInstance.completedBy
-   */
-  export type TaskInstance$completedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-  }
-
-  /**
-   * TaskInstance.skippedBy
-   */
-  export type TaskInstance$skippedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-  }
-
-  /**
-   * TaskInstance.history
-   */
-  export type TaskInstance$historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskHistory
-     */
-    select?: TaskHistorySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskHistoryInclude<ExtArgs> | null
-    where?: TaskHistoryWhereInput
-    orderBy?: TaskHistoryOrderByWithRelationInput | TaskHistoryOrderByWithRelationInput[]
-    cursor?: TaskHistoryWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TaskHistoryScalarFieldEnum | TaskHistoryScalarFieldEnum[]
-  }
-
-  /**
-   * TaskInstance without action
-   */
-  export type TaskInstanceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskInstance
-     */
-    select?: TaskInstanceSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskInstanceInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model TaskHistory
-   */
-
-  export type AggregateTaskHistory = {
-    _count: TaskHistoryCountAggregateOutputType | null
-    _min: TaskHistoryMinAggregateOutputType | null
-    _max: TaskHistoryMaxAggregateOutputType | null
-  }
-
-  export type TaskHistoryMinAggregateOutputType = {
-    id: string | null
-    instanceId: string | null
-    action: $Enums.TaskHistoryAction | null
-    performedById: string | null
-    performedAt: Date | null
-    note: string | null
-  }
-
-  export type TaskHistoryMaxAggregateOutputType = {
-    id: string | null
-    instanceId: string | null
-    action: $Enums.TaskHistoryAction | null
-    performedById: string | null
-    performedAt: Date | null
-    note: string | null
-  }
-
-  export type TaskHistoryCountAggregateOutputType = {
-    id: number
-    instanceId: number
-    action: number
-    performedById: number
-    performedAt: number
-    note: number
-    _all: number
-  }
-
-
-  export type TaskHistoryMinAggregateInputType = {
-    id?: true
-    instanceId?: true
-    action?: true
-    performedById?: true
-    performedAt?: true
-    note?: true
-  }
-
-  export type TaskHistoryMaxAggregateInputType = {
-    id?: true
-    instanceId?: true
-    action?: true
-    performedById?: true
-    performedAt?: true
-    note?: true
-  }
-
-  export type TaskHistoryCountAggregateInputType = {
-    id?: true
-    instanceId?: true
-    action?: true
-    performedById?: true
-    performedAt?: true
-    note?: true
-    _all?: true
-  }
-
-  export type TaskHistoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which TaskHistory to aggregate.
-     */
-    where?: TaskHistoryWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of TaskHistories to fetch.
-     */
-    orderBy?: TaskHistoryOrderByWithRelationInput | TaskHistoryOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: TaskHistoryWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` TaskHistories from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` TaskHistories.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned TaskHistories
-    **/
-    _count?: true | TaskHistoryCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: TaskHistoryMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: TaskHistoryMaxAggregateInputType
-  }
-
-  export type GetTaskHistoryAggregateType<T extends TaskHistoryAggregateArgs> = {
-        [P in keyof T & keyof AggregateTaskHistory]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateTaskHistory[P]>
-      : GetScalarType<T[P], AggregateTaskHistory[P]>
-  }
-
-
-
-
-  export type TaskHistoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TaskHistoryWhereInput
-    orderBy?: TaskHistoryOrderByWithAggregationInput | TaskHistoryOrderByWithAggregationInput[]
-    by: TaskHistoryScalarFieldEnum[] | TaskHistoryScalarFieldEnum
-    having?: TaskHistoryScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: TaskHistoryCountAggregateInputType | true
-    _min?: TaskHistoryMinAggregateInputType
-    _max?: TaskHistoryMaxAggregateInputType
-  }
-
-  export type TaskHistoryGroupByOutputType = {
-    id: string
-    instanceId: string
-    action: $Enums.TaskHistoryAction
-    performedById: string | null
-    performedAt: Date
-    note: string | null
-    _count: TaskHistoryCountAggregateOutputType | null
-    _min: TaskHistoryMinAggregateOutputType | null
-    _max: TaskHistoryMaxAggregateOutputType | null
-  }
-
-  type GetTaskHistoryGroupByPayload<T extends TaskHistoryGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<TaskHistoryGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof TaskHistoryGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], TaskHistoryGroupByOutputType[P]>
-            : GetScalarType<T[P], TaskHistoryGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type TaskHistorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    instanceId?: boolean
-    action?: boolean
-    performedById?: boolean
-    performedAt?: boolean
-    note?: boolean
-    instance?: boolean | TaskInstanceDefaultArgs<ExtArgs>
-    performedBy?: boolean | TaskHistory$performedByArgs<ExtArgs>
-  }, ExtArgs["result"]["taskHistory"]>
-
-  export type TaskHistorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    instanceId?: boolean
-    action?: boolean
-    performedById?: boolean
-    performedAt?: boolean
-    note?: boolean
-    instance?: boolean | TaskInstanceDefaultArgs<ExtArgs>
-    performedBy?: boolean | TaskHistory$performedByArgs<ExtArgs>
-  }, ExtArgs["result"]["taskHistory"]>
-
-  export type TaskHistorySelectScalar = {
-    id?: boolean
-    instanceId?: boolean
-    action?: boolean
-    performedById?: boolean
-    performedAt?: boolean
-    note?: boolean
-  }
-
-  export type TaskHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    instance?: boolean | TaskInstanceDefaultArgs<ExtArgs>
-    performedBy?: boolean | TaskHistory$performedByArgs<ExtArgs>
-  }
-  export type TaskHistoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    instance?: boolean | TaskInstanceDefaultArgs<ExtArgs>
-    performedBy?: boolean | TaskHistory$performedByArgs<ExtArgs>
-  }
-
-  export type $TaskHistoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "TaskHistory"
-    objects: {
-      instance: Prisma.$TaskInstancePayload<ExtArgs>
-      performedBy: Prisma.$UserPayload<ExtArgs> | null
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      instanceId: string
-      action: $Enums.TaskHistoryAction
-      performedById: string | null
-      performedAt: Date
-      note: string | null
-    }, ExtArgs["result"]["taskHistory"]>
-    composites: {}
-  }
-
-  type TaskHistoryGetPayload<S extends boolean | null | undefined | TaskHistoryDefaultArgs> = $Result.GetResult<Prisma.$TaskHistoryPayload, S>
-
-  type TaskHistoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<TaskHistoryFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: TaskHistoryCountAggregateInputType | true
-    }
-
-  export interface TaskHistoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TaskHistory'], meta: { name: 'TaskHistory' } }
-    /**
-     * Find zero or one TaskHistory that matches the filter.
-     * @param {TaskHistoryFindUniqueArgs} args - Arguments to find a TaskHistory
-     * @example
-     * // Get one TaskHistory
-     * const taskHistory = await prisma.taskHistory.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends TaskHistoryFindUniqueArgs>(args: SelectSubset<T, TaskHistoryFindUniqueArgs<ExtArgs>>): Prisma__TaskHistoryClient<$Result.GetResult<Prisma.$TaskHistoryPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
-
-    /**
-     * Find one TaskHistory that matches the filter or throw an error with `error.code='P2025'` 
-     * if no matches were found.
-     * @param {TaskHistoryFindUniqueOrThrowArgs} args - Arguments to find a TaskHistory
-     * @example
-     * // Get one TaskHistory
-     * const taskHistory = await prisma.taskHistory.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends TaskHistoryFindUniqueOrThrowArgs>(args: SelectSubset<T, TaskHistoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TaskHistoryClient<$Result.GetResult<Prisma.$TaskHistoryPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
-
-    /**
-     * Find the first TaskHistory that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskHistoryFindFirstArgs} args - Arguments to find a TaskHistory
-     * @example
-     * // Get one TaskHistory
-     * const taskHistory = await prisma.taskHistory.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends TaskHistoryFindFirstArgs>(args?: SelectSubset<T, TaskHistoryFindFirstArgs<ExtArgs>>): Prisma__TaskHistoryClient<$Result.GetResult<Prisma.$TaskHistoryPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
-
-    /**
-     * Find the first TaskHistory that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskHistoryFindFirstOrThrowArgs} args - Arguments to find a TaskHistory
-     * @example
-     * // Get one TaskHistory
-     * const taskHistory = await prisma.taskHistory.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends TaskHistoryFindFirstOrThrowArgs>(args?: SelectSubset<T, TaskHistoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__TaskHistoryClient<$Result.GetResult<Prisma.$TaskHistoryPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
-
-    /**
-     * Find zero or more TaskHistories that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskHistoryFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all TaskHistories
-     * const taskHistories = await prisma.taskHistory.findMany()
-     * 
-     * // Get first 10 TaskHistories
-     * const taskHistories = await prisma.taskHistory.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const taskHistoryWithIdOnly = await prisma.taskHistory.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends TaskHistoryFindManyArgs>(args?: SelectSubset<T, TaskHistoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskHistoryPayload<ExtArgs>, T, "findMany">>
-
-    /**
-     * Create a TaskHistory.
-     * @param {TaskHistoryCreateArgs} args - Arguments to create a TaskHistory.
-     * @example
-     * // Create one TaskHistory
-     * const TaskHistory = await prisma.taskHistory.create({
-     *   data: {
-     *     // ... data to create a TaskHistory
-     *   }
-     * })
-     * 
-     */
-    create<T extends TaskHistoryCreateArgs>(args: SelectSubset<T, TaskHistoryCreateArgs<ExtArgs>>): Prisma__TaskHistoryClient<$Result.GetResult<Prisma.$TaskHistoryPayload<ExtArgs>, T, "create">, never, ExtArgs>
-
-    /**
-     * Create many TaskHistories.
-     * @param {TaskHistoryCreateManyArgs} args - Arguments to create many TaskHistories.
-     * @example
-     * // Create many TaskHistories
-     * const taskHistory = await prisma.taskHistory.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends TaskHistoryCreateManyArgs>(args?: SelectSubset<T, TaskHistoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many TaskHistories and returns the data saved in the database.
-     * @param {TaskHistoryCreateManyAndReturnArgs} args - Arguments to create many TaskHistories.
-     * @example
-     * // Create many TaskHistories
-     * const taskHistory = await prisma.taskHistory.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many TaskHistories and only return the `id`
-     * const taskHistoryWithIdOnly = await prisma.taskHistory.createManyAndReturn({ 
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends TaskHistoryCreateManyAndReturnArgs>(args?: SelectSubset<T, TaskHistoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskHistoryPayload<ExtArgs>, T, "createManyAndReturn">>
-
-    /**
-     * Delete a TaskHistory.
-     * @param {TaskHistoryDeleteArgs} args - Arguments to delete one TaskHistory.
-     * @example
-     * // Delete one TaskHistory
-     * const TaskHistory = await prisma.taskHistory.delete({
-     *   where: {
-     *     // ... filter to delete one TaskHistory
-     *   }
-     * })
-     * 
-     */
-    delete<T extends TaskHistoryDeleteArgs>(args: SelectSubset<T, TaskHistoryDeleteArgs<ExtArgs>>): Prisma__TaskHistoryClient<$Result.GetResult<Prisma.$TaskHistoryPayload<ExtArgs>, T, "delete">, never, ExtArgs>
-
-    /**
-     * Update one TaskHistory.
-     * @param {TaskHistoryUpdateArgs} args - Arguments to update one TaskHistory.
-     * @example
-     * // Update one TaskHistory
-     * const taskHistory = await prisma.taskHistory.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends TaskHistoryUpdateArgs>(args: SelectSubset<T, TaskHistoryUpdateArgs<ExtArgs>>): Prisma__TaskHistoryClient<$Result.GetResult<Prisma.$TaskHistoryPayload<ExtArgs>, T, "update">, never, ExtArgs>
-
-    /**
-     * Delete zero or more TaskHistories.
-     * @param {TaskHistoryDeleteManyArgs} args - Arguments to filter TaskHistories to delete.
-     * @example
-     * // Delete a few TaskHistories
-     * const { count } = await prisma.taskHistory.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends TaskHistoryDeleteManyArgs>(args?: SelectSubset<T, TaskHistoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more TaskHistories.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskHistoryUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many TaskHistories
-     * const taskHistory = await prisma.taskHistory.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends TaskHistoryUpdateManyArgs>(args: SelectSubset<T, TaskHistoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one TaskHistory.
-     * @param {TaskHistoryUpsertArgs} args - Arguments to update or create a TaskHistory.
-     * @example
-     * // Update or create a TaskHistory
-     * const taskHistory = await prisma.taskHistory.upsert({
-     *   create: {
-     *     // ... data to create a TaskHistory
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the TaskHistory we want to update
-     *   }
-     * })
-     */
-    upsert<T extends TaskHistoryUpsertArgs>(args: SelectSubset<T, TaskHistoryUpsertArgs<ExtArgs>>): Prisma__TaskHistoryClient<$Result.GetResult<Prisma.$TaskHistoryPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
-
-
-    /**
-     * Count the number of TaskHistories.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskHistoryCountArgs} args - Arguments to filter TaskHistories to count.
-     * @example
-     * // Count the number of TaskHistories
-     * const count = await prisma.taskHistory.count({
-     *   where: {
-     *     // ... the filter for the TaskHistories we want to count
-     *   }
-     * })
-    **/
-    count<T extends TaskHistoryCountArgs>(
-      args?: Subset<T, TaskHistoryCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], TaskHistoryCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a TaskHistory.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskHistoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends TaskHistoryAggregateArgs>(args: Subset<T, TaskHistoryAggregateArgs>): Prisma.PrismaPromise<GetTaskHistoryAggregateType<T>>
-
-    /**
-     * Group by TaskHistory.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {TaskHistoryGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends TaskHistoryGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: TaskHistoryGroupByArgs['orderBy'] }
-        : { orderBy?: TaskHistoryGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, TaskHistoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTaskHistoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the TaskHistory model
-   */
-  readonly fields: TaskHistoryFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for TaskHistory.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__TaskHistoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    instance<T extends TaskInstanceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TaskInstanceDefaultArgs<ExtArgs>>): Prisma__TaskInstanceClient<$Result.GetResult<Prisma.$TaskInstancePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    performedBy<T extends TaskHistory$performedByArgs<ExtArgs> = {}>(args?: Subset<T, TaskHistory$performedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the TaskHistory model
-   */ 
-  interface TaskHistoryFieldRefs {
-    readonly id: FieldRef<"TaskHistory", 'String'>
-    readonly instanceId: FieldRef<"TaskHistory", 'String'>
-    readonly action: FieldRef<"TaskHistory", 'TaskHistoryAction'>
-    readonly performedById: FieldRef<"TaskHistory", 'String'>
-    readonly performedAt: FieldRef<"TaskHistory", 'DateTime'>
-    readonly note: FieldRef<"TaskHistory", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * TaskHistory findUnique
-   */
-  export type TaskHistoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskHistory
-     */
-    select?: TaskHistorySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskHistoryInclude<ExtArgs> | null
-    /**
-     * Filter, which TaskHistory to fetch.
-     */
-    where: TaskHistoryWhereUniqueInput
-  }
-
-  /**
-   * TaskHistory findUniqueOrThrow
-   */
-  export type TaskHistoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskHistory
-     */
-    select?: TaskHistorySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskHistoryInclude<ExtArgs> | null
-    /**
-     * Filter, which TaskHistory to fetch.
-     */
-    where: TaskHistoryWhereUniqueInput
-  }
-
-  /**
-   * TaskHistory findFirst
-   */
-  export type TaskHistoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskHistory
-     */
-    select?: TaskHistorySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskHistoryInclude<ExtArgs> | null
-    /**
-     * Filter, which TaskHistory to fetch.
-     */
-    where?: TaskHistoryWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of TaskHistories to fetch.
-     */
-    orderBy?: TaskHistoryOrderByWithRelationInput | TaskHistoryOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for TaskHistories.
-     */
-    cursor?: TaskHistoryWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` TaskHistories from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` TaskHistories.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of TaskHistories.
-     */
-    distinct?: TaskHistoryScalarFieldEnum | TaskHistoryScalarFieldEnum[]
-  }
-
-  /**
-   * TaskHistory findFirstOrThrow
-   */
-  export type TaskHistoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskHistory
-     */
-    select?: TaskHistorySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskHistoryInclude<ExtArgs> | null
-    /**
-     * Filter, which TaskHistory to fetch.
-     */
-    where?: TaskHistoryWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of TaskHistories to fetch.
-     */
-    orderBy?: TaskHistoryOrderByWithRelationInput | TaskHistoryOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for TaskHistories.
-     */
-    cursor?: TaskHistoryWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` TaskHistories from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` TaskHistories.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of TaskHistories.
-     */
-    distinct?: TaskHistoryScalarFieldEnum | TaskHistoryScalarFieldEnum[]
-  }
-
-  /**
-   * TaskHistory findMany
-   */
-  export type TaskHistoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskHistory
-     */
-    select?: TaskHistorySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskHistoryInclude<ExtArgs> | null
-    /**
-     * Filter, which TaskHistories to fetch.
-     */
-    where?: TaskHistoryWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of TaskHistories to fetch.
-     */
-    orderBy?: TaskHistoryOrderByWithRelationInput | TaskHistoryOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing TaskHistories.
-     */
-    cursor?: TaskHistoryWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` TaskHistories from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` TaskHistories.
-     */
-    skip?: number
-    distinct?: TaskHistoryScalarFieldEnum | TaskHistoryScalarFieldEnum[]
-  }
-
-  /**
-   * TaskHistory create
-   */
-  export type TaskHistoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskHistory
-     */
-    select?: TaskHistorySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskHistoryInclude<ExtArgs> | null
-    /**
-     * The data needed to create a TaskHistory.
-     */
-    data: XOR<TaskHistoryCreateInput, TaskHistoryUncheckedCreateInput>
-  }
-
-  /**
-   * TaskHistory createMany
-   */
-  export type TaskHistoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many TaskHistories.
-     */
-    data: TaskHistoryCreateManyInput | TaskHistoryCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * TaskHistory createManyAndReturn
-   */
-  export type TaskHistoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskHistory
-     */
-    select?: TaskHistorySelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * The data used to create many TaskHistories.
-     */
-    data: TaskHistoryCreateManyInput | TaskHistoryCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskHistoryIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * TaskHistory update
-   */
-  export type TaskHistoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskHistory
-     */
-    select?: TaskHistorySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskHistoryInclude<ExtArgs> | null
-    /**
-     * The data needed to update a TaskHistory.
-     */
-    data: XOR<TaskHistoryUpdateInput, TaskHistoryUncheckedUpdateInput>
-    /**
-     * Choose, which TaskHistory to update.
-     */
-    where: TaskHistoryWhereUniqueInput
-  }
-
-  /**
-   * TaskHistory updateMany
-   */
-  export type TaskHistoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update TaskHistories.
-     */
-    data: XOR<TaskHistoryUpdateManyMutationInput, TaskHistoryUncheckedUpdateManyInput>
-    /**
-     * Filter which TaskHistories to update
-     */
-    where?: TaskHistoryWhereInput
-  }
-
-  /**
-   * TaskHistory upsert
-   */
-  export type TaskHistoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskHistory
-     */
-    select?: TaskHistorySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskHistoryInclude<ExtArgs> | null
-    /**
-     * The filter to search for the TaskHistory to update in case it exists.
-     */
-    where: TaskHistoryWhereUniqueInput
-    /**
-     * In case the TaskHistory found by the `where` argument doesn't exist, create a new TaskHistory with this data.
-     */
-    create: XOR<TaskHistoryCreateInput, TaskHistoryUncheckedCreateInput>
-    /**
-     * In case the TaskHistory was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<TaskHistoryUpdateInput, TaskHistoryUncheckedUpdateInput>
-  }
-
-  /**
-   * TaskHistory delete
-   */
-  export type TaskHistoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskHistory
-     */
-    select?: TaskHistorySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskHistoryInclude<ExtArgs> | null
-    /**
-     * Filter which TaskHistory to delete.
-     */
-    where: TaskHistoryWhereUniqueInput
-  }
-
-  /**
-   * TaskHistory deleteMany
-   */
-  export type TaskHistoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which TaskHistories to delete
-     */
-    where?: TaskHistoryWhereInput
-  }
-
-  /**
-   * TaskHistory.performedBy
-   */
-  export type TaskHistory$performedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-  }
-
-  /**
-   * TaskHistory without action
-   */
-  export type TaskHistoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TaskHistory
-     */
-    select?: TaskHistorySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TaskHistoryInclude<ExtArgs> | null
   }
 
 
@@ -74256,31 +69087,10 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     submittedById: 'submittedById',
-    approvedById: 'approvedById',
-    taskId: 'taskId'
+    approvedById: 'approvedById'
   };
 
   export type FormSubmissionScalarFieldEnum = (typeof FormSubmissionScalarFieldEnum)[keyof typeof FormSubmissionScalarFieldEnum]
-
-
-  export const TaskScalarFieldEnum: {
-    id: 'id',
-    title: 'title',
-    description: 'description',
-    status: 'status',
-    priority: 'priority',
-    dueDate: 'dueDate',
-    completedAt: 'completedAt',
-    recurrence: 'recurrence',
-    location: 'location',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-    formId: 'formId',
-    assignedToId: 'assignedToId',
-    createdById: 'createdById'
-  };
-
-  export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
 
 
   export const RecordScalarFieldEnum: {
@@ -74791,65 +69601,6 @@ export namespace Prisma {
   };
 
   export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
-
-
-  export const TaskTemplateScalarFieldEnum: {
-    id: 'id',
-    title: 'title',
-    description: 'description',
-    category: 'category',
-    priority: 'priority',
-    assignedTo: 'assignedTo',
-    taskType: 'taskType',
-    formLink: 'formLink',
-    recurrenceType: 'recurrenceType',
-    recurrenceConfig: 'recurrenceConfig',
-    firstDueDate: 'firstDueDate',
-    isActive: 'isActive',
-    createdById: 'createdById',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type TaskTemplateScalarFieldEnum = (typeof TaskTemplateScalarFieldEnum)[keyof typeof TaskTemplateScalarFieldEnum]
-
-
-  export const TaskInstanceScalarFieldEnum: {
-    id: 'id',
-    templateId: 'templateId',
-    title: 'title',
-    description: 'description',
-    category: 'category',
-    priority: 'priority',
-    assignedTo: 'assignedTo',
-    taskType: 'taskType',
-    formLink: 'formLink',
-    dueDate: 'dueDate',
-    status: 'status',
-    completedById: 'completedById',
-    completedAt: 'completedAt',
-    completionNote: 'completionNote',
-    skippedById: 'skippedById',
-    skippedAt: 'skippedAt',
-    skipReason: 'skipReason',
-    formSubmissionId: 'formSubmissionId',
-    instanceNumber: 'instanceNumber',
-    createdAt: 'createdAt'
-  };
-
-  export type TaskInstanceScalarFieldEnum = (typeof TaskInstanceScalarFieldEnum)[keyof typeof TaskInstanceScalarFieldEnum]
-
-
-  export const TaskHistoryScalarFieldEnum: {
-    id: 'id',
-    instanceId: 'instanceId',
-    action: 'action',
-    performedById: 'performedById',
-    performedAt: 'performedAt',
-    note: 'note'
-  };
-
-  export type TaskHistoryScalarFieldEnum = (typeof TaskHistoryScalarFieldEnum)[keyof typeof TaskHistoryScalarFieldEnum]
 
 
   export const StockAlertAcknowledgmentScalarFieldEnum: {
@@ -75490,48 +70241,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'TaskStatus'
-   */
-  export type EnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'TaskStatus[]'
-   */
-  export type ListEnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'TaskPriority'
-   */
-  export type EnumTaskPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskPriority'>
-    
-
-
-  /**
-   * Reference to a field of type 'TaskPriority[]'
-   */
-  export type ListEnumTaskPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskPriority[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'RecurrenceType'
-   */
-  export type EnumRecurrenceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RecurrenceType'>
-    
-
-
-  /**
-   * Reference to a field of type 'RecurrenceType[]'
-   */
-  export type ListEnumRecurrenceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RecurrenceType[]'>
-    
-
-
-  /**
    * Reference to a field of type 'PreOpShift'
    */
   export type EnumPreOpShiftFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PreOpShift'>
@@ -75658,90 +70367,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'TaskTemplateCategory'
-   */
-  export type EnumTaskTemplateCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskTemplateCategory'>
-    
-
-
-  /**
-   * Reference to a field of type 'TaskTemplateCategory[]'
-   */
-  export type ListEnumTaskTemplateCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskTemplateCategory[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'TaskTemplatePriority'
-   */
-  export type EnumTaskTemplatePriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskTemplatePriority'>
-    
-
-
-  /**
-   * Reference to a field of type 'TaskTemplatePriority[]'
-   */
-  export type ListEnumTaskTemplatePriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskTemplatePriority[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'TaskTemplateType'
-   */
-  export type EnumTaskTemplateTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskTemplateType'>
-    
-
-
-  /**
-   * Reference to a field of type 'TaskTemplateType[]'
-   */
-  export type ListEnumTaskTemplateTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskTemplateType[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'TaskRecurrenceType'
-   */
-  export type EnumTaskRecurrenceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskRecurrenceType'>
-    
-
-
-  /**
-   * Reference to a field of type 'TaskRecurrenceType[]'
-   */
-  export type ListEnumTaskRecurrenceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskRecurrenceType[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'TaskInstanceStatus'
-   */
-  export type EnumTaskInstanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskInstanceStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'TaskInstanceStatus[]'
-   */
-  export type ListEnumTaskInstanceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskInstanceStatus[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'TaskHistoryAction'
-   */
-  export type EnumTaskHistoryActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskHistoryAction'>
-    
-
-
-  /**
-   * Reference to a field of type 'TaskHistoryAction[]'
-   */
-  export type ListEnumTaskHistoryActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskHistoryAction[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Decimal'
    */
   export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
@@ -75816,8 +70441,6 @@ export namespace Prisma {
     createdForms?: FormListRelationFilter
     submissions?: FormSubmissionListRelationFilter
     approvedSubmissions?: FormSubmissionListRelationFilter
-    assignedTasks?: TaskListRelationFilter
-    createdTasks?: TaskListRelationFilter
     records?: RecordListRelationFilter
     preOpInspections?: PreOpInspectionListRelationFilter
     batchSheetSubmissions?: BatchSheetSubmissionListRelationFilter
@@ -75831,10 +70454,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountListRelationFilter
     formTemplates?: FormTemplateListRelationFilter
     initialStockEntries?: InitialStockEntryListRelationFilter
-    createdTaskTemplates?: TaskTemplateListRelationFilter
-    completedTaskInstances?: TaskInstanceListRelationFilter
-    skippedTaskInstances?: TaskInstanceListRelationFilter
-    taskHistoryActions?: TaskHistoryListRelationFilter
     forecastExclusions?: ForecastExclusionListRelationFilter
     auditExclusions?: InventoryAuditExclusionListRelationFilter
     stockAlertAcknowledgments?: StockAlertAcknowledgmentListRelationFilter
@@ -75868,8 +70487,6 @@ export namespace Prisma {
     createdForms?: FormOrderByRelationAggregateInput
     submissions?: FormSubmissionOrderByRelationAggregateInput
     approvedSubmissions?: FormSubmissionOrderByRelationAggregateInput
-    assignedTasks?: TaskOrderByRelationAggregateInput
-    createdTasks?: TaskOrderByRelationAggregateInput
     records?: RecordOrderByRelationAggregateInput
     preOpInspections?: PreOpInspectionOrderByRelationAggregateInput
     batchSheetSubmissions?: BatchSheetSubmissionOrderByRelationAggregateInput
@@ -75883,10 +70500,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountOrderByRelationAggregateInput
     formTemplates?: FormTemplateOrderByRelationAggregateInput
     initialStockEntries?: InitialStockEntryOrderByRelationAggregateInput
-    createdTaskTemplates?: TaskTemplateOrderByRelationAggregateInput
-    completedTaskInstances?: TaskInstanceOrderByRelationAggregateInput
-    skippedTaskInstances?: TaskInstanceOrderByRelationAggregateInput
-    taskHistoryActions?: TaskHistoryOrderByRelationAggregateInput
     forecastExclusions?: ForecastExclusionOrderByRelationAggregateInput
     auditExclusions?: InventoryAuditExclusionOrderByRelationAggregateInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentOrderByRelationAggregateInput
@@ -75923,8 +70536,6 @@ export namespace Prisma {
     createdForms?: FormListRelationFilter
     submissions?: FormSubmissionListRelationFilter
     approvedSubmissions?: FormSubmissionListRelationFilter
-    assignedTasks?: TaskListRelationFilter
-    createdTasks?: TaskListRelationFilter
     records?: RecordListRelationFilter
     preOpInspections?: PreOpInspectionListRelationFilter
     batchSheetSubmissions?: BatchSheetSubmissionListRelationFilter
@@ -75938,10 +70549,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountListRelationFilter
     formTemplates?: FormTemplateListRelationFilter
     initialStockEntries?: InitialStockEntryListRelationFilter
-    createdTaskTemplates?: TaskTemplateListRelationFilter
-    completedTaskInstances?: TaskInstanceListRelationFilter
-    skippedTaskInstances?: TaskInstanceListRelationFilter
-    taskHistoryActions?: TaskHistoryListRelationFilter
     forecastExclusions?: ForecastExclusionListRelationFilter
     auditExclusions?: InventoryAuditExclusionListRelationFilter
     stockAlertAcknowledgments?: StockAlertAcknowledgmentListRelationFilter
@@ -76008,7 +70615,6 @@ export namespace Prisma {
     createdById?: StringFilter<"Form"> | string
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
     submissions?: FormSubmissionListRelationFilter
-    tasks?: TaskListRelationFilter
   }
 
   export type FormOrderByWithRelationInput = {
@@ -76024,7 +70630,6 @@ export namespace Prisma {
     createdById?: SortOrder
     createdBy?: UserOrderByWithRelationInput
     submissions?: FormSubmissionOrderByRelationAggregateInput
-    tasks?: TaskOrderByRelationAggregateInput
   }
 
   export type FormWhereUniqueInput = Prisma.AtLeast<{
@@ -76043,7 +70648,6 @@ export namespace Prisma {
     createdById?: StringFilter<"Form"> | string
     createdBy?: XOR<UserRelationFilter, UserWhereInput>
     submissions?: FormSubmissionListRelationFilter
-    tasks?: TaskListRelationFilter
   }, "id">
 
   export type FormOrderByWithAggregationInput = {
@@ -76093,11 +70697,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FormSubmission"> | Date | string
     submittedById?: StringFilter<"FormSubmission"> | string
     approvedById?: StringNullableFilter<"FormSubmission"> | string | null
-    taskId?: StringNullableFilter<"FormSubmission"> | string | null
     form?: XOR<FormRelationFilter, FormWhereInput>
     submittedBy?: XOR<UserRelationFilter, UserWhereInput>
     approvedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
-    task?: XOR<TaskNullableRelationFilter, TaskWhereInput> | null
   }
 
   export type FormSubmissionOrderByWithRelationInput = {
@@ -76110,11 +70712,9 @@ export namespace Prisma {
     updatedAt?: SortOrder
     submittedById?: SortOrder
     approvedById?: SortOrderInput | SortOrder
-    taskId?: SortOrderInput | SortOrder
     form?: FormOrderByWithRelationInput
     submittedBy?: UserOrderByWithRelationInput
     approvedBy?: UserOrderByWithRelationInput
-    task?: TaskOrderByWithRelationInput
   }
 
   export type FormSubmissionWhereUniqueInput = Prisma.AtLeast<{
@@ -76130,11 +70730,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FormSubmission"> | Date | string
     submittedById?: StringFilter<"FormSubmission"> | string
     approvedById?: StringNullableFilter<"FormSubmission"> | string | null
-    taskId?: StringNullableFilter<"FormSubmission"> | string | null
     form?: XOR<FormRelationFilter, FormWhereInput>
     submittedBy?: XOR<UserRelationFilter, UserWhereInput>
     approvedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
-    task?: XOR<TaskNullableRelationFilter, TaskWhereInput> | null
   }, "id">
 
   export type FormSubmissionOrderByWithAggregationInput = {
@@ -76147,7 +70745,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
     submittedById?: SortOrder
     approvedById?: SortOrderInput | SortOrder
-    taskId?: SortOrderInput | SortOrder
     _count?: FormSubmissionCountOrderByAggregateInput
     _max?: FormSubmissionMaxOrderByAggregateInput
     _min?: FormSubmissionMinOrderByAggregateInput
@@ -76166,116 +70763,6 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"FormSubmission"> | Date | string
     submittedById?: StringWithAggregatesFilter<"FormSubmission"> | string
     approvedById?: StringNullableWithAggregatesFilter<"FormSubmission"> | string | null
-    taskId?: StringNullableWithAggregatesFilter<"FormSubmission"> | string | null
-  }
-
-  export type TaskWhereInput = {
-    AND?: TaskWhereInput | TaskWhereInput[]
-    OR?: TaskWhereInput[]
-    NOT?: TaskWhereInput | TaskWhereInput[]
-    id?: StringFilter<"Task"> | string
-    title?: StringFilter<"Task"> | string
-    description?: StringNullableFilter<"Task"> | string | null
-    status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFilter<"Task"> | $Enums.TaskPriority
-    dueDate?: DateTimeFilter<"Task"> | Date | string
-    completedAt?: DateTimeNullableFilter<"Task"> | Date | string | null
-    recurrence?: EnumRecurrenceTypeFilter<"Task"> | $Enums.RecurrenceType
-    location?: StringNullableFilter<"Task"> | string | null
-    createdAt?: DateTimeFilter<"Task"> | Date | string
-    updatedAt?: DateTimeFilter<"Task"> | Date | string
-    formId?: StringNullableFilter<"Task"> | string | null
-    assignedToId?: StringFilter<"Task"> | string
-    createdById?: StringFilter<"Task"> | string
-    form?: XOR<FormNullableRelationFilter, FormWhereInput> | null
-    assignedTo?: XOR<UserRelationFilter, UserWhereInput>
-    createdBy?: XOR<UserRelationFilter, UserWhereInput>
-    submissions?: FormSubmissionListRelationFilter
-  }
-
-  export type TaskOrderByWithRelationInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrderInput | SortOrder
-    status?: SortOrder
-    priority?: SortOrder
-    dueDate?: SortOrder
-    completedAt?: SortOrderInput | SortOrder
-    recurrence?: SortOrder
-    location?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    formId?: SortOrderInput | SortOrder
-    assignedToId?: SortOrder
-    createdById?: SortOrder
-    form?: FormOrderByWithRelationInput
-    assignedTo?: UserOrderByWithRelationInput
-    createdBy?: UserOrderByWithRelationInput
-    submissions?: FormSubmissionOrderByRelationAggregateInput
-  }
-
-  export type TaskWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: TaskWhereInput | TaskWhereInput[]
-    OR?: TaskWhereInput[]
-    NOT?: TaskWhereInput | TaskWhereInput[]
-    title?: StringFilter<"Task"> | string
-    description?: StringNullableFilter<"Task"> | string | null
-    status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFilter<"Task"> | $Enums.TaskPriority
-    dueDate?: DateTimeFilter<"Task"> | Date | string
-    completedAt?: DateTimeNullableFilter<"Task"> | Date | string | null
-    recurrence?: EnumRecurrenceTypeFilter<"Task"> | $Enums.RecurrenceType
-    location?: StringNullableFilter<"Task"> | string | null
-    createdAt?: DateTimeFilter<"Task"> | Date | string
-    updatedAt?: DateTimeFilter<"Task"> | Date | string
-    formId?: StringNullableFilter<"Task"> | string | null
-    assignedToId?: StringFilter<"Task"> | string
-    createdById?: StringFilter<"Task"> | string
-    form?: XOR<FormNullableRelationFilter, FormWhereInput> | null
-    assignedTo?: XOR<UserRelationFilter, UserWhereInput>
-    createdBy?: XOR<UserRelationFilter, UserWhereInput>
-    submissions?: FormSubmissionListRelationFilter
-  }, "id">
-
-  export type TaskOrderByWithAggregationInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrderInput | SortOrder
-    status?: SortOrder
-    priority?: SortOrder
-    dueDate?: SortOrder
-    completedAt?: SortOrderInput | SortOrder
-    recurrence?: SortOrder
-    location?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    formId?: SortOrderInput | SortOrder
-    assignedToId?: SortOrder
-    createdById?: SortOrder
-    _count?: TaskCountOrderByAggregateInput
-    _max?: TaskMaxOrderByAggregateInput
-    _min?: TaskMinOrderByAggregateInput
-  }
-
-  export type TaskScalarWhereWithAggregatesInput = {
-    AND?: TaskScalarWhereWithAggregatesInput | TaskScalarWhereWithAggregatesInput[]
-    OR?: TaskScalarWhereWithAggregatesInput[]
-    NOT?: TaskScalarWhereWithAggregatesInput | TaskScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Task"> | string
-    title?: StringWithAggregatesFilter<"Task"> | string
-    description?: StringNullableWithAggregatesFilter<"Task"> | string | null
-    status?: EnumTaskStatusWithAggregatesFilter<"Task"> | $Enums.TaskStatus
-    priority?: EnumTaskPriorityWithAggregatesFilter<"Task"> | $Enums.TaskPriority
-    dueDate?: DateTimeWithAggregatesFilter<"Task"> | Date | string
-    completedAt?: DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
-    recurrence?: EnumRecurrenceTypeWithAggregatesFilter<"Task"> | $Enums.RecurrenceType
-    location?: StringNullableWithAggregatesFilter<"Task"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"Task"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Task"> | Date | string
-    formId?: StringNullableWithAggregatesFilter<"Task"> | string | null
-    assignedToId?: StringWithAggregatesFilter<"Task"> | string
-    createdById?: StringWithAggregatesFilter<"Task"> | string
   }
 
   export type RecordWhereInput = {
@@ -79044,318 +73531,6 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"AuditLog"> | Date | string
   }
 
-  export type TaskTemplateWhereInput = {
-    AND?: TaskTemplateWhereInput | TaskTemplateWhereInput[]
-    OR?: TaskTemplateWhereInput[]
-    NOT?: TaskTemplateWhereInput | TaskTemplateWhereInput[]
-    id?: StringFilter<"TaskTemplate"> | string
-    title?: StringFilter<"TaskTemplate"> | string
-    description?: StringNullableFilter<"TaskTemplate"> | string | null
-    category?: EnumTaskTemplateCategoryFilter<"TaskTemplate"> | $Enums.TaskTemplateCategory
-    priority?: EnumTaskTemplatePriorityFilter<"TaskTemplate"> | $Enums.TaskTemplatePriority
-    assignedTo?: JsonFilter<"TaskTemplate">
-    taskType?: EnumTaskTemplateTypeFilter<"TaskTemplate"> | $Enums.TaskTemplateType
-    formLink?: JsonNullableFilter<"TaskTemplate">
-    recurrenceType?: EnumTaskRecurrenceTypeFilter<"TaskTemplate"> | $Enums.TaskRecurrenceType
-    recurrenceConfig?: JsonNullableFilter<"TaskTemplate">
-    firstDueDate?: DateTimeFilter<"TaskTemplate"> | Date | string
-    isActive?: BoolFilter<"TaskTemplate"> | boolean
-    createdById?: StringFilter<"TaskTemplate"> | string
-    createdAt?: DateTimeFilter<"TaskTemplate"> | Date | string
-    updatedAt?: DateTimeFilter<"TaskTemplate"> | Date | string
-    createdBy?: XOR<UserRelationFilter, UserWhereInput>
-    instances?: TaskInstanceListRelationFilter
-  }
-
-  export type TaskTemplateOrderByWithRelationInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrderInput | SortOrder
-    category?: SortOrder
-    priority?: SortOrder
-    assignedTo?: SortOrder
-    taskType?: SortOrder
-    formLink?: SortOrderInput | SortOrder
-    recurrenceType?: SortOrder
-    recurrenceConfig?: SortOrderInput | SortOrder
-    firstDueDate?: SortOrder
-    isActive?: SortOrder
-    createdById?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    createdBy?: UserOrderByWithRelationInput
-    instances?: TaskInstanceOrderByRelationAggregateInput
-  }
-
-  export type TaskTemplateWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: TaskTemplateWhereInput | TaskTemplateWhereInput[]
-    OR?: TaskTemplateWhereInput[]
-    NOT?: TaskTemplateWhereInput | TaskTemplateWhereInput[]
-    title?: StringFilter<"TaskTemplate"> | string
-    description?: StringNullableFilter<"TaskTemplate"> | string | null
-    category?: EnumTaskTemplateCategoryFilter<"TaskTemplate"> | $Enums.TaskTemplateCategory
-    priority?: EnumTaskTemplatePriorityFilter<"TaskTemplate"> | $Enums.TaskTemplatePriority
-    assignedTo?: JsonFilter<"TaskTemplate">
-    taskType?: EnumTaskTemplateTypeFilter<"TaskTemplate"> | $Enums.TaskTemplateType
-    formLink?: JsonNullableFilter<"TaskTemplate">
-    recurrenceType?: EnumTaskRecurrenceTypeFilter<"TaskTemplate"> | $Enums.TaskRecurrenceType
-    recurrenceConfig?: JsonNullableFilter<"TaskTemplate">
-    firstDueDate?: DateTimeFilter<"TaskTemplate"> | Date | string
-    isActive?: BoolFilter<"TaskTemplate"> | boolean
-    createdById?: StringFilter<"TaskTemplate"> | string
-    createdAt?: DateTimeFilter<"TaskTemplate"> | Date | string
-    updatedAt?: DateTimeFilter<"TaskTemplate"> | Date | string
-    createdBy?: XOR<UserRelationFilter, UserWhereInput>
-    instances?: TaskInstanceListRelationFilter
-  }, "id">
-
-  export type TaskTemplateOrderByWithAggregationInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrderInput | SortOrder
-    category?: SortOrder
-    priority?: SortOrder
-    assignedTo?: SortOrder
-    taskType?: SortOrder
-    formLink?: SortOrderInput | SortOrder
-    recurrenceType?: SortOrder
-    recurrenceConfig?: SortOrderInput | SortOrder
-    firstDueDate?: SortOrder
-    isActive?: SortOrder
-    createdById?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: TaskTemplateCountOrderByAggregateInput
-    _max?: TaskTemplateMaxOrderByAggregateInput
-    _min?: TaskTemplateMinOrderByAggregateInput
-  }
-
-  export type TaskTemplateScalarWhereWithAggregatesInput = {
-    AND?: TaskTemplateScalarWhereWithAggregatesInput | TaskTemplateScalarWhereWithAggregatesInput[]
-    OR?: TaskTemplateScalarWhereWithAggregatesInput[]
-    NOT?: TaskTemplateScalarWhereWithAggregatesInput | TaskTemplateScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"TaskTemplate"> | string
-    title?: StringWithAggregatesFilter<"TaskTemplate"> | string
-    description?: StringNullableWithAggregatesFilter<"TaskTemplate"> | string | null
-    category?: EnumTaskTemplateCategoryWithAggregatesFilter<"TaskTemplate"> | $Enums.TaskTemplateCategory
-    priority?: EnumTaskTemplatePriorityWithAggregatesFilter<"TaskTemplate"> | $Enums.TaskTemplatePriority
-    assignedTo?: JsonWithAggregatesFilter<"TaskTemplate">
-    taskType?: EnumTaskTemplateTypeWithAggregatesFilter<"TaskTemplate"> | $Enums.TaskTemplateType
-    formLink?: JsonNullableWithAggregatesFilter<"TaskTemplate">
-    recurrenceType?: EnumTaskRecurrenceTypeWithAggregatesFilter<"TaskTemplate"> | $Enums.TaskRecurrenceType
-    recurrenceConfig?: JsonNullableWithAggregatesFilter<"TaskTemplate">
-    firstDueDate?: DateTimeWithAggregatesFilter<"TaskTemplate"> | Date | string
-    isActive?: BoolWithAggregatesFilter<"TaskTemplate"> | boolean
-    createdById?: StringWithAggregatesFilter<"TaskTemplate"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"TaskTemplate"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"TaskTemplate"> | Date | string
-  }
-
-  export type TaskInstanceWhereInput = {
-    AND?: TaskInstanceWhereInput | TaskInstanceWhereInput[]
-    OR?: TaskInstanceWhereInput[]
-    NOT?: TaskInstanceWhereInput | TaskInstanceWhereInput[]
-    id?: StringFilter<"TaskInstance"> | string
-    templateId?: StringFilter<"TaskInstance"> | string
-    title?: StringFilter<"TaskInstance"> | string
-    description?: StringNullableFilter<"TaskInstance"> | string | null
-    category?: StringFilter<"TaskInstance"> | string
-    priority?: StringFilter<"TaskInstance"> | string
-    assignedTo?: JsonFilter<"TaskInstance">
-    taskType?: StringFilter<"TaskInstance"> | string
-    formLink?: JsonNullableFilter<"TaskInstance">
-    dueDate?: DateTimeFilter<"TaskInstance"> | Date | string
-    status?: EnumTaskInstanceStatusFilter<"TaskInstance"> | $Enums.TaskInstanceStatus
-    completedById?: StringNullableFilter<"TaskInstance"> | string | null
-    completedAt?: DateTimeNullableFilter<"TaskInstance"> | Date | string | null
-    completionNote?: StringNullableFilter<"TaskInstance"> | string | null
-    skippedById?: StringNullableFilter<"TaskInstance"> | string | null
-    skippedAt?: DateTimeNullableFilter<"TaskInstance"> | Date | string | null
-    skipReason?: StringNullableFilter<"TaskInstance"> | string | null
-    formSubmissionId?: StringNullableFilter<"TaskInstance"> | string | null
-    instanceNumber?: IntFilter<"TaskInstance"> | number
-    createdAt?: DateTimeFilter<"TaskInstance"> | Date | string
-    template?: XOR<TaskTemplateRelationFilter, TaskTemplateWhereInput>
-    completedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
-    skippedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
-    history?: TaskHistoryListRelationFilter
-  }
-
-  export type TaskInstanceOrderByWithRelationInput = {
-    id?: SortOrder
-    templateId?: SortOrder
-    title?: SortOrder
-    description?: SortOrderInput | SortOrder
-    category?: SortOrder
-    priority?: SortOrder
-    assignedTo?: SortOrder
-    taskType?: SortOrder
-    formLink?: SortOrderInput | SortOrder
-    dueDate?: SortOrder
-    status?: SortOrder
-    completedById?: SortOrderInput | SortOrder
-    completedAt?: SortOrderInput | SortOrder
-    completionNote?: SortOrderInput | SortOrder
-    skippedById?: SortOrderInput | SortOrder
-    skippedAt?: SortOrderInput | SortOrder
-    skipReason?: SortOrderInput | SortOrder
-    formSubmissionId?: SortOrderInput | SortOrder
-    instanceNumber?: SortOrder
-    createdAt?: SortOrder
-    template?: TaskTemplateOrderByWithRelationInput
-    completedBy?: UserOrderByWithRelationInput
-    skippedBy?: UserOrderByWithRelationInput
-    history?: TaskHistoryOrderByRelationAggregateInput
-  }
-
-  export type TaskInstanceWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: TaskInstanceWhereInput | TaskInstanceWhereInput[]
-    OR?: TaskInstanceWhereInput[]
-    NOT?: TaskInstanceWhereInput | TaskInstanceWhereInput[]
-    templateId?: StringFilter<"TaskInstance"> | string
-    title?: StringFilter<"TaskInstance"> | string
-    description?: StringNullableFilter<"TaskInstance"> | string | null
-    category?: StringFilter<"TaskInstance"> | string
-    priority?: StringFilter<"TaskInstance"> | string
-    assignedTo?: JsonFilter<"TaskInstance">
-    taskType?: StringFilter<"TaskInstance"> | string
-    formLink?: JsonNullableFilter<"TaskInstance">
-    dueDate?: DateTimeFilter<"TaskInstance"> | Date | string
-    status?: EnumTaskInstanceStatusFilter<"TaskInstance"> | $Enums.TaskInstanceStatus
-    completedById?: StringNullableFilter<"TaskInstance"> | string | null
-    completedAt?: DateTimeNullableFilter<"TaskInstance"> | Date | string | null
-    completionNote?: StringNullableFilter<"TaskInstance"> | string | null
-    skippedById?: StringNullableFilter<"TaskInstance"> | string | null
-    skippedAt?: DateTimeNullableFilter<"TaskInstance"> | Date | string | null
-    skipReason?: StringNullableFilter<"TaskInstance"> | string | null
-    formSubmissionId?: StringNullableFilter<"TaskInstance"> | string | null
-    instanceNumber?: IntFilter<"TaskInstance"> | number
-    createdAt?: DateTimeFilter<"TaskInstance"> | Date | string
-    template?: XOR<TaskTemplateRelationFilter, TaskTemplateWhereInput>
-    completedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
-    skippedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
-    history?: TaskHistoryListRelationFilter
-  }, "id">
-
-  export type TaskInstanceOrderByWithAggregationInput = {
-    id?: SortOrder
-    templateId?: SortOrder
-    title?: SortOrder
-    description?: SortOrderInput | SortOrder
-    category?: SortOrder
-    priority?: SortOrder
-    assignedTo?: SortOrder
-    taskType?: SortOrder
-    formLink?: SortOrderInput | SortOrder
-    dueDate?: SortOrder
-    status?: SortOrder
-    completedById?: SortOrderInput | SortOrder
-    completedAt?: SortOrderInput | SortOrder
-    completionNote?: SortOrderInput | SortOrder
-    skippedById?: SortOrderInput | SortOrder
-    skippedAt?: SortOrderInput | SortOrder
-    skipReason?: SortOrderInput | SortOrder
-    formSubmissionId?: SortOrderInput | SortOrder
-    instanceNumber?: SortOrder
-    createdAt?: SortOrder
-    _count?: TaskInstanceCountOrderByAggregateInput
-    _avg?: TaskInstanceAvgOrderByAggregateInput
-    _max?: TaskInstanceMaxOrderByAggregateInput
-    _min?: TaskInstanceMinOrderByAggregateInput
-    _sum?: TaskInstanceSumOrderByAggregateInput
-  }
-
-  export type TaskInstanceScalarWhereWithAggregatesInput = {
-    AND?: TaskInstanceScalarWhereWithAggregatesInput | TaskInstanceScalarWhereWithAggregatesInput[]
-    OR?: TaskInstanceScalarWhereWithAggregatesInput[]
-    NOT?: TaskInstanceScalarWhereWithAggregatesInput | TaskInstanceScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"TaskInstance"> | string
-    templateId?: StringWithAggregatesFilter<"TaskInstance"> | string
-    title?: StringWithAggregatesFilter<"TaskInstance"> | string
-    description?: StringNullableWithAggregatesFilter<"TaskInstance"> | string | null
-    category?: StringWithAggregatesFilter<"TaskInstance"> | string
-    priority?: StringWithAggregatesFilter<"TaskInstance"> | string
-    assignedTo?: JsonWithAggregatesFilter<"TaskInstance">
-    taskType?: StringWithAggregatesFilter<"TaskInstance"> | string
-    formLink?: JsonNullableWithAggregatesFilter<"TaskInstance">
-    dueDate?: DateTimeWithAggregatesFilter<"TaskInstance"> | Date | string
-    status?: EnumTaskInstanceStatusWithAggregatesFilter<"TaskInstance"> | $Enums.TaskInstanceStatus
-    completedById?: StringNullableWithAggregatesFilter<"TaskInstance"> | string | null
-    completedAt?: DateTimeNullableWithAggregatesFilter<"TaskInstance"> | Date | string | null
-    completionNote?: StringNullableWithAggregatesFilter<"TaskInstance"> | string | null
-    skippedById?: StringNullableWithAggregatesFilter<"TaskInstance"> | string | null
-    skippedAt?: DateTimeNullableWithAggregatesFilter<"TaskInstance"> | Date | string | null
-    skipReason?: StringNullableWithAggregatesFilter<"TaskInstance"> | string | null
-    formSubmissionId?: StringNullableWithAggregatesFilter<"TaskInstance"> | string | null
-    instanceNumber?: IntWithAggregatesFilter<"TaskInstance"> | number
-    createdAt?: DateTimeWithAggregatesFilter<"TaskInstance"> | Date | string
-  }
-
-  export type TaskHistoryWhereInput = {
-    AND?: TaskHistoryWhereInput | TaskHistoryWhereInput[]
-    OR?: TaskHistoryWhereInput[]
-    NOT?: TaskHistoryWhereInput | TaskHistoryWhereInput[]
-    id?: StringFilter<"TaskHistory"> | string
-    instanceId?: StringFilter<"TaskHistory"> | string
-    action?: EnumTaskHistoryActionFilter<"TaskHistory"> | $Enums.TaskHistoryAction
-    performedById?: StringNullableFilter<"TaskHistory"> | string | null
-    performedAt?: DateTimeFilter<"TaskHistory"> | Date | string
-    note?: StringNullableFilter<"TaskHistory"> | string | null
-    instance?: XOR<TaskInstanceRelationFilter, TaskInstanceWhereInput>
-    performedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
-  }
-
-  export type TaskHistoryOrderByWithRelationInput = {
-    id?: SortOrder
-    instanceId?: SortOrder
-    action?: SortOrder
-    performedById?: SortOrderInput | SortOrder
-    performedAt?: SortOrder
-    note?: SortOrderInput | SortOrder
-    instance?: TaskInstanceOrderByWithRelationInput
-    performedBy?: UserOrderByWithRelationInput
-  }
-
-  export type TaskHistoryWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: TaskHistoryWhereInput | TaskHistoryWhereInput[]
-    OR?: TaskHistoryWhereInput[]
-    NOT?: TaskHistoryWhereInput | TaskHistoryWhereInput[]
-    instanceId?: StringFilter<"TaskHistory"> | string
-    action?: EnumTaskHistoryActionFilter<"TaskHistory"> | $Enums.TaskHistoryAction
-    performedById?: StringNullableFilter<"TaskHistory"> | string | null
-    performedAt?: DateTimeFilter<"TaskHistory"> | Date | string
-    note?: StringNullableFilter<"TaskHistory"> | string | null
-    instance?: XOR<TaskInstanceRelationFilter, TaskInstanceWhereInput>
-    performedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
-  }, "id">
-
-  export type TaskHistoryOrderByWithAggregationInput = {
-    id?: SortOrder
-    instanceId?: SortOrder
-    action?: SortOrder
-    performedById?: SortOrderInput | SortOrder
-    performedAt?: SortOrder
-    note?: SortOrderInput | SortOrder
-    _count?: TaskHistoryCountOrderByAggregateInput
-    _max?: TaskHistoryMaxOrderByAggregateInput
-    _min?: TaskHistoryMinOrderByAggregateInput
-  }
-
-  export type TaskHistoryScalarWhereWithAggregatesInput = {
-    AND?: TaskHistoryScalarWhereWithAggregatesInput | TaskHistoryScalarWhereWithAggregatesInput[]
-    OR?: TaskHistoryScalarWhereWithAggregatesInput[]
-    NOT?: TaskHistoryScalarWhereWithAggregatesInput | TaskHistoryScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"TaskHistory"> | string
-    instanceId?: StringWithAggregatesFilter<"TaskHistory"> | string
-    action?: EnumTaskHistoryActionWithAggregatesFilter<"TaskHistory"> | $Enums.TaskHistoryAction
-    performedById?: StringNullableWithAggregatesFilter<"TaskHistory"> | string | null
-    performedAt?: DateTimeWithAggregatesFilter<"TaskHistory"> | Date | string
-    note?: StringNullableWithAggregatesFilter<"TaskHistory"> | string | null
-  }
-
   export type StockAlertAcknowledgmentWhereInput = {
     AND?: StockAlertAcknowledgmentWhereInput | StockAlertAcknowledgmentWhereInput[]
     OR?: StockAlertAcknowledgmentWhereInput[]
@@ -81984,8 +76159,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -81999,10 +76172,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -82036,8 +76205,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -82051,10 +76218,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -82088,8 +76251,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -82103,10 +76264,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -82140,8 +76297,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -82155,10 +76310,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -82227,7 +76378,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedFormsInput
     submissions?: FormSubmissionCreateNestedManyWithoutFormInput
-    tasks?: TaskCreateNestedManyWithoutFormInput
   }
 
   export type FormUncheckedCreateInput = {
@@ -82242,7 +76392,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdById: string
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutFormInput
-    tasks?: TaskUncheckedCreateNestedManyWithoutFormInput
   }
 
   export type FormUpdateInput = {
@@ -82257,7 +76406,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedFormsNestedInput
     submissions?: FormSubmissionUpdateManyWithoutFormNestedInput
-    tasks?: TaskUpdateManyWithoutFormNestedInput
   }
 
   export type FormUncheckedUpdateInput = {
@@ -82272,7 +76420,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
     submissions?: FormSubmissionUncheckedUpdateManyWithoutFormNestedInput
-    tasks?: TaskUncheckedUpdateManyWithoutFormNestedInput
   }
 
   export type FormCreateManyInput = {
@@ -82323,7 +76470,6 @@ export namespace Prisma {
     form: FormCreateNestedOneWithoutSubmissionsInput
     submittedBy: UserCreateNestedOneWithoutSubmissionsInput
     approvedBy?: UserCreateNestedOneWithoutApprovedSubmissionsInput
-    task?: TaskCreateNestedOneWithoutSubmissionsInput
   }
 
   export type FormSubmissionUncheckedCreateInput = {
@@ -82336,7 +76482,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     submittedById: string
     approvedById?: string | null
-    taskId?: string | null
   }
 
   export type FormSubmissionUpdateInput = {
@@ -82349,7 +76494,6 @@ export namespace Prisma {
     form?: FormUpdateOneRequiredWithoutSubmissionsNestedInput
     submittedBy?: UserUpdateOneRequiredWithoutSubmissionsNestedInput
     approvedBy?: UserUpdateOneWithoutApprovedSubmissionsNestedInput
-    task?: TaskUpdateOneWithoutSubmissionsNestedInput
   }
 
   export type FormSubmissionUncheckedUpdateInput = {
@@ -82362,7 +76506,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
-    taskId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type FormSubmissionCreateManyInput = {
@@ -82375,7 +76518,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     submittedById: string
     approvedById?: string | null
-    taskId?: string | null
   }
 
   export type FormSubmissionUpdateManyMutationInput = {
@@ -82397,127 +76539,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
-    taskId?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type TaskCreateInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status?: $Enums.TaskStatus
-    priority?: $Enums.TaskPriority
-    dueDate: Date | string
-    completedAt?: Date | string | null
-    recurrence?: $Enums.RecurrenceType
-    location?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    form?: FormCreateNestedOneWithoutTasksInput
-    assignedTo: UserCreateNestedOneWithoutAssignedTasksInput
-    createdBy: UserCreateNestedOneWithoutCreatedTasksInput
-    submissions?: FormSubmissionCreateNestedManyWithoutTaskInput
-  }
-
-  export type TaskUncheckedCreateInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status?: $Enums.TaskStatus
-    priority?: $Enums.TaskPriority
-    dueDate: Date | string
-    completedAt?: Date | string | null
-    recurrence?: $Enums.RecurrenceType
-    location?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    formId?: string | null
-    assignedToId: string
-    createdById: string
-    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutTaskInput
-  }
-
-  export type TaskUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    recurrence?: EnumRecurrenceTypeFieldUpdateOperationsInput | $Enums.RecurrenceType
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    form?: FormUpdateOneWithoutTasksNestedInput
-    assignedTo?: UserUpdateOneRequiredWithoutAssignedTasksNestedInput
-    createdBy?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
-    submissions?: FormSubmissionUpdateManyWithoutTaskNestedInput
-  }
-
-  export type TaskUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    recurrence?: EnumRecurrenceTypeFieldUpdateOperationsInput | $Enums.RecurrenceType
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    formId?: NullableStringFieldUpdateOperationsInput | string | null
-    assignedToId?: StringFieldUpdateOperationsInput | string
-    createdById?: StringFieldUpdateOperationsInput | string
-    submissions?: FormSubmissionUncheckedUpdateManyWithoutTaskNestedInput
-  }
-
-  export type TaskCreateManyInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status?: $Enums.TaskStatus
-    priority?: $Enums.TaskPriority
-    dueDate: Date | string
-    completedAt?: Date | string | null
-    recurrence?: $Enums.RecurrenceType
-    location?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    formId?: string | null
-    assignedToId: string
-    createdById: string
-  }
-
-  export type TaskUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    recurrence?: EnumRecurrenceTypeFieldUpdateOperationsInput | $Enums.RecurrenceType
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TaskUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    recurrence?: EnumRecurrenceTypeFieldUpdateOperationsInput | $Enums.RecurrenceType
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    formId?: NullableStringFieldUpdateOperationsInput | string | null
-    assignedToId?: StringFieldUpdateOperationsInput | string
-    createdById?: StringFieldUpdateOperationsInput | string
   }
 
   export type RecordCreateInput = {
@@ -85673,358 +79694,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type TaskTemplateCreateInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: $Enums.TaskTemplateCategory
-    priority?: $Enums.TaskTemplatePriority
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType?: $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType: $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate: Date | string
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy: UserCreateNestedOneWithoutCreatedTaskTemplatesInput
-    instances?: TaskInstanceCreateNestedManyWithoutTemplateInput
-  }
-
-  export type TaskTemplateUncheckedCreateInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: $Enums.TaskTemplateCategory
-    priority?: $Enums.TaskTemplatePriority
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType?: $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType: $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate: Date | string
-    isActive?: boolean
-    createdById: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    instances?: TaskInstanceUncheckedCreateNestedManyWithoutTemplateInput
-  }
-
-  export type TaskTemplateUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: EnumTaskTemplateCategoryFieldUpdateOperationsInput | $Enums.TaskTemplateCategory
-    priority?: EnumTaskTemplatePriorityFieldUpdateOperationsInput | $Enums.TaskTemplatePriority
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: EnumTaskTemplateTypeFieldUpdateOperationsInput | $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType?: EnumTaskRecurrenceTypeFieldUpdateOperationsInput | $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: UserUpdateOneRequiredWithoutCreatedTaskTemplatesNestedInput
-    instances?: TaskInstanceUpdateManyWithoutTemplateNestedInput
-  }
-
-  export type TaskTemplateUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: EnumTaskTemplateCategoryFieldUpdateOperationsInput | $Enums.TaskTemplateCategory
-    priority?: EnumTaskTemplatePriorityFieldUpdateOperationsInput | $Enums.TaskTemplatePriority
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: EnumTaskTemplateTypeFieldUpdateOperationsInput | $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType?: EnumTaskRecurrenceTypeFieldUpdateOperationsInput | $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdById?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    instances?: TaskInstanceUncheckedUpdateManyWithoutTemplateNestedInput
-  }
-
-  export type TaskTemplateCreateManyInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: $Enums.TaskTemplateCategory
-    priority?: $Enums.TaskTemplatePriority
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType?: $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType: $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate: Date | string
-    isActive?: boolean
-    createdById: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type TaskTemplateUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: EnumTaskTemplateCategoryFieldUpdateOperationsInput | $Enums.TaskTemplateCategory
-    priority?: EnumTaskTemplatePriorityFieldUpdateOperationsInput | $Enums.TaskTemplatePriority
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: EnumTaskTemplateTypeFieldUpdateOperationsInput | $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType?: EnumTaskRecurrenceTypeFieldUpdateOperationsInput | $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TaskTemplateUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: EnumTaskTemplateCategoryFieldUpdateOperationsInput | $Enums.TaskTemplateCategory
-    priority?: EnumTaskTemplatePriorityFieldUpdateOperationsInput | $Enums.TaskTemplatePriority
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: EnumTaskTemplateTypeFieldUpdateOperationsInput | $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType?: EnumTaskRecurrenceTypeFieldUpdateOperationsInput | $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdById?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TaskInstanceCreateInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: string
-    priority: string
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType: string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate: Date | string
-    status?: $Enums.TaskInstanceStatus
-    completedAt?: Date | string | null
-    completionNote?: string | null
-    skippedAt?: Date | string | null
-    skipReason?: string | null
-    formSubmissionId?: string | null
-    instanceNumber?: number
-    createdAt?: Date | string
-    template: TaskTemplateCreateNestedOneWithoutInstancesInput
-    completedBy?: UserCreateNestedOneWithoutCompletedTaskInstancesInput
-    skippedBy?: UserCreateNestedOneWithoutSkippedTaskInstancesInput
-    history?: TaskHistoryCreateNestedManyWithoutInstanceInput
-  }
-
-  export type TaskInstanceUncheckedCreateInput = {
-    id?: string
-    templateId: string
-    title: string
-    description?: string | null
-    category: string
-    priority: string
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType: string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate: Date | string
-    status?: $Enums.TaskInstanceStatus
-    completedById?: string | null
-    completedAt?: Date | string | null
-    completionNote?: string | null
-    skippedById?: string | null
-    skippedAt?: Date | string | null
-    skipReason?: string | null
-    formSubmissionId?: string | null
-    instanceNumber?: number
-    createdAt?: Date | string
-    history?: TaskHistoryUncheckedCreateNestedManyWithoutInstanceInput
-  }
-
-  export type TaskInstanceUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    priority?: StringFieldUpdateOperationsInput | string
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: StringFieldUpdateOperationsInput | string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumTaskInstanceStatusFieldUpdateOperationsInput | $Enums.TaskInstanceStatus
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
-    formSubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
-    instanceNumber?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    template?: TaskTemplateUpdateOneRequiredWithoutInstancesNestedInput
-    completedBy?: UserUpdateOneWithoutCompletedTaskInstancesNestedInput
-    skippedBy?: UserUpdateOneWithoutSkippedTaskInstancesNestedInput
-    history?: TaskHistoryUpdateManyWithoutInstanceNestedInput
-  }
-
-  export type TaskInstanceUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    templateId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    priority?: StringFieldUpdateOperationsInput | string
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: StringFieldUpdateOperationsInput | string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumTaskInstanceStatusFieldUpdateOperationsInput | $Enums.TaskInstanceStatus
-    completedById?: NullableStringFieldUpdateOperationsInput | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedById?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
-    formSubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
-    instanceNumber?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    history?: TaskHistoryUncheckedUpdateManyWithoutInstanceNestedInput
-  }
-
-  export type TaskInstanceCreateManyInput = {
-    id?: string
-    templateId: string
-    title: string
-    description?: string | null
-    category: string
-    priority: string
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType: string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate: Date | string
-    status?: $Enums.TaskInstanceStatus
-    completedById?: string | null
-    completedAt?: Date | string | null
-    completionNote?: string | null
-    skippedById?: string | null
-    skippedAt?: Date | string | null
-    skipReason?: string | null
-    formSubmissionId?: string | null
-    instanceNumber?: number
-    createdAt?: Date | string
-  }
-
-  export type TaskInstanceUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    priority?: StringFieldUpdateOperationsInput | string
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: StringFieldUpdateOperationsInput | string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumTaskInstanceStatusFieldUpdateOperationsInput | $Enums.TaskInstanceStatus
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
-    formSubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
-    instanceNumber?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TaskInstanceUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    templateId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    priority?: StringFieldUpdateOperationsInput | string
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: StringFieldUpdateOperationsInput | string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumTaskInstanceStatusFieldUpdateOperationsInput | $Enums.TaskInstanceStatus
-    completedById?: NullableStringFieldUpdateOperationsInput | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedById?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
-    formSubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
-    instanceNumber?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TaskHistoryCreateInput = {
-    id?: string
-    action: $Enums.TaskHistoryAction
-    performedAt?: Date | string
-    note?: string | null
-    instance: TaskInstanceCreateNestedOneWithoutHistoryInput
-    performedBy?: UserCreateNestedOneWithoutTaskHistoryActionsInput
-  }
-
-  export type TaskHistoryUncheckedCreateInput = {
-    id?: string
-    instanceId: string
-    action: $Enums.TaskHistoryAction
-    performedById?: string | null
-    performedAt?: Date | string
-    note?: string | null
-  }
-
-  export type TaskHistoryUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    action?: EnumTaskHistoryActionFieldUpdateOperationsInput | $Enums.TaskHistoryAction
-    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-    instance?: TaskInstanceUpdateOneRequiredWithoutHistoryNestedInput
-    performedBy?: UserUpdateOneWithoutTaskHistoryActionsNestedInput
-  }
-
-  export type TaskHistoryUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    instanceId?: StringFieldUpdateOperationsInput | string
-    action?: EnumTaskHistoryActionFieldUpdateOperationsInput | $Enums.TaskHistoryAction
-    performedById?: NullableStringFieldUpdateOperationsInput | string | null
-    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type TaskHistoryCreateManyInput = {
-    id?: string
-    instanceId: string
-    action: $Enums.TaskHistoryAction
-    performedById?: string | null
-    performedAt?: Date | string
-    note?: string | null
-  }
-
-  export type TaskHistoryUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    action?: EnumTaskHistoryActionFieldUpdateOperationsInput | $Enums.TaskHistoryAction
-    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type TaskHistoryUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    instanceId?: StringFieldUpdateOperationsInput | string
-    action?: EnumTaskHistoryActionFieldUpdateOperationsInput | $Enums.TaskHistoryAction
-    performedById?: NullableStringFieldUpdateOperationsInput | string | null
-    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
   export type StockAlertAcknowledgmentCreateInput = {
     id?: string
     alertType: string
@@ -89012,12 +82681,6 @@ export namespace Prisma {
     none?: FormSubmissionWhereInput
   }
 
-  export type TaskListRelationFilter = {
-    every?: TaskWhereInput
-    some?: TaskWhereInput
-    none?: TaskWhereInput
-  }
-
   export type RecordListRelationFilter = {
     every?: RecordWhereInput
     some?: RecordWhereInput
@@ -89094,24 +82757,6 @@ export namespace Prisma {
     every?: InitialStockEntryWhereInput
     some?: InitialStockEntryWhereInput
     none?: InitialStockEntryWhereInput
-  }
-
-  export type TaskTemplateListRelationFilter = {
-    every?: TaskTemplateWhereInput
-    some?: TaskTemplateWhereInput
-    none?: TaskTemplateWhereInput
-  }
-
-  export type TaskInstanceListRelationFilter = {
-    every?: TaskInstanceWhereInput
-    some?: TaskInstanceWhereInput
-    none?: TaskInstanceWhereInput
-  }
-
-  export type TaskHistoryListRelationFilter = {
-    every?: TaskHistoryWhereInput
-    some?: TaskHistoryWhereInput
-    none?: TaskHistoryWhereInput
   }
 
   export type ForecastExclusionListRelationFilter = {
@@ -89217,10 +82862,6 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type TaskOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type RecordOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -89270,18 +82911,6 @@ export namespace Prisma {
   }
 
   export type InitialStockEntryOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type TaskTemplateOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type TaskInstanceOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type TaskHistoryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -89590,11 +83219,6 @@ export namespace Prisma {
     isNot?: UserWhereInput | null
   }
 
-  export type TaskNullableRelationFilter = {
-    is?: TaskWhereInput | null
-    isNot?: TaskWhereInput | null
-  }
-
   export type FormSubmissionCountOrderByAggregateInput = {
     id?: SortOrder
     formId?: SortOrder
@@ -89605,7 +83229,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
     submittedById?: SortOrder
     approvedById?: SortOrder
-    taskId?: SortOrder
   }
 
   export type FormSubmissionMaxOrderByAggregateInput = {
@@ -89617,7 +83240,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
     submittedById?: SortOrder
     approvedById?: SortOrder
-    taskId?: SortOrder
   }
 
   export type FormSubmissionMinOrderByAggregateInput = {
@@ -89629,7 +83251,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
     submittedById?: SortOrder
     approvedById?: SortOrder
-    taskId?: SortOrder
   }
 
   export type EnumSubmissionStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -89640,138 +83261,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumSubmissionStatusFilter<$PrismaModel>
     _max?: NestedEnumSubmissionStatusFilter<$PrismaModel>
-  }
-
-  export type EnumTaskStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskStatusFilter<$PrismaModel> | $Enums.TaskStatus
-  }
-
-  export type EnumTaskPriorityFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskPriority | EnumTaskPriorityFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskPriority[] | ListEnumTaskPriorityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskPriority[] | ListEnumTaskPriorityFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskPriorityFilter<$PrismaModel> | $Enums.TaskPriority
-  }
-
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type EnumRecurrenceTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.RecurrenceType | EnumRecurrenceTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.RecurrenceType[] | ListEnumRecurrenceTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RecurrenceType[] | ListEnumRecurrenceTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumRecurrenceTypeFilter<$PrismaModel> | $Enums.RecurrenceType
-  }
-
-  export type FormNullableRelationFilter = {
-    is?: FormWhereInput | null
-    isNot?: FormWhereInput | null
-  }
-
-  export type TaskCountOrderByAggregateInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    status?: SortOrder
-    priority?: SortOrder
-    dueDate?: SortOrder
-    completedAt?: SortOrder
-    recurrence?: SortOrder
-    location?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    formId?: SortOrder
-    assignedToId?: SortOrder
-    createdById?: SortOrder
-  }
-
-  export type TaskMaxOrderByAggregateInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    status?: SortOrder
-    priority?: SortOrder
-    dueDate?: SortOrder
-    completedAt?: SortOrder
-    recurrence?: SortOrder
-    location?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    formId?: SortOrder
-    assignedToId?: SortOrder
-    createdById?: SortOrder
-  }
-
-  export type TaskMinOrderByAggregateInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    status?: SortOrder
-    priority?: SortOrder
-    dueDate?: SortOrder
-    completedAt?: SortOrder
-    recurrence?: SortOrder
-    location?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    formId?: SortOrder
-    assignedToId?: SortOrder
-    createdById?: SortOrder
-  }
-
-  export type EnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel> | $Enums.TaskStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskStatusFilter<$PrismaModel>
-    _max?: NestedEnumTaskStatusFilter<$PrismaModel>
-  }
-
-  export type EnumTaskPriorityWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskPriority | EnumTaskPriorityFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskPriority[] | ListEnumTaskPriorityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskPriority[] | ListEnumTaskPriorityFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskPriorityWithAggregatesFilter<$PrismaModel> | $Enums.TaskPriority
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskPriorityFilter<$PrismaModel>
-    _max?: NestedEnumTaskPriorityFilter<$PrismaModel>
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type EnumRecurrenceTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.RecurrenceType | EnumRecurrenceTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.RecurrenceType[] | ListEnumRecurrenceTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RecurrenceType[] | ListEnumRecurrenceTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumRecurrenceTypeWithAggregatesFilter<$PrismaModel> | $Enums.RecurrenceType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumRecurrenceTypeFilter<$PrismaModel>
-    _max?: NestedEnumRecurrenceTypeFilter<$PrismaModel>
   }
 
   export type StringNullableListFilter<$PrismaModel = never> = {
@@ -90049,6 +83538,17 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -90164,6 +83664,20 @@ export namespace Prisma {
   export type BatchSheetSubmissionSumOrderByAggregateInput = {
     numEmployees?: SortOrder
     lastActiveSection?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -91616,266 +85130,6 @@ export namespace Prisma {
     userId?: SortOrder
     userName?: SortOrder
     createdAt?: SortOrder
-  }
-
-  export type EnumTaskTemplateCategoryFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskTemplateCategory | EnumTaskTemplateCategoryFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskTemplateCategory[] | ListEnumTaskTemplateCategoryFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskTemplateCategory[] | ListEnumTaskTemplateCategoryFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskTemplateCategoryFilter<$PrismaModel> | $Enums.TaskTemplateCategory
-  }
-
-  export type EnumTaskTemplatePriorityFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskTemplatePriority | EnumTaskTemplatePriorityFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskTemplatePriority[] | ListEnumTaskTemplatePriorityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskTemplatePriority[] | ListEnumTaskTemplatePriorityFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskTemplatePriorityFilter<$PrismaModel> | $Enums.TaskTemplatePriority
-  }
-
-  export type EnumTaskTemplateTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskTemplateType | EnumTaskTemplateTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskTemplateType[] | ListEnumTaskTemplateTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskTemplateType[] | ListEnumTaskTemplateTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskTemplateTypeFilter<$PrismaModel> | $Enums.TaskTemplateType
-  }
-
-  export type EnumTaskRecurrenceTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskRecurrenceType | EnumTaskRecurrenceTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskRecurrenceType[] | ListEnumTaskRecurrenceTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskRecurrenceType[] | ListEnumTaskRecurrenceTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskRecurrenceTypeFilter<$PrismaModel> | $Enums.TaskRecurrenceType
-  }
-
-  export type TaskTemplateCountOrderByAggregateInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    category?: SortOrder
-    priority?: SortOrder
-    assignedTo?: SortOrder
-    taskType?: SortOrder
-    formLink?: SortOrder
-    recurrenceType?: SortOrder
-    recurrenceConfig?: SortOrder
-    firstDueDate?: SortOrder
-    isActive?: SortOrder
-    createdById?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type TaskTemplateMaxOrderByAggregateInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    category?: SortOrder
-    priority?: SortOrder
-    taskType?: SortOrder
-    recurrenceType?: SortOrder
-    firstDueDate?: SortOrder
-    isActive?: SortOrder
-    createdById?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type TaskTemplateMinOrderByAggregateInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    category?: SortOrder
-    priority?: SortOrder
-    taskType?: SortOrder
-    recurrenceType?: SortOrder
-    firstDueDate?: SortOrder
-    isActive?: SortOrder
-    createdById?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type EnumTaskTemplateCategoryWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskTemplateCategory | EnumTaskTemplateCategoryFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskTemplateCategory[] | ListEnumTaskTemplateCategoryFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskTemplateCategory[] | ListEnumTaskTemplateCategoryFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskTemplateCategoryWithAggregatesFilter<$PrismaModel> | $Enums.TaskTemplateCategory
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskTemplateCategoryFilter<$PrismaModel>
-    _max?: NestedEnumTaskTemplateCategoryFilter<$PrismaModel>
-  }
-
-  export type EnumTaskTemplatePriorityWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskTemplatePriority | EnumTaskTemplatePriorityFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskTemplatePriority[] | ListEnumTaskTemplatePriorityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskTemplatePriority[] | ListEnumTaskTemplatePriorityFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskTemplatePriorityWithAggregatesFilter<$PrismaModel> | $Enums.TaskTemplatePriority
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskTemplatePriorityFilter<$PrismaModel>
-    _max?: NestedEnumTaskTemplatePriorityFilter<$PrismaModel>
-  }
-
-  export type EnumTaskTemplateTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskTemplateType | EnumTaskTemplateTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskTemplateType[] | ListEnumTaskTemplateTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskTemplateType[] | ListEnumTaskTemplateTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskTemplateTypeWithAggregatesFilter<$PrismaModel> | $Enums.TaskTemplateType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskTemplateTypeFilter<$PrismaModel>
-    _max?: NestedEnumTaskTemplateTypeFilter<$PrismaModel>
-  }
-
-  export type EnumTaskRecurrenceTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskRecurrenceType | EnumTaskRecurrenceTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskRecurrenceType[] | ListEnumTaskRecurrenceTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskRecurrenceType[] | ListEnumTaskRecurrenceTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskRecurrenceTypeWithAggregatesFilter<$PrismaModel> | $Enums.TaskRecurrenceType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskRecurrenceTypeFilter<$PrismaModel>
-    _max?: NestedEnumTaskRecurrenceTypeFilter<$PrismaModel>
-  }
-
-  export type EnumTaskInstanceStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskInstanceStatus | EnumTaskInstanceStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskInstanceStatus[] | ListEnumTaskInstanceStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskInstanceStatus[] | ListEnumTaskInstanceStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskInstanceStatusFilter<$PrismaModel> | $Enums.TaskInstanceStatus
-  }
-
-  export type TaskTemplateRelationFilter = {
-    is?: TaskTemplateWhereInput
-    isNot?: TaskTemplateWhereInput
-  }
-
-  export type TaskInstanceCountOrderByAggregateInput = {
-    id?: SortOrder
-    templateId?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    category?: SortOrder
-    priority?: SortOrder
-    assignedTo?: SortOrder
-    taskType?: SortOrder
-    formLink?: SortOrder
-    dueDate?: SortOrder
-    status?: SortOrder
-    completedById?: SortOrder
-    completedAt?: SortOrder
-    completionNote?: SortOrder
-    skippedById?: SortOrder
-    skippedAt?: SortOrder
-    skipReason?: SortOrder
-    formSubmissionId?: SortOrder
-    instanceNumber?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type TaskInstanceAvgOrderByAggregateInput = {
-    instanceNumber?: SortOrder
-  }
-
-  export type TaskInstanceMaxOrderByAggregateInput = {
-    id?: SortOrder
-    templateId?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    category?: SortOrder
-    priority?: SortOrder
-    taskType?: SortOrder
-    dueDate?: SortOrder
-    status?: SortOrder
-    completedById?: SortOrder
-    completedAt?: SortOrder
-    completionNote?: SortOrder
-    skippedById?: SortOrder
-    skippedAt?: SortOrder
-    skipReason?: SortOrder
-    formSubmissionId?: SortOrder
-    instanceNumber?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type TaskInstanceMinOrderByAggregateInput = {
-    id?: SortOrder
-    templateId?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    category?: SortOrder
-    priority?: SortOrder
-    taskType?: SortOrder
-    dueDate?: SortOrder
-    status?: SortOrder
-    completedById?: SortOrder
-    completedAt?: SortOrder
-    completionNote?: SortOrder
-    skippedById?: SortOrder
-    skippedAt?: SortOrder
-    skipReason?: SortOrder
-    formSubmissionId?: SortOrder
-    instanceNumber?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type TaskInstanceSumOrderByAggregateInput = {
-    instanceNumber?: SortOrder
-  }
-
-  export type EnumTaskInstanceStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskInstanceStatus | EnumTaskInstanceStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskInstanceStatus[] | ListEnumTaskInstanceStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskInstanceStatus[] | ListEnumTaskInstanceStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskInstanceStatusWithAggregatesFilter<$PrismaModel> | $Enums.TaskInstanceStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskInstanceStatusFilter<$PrismaModel>
-    _max?: NestedEnumTaskInstanceStatusFilter<$PrismaModel>
-  }
-
-  export type EnumTaskHistoryActionFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskHistoryAction | EnumTaskHistoryActionFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskHistoryAction[] | ListEnumTaskHistoryActionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskHistoryAction[] | ListEnumTaskHistoryActionFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskHistoryActionFilter<$PrismaModel> | $Enums.TaskHistoryAction
-  }
-
-  export type TaskInstanceRelationFilter = {
-    is?: TaskInstanceWhereInput
-    isNot?: TaskInstanceWhereInput
-  }
-
-  export type TaskHistoryCountOrderByAggregateInput = {
-    id?: SortOrder
-    instanceId?: SortOrder
-    action?: SortOrder
-    performedById?: SortOrder
-    performedAt?: SortOrder
-    note?: SortOrder
-  }
-
-  export type TaskHistoryMaxOrderByAggregateInput = {
-    id?: SortOrder
-    instanceId?: SortOrder
-    action?: SortOrder
-    performedById?: SortOrder
-    performedAt?: SortOrder
-    note?: SortOrder
-  }
-
-  export type TaskHistoryMinOrderByAggregateInput = {
-    id?: SortOrder
-    instanceId?: SortOrder
-    action?: SortOrder
-    performedById?: SortOrder
-    performedAt?: SortOrder
-    note?: SortOrder
-  }
-
-  export type EnumTaskHistoryActionWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskHistoryAction | EnumTaskHistoryActionFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskHistoryAction[] | ListEnumTaskHistoryActionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskHistoryAction[] | ListEnumTaskHistoryActionFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskHistoryActionWithAggregatesFilter<$PrismaModel> | $Enums.TaskHistoryAction
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskHistoryActionFilter<$PrismaModel>
-    _max?: NestedEnumTaskHistoryActionFilter<$PrismaModel>
   }
 
   export type StockAlertAcknowledgmentCountOrderByAggregateInput = {
@@ -93596,20 +86850,6 @@ export namespace Prisma {
     connect?: FormSubmissionWhereUniqueInput | FormSubmissionWhereUniqueInput[]
   }
 
-  export type TaskCreateNestedManyWithoutAssignedToInput = {
-    create?: XOR<TaskCreateWithoutAssignedToInput, TaskUncheckedCreateWithoutAssignedToInput> | TaskCreateWithoutAssignedToInput[] | TaskUncheckedCreateWithoutAssignedToInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutAssignedToInput | TaskCreateOrConnectWithoutAssignedToInput[]
-    createMany?: TaskCreateManyAssignedToInputEnvelope
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-  }
-
-  export type TaskCreateNestedManyWithoutCreatedByInput = {
-    create?: XOR<TaskCreateWithoutCreatedByInput, TaskUncheckedCreateWithoutCreatedByInput> | TaskCreateWithoutCreatedByInput[] | TaskUncheckedCreateWithoutCreatedByInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutCreatedByInput | TaskCreateOrConnectWithoutCreatedByInput[]
-    createMany?: TaskCreateManyCreatedByInputEnvelope
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-  }
-
   export type RecordCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<RecordCreateWithoutCreatedByInput, RecordUncheckedCreateWithoutCreatedByInput> | RecordCreateWithoutCreatedByInput[] | RecordUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: RecordCreateOrConnectWithoutCreatedByInput | RecordCreateOrConnectWithoutCreatedByInput[]
@@ -93699,34 +86939,6 @@ export namespace Prisma {
     connectOrCreate?: InitialStockEntryCreateOrConnectWithoutEnteredByInput | InitialStockEntryCreateOrConnectWithoutEnteredByInput[]
     createMany?: InitialStockEntryCreateManyEnteredByInputEnvelope
     connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
-  }
-
-  export type TaskTemplateCreateNestedManyWithoutCreatedByInput = {
-    create?: XOR<TaskTemplateCreateWithoutCreatedByInput, TaskTemplateUncheckedCreateWithoutCreatedByInput> | TaskTemplateCreateWithoutCreatedByInput[] | TaskTemplateUncheckedCreateWithoutCreatedByInput[]
-    connectOrCreate?: TaskTemplateCreateOrConnectWithoutCreatedByInput | TaskTemplateCreateOrConnectWithoutCreatedByInput[]
-    createMany?: TaskTemplateCreateManyCreatedByInputEnvelope
-    connect?: TaskTemplateWhereUniqueInput | TaskTemplateWhereUniqueInput[]
-  }
-
-  export type TaskInstanceCreateNestedManyWithoutCompletedByInput = {
-    create?: XOR<TaskInstanceCreateWithoutCompletedByInput, TaskInstanceUncheckedCreateWithoutCompletedByInput> | TaskInstanceCreateWithoutCompletedByInput[] | TaskInstanceUncheckedCreateWithoutCompletedByInput[]
-    connectOrCreate?: TaskInstanceCreateOrConnectWithoutCompletedByInput | TaskInstanceCreateOrConnectWithoutCompletedByInput[]
-    createMany?: TaskInstanceCreateManyCompletedByInputEnvelope
-    connect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-  }
-
-  export type TaskInstanceCreateNestedManyWithoutSkippedByInput = {
-    create?: XOR<TaskInstanceCreateWithoutSkippedByInput, TaskInstanceUncheckedCreateWithoutSkippedByInput> | TaskInstanceCreateWithoutSkippedByInput[] | TaskInstanceUncheckedCreateWithoutSkippedByInput[]
-    connectOrCreate?: TaskInstanceCreateOrConnectWithoutSkippedByInput | TaskInstanceCreateOrConnectWithoutSkippedByInput[]
-    createMany?: TaskInstanceCreateManySkippedByInputEnvelope
-    connect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-  }
-
-  export type TaskHistoryCreateNestedManyWithoutPerformedByInput = {
-    create?: XOR<TaskHistoryCreateWithoutPerformedByInput, TaskHistoryUncheckedCreateWithoutPerformedByInput> | TaskHistoryCreateWithoutPerformedByInput[] | TaskHistoryUncheckedCreateWithoutPerformedByInput[]
-    connectOrCreate?: TaskHistoryCreateOrConnectWithoutPerformedByInput | TaskHistoryCreateOrConnectWithoutPerformedByInput[]
-    createMany?: TaskHistoryCreateManyPerformedByInputEnvelope
-    connect?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
   }
 
   export type ForecastExclusionCreateNestedManyWithoutExcludedByInput = {
@@ -93876,20 +87088,6 @@ export namespace Prisma {
     connect?: FormSubmissionWhereUniqueInput | FormSubmissionWhereUniqueInput[]
   }
 
-  export type TaskUncheckedCreateNestedManyWithoutAssignedToInput = {
-    create?: XOR<TaskCreateWithoutAssignedToInput, TaskUncheckedCreateWithoutAssignedToInput> | TaskCreateWithoutAssignedToInput[] | TaskUncheckedCreateWithoutAssignedToInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutAssignedToInput | TaskCreateOrConnectWithoutAssignedToInput[]
-    createMany?: TaskCreateManyAssignedToInputEnvelope
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-  }
-
-  export type TaskUncheckedCreateNestedManyWithoutCreatedByInput = {
-    create?: XOR<TaskCreateWithoutCreatedByInput, TaskUncheckedCreateWithoutCreatedByInput> | TaskCreateWithoutCreatedByInput[] | TaskUncheckedCreateWithoutCreatedByInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutCreatedByInput | TaskCreateOrConnectWithoutCreatedByInput[]
-    createMany?: TaskCreateManyCreatedByInputEnvelope
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-  }
-
   export type RecordUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<RecordCreateWithoutCreatedByInput, RecordUncheckedCreateWithoutCreatedByInput> | RecordCreateWithoutCreatedByInput[] | RecordUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: RecordCreateOrConnectWithoutCreatedByInput | RecordCreateOrConnectWithoutCreatedByInput[]
@@ -93979,34 +87177,6 @@ export namespace Prisma {
     connectOrCreate?: InitialStockEntryCreateOrConnectWithoutEnteredByInput | InitialStockEntryCreateOrConnectWithoutEnteredByInput[]
     createMany?: InitialStockEntryCreateManyEnteredByInputEnvelope
     connect?: InitialStockEntryWhereUniqueInput | InitialStockEntryWhereUniqueInput[]
-  }
-
-  export type TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput = {
-    create?: XOR<TaskTemplateCreateWithoutCreatedByInput, TaskTemplateUncheckedCreateWithoutCreatedByInput> | TaskTemplateCreateWithoutCreatedByInput[] | TaskTemplateUncheckedCreateWithoutCreatedByInput[]
-    connectOrCreate?: TaskTemplateCreateOrConnectWithoutCreatedByInput | TaskTemplateCreateOrConnectWithoutCreatedByInput[]
-    createMany?: TaskTemplateCreateManyCreatedByInputEnvelope
-    connect?: TaskTemplateWhereUniqueInput | TaskTemplateWhereUniqueInput[]
-  }
-
-  export type TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput = {
-    create?: XOR<TaskInstanceCreateWithoutCompletedByInput, TaskInstanceUncheckedCreateWithoutCompletedByInput> | TaskInstanceCreateWithoutCompletedByInput[] | TaskInstanceUncheckedCreateWithoutCompletedByInput[]
-    connectOrCreate?: TaskInstanceCreateOrConnectWithoutCompletedByInput | TaskInstanceCreateOrConnectWithoutCompletedByInput[]
-    createMany?: TaskInstanceCreateManyCompletedByInputEnvelope
-    connect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-  }
-
-  export type TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput = {
-    create?: XOR<TaskInstanceCreateWithoutSkippedByInput, TaskInstanceUncheckedCreateWithoutSkippedByInput> | TaskInstanceCreateWithoutSkippedByInput[] | TaskInstanceUncheckedCreateWithoutSkippedByInput[]
-    connectOrCreate?: TaskInstanceCreateOrConnectWithoutSkippedByInput | TaskInstanceCreateOrConnectWithoutSkippedByInput[]
-    createMany?: TaskInstanceCreateManySkippedByInputEnvelope
-    connect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-  }
-
-  export type TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput = {
-    create?: XOR<TaskHistoryCreateWithoutPerformedByInput, TaskHistoryUncheckedCreateWithoutPerformedByInput> | TaskHistoryCreateWithoutPerformedByInput[] | TaskHistoryUncheckedCreateWithoutPerformedByInput[]
-    connectOrCreate?: TaskHistoryCreateOrConnectWithoutPerformedByInput | TaskHistoryCreateOrConnectWithoutPerformedByInput[]
-    createMany?: TaskHistoryCreateManyPerformedByInputEnvelope
-    connect?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
   }
 
   export type ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput = {
@@ -94197,34 +87367,6 @@ export namespace Prisma {
     deleteMany?: FormSubmissionScalarWhereInput | FormSubmissionScalarWhereInput[]
   }
 
-  export type TaskUpdateManyWithoutAssignedToNestedInput = {
-    create?: XOR<TaskCreateWithoutAssignedToInput, TaskUncheckedCreateWithoutAssignedToInput> | TaskCreateWithoutAssignedToInput[] | TaskUncheckedCreateWithoutAssignedToInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutAssignedToInput | TaskCreateOrConnectWithoutAssignedToInput[]
-    upsert?: TaskUpsertWithWhereUniqueWithoutAssignedToInput | TaskUpsertWithWhereUniqueWithoutAssignedToInput[]
-    createMany?: TaskCreateManyAssignedToInputEnvelope
-    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    update?: TaskUpdateWithWhereUniqueWithoutAssignedToInput | TaskUpdateWithWhereUniqueWithoutAssignedToInput[]
-    updateMany?: TaskUpdateManyWithWhereWithoutAssignedToInput | TaskUpdateManyWithWhereWithoutAssignedToInput[]
-    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
-  }
-
-  export type TaskUpdateManyWithoutCreatedByNestedInput = {
-    create?: XOR<TaskCreateWithoutCreatedByInput, TaskUncheckedCreateWithoutCreatedByInput> | TaskCreateWithoutCreatedByInput[] | TaskUncheckedCreateWithoutCreatedByInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutCreatedByInput | TaskCreateOrConnectWithoutCreatedByInput[]
-    upsert?: TaskUpsertWithWhereUniqueWithoutCreatedByInput | TaskUpsertWithWhereUniqueWithoutCreatedByInput[]
-    createMany?: TaskCreateManyCreatedByInputEnvelope
-    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    update?: TaskUpdateWithWhereUniqueWithoutCreatedByInput | TaskUpdateWithWhereUniqueWithoutCreatedByInput[]
-    updateMany?: TaskUpdateManyWithWhereWithoutCreatedByInput | TaskUpdateManyWithWhereWithoutCreatedByInput[]
-    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
-  }
-
   export type RecordUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<RecordCreateWithoutCreatedByInput, RecordUncheckedCreateWithoutCreatedByInput> | RecordCreateWithoutCreatedByInput[] | RecordUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: RecordCreateOrConnectWithoutCreatedByInput | RecordCreateOrConnectWithoutCreatedByInput[]
@@ -94405,62 +87547,6 @@ export namespace Prisma {
     update?: InitialStockEntryUpdateWithWhereUniqueWithoutEnteredByInput | InitialStockEntryUpdateWithWhereUniqueWithoutEnteredByInput[]
     updateMany?: InitialStockEntryUpdateManyWithWhereWithoutEnteredByInput | InitialStockEntryUpdateManyWithWhereWithoutEnteredByInput[]
     deleteMany?: InitialStockEntryScalarWhereInput | InitialStockEntryScalarWhereInput[]
-  }
-
-  export type TaskTemplateUpdateManyWithoutCreatedByNestedInput = {
-    create?: XOR<TaskTemplateCreateWithoutCreatedByInput, TaskTemplateUncheckedCreateWithoutCreatedByInput> | TaskTemplateCreateWithoutCreatedByInput[] | TaskTemplateUncheckedCreateWithoutCreatedByInput[]
-    connectOrCreate?: TaskTemplateCreateOrConnectWithoutCreatedByInput | TaskTemplateCreateOrConnectWithoutCreatedByInput[]
-    upsert?: TaskTemplateUpsertWithWhereUniqueWithoutCreatedByInput | TaskTemplateUpsertWithWhereUniqueWithoutCreatedByInput[]
-    createMany?: TaskTemplateCreateManyCreatedByInputEnvelope
-    set?: TaskTemplateWhereUniqueInput | TaskTemplateWhereUniqueInput[]
-    disconnect?: TaskTemplateWhereUniqueInput | TaskTemplateWhereUniqueInput[]
-    delete?: TaskTemplateWhereUniqueInput | TaskTemplateWhereUniqueInput[]
-    connect?: TaskTemplateWhereUniqueInput | TaskTemplateWhereUniqueInput[]
-    update?: TaskTemplateUpdateWithWhereUniqueWithoutCreatedByInput | TaskTemplateUpdateWithWhereUniqueWithoutCreatedByInput[]
-    updateMany?: TaskTemplateUpdateManyWithWhereWithoutCreatedByInput | TaskTemplateUpdateManyWithWhereWithoutCreatedByInput[]
-    deleteMany?: TaskTemplateScalarWhereInput | TaskTemplateScalarWhereInput[]
-  }
-
-  export type TaskInstanceUpdateManyWithoutCompletedByNestedInput = {
-    create?: XOR<TaskInstanceCreateWithoutCompletedByInput, TaskInstanceUncheckedCreateWithoutCompletedByInput> | TaskInstanceCreateWithoutCompletedByInput[] | TaskInstanceUncheckedCreateWithoutCompletedByInput[]
-    connectOrCreate?: TaskInstanceCreateOrConnectWithoutCompletedByInput | TaskInstanceCreateOrConnectWithoutCompletedByInput[]
-    upsert?: TaskInstanceUpsertWithWhereUniqueWithoutCompletedByInput | TaskInstanceUpsertWithWhereUniqueWithoutCompletedByInput[]
-    createMany?: TaskInstanceCreateManyCompletedByInputEnvelope
-    set?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    disconnect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    delete?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    connect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    update?: TaskInstanceUpdateWithWhereUniqueWithoutCompletedByInput | TaskInstanceUpdateWithWhereUniqueWithoutCompletedByInput[]
-    updateMany?: TaskInstanceUpdateManyWithWhereWithoutCompletedByInput | TaskInstanceUpdateManyWithWhereWithoutCompletedByInput[]
-    deleteMany?: TaskInstanceScalarWhereInput | TaskInstanceScalarWhereInput[]
-  }
-
-  export type TaskInstanceUpdateManyWithoutSkippedByNestedInput = {
-    create?: XOR<TaskInstanceCreateWithoutSkippedByInput, TaskInstanceUncheckedCreateWithoutSkippedByInput> | TaskInstanceCreateWithoutSkippedByInput[] | TaskInstanceUncheckedCreateWithoutSkippedByInput[]
-    connectOrCreate?: TaskInstanceCreateOrConnectWithoutSkippedByInput | TaskInstanceCreateOrConnectWithoutSkippedByInput[]
-    upsert?: TaskInstanceUpsertWithWhereUniqueWithoutSkippedByInput | TaskInstanceUpsertWithWhereUniqueWithoutSkippedByInput[]
-    createMany?: TaskInstanceCreateManySkippedByInputEnvelope
-    set?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    disconnect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    delete?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    connect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    update?: TaskInstanceUpdateWithWhereUniqueWithoutSkippedByInput | TaskInstanceUpdateWithWhereUniqueWithoutSkippedByInput[]
-    updateMany?: TaskInstanceUpdateManyWithWhereWithoutSkippedByInput | TaskInstanceUpdateManyWithWhereWithoutSkippedByInput[]
-    deleteMany?: TaskInstanceScalarWhereInput | TaskInstanceScalarWhereInput[]
-  }
-
-  export type TaskHistoryUpdateManyWithoutPerformedByNestedInput = {
-    create?: XOR<TaskHistoryCreateWithoutPerformedByInput, TaskHistoryUncheckedCreateWithoutPerformedByInput> | TaskHistoryCreateWithoutPerformedByInput[] | TaskHistoryUncheckedCreateWithoutPerformedByInput[]
-    connectOrCreate?: TaskHistoryCreateOrConnectWithoutPerformedByInput | TaskHistoryCreateOrConnectWithoutPerformedByInput[]
-    upsert?: TaskHistoryUpsertWithWhereUniqueWithoutPerformedByInput | TaskHistoryUpsertWithWhereUniqueWithoutPerformedByInput[]
-    createMany?: TaskHistoryCreateManyPerformedByInputEnvelope
-    set?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    disconnect?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    delete?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    connect?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    update?: TaskHistoryUpdateWithWhereUniqueWithoutPerformedByInput | TaskHistoryUpdateWithWhereUniqueWithoutPerformedByInput[]
-    updateMany?: TaskHistoryUpdateManyWithWhereWithoutPerformedByInput | TaskHistoryUpdateManyWithWhereWithoutPerformedByInput[]
-    deleteMany?: TaskHistoryScalarWhereInput | TaskHistoryScalarWhereInput[]
   }
 
   export type ForecastExclusionUpdateManyWithoutExcludedByNestedInput = {
@@ -94757,34 +87843,6 @@ export namespace Prisma {
     deleteMany?: FormSubmissionScalarWhereInput | FormSubmissionScalarWhereInput[]
   }
 
-  export type TaskUncheckedUpdateManyWithoutAssignedToNestedInput = {
-    create?: XOR<TaskCreateWithoutAssignedToInput, TaskUncheckedCreateWithoutAssignedToInput> | TaskCreateWithoutAssignedToInput[] | TaskUncheckedCreateWithoutAssignedToInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutAssignedToInput | TaskCreateOrConnectWithoutAssignedToInput[]
-    upsert?: TaskUpsertWithWhereUniqueWithoutAssignedToInput | TaskUpsertWithWhereUniqueWithoutAssignedToInput[]
-    createMany?: TaskCreateManyAssignedToInputEnvelope
-    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    update?: TaskUpdateWithWhereUniqueWithoutAssignedToInput | TaskUpdateWithWhereUniqueWithoutAssignedToInput[]
-    updateMany?: TaskUpdateManyWithWhereWithoutAssignedToInput | TaskUpdateManyWithWhereWithoutAssignedToInput[]
-    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
-  }
-
-  export type TaskUncheckedUpdateManyWithoutCreatedByNestedInput = {
-    create?: XOR<TaskCreateWithoutCreatedByInput, TaskUncheckedCreateWithoutCreatedByInput> | TaskCreateWithoutCreatedByInput[] | TaskUncheckedCreateWithoutCreatedByInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutCreatedByInput | TaskCreateOrConnectWithoutCreatedByInput[]
-    upsert?: TaskUpsertWithWhereUniqueWithoutCreatedByInput | TaskUpsertWithWhereUniqueWithoutCreatedByInput[]
-    createMany?: TaskCreateManyCreatedByInputEnvelope
-    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    update?: TaskUpdateWithWhereUniqueWithoutCreatedByInput | TaskUpdateWithWhereUniqueWithoutCreatedByInput[]
-    updateMany?: TaskUpdateManyWithWhereWithoutCreatedByInput | TaskUpdateManyWithWhereWithoutCreatedByInput[]
-    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
-  }
-
   export type RecordUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<RecordCreateWithoutCreatedByInput, RecordUncheckedCreateWithoutCreatedByInput> | RecordCreateWithoutCreatedByInput[] | RecordUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: RecordCreateOrConnectWithoutCreatedByInput | RecordCreateOrConnectWithoutCreatedByInput[]
@@ -94965,62 +88023,6 @@ export namespace Prisma {
     update?: InitialStockEntryUpdateWithWhereUniqueWithoutEnteredByInput | InitialStockEntryUpdateWithWhereUniqueWithoutEnteredByInput[]
     updateMany?: InitialStockEntryUpdateManyWithWhereWithoutEnteredByInput | InitialStockEntryUpdateManyWithWhereWithoutEnteredByInput[]
     deleteMany?: InitialStockEntryScalarWhereInput | InitialStockEntryScalarWhereInput[]
-  }
-
-  export type TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput = {
-    create?: XOR<TaskTemplateCreateWithoutCreatedByInput, TaskTemplateUncheckedCreateWithoutCreatedByInput> | TaskTemplateCreateWithoutCreatedByInput[] | TaskTemplateUncheckedCreateWithoutCreatedByInput[]
-    connectOrCreate?: TaskTemplateCreateOrConnectWithoutCreatedByInput | TaskTemplateCreateOrConnectWithoutCreatedByInput[]
-    upsert?: TaskTemplateUpsertWithWhereUniqueWithoutCreatedByInput | TaskTemplateUpsertWithWhereUniqueWithoutCreatedByInput[]
-    createMany?: TaskTemplateCreateManyCreatedByInputEnvelope
-    set?: TaskTemplateWhereUniqueInput | TaskTemplateWhereUniqueInput[]
-    disconnect?: TaskTemplateWhereUniqueInput | TaskTemplateWhereUniqueInput[]
-    delete?: TaskTemplateWhereUniqueInput | TaskTemplateWhereUniqueInput[]
-    connect?: TaskTemplateWhereUniqueInput | TaskTemplateWhereUniqueInput[]
-    update?: TaskTemplateUpdateWithWhereUniqueWithoutCreatedByInput | TaskTemplateUpdateWithWhereUniqueWithoutCreatedByInput[]
-    updateMany?: TaskTemplateUpdateManyWithWhereWithoutCreatedByInput | TaskTemplateUpdateManyWithWhereWithoutCreatedByInput[]
-    deleteMany?: TaskTemplateScalarWhereInput | TaskTemplateScalarWhereInput[]
-  }
-
-  export type TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput = {
-    create?: XOR<TaskInstanceCreateWithoutCompletedByInput, TaskInstanceUncheckedCreateWithoutCompletedByInput> | TaskInstanceCreateWithoutCompletedByInput[] | TaskInstanceUncheckedCreateWithoutCompletedByInput[]
-    connectOrCreate?: TaskInstanceCreateOrConnectWithoutCompletedByInput | TaskInstanceCreateOrConnectWithoutCompletedByInput[]
-    upsert?: TaskInstanceUpsertWithWhereUniqueWithoutCompletedByInput | TaskInstanceUpsertWithWhereUniqueWithoutCompletedByInput[]
-    createMany?: TaskInstanceCreateManyCompletedByInputEnvelope
-    set?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    disconnect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    delete?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    connect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    update?: TaskInstanceUpdateWithWhereUniqueWithoutCompletedByInput | TaskInstanceUpdateWithWhereUniqueWithoutCompletedByInput[]
-    updateMany?: TaskInstanceUpdateManyWithWhereWithoutCompletedByInput | TaskInstanceUpdateManyWithWhereWithoutCompletedByInput[]
-    deleteMany?: TaskInstanceScalarWhereInput | TaskInstanceScalarWhereInput[]
-  }
-
-  export type TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput = {
-    create?: XOR<TaskInstanceCreateWithoutSkippedByInput, TaskInstanceUncheckedCreateWithoutSkippedByInput> | TaskInstanceCreateWithoutSkippedByInput[] | TaskInstanceUncheckedCreateWithoutSkippedByInput[]
-    connectOrCreate?: TaskInstanceCreateOrConnectWithoutSkippedByInput | TaskInstanceCreateOrConnectWithoutSkippedByInput[]
-    upsert?: TaskInstanceUpsertWithWhereUniqueWithoutSkippedByInput | TaskInstanceUpsertWithWhereUniqueWithoutSkippedByInput[]
-    createMany?: TaskInstanceCreateManySkippedByInputEnvelope
-    set?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    disconnect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    delete?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    connect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    update?: TaskInstanceUpdateWithWhereUniqueWithoutSkippedByInput | TaskInstanceUpdateWithWhereUniqueWithoutSkippedByInput[]
-    updateMany?: TaskInstanceUpdateManyWithWhereWithoutSkippedByInput | TaskInstanceUpdateManyWithWhereWithoutSkippedByInput[]
-    deleteMany?: TaskInstanceScalarWhereInput | TaskInstanceScalarWhereInput[]
-  }
-
-  export type TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput = {
-    create?: XOR<TaskHistoryCreateWithoutPerformedByInput, TaskHistoryUncheckedCreateWithoutPerformedByInput> | TaskHistoryCreateWithoutPerformedByInput[] | TaskHistoryUncheckedCreateWithoutPerformedByInput[]
-    connectOrCreate?: TaskHistoryCreateOrConnectWithoutPerformedByInput | TaskHistoryCreateOrConnectWithoutPerformedByInput[]
-    upsert?: TaskHistoryUpsertWithWhereUniqueWithoutPerformedByInput | TaskHistoryUpsertWithWhereUniqueWithoutPerformedByInput[]
-    createMany?: TaskHistoryCreateManyPerformedByInputEnvelope
-    set?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    disconnect?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    delete?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    connect?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    update?: TaskHistoryUpdateWithWhereUniqueWithoutPerformedByInput | TaskHistoryUpdateWithWhereUniqueWithoutPerformedByInput[]
-    updateMany?: TaskHistoryUpdateManyWithWhereWithoutPerformedByInput | TaskHistoryUpdateManyWithWhereWithoutPerformedByInput[]
-    deleteMany?: TaskHistoryScalarWhereInput | TaskHistoryScalarWhereInput[]
   }
 
   export type ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput = {
@@ -95288,25 +88290,11 @@ export namespace Prisma {
     connect?: FormSubmissionWhereUniqueInput | FormSubmissionWhereUniqueInput[]
   }
 
-  export type TaskCreateNestedManyWithoutFormInput = {
-    create?: XOR<TaskCreateWithoutFormInput, TaskUncheckedCreateWithoutFormInput> | TaskCreateWithoutFormInput[] | TaskUncheckedCreateWithoutFormInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutFormInput | TaskCreateOrConnectWithoutFormInput[]
-    createMany?: TaskCreateManyFormInputEnvelope
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-  }
-
   export type FormSubmissionUncheckedCreateNestedManyWithoutFormInput = {
     create?: XOR<FormSubmissionCreateWithoutFormInput, FormSubmissionUncheckedCreateWithoutFormInput> | FormSubmissionCreateWithoutFormInput[] | FormSubmissionUncheckedCreateWithoutFormInput[]
     connectOrCreate?: FormSubmissionCreateOrConnectWithoutFormInput | FormSubmissionCreateOrConnectWithoutFormInput[]
     createMany?: FormSubmissionCreateManyFormInputEnvelope
     connect?: FormSubmissionWhereUniqueInput | FormSubmissionWhereUniqueInput[]
-  }
-
-  export type TaskUncheckedCreateNestedManyWithoutFormInput = {
-    create?: XOR<TaskCreateWithoutFormInput, TaskUncheckedCreateWithoutFormInput> | TaskCreateWithoutFormInput[] | TaskUncheckedCreateWithoutFormInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutFormInput | TaskCreateOrConnectWithoutFormInput[]
-    createMany?: TaskCreateManyFormInputEnvelope
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -95339,20 +88327,6 @@ export namespace Prisma {
     deleteMany?: FormSubmissionScalarWhereInput | FormSubmissionScalarWhereInput[]
   }
 
-  export type TaskUpdateManyWithoutFormNestedInput = {
-    create?: XOR<TaskCreateWithoutFormInput, TaskUncheckedCreateWithoutFormInput> | TaskCreateWithoutFormInput[] | TaskUncheckedCreateWithoutFormInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutFormInput | TaskCreateOrConnectWithoutFormInput[]
-    upsert?: TaskUpsertWithWhereUniqueWithoutFormInput | TaskUpsertWithWhereUniqueWithoutFormInput[]
-    createMany?: TaskCreateManyFormInputEnvelope
-    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    update?: TaskUpdateWithWhereUniqueWithoutFormInput | TaskUpdateWithWhereUniqueWithoutFormInput[]
-    updateMany?: TaskUpdateManyWithWhereWithoutFormInput | TaskUpdateManyWithWhereWithoutFormInput[]
-    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
-  }
-
   export type FormSubmissionUncheckedUpdateManyWithoutFormNestedInput = {
     create?: XOR<FormSubmissionCreateWithoutFormInput, FormSubmissionUncheckedCreateWithoutFormInput> | FormSubmissionCreateWithoutFormInput[] | FormSubmissionUncheckedCreateWithoutFormInput[]
     connectOrCreate?: FormSubmissionCreateOrConnectWithoutFormInput | FormSubmissionCreateOrConnectWithoutFormInput[]
@@ -95365,20 +88339,6 @@ export namespace Prisma {
     update?: FormSubmissionUpdateWithWhereUniqueWithoutFormInput | FormSubmissionUpdateWithWhereUniqueWithoutFormInput[]
     updateMany?: FormSubmissionUpdateManyWithWhereWithoutFormInput | FormSubmissionUpdateManyWithWhereWithoutFormInput[]
     deleteMany?: FormSubmissionScalarWhereInput | FormSubmissionScalarWhereInput[]
-  }
-
-  export type TaskUncheckedUpdateManyWithoutFormNestedInput = {
-    create?: XOR<TaskCreateWithoutFormInput, TaskUncheckedCreateWithoutFormInput> | TaskCreateWithoutFormInput[] | TaskUncheckedCreateWithoutFormInput[]
-    connectOrCreate?: TaskCreateOrConnectWithoutFormInput | TaskCreateOrConnectWithoutFormInput[]
-    upsert?: TaskUpsertWithWhereUniqueWithoutFormInput | TaskUpsertWithWhereUniqueWithoutFormInput[]
-    createMany?: TaskCreateManyFormInputEnvelope
-    set?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    disconnect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    delete?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
-    update?: TaskUpdateWithWhereUniqueWithoutFormInput | TaskUpdateWithWhereUniqueWithoutFormInput[]
-    updateMany?: TaskUpdateManyWithWhereWithoutFormInput | TaskUpdateManyWithWhereWithoutFormInput[]
-    deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
   export type FormCreateNestedOneWithoutSubmissionsInput = {
@@ -95397,12 +88357,6 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutApprovedSubmissionsInput, UserUncheckedCreateWithoutApprovedSubmissionsInput>
     connectOrCreate?: UserCreateOrConnectWithoutApprovedSubmissionsInput
     connect?: UserWhereUniqueInput
-  }
-
-  export type TaskCreateNestedOneWithoutSubmissionsInput = {
-    create?: XOR<TaskCreateWithoutSubmissionsInput, TaskUncheckedCreateWithoutSubmissionsInput>
-    connectOrCreate?: TaskCreateOrConnectWithoutSubmissionsInput
-    connect?: TaskWhereUniqueInput
   }
 
   export type EnumSubmissionStatusFieldUpdateOperationsInput = {
@@ -95433,118 +88387,6 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutApprovedSubmissionsInput, UserUpdateWithoutApprovedSubmissionsInput>, UserUncheckedUpdateWithoutApprovedSubmissionsInput>
-  }
-
-  export type TaskUpdateOneWithoutSubmissionsNestedInput = {
-    create?: XOR<TaskCreateWithoutSubmissionsInput, TaskUncheckedCreateWithoutSubmissionsInput>
-    connectOrCreate?: TaskCreateOrConnectWithoutSubmissionsInput
-    upsert?: TaskUpsertWithoutSubmissionsInput
-    disconnect?: TaskWhereInput | boolean
-    delete?: TaskWhereInput | boolean
-    connect?: TaskWhereUniqueInput
-    update?: XOR<XOR<TaskUpdateToOneWithWhereWithoutSubmissionsInput, TaskUpdateWithoutSubmissionsInput>, TaskUncheckedUpdateWithoutSubmissionsInput>
-  }
-
-  export type FormCreateNestedOneWithoutTasksInput = {
-    create?: XOR<FormCreateWithoutTasksInput, FormUncheckedCreateWithoutTasksInput>
-    connectOrCreate?: FormCreateOrConnectWithoutTasksInput
-    connect?: FormWhereUniqueInput
-  }
-
-  export type UserCreateNestedOneWithoutAssignedTasksInput = {
-    create?: XOR<UserCreateWithoutAssignedTasksInput, UserUncheckedCreateWithoutAssignedTasksInput>
-    connectOrCreate?: UserCreateOrConnectWithoutAssignedTasksInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type UserCreateNestedOneWithoutCreatedTasksInput = {
-    create?: XOR<UserCreateWithoutCreatedTasksInput, UserUncheckedCreateWithoutCreatedTasksInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCreatedTasksInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type FormSubmissionCreateNestedManyWithoutTaskInput = {
-    create?: XOR<FormSubmissionCreateWithoutTaskInput, FormSubmissionUncheckedCreateWithoutTaskInput> | FormSubmissionCreateWithoutTaskInput[] | FormSubmissionUncheckedCreateWithoutTaskInput[]
-    connectOrCreate?: FormSubmissionCreateOrConnectWithoutTaskInput | FormSubmissionCreateOrConnectWithoutTaskInput[]
-    createMany?: FormSubmissionCreateManyTaskInputEnvelope
-    connect?: FormSubmissionWhereUniqueInput | FormSubmissionWhereUniqueInput[]
-  }
-
-  export type FormSubmissionUncheckedCreateNestedManyWithoutTaskInput = {
-    create?: XOR<FormSubmissionCreateWithoutTaskInput, FormSubmissionUncheckedCreateWithoutTaskInput> | FormSubmissionCreateWithoutTaskInput[] | FormSubmissionUncheckedCreateWithoutTaskInput[]
-    connectOrCreate?: FormSubmissionCreateOrConnectWithoutTaskInput | FormSubmissionCreateOrConnectWithoutTaskInput[]
-    createMany?: FormSubmissionCreateManyTaskInputEnvelope
-    connect?: FormSubmissionWhereUniqueInput | FormSubmissionWhereUniqueInput[]
-  }
-
-  export type EnumTaskStatusFieldUpdateOperationsInput = {
-    set?: $Enums.TaskStatus
-  }
-
-  export type EnumTaskPriorityFieldUpdateOperationsInput = {
-    set?: $Enums.TaskPriority
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
-  export type EnumRecurrenceTypeFieldUpdateOperationsInput = {
-    set?: $Enums.RecurrenceType
-  }
-
-  export type FormUpdateOneWithoutTasksNestedInput = {
-    create?: XOR<FormCreateWithoutTasksInput, FormUncheckedCreateWithoutTasksInput>
-    connectOrCreate?: FormCreateOrConnectWithoutTasksInput
-    upsert?: FormUpsertWithoutTasksInput
-    disconnect?: FormWhereInput | boolean
-    delete?: FormWhereInput | boolean
-    connect?: FormWhereUniqueInput
-    update?: XOR<XOR<FormUpdateToOneWithWhereWithoutTasksInput, FormUpdateWithoutTasksInput>, FormUncheckedUpdateWithoutTasksInput>
-  }
-
-  export type UserUpdateOneRequiredWithoutAssignedTasksNestedInput = {
-    create?: XOR<UserCreateWithoutAssignedTasksInput, UserUncheckedCreateWithoutAssignedTasksInput>
-    connectOrCreate?: UserCreateOrConnectWithoutAssignedTasksInput
-    upsert?: UserUpsertWithoutAssignedTasksInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssignedTasksInput, UserUpdateWithoutAssignedTasksInput>, UserUncheckedUpdateWithoutAssignedTasksInput>
-  }
-
-  export type UserUpdateOneRequiredWithoutCreatedTasksNestedInput = {
-    create?: XOR<UserCreateWithoutCreatedTasksInput, UserUncheckedCreateWithoutCreatedTasksInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCreatedTasksInput
-    upsert?: UserUpsertWithoutCreatedTasksInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedTasksInput, UserUpdateWithoutCreatedTasksInput>, UserUncheckedUpdateWithoutCreatedTasksInput>
-  }
-
-  export type FormSubmissionUpdateManyWithoutTaskNestedInput = {
-    create?: XOR<FormSubmissionCreateWithoutTaskInput, FormSubmissionUncheckedCreateWithoutTaskInput> | FormSubmissionCreateWithoutTaskInput[] | FormSubmissionUncheckedCreateWithoutTaskInput[]
-    connectOrCreate?: FormSubmissionCreateOrConnectWithoutTaskInput | FormSubmissionCreateOrConnectWithoutTaskInput[]
-    upsert?: FormSubmissionUpsertWithWhereUniqueWithoutTaskInput | FormSubmissionUpsertWithWhereUniqueWithoutTaskInput[]
-    createMany?: FormSubmissionCreateManyTaskInputEnvelope
-    set?: FormSubmissionWhereUniqueInput | FormSubmissionWhereUniqueInput[]
-    disconnect?: FormSubmissionWhereUniqueInput | FormSubmissionWhereUniqueInput[]
-    delete?: FormSubmissionWhereUniqueInput | FormSubmissionWhereUniqueInput[]
-    connect?: FormSubmissionWhereUniqueInput | FormSubmissionWhereUniqueInput[]
-    update?: FormSubmissionUpdateWithWhereUniqueWithoutTaskInput | FormSubmissionUpdateWithWhereUniqueWithoutTaskInput[]
-    updateMany?: FormSubmissionUpdateManyWithWhereWithoutTaskInput | FormSubmissionUpdateManyWithWhereWithoutTaskInput[]
-    deleteMany?: FormSubmissionScalarWhereInput | FormSubmissionScalarWhereInput[]
-  }
-
-  export type FormSubmissionUncheckedUpdateManyWithoutTaskNestedInput = {
-    create?: XOR<FormSubmissionCreateWithoutTaskInput, FormSubmissionUncheckedCreateWithoutTaskInput> | FormSubmissionCreateWithoutTaskInput[] | FormSubmissionUncheckedCreateWithoutTaskInput[]
-    connectOrCreate?: FormSubmissionCreateOrConnectWithoutTaskInput | FormSubmissionCreateOrConnectWithoutTaskInput[]
-    upsert?: FormSubmissionUpsertWithWhereUniqueWithoutTaskInput | FormSubmissionUpsertWithWhereUniqueWithoutTaskInput[]
-    createMany?: FormSubmissionCreateManyTaskInputEnvelope
-    set?: FormSubmissionWhereUniqueInput | FormSubmissionWhereUniqueInput[]
-    disconnect?: FormSubmissionWhereUniqueInput | FormSubmissionWhereUniqueInput[]
-    delete?: FormSubmissionWhereUniqueInput | FormSubmissionWhereUniqueInput[]
-    connect?: FormSubmissionWhereUniqueInput | FormSubmissionWhereUniqueInput[]
-    update?: FormSubmissionUpdateWithWhereUniqueWithoutTaskInput | FormSubmissionUpdateWithWhereUniqueWithoutTaskInput[]
-    updateMany?: FormSubmissionUpdateManyWithWhereWithoutTaskInput | FormSubmissionUpdateManyWithWhereWithoutTaskInput[]
-    deleteMany?: FormSubmissionScalarWhereInput | FormSubmissionScalarWhereInput[]
   }
 
   export type RecordCreatetagsInput = {
@@ -95702,6 +88544,10 @@ export namespace Prisma {
     connectOrCreate?: InventoryAuditExclusionCreateOrConnectWithoutSubmissionInput | InventoryAuditExclusionCreateOrConnectWithoutSubmissionInput[]
     createMany?: InventoryAuditExclusionCreateManySubmissionInputEnvelope
     connect?: InventoryAuditExclusionWhereUniqueInput | InventoryAuditExclusionWhereUniqueInput[]
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -97916,204 +90762,6 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutInitialStockEntriesInput, UserUpdateWithoutInitialStockEntriesInput>, UserUncheckedUpdateWithoutInitialStockEntriesInput>
   }
 
-  export type UserCreateNestedOneWithoutCreatedTaskTemplatesInput = {
-    create?: XOR<UserCreateWithoutCreatedTaskTemplatesInput, UserUncheckedCreateWithoutCreatedTaskTemplatesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCreatedTaskTemplatesInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type TaskInstanceCreateNestedManyWithoutTemplateInput = {
-    create?: XOR<TaskInstanceCreateWithoutTemplateInput, TaskInstanceUncheckedCreateWithoutTemplateInput> | TaskInstanceCreateWithoutTemplateInput[] | TaskInstanceUncheckedCreateWithoutTemplateInput[]
-    connectOrCreate?: TaskInstanceCreateOrConnectWithoutTemplateInput | TaskInstanceCreateOrConnectWithoutTemplateInput[]
-    createMany?: TaskInstanceCreateManyTemplateInputEnvelope
-    connect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-  }
-
-  export type TaskInstanceUncheckedCreateNestedManyWithoutTemplateInput = {
-    create?: XOR<TaskInstanceCreateWithoutTemplateInput, TaskInstanceUncheckedCreateWithoutTemplateInput> | TaskInstanceCreateWithoutTemplateInput[] | TaskInstanceUncheckedCreateWithoutTemplateInput[]
-    connectOrCreate?: TaskInstanceCreateOrConnectWithoutTemplateInput | TaskInstanceCreateOrConnectWithoutTemplateInput[]
-    createMany?: TaskInstanceCreateManyTemplateInputEnvelope
-    connect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-  }
-
-  export type EnumTaskTemplateCategoryFieldUpdateOperationsInput = {
-    set?: $Enums.TaskTemplateCategory
-  }
-
-  export type EnumTaskTemplatePriorityFieldUpdateOperationsInput = {
-    set?: $Enums.TaskTemplatePriority
-  }
-
-  export type EnumTaskTemplateTypeFieldUpdateOperationsInput = {
-    set?: $Enums.TaskTemplateType
-  }
-
-  export type EnumTaskRecurrenceTypeFieldUpdateOperationsInput = {
-    set?: $Enums.TaskRecurrenceType
-  }
-
-  export type UserUpdateOneRequiredWithoutCreatedTaskTemplatesNestedInput = {
-    create?: XOR<UserCreateWithoutCreatedTaskTemplatesInput, UserUncheckedCreateWithoutCreatedTaskTemplatesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCreatedTaskTemplatesInput
-    upsert?: UserUpsertWithoutCreatedTaskTemplatesInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedTaskTemplatesInput, UserUpdateWithoutCreatedTaskTemplatesInput>, UserUncheckedUpdateWithoutCreatedTaskTemplatesInput>
-  }
-
-  export type TaskInstanceUpdateManyWithoutTemplateNestedInput = {
-    create?: XOR<TaskInstanceCreateWithoutTemplateInput, TaskInstanceUncheckedCreateWithoutTemplateInput> | TaskInstanceCreateWithoutTemplateInput[] | TaskInstanceUncheckedCreateWithoutTemplateInput[]
-    connectOrCreate?: TaskInstanceCreateOrConnectWithoutTemplateInput | TaskInstanceCreateOrConnectWithoutTemplateInput[]
-    upsert?: TaskInstanceUpsertWithWhereUniqueWithoutTemplateInput | TaskInstanceUpsertWithWhereUniqueWithoutTemplateInput[]
-    createMany?: TaskInstanceCreateManyTemplateInputEnvelope
-    set?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    disconnect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    delete?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    connect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    update?: TaskInstanceUpdateWithWhereUniqueWithoutTemplateInput | TaskInstanceUpdateWithWhereUniqueWithoutTemplateInput[]
-    updateMany?: TaskInstanceUpdateManyWithWhereWithoutTemplateInput | TaskInstanceUpdateManyWithWhereWithoutTemplateInput[]
-    deleteMany?: TaskInstanceScalarWhereInput | TaskInstanceScalarWhereInput[]
-  }
-
-  export type TaskInstanceUncheckedUpdateManyWithoutTemplateNestedInput = {
-    create?: XOR<TaskInstanceCreateWithoutTemplateInput, TaskInstanceUncheckedCreateWithoutTemplateInput> | TaskInstanceCreateWithoutTemplateInput[] | TaskInstanceUncheckedCreateWithoutTemplateInput[]
-    connectOrCreate?: TaskInstanceCreateOrConnectWithoutTemplateInput | TaskInstanceCreateOrConnectWithoutTemplateInput[]
-    upsert?: TaskInstanceUpsertWithWhereUniqueWithoutTemplateInput | TaskInstanceUpsertWithWhereUniqueWithoutTemplateInput[]
-    createMany?: TaskInstanceCreateManyTemplateInputEnvelope
-    set?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    disconnect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    delete?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    connect?: TaskInstanceWhereUniqueInput | TaskInstanceWhereUniqueInput[]
-    update?: TaskInstanceUpdateWithWhereUniqueWithoutTemplateInput | TaskInstanceUpdateWithWhereUniqueWithoutTemplateInput[]
-    updateMany?: TaskInstanceUpdateManyWithWhereWithoutTemplateInput | TaskInstanceUpdateManyWithWhereWithoutTemplateInput[]
-    deleteMany?: TaskInstanceScalarWhereInput | TaskInstanceScalarWhereInput[]
-  }
-
-  export type TaskTemplateCreateNestedOneWithoutInstancesInput = {
-    create?: XOR<TaskTemplateCreateWithoutInstancesInput, TaskTemplateUncheckedCreateWithoutInstancesInput>
-    connectOrCreate?: TaskTemplateCreateOrConnectWithoutInstancesInput
-    connect?: TaskTemplateWhereUniqueInput
-  }
-
-  export type UserCreateNestedOneWithoutCompletedTaskInstancesInput = {
-    create?: XOR<UserCreateWithoutCompletedTaskInstancesInput, UserUncheckedCreateWithoutCompletedTaskInstancesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCompletedTaskInstancesInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type UserCreateNestedOneWithoutSkippedTaskInstancesInput = {
-    create?: XOR<UserCreateWithoutSkippedTaskInstancesInput, UserUncheckedCreateWithoutSkippedTaskInstancesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutSkippedTaskInstancesInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type TaskHistoryCreateNestedManyWithoutInstanceInput = {
-    create?: XOR<TaskHistoryCreateWithoutInstanceInput, TaskHistoryUncheckedCreateWithoutInstanceInput> | TaskHistoryCreateWithoutInstanceInput[] | TaskHistoryUncheckedCreateWithoutInstanceInput[]
-    connectOrCreate?: TaskHistoryCreateOrConnectWithoutInstanceInput | TaskHistoryCreateOrConnectWithoutInstanceInput[]
-    createMany?: TaskHistoryCreateManyInstanceInputEnvelope
-    connect?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-  }
-
-  export type TaskHistoryUncheckedCreateNestedManyWithoutInstanceInput = {
-    create?: XOR<TaskHistoryCreateWithoutInstanceInput, TaskHistoryUncheckedCreateWithoutInstanceInput> | TaskHistoryCreateWithoutInstanceInput[] | TaskHistoryUncheckedCreateWithoutInstanceInput[]
-    connectOrCreate?: TaskHistoryCreateOrConnectWithoutInstanceInput | TaskHistoryCreateOrConnectWithoutInstanceInput[]
-    createMany?: TaskHistoryCreateManyInstanceInputEnvelope
-    connect?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-  }
-
-  export type EnumTaskInstanceStatusFieldUpdateOperationsInput = {
-    set?: $Enums.TaskInstanceStatus
-  }
-
-  export type TaskTemplateUpdateOneRequiredWithoutInstancesNestedInput = {
-    create?: XOR<TaskTemplateCreateWithoutInstancesInput, TaskTemplateUncheckedCreateWithoutInstancesInput>
-    connectOrCreate?: TaskTemplateCreateOrConnectWithoutInstancesInput
-    upsert?: TaskTemplateUpsertWithoutInstancesInput
-    connect?: TaskTemplateWhereUniqueInput
-    update?: XOR<XOR<TaskTemplateUpdateToOneWithWhereWithoutInstancesInput, TaskTemplateUpdateWithoutInstancesInput>, TaskTemplateUncheckedUpdateWithoutInstancesInput>
-  }
-
-  export type UserUpdateOneWithoutCompletedTaskInstancesNestedInput = {
-    create?: XOR<UserCreateWithoutCompletedTaskInstancesInput, UserUncheckedCreateWithoutCompletedTaskInstancesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCompletedTaskInstancesInput
-    upsert?: UserUpsertWithoutCompletedTaskInstancesInput
-    disconnect?: UserWhereInput | boolean
-    delete?: UserWhereInput | boolean
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCompletedTaskInstancesInput, UserUpdateWithoutCompletedTaskInstancesInput>, UserUncheckedUpdateWithoutCompletedTaskInstancesInput>
-  }
-
-  export type UserUpdateOneWithoutSkippedTaskInstancesNestedInput = {
-    create?: XOR<UserCreateWithoutSkippedTaskInstancesInput, UserUncheckedCreateWithoutSkippedTaskInstancesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutSkippedTaskInstancesInput
-    upsert?: UserUpsertWithoutSkippedTaskInstancesInput
-    disconnect?: UserWhereInput | boolean
-    delete?: UserWhereInput | boolean
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSkippedTaskInstancesInput, UserUpdateWithoutSkippedTaskInstancesInput>, UserUncheckedUpdateWithoutSkippedTaskInstancesInput>
-  }
-
-  export type TaskHistoryUpdateManyWithoutInstanceNestedInput = {
-    create?: XOR<TaskHistoryCreateWithoutInstanceInput, TaskHistoryUncheckedCreateWithoutInstanceInput> | TaskHistoryCreateWithoutInstanceInput[] | TaskHistoryUncheckedCreateWithoutInstanceInput[]
-    connectOrCreate?: TaskHistoryCreateOrConnectWithoutInstanceInput | TaskHistoryCreateOrConnectWithoutInstanceInput[]
-    upsert?: TaskHistoryUpsertWithWhereUniqueWithoutInstanceInput | TaskHistoryUpsertWithWhereUniqueWithoutInstanceInput[]
-    createMany?: TaskHistoryCreateManyInstanceInputEnvelope
-    set?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    disconnect?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    delete?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    connect?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    update?: TaskHistoryUpdateWithWhereUniqueWithoutInstanceInput | TaskHistoryUpdateWithWhereUniqueWithoutInstanceInput[]
-    updateMany?: TaskHistoryUpdateManyWithWhereWithoutInstanceInput | TaskHistoryUpdateManyWithWhereWithoutInstanceInput[]
-    deleteMany?: TaskHistoryScalarWhereInput | TaskHistoryScalarWhereInput[]
-  }
-
-  export type TaskHistoryUncheckedUpdateManyWithoutInstanceNestedInput = {
-    create?: XOR<TaskHistoryCreateWithoutInstanceInput, TaskHistoryUncheckedCreateWithoutInstanceInput> | TaskHistoryCreateWithoutInstanceInput[] | TaskHistoryUncheckedCreateWithoutInstanceInput[]
-    connectOrCreate?: TaskHistoryCreateOrConnectWithoutInstanceInput | TaskHistoryCreateOrConnectWithoutInstanceInput[]
-    upsert?: TaskHistoryUpsertWithWhereUniqueWithoutInstanceInput | TaskHistoryUpsertWithWhereUniqueWithoutInstanceInput[]
-    createMany?: TaskHistoryCreateManyInstanceInputEnvelope
-    set?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    disconnect?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    delete?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    connect?: TaskHistoryWhereUniqueInput | TaskHistoryWhereUniqueInput[]
-    update?: TaskHistoryUpdateWithWhereUniqueWithoutInstanceInput | TaskHistoryUpdateWithWhereUniqueWithoutInstanceInput[]
-    updateMany?: TaskHistoryUpdateManyWithWhereWithoutInstanceInput | TaskHistoryUpdateManyWithWhereWithoutInstanceInput[]
-    deleteMany?: TaskHistoryScalarWhereInput | TaskHistoryScalarWhereInput[]
-  }
-
-  export type TaskInstanceCreateNestedOneWithoutHistoryInput = {
-    create?: XOR<TaskInstanceCreateWithoutHistoryInput, TaskInstanceUncheckedCreateWithoutHistoryInput>
-    connectOrCreate?: TaskInstanceCreateOrConnectWithoutHistoryInput
-    connect?: TaskInstanceWhereUniqueInput
-  }
-
-  export type UserCreateNestedOneWithoutTaskHistoryActionsInput = {
-    create?: XOR<UserCreateWithoutTaskHistoryActionsInput, UserUncheckedCreateWithoutTaskHistoryActionsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutTaskHistoryActionsInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type EnumTaskHistoryActionFieldUpdateOperationsInput = {
-    set?: $Enums.TaskHistoryAction
-  }
-
-  export type TaskInstanceUpdateOneRequiredWithoutHistoryNestedInput = {
-    create?: XOR<TaskInstanceCreateWithoutHistoryInput, TaskInstanceUncheckedCreateWithoutHistoryInput>
-    connectOrCreate?: TaskInstanceCreateOrConnectWithoutHistoryInput
-    upsert?: TaskInstanceUpsertWithoutHistoryInput
-    connect?: TaskInstanceWhereUniqueInput
-    update?: XOR<XOR<TaskInstanceUpdateToOneWithWhereWithoutHistoryInput, TaskInstanceUpdateWithoutHistoryInput>, TaskInstanceUncheckedUpdateWithoutHistoryInput>
-  }
-
-  export type UserUpdateOneWithoutTaskHistoryActionsNestedInput = {
-    create?: XOR<UserCreateWithoutTaskHistoryActionsInput, UserUncheckedCreateWithoutTaskHistoryActionsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutTaskHistoryActionsInput
-    upsert?: UserUpsertWithoutTaskHistoryActionsInput
-    disconnect?: UserWhereInput | boolean
-    delete?: UserWhereInput | boolean
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTaskHistoryActionsInput, UserUpdateWithoutTaskHistoryActionsInput>, UserUncheckedUpdateWithoutTaskHistoryActionsInput>
-  }
-
   export type MaterialCreateNestedOneWithoutStockAlertAcknowledgmentsInput = {
     create?: XOR<MaterialCreateWithoutStockAlertAcknowledgmentsInput, MaterialUncheckedCreateWithoutStockAlertAcknowledgmentsInput>
     connectOrCreate?: MaterialCreateOrConnectWithoutStockAlertAcknowledgmentsInput
@@ -99621,82 +92269,6 @@ export namespace Prisma {
     _max?: NestedEnumSubmissionStatusFilter<$PrismaModel>
   }
 
-  export type NestedEnumTaskStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskStatusFilter<$PrismaModel> | $Enums.TaskStatus
-  }
-
-  export type NestedEnumTaskPriorityFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskPriority | EnumTaskPriorityFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskPriority[] | ListEnumTaskPriorityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskPriority[] | ListEnumTaskPriorityFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskPriorityFilter<$PrismaModel> | $Enums.TaskPriority
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedEnumRecurrenceTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.RecurrenceType | EnumRecurrenceTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.RecurrenceType[] | ListEnumRecurrenceTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RecurrenceType[] | ListEnumRecurrenceTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumRecurrenceTypeFilter<$PrismaModel> | $Enums.RecurrenceType
-  }
-
-  export type NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel> | $Enums.TaskStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskStatusFilter<$PrismaModel>
-    _max?: NestedEnumTaskStatusFilter<$PrismaModel>
-  }
-
-  export type NestedEnumTaskPriorityWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskPriority | EnumTaskPriorityFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskPriority[] | ListEnumTaskPriorityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskPriority[] | ListEnumTaskPriorityFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskPriorityWithAggregatesFilter<$PrismaModel> | $Enums.TaskPriority
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskPriorityFilter<$PrismaModel>
-    _max?: NestedEnumTaskPriorityFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedEnumRecurrenceTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.RecurrenceType | EnumRecurrenceTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.RecurrenceType[] | ListEnumRecurrenceTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RecurrenceType[] | ListEnumRecurrenceTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumRecurrenceTypeWithAggregatesFilter<$PrismaModel> | $Enums.RecurrenceType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumRecurrenceTypeFilter<$PrismaModel>
-    _max?: NestedEnumRecurrenceTypeFilter<$PrismaModel>
-  }
-
   export type NestedEnumPreOpShiftFilter<$PrismaModel = never> = {
     equals?: $Enums.PreOpShift | EnumPreOpShiftFieldRefInput<$PrismaModel>
     in?: $Enums.PreOpShift[] | ListEnumPreOpShiftFieldRefInput<$PrismaModel>
@@ -99780,6 +92352,17 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedEnumBatchSheetStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.BatchSheetStatus | EnumBatchSheetStatusFieldRefInput<$PrismaModel>
     in?: $Enums.BatchSheetStatus[] | ListEnumBatchSheetStatusFieldRefInput<$PrismaModel>
@@ -99790,6 +92373,20 @@ export namespace Prisma {
   export type NestedBoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -99927,108 +92524,6 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type NestedEnumTaskTemplateCategoryFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskTemplateCategory | EnumTaskTemplateCategoryFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskTemplateCategory[] | ListEnumTaskTemplateCategoryFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskTemplateCategory[] | ListEnumTaskTemplateCategoryFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskTemplateCategoryFilter<$PrismaModel> | $Enums.TaskTemplateCategory
-  }
-
-  export type NestedEnumTaskTemplatePriorityFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskTemplatePriority | EnumTaskTemplatePriorityFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskTemplatePriority[] | ListEnumTaskTemplatePriorityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskTemplatePriority[] | ListEnumTaskTemplatePriorityFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskTemplatePriorityFilter<$PrismaModel> | $Enums.TaskTemplatePriority
-  }
-
-  export type NestedEnumTaskTemplateTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskTemplateType | EnumTaskTemplateTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskTemplateType[] | ListEnumTaskTemplateTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskTemplateType[] | ListEnumTaskTemplateTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskTemplateTypeFilter<$PrismaModel> | $Enums.TaskTemplateType
-  }
-
-  export type NestedEnumTaskRecurrenceTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskRecurrenceType | EnumTaskRecurrenceTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskRecurrenceType[] | ListEnumTaskRecurrenceTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskRecurrenceType[] | ListEnumTaskRecurrenceTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskRecurrenceTypeFilter<$PrismaModel> | $Enums.TaskRecurrenceType
-  }
-
-  export type NestedEnumTaskTemplateCategoryWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskTemplateCategory | EnumTaskTemplateCategoryFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskTemplateCategory[] | ListEnumTaskTemplateCategoryFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskTemplateCategory[] | ListEnumTaskTemplateCategoryFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskTemplateCategoryWithAggregatesFilter<$PrismaModel> | $Enums.TaskTemplateCategory
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskTemplateCategoryFilter<$PrismaModel>
-    _max?: NestedEnumTaskTemplateCategoryFilter<$PrismaModel>
-  }
-
-  export type NestedEnumTaskTemplatePriorityWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskTemplatePriority | EnumTaskTemplatePriorityFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskTemplatePriority[] | ListEnumTaskTemplatePriorityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskTemplatePriority[] | ListEnumTaskTemplatePriorityFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskTemplatePriorityWithAggregatesFilter<$PrismaModel> | $Enums.TaskTemplatePriority
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskTemplatePriorityFilter<$PrismaModel>
-    _max?: NestedEnumTaskTemplatePriorityFilter<$PrismaModel>
-  }
-
-  export type NestedEnumTaskTemplateTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskTemplateType | EnumTaskTemplateTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskTemplateType[] | ListEnumTaskTemplateTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskTemplateType[] | ListEnumTaskTemplateTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskTemplateTypeWithAggregatesFilter<$PrismaModel> | $Enums.TaskTemplateType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskTemplateTypeFilter<$PrismaModel>
-    _max?: NestedEnumTaskTemplateTypeFilter<$PrismaModel>
-  }
-
-  export type NestedEnumTaskRecurrenceTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskRecurrenceType | EnumTaskRecurrenceTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskRecurrenceType[] | ListEnumTaskRecurrenceTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskRecurrenceType[] | ListEnumTaskRecurrenceTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskRecurrenceTypeWithAggregatesFilter<$PrismaModel> | $Enums.TaskRecurrenceType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskRecurrenceTypeFilter<$PrismaModel>
-    _max?: NestedEnumTaskRecurrenceTypeFilter<$PrismaModel>
-  }
-
-  export type NestedEnumTaskInstanceStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskInstanceStatus | EnumTaskInstanceStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskInstanceStatus[] | ListEnumTaskInstanceStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskInstanceStatus[] | ListEnumTaskInstanceStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskInstanceStatusFilter<$PrismaModel> | $Enums.TaskInstanceStatus
-  }
-
-  export type NestedEnumTaskInstanceStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskInstanceStatus | EnumTaskInstanceStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskInstanceStatus[] | ListEnumTaskInstanceStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskInstanceStatus[] | ListEnumTaskInstanceStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskInstanceStatusWithAggregatesFilter<$PrismaModel> | $Enums.TaskInstanceStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskInstanceStatusFilter<$PrismaModel>
-    _max?: NestedEnumTaskInstanceStatusFilter<$PrismaModel>
-  }
-
-  export type NestedEnumTaskHistoryActionFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskHistoryAction | EnumTaskHistoryActionFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskHistoryAction[] | ListEnumTaskHistoryActionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskHistoryAction[] | ListEnumTaskHistoryActionFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskHistoryActionFilter<$PrismaModel> | $Enums.TaskHistoryAction
-  }
-
-  export type NestedEnumTaskHistoryActionWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TaskHistoryAction | EnumTaskHistoryActionFieldRefInput<$PrismaModel>
-    in?: $Enums.TaskHistoryAction[] | ListEnumTaskHistoryActionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TaskHistoryAction[] | ListEnumTaskHistoryActionFieldRefInput<$PrismaModel>
-    not?: NestedEnumTaskHistoryActionWithAggregatesFilter<$PrismaModel> | $Enums.TaskHistoryAction
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTaskHistoryActionFilter<$PrismaModel>
-    _max?: NestedEnumTaskHistoryActionFilter<$PrismaModel>
-  }
-
   export type NestedDecimalNullableFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
@@ -100145,7 +92640,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     submissions?: FormSubmissionCreateNestedManyWithoutFormInput
-    tasks?: TaskCreateNestedManyWithoutFormInput
   }
 
   export type FormUncheckedCreateWithoutCreatedByInput = {
@@ -100159,7 +92653,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutFormInput
-    tasks?: TaskUncheckedCreateNestedManyWithoutFormInput
   }
 
   export type FormCreateOrConnectWithoutCreatedByInput = {
@@ -100181,7 +92674,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     form: FormCreateNestedOneWithoutSubmissionsInput
     approvedBy?: UserCreateNestedOneWithoutApprovedSubmissionsInput
-    task?: TaskCreateNestedOneWithoutSubmissionsInput
   }
 
   export type FormSubmissionUncheckedCreateWithoutSubmittedByInput = {
@@ -100193,7 +92685,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     approvedById?: string | null
-    taskId?: string | null
   }
 
   export type FormSubmissionCreateOrConnectWithoutSubmittedByInput = {
@@ -100215,7 +92706,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     form: FormCreateNestedOneWithoutSubmissionsInput
     submittedBy: UserCreateNestedOneWithoutSubmissionsInput
-    task?: TaskCreateNestedOneWithoutSubmissionsInput
   }
 
   export type FormSubmissionUncheckedCreateWithoutApprovedByInput = {
@@ -100227,7 +92717,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     submittedById: string
-    taskId?: string | null
   }
 
   export type FormSubmissionCreateOrConnectWithoutApprovedByInput = {
@@ -100237,94 +92726,6 @@ export namespace Prisma {
 
   export type FormSubmissionCreateManyApprovedByInputEnvelope = {
     data: FormSubmissionCreateManyApprovedByInput | FormSubmissionCreateManyApprovedByInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type TaskCreateWithoutAssignedToInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status?: $Enums.TaskStatus
-    priority?: $Enums.TaskPriority
-    dueDate: Date | string
-    completedAt?: Date | string | null
-    recurrence?: $Enums.RecurrenceType
-    location?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    form?: FormCreateNestedOneWithoutTasksInput
-    createdBy: UserCreateNestedOneWithoutCreatedTasksInput
-    submissions?: FormSubmissionCreateNestedManyWithoutTaskInput
-  }
-
-  export type TaskUncheckedCreateWithoutAssignedToInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status?: $Enums.TaskStatus
-    priority?: $Enums.TaskPriority
-    dueDate: Date | string
-    completedAt?: Date | string | null
-    recurrence?: $Enums.RecurrenceType
-    location?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    formId?: string | null
-    createdById: string
-    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutTaskInput
-  }
-
-  export type TaskCreateOrConnectWithoutAssignedToInput = {
-    where: TaskWhereUniqueInput
-    create: XOR<TaskCreateWithoutAssignedToInput, TaskUncheckedCreateWithoutAssignedToInput>
-  }
-
-  export type TaskCreateManyAssignedToInputEnvelope = {
-    data: TaskCreateManyAssignedToInput | TaskCreateManyAssignedToInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type TaskCreateWithoutCreatedByInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status?: $Enums.TaskStatus
-    priority?: $Enums.TaskPriority
-    dueDate: Date | string
-    completedAt?: Date | string | null
-    recurrence?: $Enums.RecurrenceType
-    location?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    form?: FormCreateNestedOneWithoutTasksInput
-    assignedTo: UserCreateNestedOneWithoutAssignedTasksInput
-    submissions?: FormSubmissionCreateNestedManyWithoutTaskInput
-  }
-
-  export type TaskUncheckedCreateWithoutCreatedByInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status?: $Enums.TaskStatus
-    priority?: $Enums.TaskPriority
-    dueDate: Date | string
-    completedAt?: Date | string | null
-    recurrence?: $Enums.RecurrenceType
-    location?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    formId?: string | null
-    assignedToId: string
-    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutTaskInput
-  }
-
-  export type TaskCreateOrConnectWithoutCreatedByInput = {
-    where: TaskWhereUniqueInput
-    create: XOR<TaskCreateWithoutCreatedByInput, TaskUncheckedCreateWithoutCreatedByInput>
-  }
-
-  export type TaskCreateManyCreatedByInputEnvelope = {
-    data: TaskCreateManyCreatedByInput | TaskCreateManyCreatedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -100969,190 +93370,6 @@ export namespace Prisma {
 
   export type InitialStockEntryCreateManyEnteredByInputEnvelope = {
     data: InitialStockEntryCreateManyEnteredByInput | InitialStockEntryCreateManyEnteredByInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type TaskTemplateCreateWithoutCreatedByInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: $Enums.TaskTemplateCategory
-    priority?: $Enums.TaskTemplatePriority
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType?: $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType: $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate: Date | string
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    instances?: TaskInstanceCreateNestedManyWithoutTemplateInput
-  }
-
-  export type TaskTemplateUncheckedCreateWithoutCreatedByInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: $Enums.TaskTemplateCategory
-    priority?: $Enums.TaskTemplatePriority
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType?: $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType: $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate: Date | string
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    instances?: TaskInstanceUncheckedCreateNestedManyWithoutTemplateInput
-  }
-
-  export type TaskTemplateCreateOrConnectWithoutCreatedByInput = {
-    where: TaskTemplateWhereUniqueInput
-    create: XOR<TaskTemplateCreateWithoutCreatedByInput, TaskTemplateUncheckedCreateWithoutCreatedByInput>
-  }
-
-  export type TaskTemplateCreateManyCreatedByInputEnvelope = {
-    data: TaskTemplateCreateManyCreatedByInput | TaskTemplateCreateManyCreatedByInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type TaskInstanceCreateWithoutCompletedByInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: string
-    priority: string
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType: string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate: Date | string
-    status?: $Enums.TaskInstanceStatus
-    completedAt?: Date | string | null
-    completionNote?: string | null
-    skippedAt?: Date | string | null
-    skipReason?: string | null
-    formSubmissionId?: string | null
-    instanceNumber?: number
-    createdAt?: Date | string
-    template: TaskTemplateCreateNestedOneWithoutInstancesInput
-    skippedBy?: UserCreateNestedOneWithoutSkippedTaskInstancesInput
-    history?: TaskHistoryCreateNestedManyWithoutInstanceInput
-  }
-
-  export type TaskInstanceUncheckedCreateWithoutCompletedByInput = {
-    id?: string
-    templateId: string
-    title: string
-    description?: string | null
-    category: string
-    priority: string
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType: string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate: Date | string
-    status?: $Enums.TaskInstanceStatus
-    completedAt?: Date | string | null
-    completionNote?: string | null
-    skippedById?: string | null
-    skippedAt?: Date | string | null
-    skipReason?: string | null
-    formSubmissionId?: string | null
-    instanceNumber?: number
-    createdAt?: Date | string
-    history?: TaskHistoryUncheckedCreateNestedManyWithoutInstanceInput
-  }
-
-  export type TaskInstanceCreateOrConnectWithoutCompletedByInput = {
-    where: TaskInstanceWhereUniqueInput
-    create: XOR<TaskInstanceCreateWithoutCompletedByInput, TaskInstanceUncheckedCreateWithoutCompletedByInput>
-  }
-
-  export type TaskInstanceCreateManyCompletedByInputEnvelope = {
-    data: TaskInstanceCreateManyCompletedByInput | TaskInstanceCreateManyCompletedByInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type TaskInstanceCreateWithoutSkippedByInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: string
-    priority: string
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType: string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate: Date | string
-    status?: $Enums.TaskInstanceStatus
-    completedAt?: Date | string | null
-    completionNote?: string | null
-    skippedAt?: Date | string | null
-    skipReason?: string | null
-    formSubmissionId?: string | null
-    instanceNumber?: number
-    createdAt?: Date | string
-    template: TaskTemplateCreateNestedOneWithoutInstancesInput
-    completedBy?: UserCreateNestedOneWithoutCompletedTaskInstancesInput
-    history?: TaskHistoryCreateNestedManyWithoutInstanceInput
-  }
-
-  export type TaskInstanceUncheckedCreateWithoutSkippedByInput = {
-    id?: string
-    templateId: string
-    title: string
-    description?: string | null
-    category: string
-    priority: string
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType: string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate: Date | string
-    status?: $Enums.TaskInstanceStatus
-    completedById?: string | null
-    completedAt?: Date | string | null
-    completionNote?: string | null
-    skippedAt?: Date | string | null
-    skipReason?: string | null
-    formSubmissionId?: string | null
-    instanceNumber?: number
-    createdAt?: Date | string
-    history?: TaskHistoryUncheckedCreateNestedManyWithoutInstanceInput
-  }
-
-  export type TaskInstanceCreateOrConnectWithoutSkippedByInput = {
-    where: TaskInstanceWhereUniqueInput
-    create: XOR<TaskInstanceCreateWithoutSkippedByInput, TaskInstanceUncheckedCreateWithoutSkippedByInput>
-  }
-
-  export type TaskInstanceCreateManySkippedByInputEnvelope = {
-    data: TaskInstanceCreateManySkippedByInput | TaskInstanceCreateManySkippedByInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type TaskHistoryCreateWithoutPerformedByInput = {
-    id?: string
-    action: $Enums.TaskHistoryAction
-    performedAt?: Date | string
-    note?: string | null
-    instance: TaskInstanceCreateNestedOneWithoutHistoryInput
-  }
-
-  export type TaskHistoryUncheckedCreateWithoutPerformedByInput = {
-    id?: string
-    instanceId: string
-    action: $Enums.TaskHistoryAction
-    performedAt?: Date | string
-    note?: string | null
-  }
-
-  export type TaskHistoryCreateOrConnectWithoutPerformedByInput = {
-    where: TaskHistoryWhereUniqueInput
-    create: XOR<TaskHistoryCreateWithoutPerformedByInput, TaskHistoryUncheckedCreateWithoutPerformedByInput>
-  }
-
-  export type TaskHistoryCreateManyPerformedByInputEnvelope = {
-    data: TaskHistoryCreateManyPerformedByInput | TaskHistoryCreateManyPerformedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -102023,7 +94240,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FormSubmission"> | Date | string
     submittedById?: StringFilter<"FormSubmission"> | string
     approvedById?: StringNullableFilter<"FormSubmission"> | string | null
-    taskId?: StringNullableFilter<"FormSubmission"> | string | null
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutApprovedByInput = {
@@ -102040,58 +94256,6 @@ export namespace Prisma {
   export type FormSubmissionUpdateManyWithWhereWithoutApprovedByInput = {
     where: FormSubmissionScalarWhereInput
     data: XOR<FormSubmissionUpdateManyMutationInput, FormSubmissionUncheckedUpdateManyWithoutApprovedByInput>
-  }
-
-  export type TaskUpsertWithWhereUniqueWithoutAssignedToInput = {
-    where: TaskWhereUniqueInput
-    update: XOR<TaskUpdateWithoutAssignedToInput, TaskUncheckedUpdateWithoutAssignedToInput>
-    create: XOR<TaskCreateWithoutAssignedToInput, TaskUncheckedCreateWithoutAssignedToInput>
-  }
-
-  export type TaskUpdateWithWhereUniqueWithoutAssignedToInput = {
-    where: TaskWhereUniqueInput
-    data: XOR<TaskUpdateWithoutAssignedToInput, TaskUncheckedUpdateWithoutAssignedToInput>
-  }
-
-  export type TaskUpdateManyWithWhereWithoutAssignedToInput = {
-    where: TaskScalarWhereInput
-    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutAssignedToInput>
-  }
-
-  export type TaskScalarWhereInput = {
-    AND?: TaskScalarWhereInput | TaskScalarWhereInput[]
-    OR?: TaskScalarWhereInput[]
-    NOT?: TaskScalarWhereInput | TaskScalarWhereInput[]
-    id?: StringFilter<"Task"> | string
-    title?: StringFilter<"Task"> | string
-    description?: StringNullableFilter<"Task"> | string | null
-    status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFilter<"Task"> | $Enums.TaskPriority
-    dueDate?: DateTimeFilter<"Task"> | Date | string
-    completedAt?: DateTimeNullableFilter<"Task"> | Date | string | null
-    recurrence?: EnumRecurrenceTypeFilter<"Task"> | $Enums.RecurrenceType
-    location?: StringNullableFilter<"Task"> | string | null
-    createdAt?: DateTimeFilter<"Task"> | Date | string
-    updatedAt?: DateTimeFilter<"Task"> | Date | string
-    formId?: StringNullableFilter<"Task"> | string | null
-    assignedToId?: StringFilter<"Task"> | string
-    createdById?: StringFilter<"Task"> | string
-  }
-
-  export type TaskUpsertWithWhereUniqueWithoutCreatedByInput = {
-    where: TaskWhereUniqueInput
-    update: XOR<TaskUpdateWithoutCreatedByInput, TaskUncheckedUpdateWithoutCreatedByInput>
-    create: XOR<TaskCreateWithoutCreatedByInput, TaskUncheckedCreateWithoutCreatedByInput>
-  }
-
-  export type TaskUpdateWithWhereUniqueWithoutCreatedByInput = {
-    where: TaskWhereUniqueInput
-    data: XOR<TaskUpdateWithoutCreatedByInput, TaskUncheckedUpdateWithoutCreatedByInput>
-  }
-
-  export type TaskUpdateManyWithWhereWithoutCreatedByInput = {
-    where: TaskScalarWhereInput
-    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutCreatedByInput>
   }
 
   export type RecordUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -102599,129 +94763,6 @@ export namespace Prisma {
     inventoryLotId?: StringFilter<"InitialStockEntry"> | string
     enteredById?: StringFilter<"InitialStockEntry"> | string
     enteredAt?: DateTimeFilter<"InitialStockEntry"> | Date | string
-  }
-
-  export type TaskTemplateUpsertWithWhereUniqueWithoutCreatedByInput = {
-    where: TaskTemplateWhereUniqueInput
-    update: XOR<TaskTemplateUpdateWithoutCreatedByInput, TaskTemplateUncheckedUpdateWithoutCreatedByInput>
-    create: XOR<TaskTemplateCreateWithoutCreatedByInput, TaskTemplateUncheckedCreateWithoutCreatedByInput>
-  }
-
-  export type TaskTemplateUpdateWithWhereUniqueWithoutCreatedByInput = {
-    where: TaskTemplateWhereUniqueInput
-    data: XOR<TaskTemplateUpdateWithoutCreatedByInput, TaskTemplateUncheckedUpdateWithoutCreatedByInput>
-  }
-
-  export type TaskTemplateUpdateManyWithWhereWithoutCreatedByInput = {
-    where: TaskTemplateScalarWhereInput
-    data: XOR<TaskTemplateUpdateManyMutationInput, TaskTemplateUncheckedUpdateManyWithoutCreatedByInput>
-  }
-
-  export type TaskTemplateScalarWhereInput = {
-    AND?: TaskTemplateScalarWhereInput | TaskTemplateScalarWhereInput[]
-    OR?: TaskTemplateScalarWhereInput[]
-    NOT?: TaskTemplateScalarWhereInput | TaskTemplateScalarWhereInput[]
-    id?: StringFilter<"TaskTemplate"> | string
-    title?: StringFilter<"TaskTemplate"> | string
-    description?: StringNullableFilter<"TaskTemplate"> | string | null
-    category?: EnumTaskTemplateCategoryFilter<"TaskTemplate"> | $Enums.TaskTemplateCategory
-    priority?: EnumTaskTemplatePriorityFilter<"TaskTemplate"> | $Enums.TaskTemplatePriority
-    assignedTo?: JsonFilter<"TaskTemplate">
-    taskType?: EnumTaskTemplateTypeFilter<"TaskTemplate"> | $Enums.TaskTemplateType
-    formLink?: JsonNullableFilter<"TaskTemplate">
-    recurrenceType?: EnumTaskRecurrenceTypeFilter<"TaskTemplate"> | $Enums.TaskRecurrenceType
-    recurrenceConfig?: JsonNullableFilter<"TaskTemplate">
-    firstDueDate?: DateTimeFilter<"TaskTemplate"> | Date | string
-    isActive?: BoolFilter<"TaskTemplate"> | boolean
-    createdById?: StringFilter<"TaskTemplate"> | string
-    createdAt?: DateTimeFilter<"TaskTemplate"> | Date | string
-    updatedAt?: DateTimeFilter<"TaskTemplate"> | Date | string
-  }
-
-  export type TaskInstanceUpsertWithWhereUniqueWithoutCompletedByInput = {
-    where: TaskInstanceWhereUniqueInput
-    update: XOR<TaskInstanceUpdateWithoutCompletedByInput, TaskInstanceUncheckedUpdateWithoutCompletedByInput>
-    create: XOR<TaskInstanceCreateWithoutCompletedByInput, TaskInstanceUncheckedCreateWithoutCompletedByInput>
-  }
-
-  export type TaskInstanceUpdateWithWhereUniqueWithoutCompletedByInput = {
-    where: TaskInstanceWhereUniqueInput
-    data: XOR<TaskInstanceUpdateWithoutCompletedByInput, TaskInstanceUncheckedUpdateWithoutCompletedByInput>
-  }
-
-  export type TaskInstanceUpdateManyWithWhereWithoutCompletedByInput = {
-    where: TaskInstanceScalarWhereInput
-    data: XOR<TaskInstanceUpdateManyMutationInput, TaskInstanceUncheckedUpdateManyWithoutCompletedByInput>
-  }
-
-  export type TaskInstanceScalarWhereInput = {
-    AND?: TaskInstanceScalarWhereInput | TaskInstanceScalarWhereInput[]
-    OR?: TaskInstanceScalarWhereInput[]
-    NOT?: TaskInstanceScalarWhereInput | TaskInstanceScalarWhereInput[]
-    id?: StringFilter<"TaskInstance"> | string
-    templateId?: StringFilter<"TaskInstance"> | string
-    title?: StringFilter<"TaskInstance"> | string
-    description?: StringNullableFilter<"TaskInstance"> | string | null
-    category?: StringFilter<"TaskInstance"> | string
-    priority?: StringFilter<"TaskInstance"> | string
-    assignedTo?: JsonFilter<"TaskInstance">
-    taskType?: StringFilter<"TaskInstance"> | string
-    formLink?: JsonNullableFilter<"TaskInstance">
-    dueDate?: DateTimeFilter<"TaskInstance"> | Date | string
-    status?: EnumTaskInstanceStatusFilter<"TaskInstance"> | $Enums.TaskInstanceStatus
-    completedById?: StringNullableFilter<"TaskInstance"> | string | null
-    completedAt?: DateTimeNullableFilter<"TaskInstance"> | Date | string | null
-    completionNote?: StringNullableFilter<"TaskInstance"> | string | null
-    skippedById?: StringNullableFilter<"TaskInstance"> | string | null
-    skippedAt?: DateTimeNullableFilter<"TaskInstance"> | Date | string | null
-    skipReason?: StringNullableFilter<"TaskInstance"> | string | null
-    formSubmissionId?: StringNullableFilter<"TaskInstance"> | string | null
-    instanceNumber?: IntFilter<"TaskInstance"> | number
-    createdAt?: DateTimeFilter<"TaskInstance"> | Date | string
-  }
-
-  export type TaskInstanceUpsertWithWhereUniqueWithoutSkippedByInput = {
-    where: TaskInstanceWhereUniqueInput
-    update: XOR<TaskInstanceUpdateWithoutSkippedByInput, TaskInstanceUncheckedUpdateWithoutSkippedByInput>
-    create: XOR<TaskInstanceCreateWithoutSkippedByInput, TaskInstanceUncheckedCreateWithoutSkippedByInput>
-  }
-
-  export type TaskInstanceUpdateWithWhereUniqueWithoutSkippedByInput = {
-    where: TaskInstanceWhereUniqueInput
-    data: XOR<TaskInstanceUpdateWithoutSkippedByInput, TaskInstanceUncheckedUpdateWithoutSkippedByInput>
-  }
-
-  export type TaskInstanceUpdateManyWithWhereWithoutSkippedByInput = {
-    where: TaskInstanceScalarWhereInput
-    data: XOR<TaskInstanceUpdateManyMutationInput, TaskInstanceUncheckedUpdateManyWithoutSkippedByInput>
-  }
-
-  export type TaskHistoryUpsertWithWhereUniqueWithoutPerformedByInput = {
-    where: TaskHistoryWhereUniqueInput
-    update: XOR<TaskHistoryUpdateWithoutPerformedByInput, TaskHistoryUncheckedUpdateWithoutPerformedByInput>
-    create: XOR<TaskHistoryCreateWithoutPerformedByInput, TaskHistoryUncheckedCreateWithoutPerformedByInput>
-  }
-
-  export type TaskHistoryUpdateWithWhereUniqueWithoutPerformedByInput = {
-    where: TaskHistoryWhereUniqueInput
-    data: XOR<TaskHistoryUpdateWithoutPerformedByInput, TaskHistoryUncheckedUpdateWithoutPerformedByInput>
-  }
-
-  export type TaskHistoryUpdateManyWithWhereWithoutPerformedByInput = {
-    where: TaskHistoryScalarWhereInput
-    data: XOR<TaskHistoryUpdateManyMutationInput, TaskHistoryUncheckedUpdateManyWithoutPerformedByInput>
-  }
-
-  export type TaskHistoryScalarWhereInput = {
-    AND?: TaskHistoryScalarWhereInput | TaskHistoryScalarWhereInput[]
-    OR?: TaskHistoryScalarWhereInput[]
-    NOT?: TaskHistoryScalarWhereInput | TaskHistoryScalarWhereInput[]
-    id?: StringFilter<"TaskHistory"> | string
-    instanceId?: StringFilter<"TaskHistory"> | string
-    action?: EnumTaskHistoryActionFilter<"TaskHistory"> | $Enums.TaskHistoryAction
-    performedById?: StringNullableFilter<"TaskHistory"> | string | null
-    performedAt?: DateTimeFilter<"TaskHistory"> | Date | string
-    note?: StringNullableFilter<"TaskHistory"> | string | null
   }
 
   export type ForecastExclusionUpsertWithWhereUniqueWithoutExcludedByInput = {
@@ -103310,8 +95351,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -103325,10 +95364,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -103361,8 +95396,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -103376,10 +95409,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -103414,7 +95443,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     submittedBy: UserCreateNestedOneWithoutSubmissionsInput
     approvedBy?: UserCreateNestedOneWithoutApprovedSubmissionsInput
-    task?: TaskCreateNestedOneWithoutSubmissionsInput
   }
 
   export type FormSubmissionUncheckedCreateWithoutFormInput = {
@@ -103426,7 +95454,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     submittedById: string
     approvedById?: string | null
-    taskId?: string | null
   }
 
   export type FormSubmissionCreateOrConnectWithoutFormInput = {
@@ -103436,50 +95463,6 @@ export namespace Prisma {
 
   export type FormSubmissionCreateManyFormInputEnvelope = {
     data: FormSubmissionCreateManyFormInput | FormSubmissionCreateManyFormInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type TaskCreateWithoutFormInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status?: $Enums.TaskStatus
-    priority?: $Enums.TaskPriority
-    dueDate: Date | string
-    completedAt?: Date | string | null
-    recurrence?: $Enums.RecurrenceType
-    location?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    assignedTo: UserCreateNestedOneWithoutAssignedTasksInput
-    createdBy: UserCreateNestedOneWithoutCreatedTasksInput
-    submissions?: FormSubmissionCreateNestedManyWithoutTaskInput
-  }
-
-  export type TaskUncheckedCreateWithoutFormInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status?: $Enums.TaskStatus
-    priority?: $Enums.TaskPriority
-    dueDate: Date | string
-    completedAt?: Date | string | null
-    recurrence?: $Enums.RecurrenceType
-    location?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    assignedToId: string
-    createdById: string
-    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutTaskInput
-  }
-
-  export type TaskCreateOrConnectWithoutFormInput = {
-    where: TaskWhereUniqueInput
-    create: XOR<TaskCreateWithoutFormInput, TaskUncheckedCreateWithoutFormInput>
-  }
-
-  export type TaskCreateManyFormInputEnvelope = {
-    data: TaskCreateManyFormInput | TaskCreateManyFormInput[]
     skipDuplicates?: boolean
   }
 
@@ -103506,8 +95489,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -103521,10 +95502,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -103557,8 +95534,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -103572,10 +95547,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -103612,22 +95583,6 @@ export namespace Prisma {
     data: XOR<FormSubmissionUpdateManyMutationInput, FormSubmissionUncheckedUpdateManyWithoutFormInput>
   }
 
-  export type TaskUpsertWithWhereUniqueWithoutFormInput = {
-    where: TaskWhereUniqueInput
-    update: XOR<TaskUpdateWithoutFormInput, TaskUncheckedUpdateWithoutFormInput>
-    create: XOR<TaskCreateWithoutFormInput, TaskUncheckedCreateWithoutFormInput>
-  }
-
-  export type TaskUpdateWithWhereUniqueWithoutFormInput = {
-    where: TaskWhereUniqueInput
-    data: XOR<TaskUpdateWithoutFormInput, TaskUncheckedUpdateWithoutFormInput>
-  }
-
-  export type TaskUpdateManyWithWhereWithoutFormInput = {
-    where: TaskScalarWhereInput
-    data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutFormInput>
-  }
-
   export type FormCreateWithoutSubmissionsInput = {
     id?: string
     title: string
@@ -103639,7 +95594,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutCreatedFormsInput
-    tasks?: TaskCreateNestedManyWithoutFormInput
   }
 
   export type FormUncheckedCreateWithoutSubmissionsInput = {
@@ -103653,7 +95607,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdById: string
-    tasks?: TaskUncheckedCreateNestedManyWithoutFormInput
   }
 
   export type FormCreateOrConnectWithoutSubmissionsInput = {
@@ -103673,8 +95626,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -103688,10 +95639,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -103724,8 +95671,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -103739,10 +95684,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -103780,8 +95721,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -103795,10 +95734,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -103831,8 +95766,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -103846,10 +95779,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -103875,45 +95804,6 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutApprovedSubmissionsInput, UserUncheckedCreateWithoutApprovedSubmissionsInput>
   }
 
-  export type TaskCreateWithoutSubmissionsInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status?: $Enums.TaskStatus
-    priority?: $Enums.TaskPriority
-    dueDate: Date | string
-    completedAt?: Date | string | null
-    recurrence?: $Enums.RecurrenceType
-    location?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    form?: FormCreateNestedOneWithoutTasksInput
-    assignedTo: UserCreateNestedOneWithoutAssignedTasksInput
-    createdBy: UserCreateNestedOneWithoutCreatedTasksInput
-  }
-
-  export type TaskUncheckedCreateWithoutSubmissionsInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status?: $Enums.TaskStatus
-    priority?: $Enums.TaskPriority
-    dueDate: Date | string
-    completedAt?: Date | string | null
-    recurrence?: $Enums.RecurrenceType
-    location?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    formId?: string | null
-    assignedToId: string
-    createdById: string
-  }
-
-  export type TaskCreateOrConnectWithoutSubmissionsInput = {
-    where: TaskWhereUniqueInput
-    create: XOR<TaskCreateWithoutSubmissionsInput, TaskUncheckedCreateWithoutSubmissionsInput>
-  }
-
   export type FormUpsertWithoutSubmissionsInput = {
     update: XOR<FormUpdateWithoutSubmissionsInput, FormUncheckedUpdateWithoutSubmissionsInput>
     create: XOR<FormCreateWithoutSubmissionsInput, FormUncheckedCreateWithoutSubmissionsInput>
@@ -103936,7 +95826,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutCreatedFormsNestedInput
-    tasks?: TaskUpdateManyWithoutFormNestedInput
   }
 
   export type FormUncheckedUpdateWithoutSubmissionsInput = {
@@ -103950,7 +95839,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
-    tasks?: TaskUncheckedUpdateManyWithoutFormNestedInput
   }
 
   export type UserUpsertWithoutSubmissionsInput = {
@@ -103976,8 +95864,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -103991,10 +95877,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -104027,8 +95909,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -104042,10 +95922,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -104089,8 +95965,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -104104,10 +95978,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -104140,8 +96010,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -104155,10 +96023,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -104177,613 +96041,6 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type TaskUpsertWithoutSubmissionsInput = {
-    update: XOR<TaskUpdateWithoutSubmissionsInput, TaskUncheckedUpdateWithoutSubmissionsInput>
-    create: XOR<TaskCreateWithoutSubmissionsInput, TaskUncheckedCreateWithoutSubmissionsInput>
-    where?: TaskWhereInput
-  }
-
-  export type TaskUpdateToOneWithWhereWithoutSubmissionsInput = {
-    where?: TaskWhereInput
-    data: XOR<TaskUpdateWithoutSubmissionsInput, TaskUncheckedUpdateWithoutSubmissionsInput>
-  }
-
-  export type TaskUpdateWithoutSubmissionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    recurrence?: EnumRecurrenceTypeFieldUpdateOperationsInput | $Enums.RecurrenceType
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    form?: FormUpdateOneWithoutTasksNestedInput
-    assignedTo?: UserUpdateOneRequiredWithoutAssignedTasksNestedInput
-    createdBy?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
-  }
-
-  export type TaskUncheckedUpdateWithoutSubmissionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    recurrence?: EnumRecurrenceTypeFieldUpdateOperationsInput | $Enums.RecurrenceType
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    formId?: NullableStringFieldUpdateOperationsInput | string | null
-    assignedToId?: StringFieldUpdateOperationsInput | string
-    createdById?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type FormCreateWithoutTasksInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: string
-    fields: JsonNullValueInput | InputJsonValue
-    active?: boolean
-    version?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy: UserCreateNestedOneWithoutCreatedFormsInput
-    submissions?: FormSubmissionCreateNestedManyWithoutFormInput
-  }
-
-  export type FormUncheckedCreateWithoutTasksInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: string
-    fields: JsonNullValueInput | InputJsonValue
-    active?: boolean
-    version?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdById: string
-    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutFormInput
-  }
-
-  export type FormCreateOrConnectWithoutTasksInput = {
-    where: FormWhereUniqueInput
-    create: XOR<FormCreateWithoutTasksInput, FormUncheckedCreateWithoutTasksInput>
-  }
-
-  export type UserCreateWithoutAssignedTasksInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role?: $Enums.Role
-    department?: string | null
-    active?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdForms?: FormCreateNestedManyWithoutCreatedByInput
-    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
-    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
-    records?: RecordCreateNestedManyWithoutCreatedByInput
-    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
-    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
-    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
-    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
-    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
-    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
-    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
-    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
-    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
-    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
-    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
-    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
-    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
-    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
-    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
-    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
-    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
-    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
-    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
-    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
-    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
-    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
-    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
-    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
-    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
-    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
-    notifications?: NotificationCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutAssignedTasksInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role?: $Enums.Role
-    department?: string | null
-    active?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
-    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
-    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
-    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
-    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
-    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
-    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
-    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
-    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
-    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
-    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
-    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
-    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
-    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
-    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
-    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
-    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
-    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
-    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
-    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
-    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
-    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
-    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
-    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
-    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
-    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutAssignedTasksInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutAssignedTasksInput, UserUncheckedCreateWithoutAssignedTasksInput>
-  }
-
-  export type UserCreateWithoutCreatedTasksInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role?: $Enums.Role
-    department?: string | null
-    active?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdForms?: FormCreateNestedManyWithoutCreatedByInput
-    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
-    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    records?: RecordCreateNestedManyWithoutCreatedByInput
-    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
-    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
-    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
-    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
-    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
-    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
-    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
-    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
-    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
-    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
-    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
-    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
-    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
-    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
-    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
-    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
-    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
-    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
-    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
-    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
-    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
-    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
-    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
-    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
-    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
-    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
-    notifications?: NotificationCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutCreatedTasksInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role?: $Enums.Role
-    department?: string | null
-    active?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
-    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
-    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
-    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
-    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
-    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
-    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
-    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
-    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
-    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
-    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
-    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
-    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
-    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
-    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
-    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
-    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
-    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
-    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
-    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
-    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
-    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
-    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
-    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
-    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutCreatedTasksInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutCreatedTasksInput, UserUncheckedCreateWithoutCreatedTasksInput>
-  }
-
-  export type FormSubmissionCreateWithoutTaskInput = {
-    id?: string
-    data: JsonNullValueInput | InputJsonValue
-    status?: $Enums.SubmissionStatus
-    notes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    form: FormCreateNestedOneWithoutSubmissionsInput
-    submittedBy: UserCreateNestedOneWithoutSubmissionsInput
-    approvedBy?: UserCreateNestedOneWithoutApprovedSubmissionsInput
-  }
-
-  export type FormSubmissionUncheckedCreateWithoutTaskInput = {
-    id?: string
-    formId: string
-    data: JsonNullValueInput | InputJsonValue
-    status?: $Enums.SubmissionStatus
-    notes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    submittedById: string
-    approvedById?: string | null
-  }
-
-  export type FormSubmissionCreateOrConnectWithoutTaskInput = {
-    where: FormSubmissionWhereUniqueInput
-    create: XOR<FormSubmissionCreateWithoutTaskInput, FormSubmissionUncheckedCreateWithoutTaskInput>
-  }
-
-  export type FormSubmissionCreateManyTaskInputEnvelope = {
-    data: FormSubmissionCreateManyTaskInput | FormSubmissionCreateManyTaskInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type FormUpsertWithoutTasksInput = {
-    update: XOR<FormUpdateWithoutTasksInput, FormUncheckedUpdateWithoutTasksInput>
-    create: XOR<FormCreateWithoutTasksInput, FormUncheckedCreateWithoutTasksInput>
-    where?: FormWhereInput
-  }
-
-  export type FormUpdateToOneWithWhereWithoutTasksInput = {
-    where?: FormWhereInput
-    data: XOR<FormUpdateWithoutTasksInput, FormUncheckedUpdateWithoutTasksInput>
-  }
-
-  export type FormUpdateWithoutTasksInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    fields?: JsonNullValueInput | InputJsonValue
-    active?: BoolFieldUpdateOperationsInput | boolean
-    version?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: UserUpdateOneRequiredWithoutCreatedFormsNestedInput
-    submissions?: FormSubmissionUpdateManyWithoutFormNestedInput
-  }
-
-  export type FormUncheckedUpdateWithoutTasksInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    fields?: JsonNullValueInput | InputJsonValue
-    active?: BoolFieldUpdateOperationsInput | boolean
-    version?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
-    submissions?: FormSubmissionUncheckedUpdateManyWithoutFormNestedInput
-  }
-
-  export type UserUpsertWithoutAssignedTasksInput = {
-    update: XOR<UserUpdateWithoutAssignedTasksInput, UserUncheckedUpdateWithoutAssignedTasksInput>
-    create: XOR<UserCreateWithoutAssignedTasksInput, UserUncheckedCreateWithoutAssignedTasksInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutAssignedTasksInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutAssignedTasksInput, UserUncheckedUpdateWithoutAssignedTasksInput>
-  }
-
-  export type UserUpdateWithoutAssignedTasksInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
-    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
-    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
-    records?: RecordUpdateManyWithoutCreatedByNestedInput
-    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
-    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
-    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
-    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
-    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
-    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
-    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
-    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
-    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
-    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
-    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
-    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
-    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
-    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
-    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
-    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
-    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
-    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
-    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
-    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
-    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
-    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
-    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
-    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
-    notifications?: NotificationUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutAssignedTasksInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
-    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
-    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
-    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
-    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
-    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
-    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
-    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
-    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
-    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
-    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
-    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
-    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
-    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
-    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
-    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
-    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
-    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUpsertWithoutCreatedTasksInput = {
-    update: XOR<UserUpdateWithoutCreatedTasksInput, UserUncheckedUpdateWithoutCreatedTasksInput>
-    create: XOR<UserCreateWithoutCreatedTasksInput, UserUncheckedCreateWithoutCreatedTasksInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutCreatedTasksInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutCreatedTasksInput, UserUncheckedUpdateWithoutCreatedTasksInput>
-  }
-
-  export type UserUpdateWithoutCreatedTasksInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
-    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
-    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    records?: RecordUpdateManyWithoutCreatedByNestedInput
-    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
-    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
-    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
-    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
-    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
-    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
-    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
-    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
-    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
-    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
-    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
-    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
-    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
-    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
-    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
-    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
-    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
-    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
-    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
-    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
-    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
-    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
-    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
-    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
-    notifications?: NotificationUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutCreatedTasksInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
-    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
-    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
-    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
-    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
-    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
-    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
-    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
-    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
-    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
-    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
-    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
-    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
-    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
-    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
-    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
-    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
-    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type FormSubmissionUpsertWithWhereUniqueWithoutTaskInput = {
-    where: FormSubmissionWhereUniqueInput
-    update: XOR<FormSubmissionUpdateWithoutTaskInput, FormSubmissionUncheckedUpdateWithoutTaskInput>
-    create: XOR<FormSubmissionCreateWithoutTaskInput, FormSubmissionUncheckedCreateWithoutTaskInput>
-  }
-
-  export type FormSubmissionUpdateWithWhereUniqueWithoutTaskInput = {
-    where: FormSubmissionWhereUniqueInput
-    data: XOR<FormSubmissionUpdateWithoutTaskInput, FormSubmissionUncheckedUpdateWithoutTaskInput>
-  }
-
-  export type FormSubmissionUpdateManyWithWhereWithoutTaskInput = {
-    where: FormSubmissionScalarWhereInput
-    data: XOR<FormSubmissionUpdateManyMutationInput, FormSubmissionUncheckedUpdateManyWithoutTaskInput>
   }
 
   export type UserCreateWithoutRecordsInput = {
@@ -104799,8 +96056,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
@@ -104813,10 +96068,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -104850,8 +96101,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
@@ -104864,10 +96113,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -104917,8 +96162,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
@@ -104931,10 +96174,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -104968,8 +96207,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -104982,10 +96219,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -105019,8 +96252,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
@@ -105033,10 +96264,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -105070,8 +96297,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
@@ -105084,10 +96309,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -105137,8 +96358,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
@@ -105151,10 +96370,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -105188,8 +96403,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -105202,10 +96415,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -105239,8 +96448,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -105253,10 +96460,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -105290,8 +96493,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -105304,10 +96505,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -105480,8 +96677,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -105494,10 +96689,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -105531,8 +96722,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -105545,10 +96734,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -105722,8 +96907,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
@@ -105736,10 +96919,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -105773,8 +96952,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
@@ -105787,10 +96964,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -105990,8 +97163,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
@@ -106004,10 +97175,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -106041,8 +97208,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -106055,10 +97220,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -106165,8 +97326,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -106179,10 +97338,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -106216,8 +97371,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -106230,10 +97383,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -106283,8 +97432,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -106297,10 +97444,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -106334,8 +97477,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -106348,10 +97489,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -106385,8 +97522,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -106399,10 +97534,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -106436,8 +97567,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -106450,10 +97579,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -106503,8 +97628,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -106517,10 +97640,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -106554,8 +97673,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -106568,10 +97685,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -108562,8 +99675,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -108576,10 +99687,6 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -108613,8 +99720,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -108627,10 +99732,6 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -108725,8 +99826,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -108739,10 +99838,6 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -108776,8 +99871,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -108790,10 +99883,6 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -109927,8 +101016,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -109941,10 +101028,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -109978,8 +101061,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -109992,10 +101073,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -110299,8 +101376,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -110313,10 +101388,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -110350,8 +101421,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -110364,10 +101433,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -110546,8 +101611,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -110561,10 +101624,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -110597,8 +101656,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -110612,10 +101669,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -110839,8 +101892,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -110854,10 +101905,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -110890,8 +101937,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -110905,10 +101950,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -111221,8 +102262,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -111235,10 +102274,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -111272,8 +102307,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -111286,10 +102319,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -111682,8 +102711,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -111696,10 +102723,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -111733,8 +102756,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -111747,10 +102768,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -112186,8 +103203,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -112200,10 +103215,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -112237,8 +103248,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -112251,10 +103260,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -112381,8 +103386,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -112395,10 +103398,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -112432,8 +103431,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -112446,10 +103443,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -113233,8 +104226,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -113247,10 +104238,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -113284,8 +104271,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -113298,10 +104283,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -113487,8 +104468,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -113501,10 +104480,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -113538,8 +104513,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -113552,10 +104525,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -113713,8 +104682,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -113727,10 +104694,6 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -113764,8 +104727,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -113778,10 +104739,6 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -113967,8 +104924,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -113981,10 +104936,6 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -114018,8 +104969,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -114032,10 +104981,6 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -114248,8 +105193,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -114262,10 +105205,6 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -114299,8 +105238,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -114313,10 +105250,6 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -114563,8 +105496,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -114577,10 +105508,6 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -114614,8 +105541,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -114628,1200 +105553,6 @@ export namespace Prisma {
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
-    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
-    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
-    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
-    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
-    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
-    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
-    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
-    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
-    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
-    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserCreateWithoutCreatedTaskTemplatesInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role?: $Enums.Role
-    department?: string | null
-    active?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdForms?: FormCreateNestedManyWithoutCreatedByInput
-    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
-    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
-    records?: RecordCreateNestedManyWithoutCreatedByInput
-    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
-    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
-    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
-    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
-    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
-    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
-    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
-    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
-    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
-    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
-    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
-    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
-    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
-    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
-    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
-    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
-    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
-    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
-    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
-    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
-    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
-    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
-    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
-    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
-    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
-    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
-    notifications?: NotificationCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutCreatedTaskTemplatesInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role?: $Enums.Role
-    department?: string | null
-    active?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
-    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
-    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
-    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
-    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
-    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
-    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
-    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
-    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
-    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
-    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
-    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
-    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
-    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
-    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
-    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
-    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
-    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
-    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
-    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
-    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
-    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
-    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
-    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
-    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
-    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutCreatedTaskTemplatesInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutCreatedTaskTemplatesInput, UserUncheckedCreateWithoutCreatedTaskTemplatesInput>
-  }
-
-  export type TaskInstanceCreateWithoutTemplateInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: string
-    priority: string
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType: string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate: Date | string
-    status?: $Enums.TaskInstanceStatus
-    completedAt?: Date | string | null
-    completionNote?: string | null
-    skippedAt?: Date | string | null
-    skipReason?: string | null
-    formSubmissionId?: string | null
-    instanceNumber?: number
-    createdAt?: Date | string
-    completedBy?: UserCreateNestedOneWithoutCompletedTaskInstancesInput
-    skippedBy?: UserCreateNestedOneWithoutSkippedTaskInstancesInput
-    history?: TaskHistoryCreateNestedManyWithoutInstanceInput
-  }
-
-  export type TaskInstanceUncheckedCreateWithoutTemplateInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: string
-    priority: string
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType: string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate: Date | string
-    status?: $Enums.TaskInstanceStatus
-    completedById?: string | null
-    completedAt?: Date | string | null
-    completionNote?: string | null
-    skippedById?: string | null
-    skippedAt?: Date | string | null
-    skipReason?: string | null
-    formSubmissionId?: string | null
-    instanceNumber?: number
-    createdAt?: Date | string
-    history?: TaskHistoryUncheckedCreateNestedManyWithoutInstanceInput
-  }
-
-  export type TaskInstanceCreateOrConnectWithoutTemplateInput = {
-    where: TaskInstanceWhereUniqueInput
-    create: XOR<TaskInstanceCreateWithoutTemplateInput, TaskInstanceUncheckedCreateWithoutTemplateInput>
-  }
-
-  export type TaskInstanceCreateManyTemplateInputEnvelope = {
-    data: TaskInstanceCreateManyTemplateInput | TaskInstanceCreateManyTemplateInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type UserUpsertWithoutCreatedTaskTemplatesInput = {
-    update: XOR<UserUpdateWithoutCreatedTaskTemplatesInput, UserUncheckedUpdateWithoutCreatedTaskTemplatesInput>
-    create: XOR<UserCreateWithoutCreatedTaskTemplatesInput, UserUncheckedCreateWithoutCreatedTaskTemplatesInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutCreatedTaskTemplatesInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutCreatedTaskTemplatesInput, UserUncheckedUpdateWithoutCreatedTaskTemplatesInput>
-  }
-
-  export type UserUpdateWithoutCreatedTaskTemplatesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
-    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
-    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
-    records?: RecordUpdateManyWithoutCreatedByNestedInput
-    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
-    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
-    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
-    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
-    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
-    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
-    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
-    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
-    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
-    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
-    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
-    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
-    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
-    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
-    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
-    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
-    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
-    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
-    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
-    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
-    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
-    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
-    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
-    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
-    notifications?: NotificationUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutCreatedTaskTemplatesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
-    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
-    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
-    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
-    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
-    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
-    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
-    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
-    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
-    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
-    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
-    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
-    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
-    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
-    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
-    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
-    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
-    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type TaskInstanceUpsertWithWhereUniqueWithoutTemplateInput = {
-    where: TaskInstanceWhereUniqueInput
-    update: XOR<TaskInstanceUpdateWithoutTemplateInput, TaskInstanceUncheckedUpdateWithoutTemplateInput>
-    create: XOR<TaskInstanceCreateWithoutTemplateInput, TaskInstanceUncheckedCreateWithoutTemplateInput>
-  }
-
-  export type TaskInstanceUpdateWithWhereUniqueWithoutTemplateInput = {
-    where: TaskInstanceWhereUniqueInput
-    data: XOR<TaskInstanceUpdateWithoutTemplateInput, TaskInstanceUncheckedUpdateWithoutTemplateInput>
-  }
-
-  export type TaskInstanceUpdateManyWithWhereWithoutTemplateInput = {
-    where: TaskInstanceScalarWhereInput
-    data: XOR<TaskInstanceUpdateManyMutationInput, TaskInstanceUncheckedUpdateManyWithoutTemplateInput>
-  }
-
-  export type TaskTemplateCreateWithoutInstancesInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: $Enums.TaskTemplateCategory
-    priority?: $Enums.TaskTemplatePriority
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType?: $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType: $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate: Date | string
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy: UserCreateNestedOneWithoutCreatedTaskTemplatesInput
-  }
-
-  export type TaskTemplateUncheckedCreateWithoutInstancesInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: $Enums.TaskTemplateCategory
-    priority?: $Enums.TaskTemplatePriority
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType?: $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType: $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate: Date | string
-    isActive?: boolean
-    createdById: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type TaskTemplateCreateOrConnectWithoutInstancesInput = {
-    where: TaskTemplateWhereUniqueInput
-    create: XOR<TaskTemplateCreateWithoutInstancesInput, TaskTemplateUncheckedCreateWithoutInstancesInput>
-  }
-
-  export type UserCreateWithoutCompletedTaskInstancesInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role?: $Enums.Role
-    department?: string | null
-    active?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdForms?: FormCreateNestedManyWithoutCreatedByInput
-    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
-    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
-    records?: RecordCreateNestedManyWithoutCreatedByInput
-    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
-    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
-    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
-    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
-    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
-    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
-    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
-    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
-    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
-    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
-    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
-    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
-    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
-    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
-    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
-    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
-    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
-    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
-    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
-    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
-    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
-    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
-    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
-    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
-    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
-    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
-    notifications?: NotificationCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutCompletedTaskInstancesInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role?: $Enums.Role
-    department?: string | null
-    active?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
-    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
-    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
-    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
-    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
-    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
-    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
-    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
-    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
-    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
-    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
-    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
-    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
-    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
-    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
-    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
-    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
-    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
-    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
-    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
-    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
-    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
-    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
-    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
-    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
-    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutCompletedTaskInstancesInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutCompletedTaskInstancesInput, UserUncheckedCreateWithoutCompletedTaskInstancesInput>
-  }
-
-  export type UserCreateWithoutSkippedTaskInstancesInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role?: $Enums.Role
-    department?: string | null
-    active?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdForms?: FormCreateNestedManyWithoutCreatedByInput
-    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
-    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
-    records?: RecordCreateNestedManyWithoutCreatedByInput
-    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
-    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
-    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
-    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
-    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
-    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
-    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
-    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
-    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
-    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
-    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
-    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
-    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
-    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
-    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
-    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
-    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
-    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
-    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
-    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
-    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
-    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
-    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
-    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
-    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
-    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
-    notifications?: NotificationCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutSkippedTaskInstancesInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role?: $Enums.Role
-    department?: string | null
-    active?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
-    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
-    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
-    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
-    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
-    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
-    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
-    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
-    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
-    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
-    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
-    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
-    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
-    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
-    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
-    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
-    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
-    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
-    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
-    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
-    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
-    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
-    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
-    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
-    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
-    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutSkippedTaskInstancesInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutSkippedTaskInstancesInput, UserUncheckedCreateWithoutSkippedTaskInstancesInput>
-  }
-
-  export type TaskHistoryCreateWithoutInstanceInput = {
-    id?: string
-    action: $Enums.TaskHistoryAction
-    performedAt?: Date | string
-    note?: string | null
-    performedBy?: UserCreateNestedOneWithoutTaskHistoryActionsInput
-  }
-
-  export type TaskHistoryUncheckedCreateWithoutInstanceInput = {
-    id?: string
-    action: $Enums.TaskHistoryAction
-    performedById?: string | null
-    performedAt?: Date | string
-    note?: string | null
-  }
-
-  export type TaskHistoryCreateOrConnectWithoutInstanceInput = {
-    where: TaskHistoryWhereUniqueInput
-    create: XOR<TaskHistoryCreateWithoutInstanceInput, TaskHistoryUncheckedCreateWithoutInstanceInput>
-  }
-
-  export type TaskHistoryCreateManyInstanceInputEnvelope = {
-    data: TaskHistoryCreateManyInstanceInput | TaskHistoryCreateManyInstanceInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type TaskTemplateUpsertWithoutInstancesInput = {
-    update: XOR<TaskTemplateUpdateWithoutInstancesInput, TaskTemplateUncheckedUpdateWithoutInstancesInput>
-    create: XOR<TaskTemplateCreateWithoutInstancesInput, TaskTemplateUncheckedCreateWithoutInstancesInput>
-    where?: TaskTemplateWhereInput
-  }
-
-  export type TaskTemplateUpdateToOneWithWhereWithoutInstancesInput = {
-    where?: TaskTemplateWhereInput
-    data: XOR<TaskTemplateUpdateWithoutInstancesInput, TaskTemplateUncheckedUpdateWithoutInstancesInput>
-  }
-
-  export type TaskTemplateUpdateWithoutInstancesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: EnumTaskTemplateCategoryFieldUpdateOperationsInput | $Enums.TaskTemplateCategory
-    priority?: EnumTaskTemplatePriorityFieldUpdateOperationsInput | $Enums.TaskTemplatePriority
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: EnumTaskTemplateTypeFieldUpdateOperationsInput | $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType?: EnumTaskRecurrenceTypeFieldUpdateOperationsInput | $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: UserUpdateOneRequiredWithoutCreatedTaskTemplatesNestedInput
-  }
-
-  export type TaskTemplateUncheckedUpdateWithoutInstancesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: EnumTaskTemplateCategoryFieldUpdateOperationsInput | $Enums.TaskTemplateCategory
-    priority?: EnumTaskTemplatePriorityFieldUpdateOperationsInput | $Enums.TaskTemplatePriority
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: EnumTaskTemplateTypeFieldUpdateOperationsInput | $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType?: EnumTaskRecurrenceTypeFieldUpdateOperationsInput | $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdById?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type UserUpsertWithoutCompletedTaskInstancesInput = {
-    update: XOR<UserUpdateWithoutCompletedTaskInstancesInput, UserUncheckedUpdateWithoutCompletedTaskInstancesInput>
-    create: XOR<UserCreateWithoutCompletedTaskInstancesInput, UserUncheckedCreateWithoutCompletedTaskInstancesInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutCompletedTaskInstancesInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutCompletedTaskInstancesInput, UserUncheckedUpdateWithoutCompletedTaskInstancesInput>
-  }
-
-  export type UserUpdateWithoutCompletedTaskInstancesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
-    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
-    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
-    records?: RecordUpdateManyWithoutCreatedByNestedInput
-    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
-    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
-    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
-    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
-    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
-    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
-    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
-    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
-    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
-    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
-    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
-    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
-    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
-    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
-    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
-    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
-    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
-    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
-    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
-    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
-    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
-    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
-    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
-    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
-    notifications?: NotificationUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutCompletedTaskInstancesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
-    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
-    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
-    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
-    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
-    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
-    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
-    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
-    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
-    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
-    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
-    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
-    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
-    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
-    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
-    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
-    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
-    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUpsertWithoutSkippedTaskInstancesInput = {
-    update: XOR<UserUpdateWithoutSkippedTaskInstancesInput, UserUncheckedUpdateWithoutSkippedTaskInstancesInput>
-    create: XOR<UserCreateWithoutSkippedTaskInstancesInput, UserUncheckedCreateWithoutSkippedTaskInstancesInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutSkippedTaskInstancesInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutSkippedTaskInstancesInput, UserUncheckedUpdateWithoutSkippedTaskInstancesInput>
-  }
-
-  export type UserUpdateWithoutSkippedTaskInstancesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
-    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
-    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
-    records?: RecordUpdateManyWithoutCreatedByNestedInput
-    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
-    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
-    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
-    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
-    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
-    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
-    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
-    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
-    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
-    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
-    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
-    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
-    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
-    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
-    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
-    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
-    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
-    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
-    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
-    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
-    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
-    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
-    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
-    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
-    notifications?: NotificationUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutSkippedTaskInstancesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
-    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
-    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
-    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
-    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
-    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
-    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
-    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
-    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
-    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
-    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
-    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
-    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
-    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
-    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
-    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
-    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
-    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
-    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type TaskHistoryUpsertWithWhereUniqueWithoutInstanceInput = {
-    where: TaskHistoryWhereUniqueInput
-    update: XOR<TaskHistoryUpdateWithoutInstanceInput, TaskHistoryUncheckedUpdateWithoutInstanceInput>
-    create: XOR<TaskHistoryCreateWithoutInstanceInput, TaskHistoryUncheckedCreateWithoutInstanceInput>
-  }
-
-  export type TaskHistoryUpdateWithWhereUniqueWithoutInstanceInput = {
-    where: TaskHistoryWhereUniqueInput
-    data: XOR<TaskHistoryUpdateWithoutInstanceInput, TaskHistoryUncheckedUpdateWithoutInstanceInput>
-  }
-
-  export type TaskHistoryUpdateManyWithWhereWithoutInstanceInput = {
-    where: TaskHistoryScalarWhereInput
-    data: XOR<TaskHistoryUpdateManyMutationInput, TaskHistoryUncheckedUpdateManyWithoutInstanceInput>
-  }
-
-  export type TaskInstanceCreateWithoutHistoryInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: string
-    priority: string
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType: string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate: Date | string
-    status?: $Enums.TaskInstanceStatus
-    completedAt?: Date | string | null
-    completionNote?: string | null
-    skippedAt?: Date | string | null
-    skipReason?: string | null
-    formSubmissionId?: string | null
-    instanceNumber?: number
-    createdAt?: Date | string
-    template: TaskTemplateCreateNestedOneWithoutInstancesInput
-    completedBy?: UserCreateNestedOneWithoutCompletedTaskInstancesInput
-    skippedBy?: UserCreateNestedOneWithoutSkippedTaskInstancesInput
-  }
-
-  export type TaskInstanceUncheckedCreateWithoutHistoryInput = {
-    id?: string
-    templateId: string
-    title: string
-    description?: string | null
-    category: string
-    priority: string
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType: string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate: Date | string
-    status?: $Enums.TaskInstanceStatus
-    completedById?: string | null
-    completedAt?: Date | string | null
-    completionNote?: string | null
-    skippedById?: string | null
-    skippedAt?: Date | string | null
-    skipReason?: string | null
-    formSubmissionId?: string | null
-    instanceNumber?: number
-    createdAt?: Date | string
-  }
-
-  export type TaskInstanceCreateOrConnectWithoutHistoryInput = {
-    where: TaskInstanceWhereUniqueInput
-    create: XOR<TaskInstanceCreateWithoutHistoryInput, TaskInstanceUncheckedCreateWithoutHistoryInput>
-  }
-
-  export type UserCreateWithoutTaskHistoryActionsInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role?: $Enums.Role
-    department?: string | null
-    active?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdForms?: FormCreateNestedManyWithoutCreatedByInput
-    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
-    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
-    records?: RecordCreateNestedManyWithoutCreatedByInput
-    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
-    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
-    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
-    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
-    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
-    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
-    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
-    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
-    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
-    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
-    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
-    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
-    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
-    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
-    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
-    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
-    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
-    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
-    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
-    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
-    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
-    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
-    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
-    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
-    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
-    notifications?: NotificationCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutTaskHistoryActionsInput = {
-    id?: string
-    name: string
-    email: string
-    password: string
-    role?: $Enums.Role
-    department?: string | null
-    active?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
-    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
-    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
-    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
-    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
-    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
-    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
-    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
-    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
-    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
-    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
-    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
-    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
-    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
-    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
-    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
-    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
-    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
-    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
-    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
-    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
-    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
-    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
-    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
-    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutTaskHistoryActionsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutTaskHistoryActionsInput, UserUncheckedCreateWithoutTaskHistoryActionsInput>
-  }
-
-  export type TaskInstanceUpsertWithoutHistoryInput = {
-    update: XOR<TaskInstanceUpdateWithoutHistoryInput, TaskInstanceUncheckedUpdateWithoutHistoryInput>
-    create: XOR<TaskInstanceCreateWithoutHistoryInput, TaskInstanceUncheckedCreateWithoutHistoryInput>
-    where?: TaskInstanceWhereInput
-  }
-
-  export type TaskInstanceUpdateToOneWithWhereWithoutHistoryInput = {
-    where?: TaskInstanceWhereInput
-    data: XOR<TaskInstanceUpdateWithoutHistoryInput, TaskInstanceUncheckedUpdateWithoutHistoryInput>
-  }
-
-  export type TaskInstanceUpdateWithoutHistoryInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    priority?: StringFieldUpdateOperationsInput | string
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: StringFieldUpdateOperationsInput | string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumTaskInstanceStatusFieldUpdateOperationsInput | $Enums.TaskInstanceStatus
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
-    formSubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
-    instanceNumber?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    template?: TaskTemplateUpdateOneRequiredWithoutInstancesNestedInput
-    completedBy?: UserUpdateOneWithoutCompletedTaskInstancesNestedInput
-    skippedBy?: UserUpdateOneWithoutSkippedTaskInstancesNestedInput
-  }
-
-  export type TaskInstanceUncheckedUpdateWithoutHistoryInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    templateId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    priority?: StringFieldUpdateOperationsInput | string
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: StringFieldUpdateOperationsInput | string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumTaskInstanceStatusFieldUpdateOperationsInput | $Enums.TaskInstanceStatus
-    completedById?: NullableStringFieldUpdateOperationsInput | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedById?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
-    formSubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
-    instanceNumber?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type UserUpsertWithoutTaskHistoryActionsInput = {
-    update: XOR<UserUpdateWithoutTaskHistoryActionsInput, UserUncheckedUpdateWithoutTaskHistoryActionsInput>
-    create: XOR<UserCreateWithoutTaskHistoryActionsInput, UserUncheckedCreateWithoutTaskHistoryActionsInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutTaskHistoryActionsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutTaskHistoryActionsInput, UserUncheckedUpdateWithoutTaskHistoryActionsInput>
-  }
-
-  export type UserUpdateWithoutTaskHistoryActionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
-    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
-    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
-    records?: RecordUpdateManyWithoutCreatedByNestedInput
-    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
-    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
-    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
-    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
-    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
-    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
-    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
-    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
-    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
-    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
-    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
-    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
-    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
-    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
-    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
-    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
-    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
-    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
-    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
-    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
-    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
-    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
-    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
-    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
-    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
-    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
-    notifications?: NotificationUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutTaskHistoryActionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    department?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
-    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
-    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
-    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
-    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
-    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
-    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
-    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
-    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
-    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
-    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
-    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -115926,8 +105657,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -115941,10 +105670,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
@@ -115977,8 +105702,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -115992,10 +105715,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
@@ -116121,8 +105840,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -116136,10 +105853,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
@@ -116172,8 +105885,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -116187,10 +105898,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -116223,8 +105930,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -116238,10 +105943,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
@@ -116274,8 +105975,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -116289,10 +105988,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
@@ -116392,8 +106087,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -116407,10 +106100,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
@@ -116443,8 +106132,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -116458,10 +106145,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -116689,8 +106372,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -116704,10 +106385,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
@@ -116740,8 +106417,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -116755,10 +106430,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
     purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
@@ -116957,8 +106628,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -116972,10 +106641,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
@@ -117008,8 +106673,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -117023,10 +106686,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
     purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -117816,8 +107475,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -117831,10 +107488,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -117867,8 +107520,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -117882,10 +107533,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -117934,8 +107581,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -117949,10 +107594,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -117985,8 +107626,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -118000,10 +107639,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -118036,8 +107671,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -118051,10 +107684,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -118087,8 +107716,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -118102,10 +107729,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -118226,8 +107849,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -118241,10 +107862,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -118277,8 +107894,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -118292,10 +107907,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -118858,8 +108469,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -118873,10 +108482,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -118909,8 +108514,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -118924,10 +108527,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -119049,8 +108648,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -119064,10 +108661,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -119100,8 +108693,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -119115,10 +108706,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -119151,8 +108738,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -119166,10 +108751,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -119202,8 +108783,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -119217,10 +108796,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -119269,8 +108844,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -119284,10 +108857,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -119320,8 +108889,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -119335,10 +108902,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -119442,8 +109005,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -119457,10 +109018,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -119493,8 +109050,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -119508,10 +109063,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -119637,8 +109188,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -119652,10 +109201,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -119688,8 +109233,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -119703,10 +109246,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -119781,8 +109320,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -119796,10 +109333,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -119832,8 +109365,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -119847,10 +109378,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -119993,8 +109520,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -120008,10 +109533,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -120044,8 +109565,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -120059,10 +109578,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -120524,8 +110039,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -120539,10 +110052,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -120575,8 +110084,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -120590,10 +110097,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -120691,8 +110194,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -120706,10 +110207,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -120742,8 +110239,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -120757,10 +110252,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -120970,8 +110461,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -120985,10 +110474,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -121021,8 +110506,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -121036,10 +110519,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -121179,8 +110658,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -121194,10 +110671,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -121230,8 +110703,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -121245,10 +110716,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -121338,8 +110805,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -121353,10 +110818,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -121389,8 +110850,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -121404,10 +110863,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -121445,8 +110900,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -121460,10 +110913,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -121496,8 +110945,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -121511,10 +110958,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -121552,8 +110995,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -121567,10 +111008,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -121603,8 +111040,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -121618,10 +111053,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -121659,8 +111090,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -121674,10 +111103,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -121710,8 +111135,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -121725,10 +111148,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -121850,8 +111269,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -121865,10 +111282,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -121901,8 +111314,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -121916,10 +111327,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -121963,8 +111370,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -121978,10 +111383,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -122014,8 +111415,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -122029,10 +111428,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -122076,8 +111471,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -122091,10 +111484,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -122127,8 +111516,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -122142,10 +111529,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -122189,8 +111572,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -122204,10 +111585,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -122240,8 +111617,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -122255,10 +111630,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -122364,8 +111735,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -122379,10 +111748,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -122415,8 +111780,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -122430,10 +111793,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -122545,8 +111904,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -122560,10 +111917,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -122596,8 +111949,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -122611,10 +111962,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -122647,8 +111994,6 @@ export namespace Prisma {
     createdForms?: FormCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
     records?: RecordCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
@@ -122662,10 +112007,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
@@ -122698,8 +112039,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
     submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
     approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
     records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
     preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
@@ -122713,10 +112052,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
     formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
     initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
-    createdTaskTemplates?: TaskTemplateUncheckedCreateNestedManyWithoutCreatedByInput
-    completedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutCompletedByInput
-    skippedTaskInstances?: TaskInstanceUncheckedCreateNestedManyWithoutSkippedByInput
-    taskHistoryActions?: TaskHistoryUncheckedCreateNestedManyWithoutPerformedByInput
     forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
@@ -122765,8 +112100,6 @@ export namespace Prisma {
     createdForms?: FormUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
     records?: RecordUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
@@ -122780,10 +112113,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
@@ -122816,8 +112145,6 @@ export namespace Prisma {
     createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
@@ -122831,10 +112158,6 @@ export namespace Prisma {
     cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
     formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
     initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
-    createdTaskTemplates?: TaskTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
-    completedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutCompletedByNestedInput
-    skippedTaskInstances?: TaskInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
-    taskHistoryActions?: TaskHistoryUncheckedUpdateManyWithoutPerformedByNestedInput
     forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
     stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
@@ -122875,7 +112198,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     approvedById?: string | null
-    taskId?: string | null
   }
 
   export type FormSubmissionCreateManyApprovedByInput = {
@@ -122887,39 +112209,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     submittedById: string
-    taskId?: string | null
-  }
-
-  export type TaskCreateManyAssignedToInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status?: $Enums.TaskStatus
-    priority?: $Enums.TaskPriority
-    dueDate: Date | string
-    completedAt?: Date | string | null
-    recurrence?: $Enums.RecurrenceType
-    location?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    formId?: string | null
-    createdById: string
-  }
-
-  export type TaskCreateManyCreatedByInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status?: $Enums.TaskStatus
-    priority?: $Enums.TaskPriority
-    dueDate: Date | string
-    completedAt?: Date | string | null
-    recurrence?: $Enums.RecurrenceType
-    location?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    formId?: string | null
-    assignedToId: string
   }
 
   export type RecordCreateManyCreatedByInput = {
@@ -123167,75 +112456,6 @@ export namespace Prisma {
     notes?: string | null
     inventoryLotId: string
     enteredAt?: Date | string
-  }
-
-  export type TaskTemplateCreateManyCreatedByInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: $Enums.TaskTemplateCategory
-    priority?: $Enums.TaskTemplatePriority
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType?: $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType: $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate: Date | string
-    isActive?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type TaskInstanceCreateManyCompletedByInput = {
-    id?: string
-    templateId: string
-    title: string
-    description?: string | null
-    category: string
-    priority: string
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType: string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate: Date | string
-    status?: $Enums.TaskInstanceStatus
-    completedAt?: Date | string | null
-    completionNote?: string | null
-    skippedById?: string | null
-    skippedAt?: Date | string | null
-    skipReason?: string | null
-    formSubmissionId?: string | null
-    instanceNumber?: number
-    createdAt?: Date | string
-  }
-
-  export type TaskInstanceCreateManySkippedByInput = {
-    id?: string
-    templateId: string
-    title: string
-    description?: string | null
-    category: string
-    priority: string
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType: string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate: Date | string
-    status?: $Enums.TaskInstanceStatus
-    completedById?: string | null
-    completedAt?: Date | string | null
-    completionNote?: string | null
-    skippedAt?: Date | string | null
-    skipReason?: string | null
-    formSubmissionId?: string | null
-    instanceNumber?: number
-    createdAt?: Date | string
-  }
-
-  export type TaskHistoryCreateManyPerformedByInput = {
-    id?: string
-    instanceId: string
-    action: $Enums.TaskHistoryAction
-    performedAt?: Date | string
-    note?: string | null
   }
 
   export type ForecastExclusionCreateManyExcludedByInput = {
@@ -123550,7 +112770,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submissions?: FormSubmissionUpdateManyWithoutFormNestedInput
-    tasks?: TaskUpdateManyWithoutFormNestedInput
   }
 
   export type FormUncheckedUpdateWithoutCreatedByInput = {
@@ -123564,7 +112783,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submissions?: FormSubmissionUncheckedUpdateManyWithoutFormNestedInput
-    tasks?: TaskUncheckedUpdateManyWithoutFormNestedInput
   }
 
   export type FormUncheckedUpdateManyWithoutCreatedByInput = {
@@ -123588,7 +112806,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     form?: FormUpdateOneRequiredWithoutSubmissionsNestedInput
     approvedBy?: UserUpdateOneWithoutApprovedSubmissionsNestedInput
-    task?: TaskUpdateOneWithoutSubmissionsNestedInput
   }
 
   export type FormSubmissionUncheckedUpdateWithoutSubmittedByInput = {
@@ -123600,7 +112817,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
-    taskId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type FormSubmissionUncheckedUpdateManyWithoutSubmittedByInput = {
@@ -123612,7 +112828,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
-    taskId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type FormSubmissionUpdateWithoutApprovedByInput = {
@@ -123624,7 +112839,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     form?: FormUpdateOneRequiredWithoutSubmissionsNestedInput
     submittedBy?: UserUpdateOneRequiredWithoutSubmissionsNestedInput
-    task?: TaskUpdateOneWithoutSubmissionsNestedInput
   }
 
   export type FormSubmissionUncheckedUpdateWithoutApprovedByInput = {
@@ -123636,7 +112850,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
-    taskId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type FormSubmissionUncheckedUpdateManyWithoutApprovedByInput = {
@@ -123648,107 +112861,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
-    taskId?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type TaskUpdateWithoutAssignedToInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    recurrence?: EnumRecurrenceTypeFieldUpdateOperationsInput | $Enums.RecurrenceType
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    form?: FormUpdateOneWithoutTasksNestedInput
-    createdBy?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
-    submissions?: FormSubmissionUpdateManyWithoutTaskNestedInput
-  }
-
-  export type TaskUncheckedUpdateWithoutAssignedToInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    recurrence?: EnumRecurrenceTypeFieldUpdateOperationsInput | $Enums.RecurrenceType
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    formId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdById?: StringFieldUpdateOperationsInput | string
-    submissions?: FormSubmissionUncheckedUpdateManyWithoutTaskNestedInput
-  }
-
-  export type TaskUncheckedUpdateManyWithoutAssignedToInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    recurrence?: EnumRecurrenceTypeFieldUpdateOperationsInput | $Enums.RecurrenceType
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    formId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdById?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type TaskUpdateWithoutCreatedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    recurrence?: EnumRecurrenceTypeFieldUpdateOperationsInput | $Enums.RecurrenceType
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    form?: FormUpdateOneWithoutTasksNestedInput
-    assignedTo?: UserUpdateOneRequiredWithoutAssignedTasksNestedInput
-    submissions?: FormSubmissionUpdateManyWithoutTaskNestedInput
-  }
-
-  export type TaskUncheckedUpdateWithoutCreatedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    recurrence?: EnumRecurrenceTypeFieldUpdateOperationsInput | $Enums.RecurrenceType
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    formId?: NullableStringFieldUpdateOperationsInput | string | null
-    assignedToId?: StringFieldUpdateOperationsInput | string
-    submissions?: FormSubmissionUncheckedUpdateManyWithoutTaskNestedInput
-  }
-
-  export type TaskUncheckedUpdateManyWithoutCreatedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    recurrence?: EnumRecurrenceTypeFieldUpdateOperationsInput | $Enums.RecurrenceType
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    formId?: NullableStringFieldUpdateOperationsInput | string | null
-    assignedToId?: StringFieldUpdateOperationsInput | string
   }
 
   export type RecordUpdateWithoutCreatedByInput = {
@@ -124510,219 +113622,6 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     inventoryLotId?: StringFieldUpdateOperationsInput | string
     enteredAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TaskTemplateUpdateWithoutCreatedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: EnumTaskTemplateCategoryFieldUpdateOperationsInput | $Enums.TaskTemplateCategory
-    priority?: EnumTaskTemplatePriorityFieldUpdateOperationsInput | $Enums.TaskTemplatePriority
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: EnumTaskTemplateTypeFieldUpdateOperationsInput | $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType?: EnumTaskRecurrenceTypeFieldUpdateOperationsInput | $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    instances?: TaskInstanceUpdateManyWithoutTemplateNestedInput
-  }
-
-  export type TaskTemplateUncheckedUpdateWithoutCreatedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: EnumTaskTemplateCategoryFieldUpdateOperationsInput | $Enums.TaskTemplateCategory
-    priority?: EnumTaskTemplatePriorityFieldUpdateOperationsInput | $Enums.TaskTemplatePriority
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: EnumTaskTemplateTypeFieldUpdateOperationsInput | $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType?: EnumTaskRecurrenceTypeFieldUpdateOperationsInput | $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    instances?: TaskInstanceUncheckedUpdateManyWithoutTemplateNestedInput
-  }
-
-  export type TaskTemplateUncheckedUpdateManyWithoutCreatedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: EnumTaskTemplateCategoryFieldUpdateOperationsInput | $Enums.TaskTemplateCategory
-    priority?: EnumTaskTemplatePriorityFieldUpdateOperationsInput | $Enums.TaskTemplatePriority
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: EnumTaskTemplateTypeFieldUpdateOperationsInput | $Enums.TaskTemplateType
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    recurrenceType?: EnumTaskRecurrenceTypeFieldUpdateOperationsInput | $Enums.TaskRecurrenceType
-    recurrenceConfig?: NullableJsonNullValueInput | InputJsonValue
-    firstDueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TaskInstanceUpdateWithoutCompletedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    priority?: StringFieldUpdateOperationsInput | string
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: StringFieldUpdateOperationsInput | string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumTaskInstanceStatusFieldUpdateOperationsInput | $Enums.TaskInstanceStatus
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
-    formSubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
-    instanceNumber?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    template?: TaskTemplateUpdateOneRequiredWithoutInstancesNestedInput
-    skippedBy?: UserUpdateOneWithoutSkippedTaskInstancesNestedInput
-    history?: TaskHistoryUpdateManyWithoutInstanceNestedInput
-  }
-
-  export type TaskInstanceUncheckedUpdateWithoutCompletedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    templateId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    priority?: StringFieldUpdateOperationsInput | string
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: StringFieldUpdateOperationsInput | string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumTaskInstanceStatusFieldUpdateOperationsInput | $Enums.TaskInstanceStatus
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedById?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
-    formSubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
-    instanceNumber?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    history?: TaskHistoryUncheckedUpdateManyWithoutInstanceNestedInput
-  }
-
-  export type TaskInstanceUncheckedUpdateManyWithoutCompletedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    templateId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    priority?: StringFieldUpdateOperationsInput | string
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: StringFieldUpdateOperationsInput | string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumTaskInstanceStatusFieldUpdateOperationsInput | $Enums.TaskInstanceStatus
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedById?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
-    formSubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
-    instanceNumber?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TaskInstanceUpdateWithoutSkippedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    priority?: StringFieldUpdateOperationsInput | string
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: StringFieldUpdateOperationsInput | string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumTaskInstanceStatusFieldUpdateOperationsInput | $Enums.TaskInstanceStatus
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
-    formSubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
-    instanceNumber?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    template?: TaskTemplateUpdateOneRequiredWithoutInstancesNestedInput
-    completedBy?: UserUpdateOneWithoutCompletedTaskInstancesNestedInput
-    history?: TaskHistoryUpdateManyWithoutInstanceNestedInput
-  }
-
-  export type TaskInstanceUncheckedUpdateWithoutSkippedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    templateId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    priority?: StringFieldUpdateOperationsInput | string
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: StringFieldUpdateOperationsInput | string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumTaskInstanceStatusFieldUpdateOperationsInput | $Enums.TaskInstanceStatus
-    completedById?: NullableStringFieldUpdateOperationsInput | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
-    formSubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
-    instanceNumber?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    history?: TaskHistoryUncheckedUpdateManyWithoutInstanceNestedInput
-  }
-
-  export type TaskInstanceUncheckedUpdateManyWithoutSkippedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    templateId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    priority?: StringFieldUpdateOperationsInput | string
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: StringFieldUpdateOperationsInput | string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumTaskInstanceStatusFieldUpdateOperationsInput | $Enums.TaskInstanceStatus
-    completedById?: NullableStringFieldUpdateOperationsInput | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
-    formSubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
-    instanceNumber?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TaskHistoryUpdateWithoutPerformedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    action?: EnumTaskHistoryActionFieldUpdateOperationsInput | $Enums.TaskHistoryAction
-    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-    instance?: TaskInstanceUpdateOneRequiredWithoutHistoryNestedInput
-  }
-
-  export type TaskHistoryUncheckedUpdateWithoutPerformedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    instanceId?: StringFieldUpdateOperationsInput | string
-    action?: EnumTaskHistoryActionFieldUpdateOperationsInput | $Enums.TaskHistoryAction
-    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type TaskHistoryUncheckedUpdateManyWithoutPerformedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    instanceId?: StringFieldUpdateOperationsInput | string
-    action?: EnumTaskHistoryActionFieldUpdateOperationsInput | $Enums.TaskHistoryAction
-    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    note?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ForecastExclusionUpdateWithoutExcludedByInput = {
@@ -125661,23 +114560,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     submittedById: string
     approvedById?: string | null
-    taskId?: string | null
-  }
-
-  export type TaskCreateManyFormInput = {
-    id?: string
-    title: string
-    description?: string | null
-    status?: $Enums.TaskStatus
-    priority?: $Enums.TaskPriority
-    dueDate: Date | string
-    completedAt?: Date | string | null
-    recurrence?: $Enums.RecurrenceType
-    location?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    assignedToId: string
-    createdById: string
   }
 
   export type FormSubmissionUpdateWithoutFormInput = {
@@ -125689,7 +114571,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedBy?: UserUpdateOneRequiredWithoutSubmissionsNestedInput
     approvedBy?: UserUpdateOneWithoutApprovedSubmissionsNestedInput
-    task?: TaskUpdateOneWithoutSubmissionsNestedInput
   }
 
   export type FormSubmissionUncheckedUpdateWithoutFormInput = {
@@ -125701,110 +114582,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
-    taskId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type FormSubmissionUncheckedUpdateManyWithoutFormInput = {
     id?: StringFieldUpdateOperationsInput | string
-    data?: JsonNullValueInput | InputJsonValue
-    status?: EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    submittedById?: StringFieldUpdateOperationsInput | string
-    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
-    taskId?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type TaskUpdateWithoutFormInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    recurrence?: EnumRecurrenceTypeFieldUpdateOperationsInput | $Enums.RecurrenceType
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedTo?: UserUpdateOneRequiredWithoutAssignedTasksNestedInput
-    createdBy?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
-    submissions?: FormSubmissionUpdateManyWithoutTaskNestedInput
-  }
-
-  export type TaskUncheckedUpdateWithoutFormInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    recurrence?: EnumRecurrenceTypeFieldUpdateOperationsInput | $Enums.RecurrenceType
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedToId?: StringFieldUpdateOperationsInput | string
-    createdById?: StringFieldUpdateOperationsInput | string
-    submissions?: FormSubmissionUncheckedUpdateManyWithoutTaskNestedInput
-  }
-
-  export type TaskUncheckedUpdateManyWithoutFormInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
-    priority?: EnumTaskPriorityFieldUpdateOperationsInput | $Enums.TaskPriority
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    recurrence?: EnumRecurrenceTypeFieldUpdateOperationsInput | $Enums.RecurrenceType
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedToId?: StringFieldUpdateOperationsInput | string
-    createdById?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type FormSubmissionCreateManyTaskInput = {
-    id?: string
-    formId: string
-    data: JsonNullValueInput | InputJsonValue
-    status?: $Enums.SubmissionStatus
-    notes?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    submittedById: string
-    approvedById?: string | null
-  }
-
-  export type FormSubmissionUpdateWithoutTaskInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    data?: JsonNullValueInput | InputJsonValue
-    status?: EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    form?: FormUpdateOneRequiredWithoutSubmissionsNestedInput
-    submittedBy?: UserUpdateOneRequiredWithoutSubmissionsNestedInput
-    approvedBy?: UserUpdateOneWithoutApprovedSubmissionsNestedInput
-  }
-
-  export type FormSubmissionUncheckedUpdateWithoutTaskInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    formId?: StringFieldUpdateOperationsInput | string
-    data?: JsonNullValueInput | InputJsonValue
-    status?: EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    submittedById?: StringFieldUpdateOperationsInput | string
-    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type FormSubmissionUncheckedUpdateManyWithoutTaskInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    formId?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
     status?: EnumSubmissionStatusFieldUpdateOperationsInput | $Enums.SubmissionStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -128212,128 +116993,6 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type TaskInstanceCreateManyTemplateInput = {
-    id?: string
-    title: string
-    description?: string | null
-    category: string
-    priority: string
-    assignedTo: JsonNullValueInput | InputJsonValue
-    taskType: string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate: Date | string
-    status?: $Enums.TaskInstanceStatus
-    completedById?: string | null
-    completedAt?: Date | string | null
-    completionNote?: string | null
-    skippedById?: string | null
-    skippedAt?: Date | string | null
-    skipReason?: string | null
-    formSubmissionId?: string | null
-    instanceNumber?: number
-    createdAt?: Date | string
-  }
-
-  export type TaskInstanceUpdateWithoutTemplateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    priority?: StringFieldUpdateOperationsInput | string
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: StringFieldUpdateOperationsInput | string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumTaskInstanceStatusFieldUpdateOperationsInput | $Enums.TaskInstanceStatus
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
-    formSubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
-    instanceNumber?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedBy?: UserUpdateOneWithoutCompletedTaskInstancesNestedInput
-    skippedBy?: UserUpdateOneWithoutSkippedTaskInstancesNestedInput
-    history?: TaskHistoryUpdateManyWithoutInstanceNestedInput
-  }
-
-  export type TaskInstanceUncheckedUpdateWithoutTemplateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    priority?: StringFieldUpdateOperationsInput | string
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: StringFieldUpdateOperationsInput | string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumTaskInstanceStatusFieldUpdateOperationsInput | $Enums.TaskInstanceStatus
-    completedById?: NullableStringFieldUpdateOperationsInput | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedById?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
-    formSubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
-    instanceNumber?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    history?: TaskHistoryUncheckedUpdateManyWithoutInstanceNestedInput
-  }
-
-  export type TaskInstanceUncheckedUpdateManyWithoutTemplateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    category?: StringFieldUpdateOperationsInput | string
-    priority?: StringFieldUpdateOperationsInput | string
-    assignedTo?: JsonNullValueInput | InputJsonValue
-    taskType?: StringFieldUpdateOperationsInput | string
-    formLink?: NullableJsonNullValueInput | InputJsonValue
-    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumTaskInstanceStatusFieldUpdateOperationsInput | $Enums.TaskInstanceStatus
-    completedById?: NullableStringFieldUpdateOperationsInput | string | null
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    completionNote?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedById?: NullableStringFieldUpdateOperationsInput | string | null
-    skippedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    skipReason?: NullableStringFieldUpdateOperationsInput | string | null
-    formSubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
-    instanceNumber?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TaskHistoryCreateManyInstanceInput = {
-    id?: string
-    action: $Enums.TaskHistoryAction
-    performedById?: string | null
-    performedAt?: Date | string
-    note?: string | null
-  }
-
-  export type TaskHistoryUpdateWithoutInstanceInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    action?: EnumTaskHistoryActionFieldUpdateOperationsInput | $Enums.TaskHistoryAction
-    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-    performedBy?: UserUpdateOneWithoutTaskHistoryActionsNestedInput
-  }
-
-  export type TaskHistoryUncheckedUpdateWithoutInstanceInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    action?: EnumTaskHistoryActionFieldUpdateOperationsInput | $Enums.TaskHistoryAction
-    performedById?: NullableStringFieldUpdateOperationsInput | string | null
-    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type TaskHistoryUncheckedUpdateManyWithoutInstanceInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    action?: EnumTaskHistoryActionFieldUpdateOperationsInput | $Enums.TaskHistoryAction
-    performedById?: NullableStringFieldUpdateOperationsInput | string | null
-    performedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    note?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
   export type ShipstationBundleComponentCreateManyBundleProductInput = {
     id?: string
     componentProductId: string
@@ -129136,10 +117795,6 @@ export namespace Prisma {
      */
     export type FormCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FormCountOutputTypeDefaultArgs<ExtArgs>
     /**
-     * @deprecated Use TaskCountOutputTypeDefaultArgs instead
-     */
-    export type TaskCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskCountOutputTypeDefaultArgs<ExtArgs>
-    /**
      * @deprecated Use BatchSheetTemplateCountOutputTypeDefaultArgs instead
      */
     export type BatchSheetTemplateCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BatchSheetTemplateCountOutputTypeDefaultArgs<ExtArgs>
@@ -129175,14 +117830,6 @@ export namespace Prisma {
      * @deprecated Use InventoryLotCountOutputTypeDefaultArgs instead
      */
     export type InventoryLotCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InventoryLotCountOutputTypeDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use TaskTemplateCountOutputTypeDefaultArgs instead
-     */
-    export type TaskTemplateCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskTemplateCountOutputTypeDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use TaskInstanceCountOutputTypeDefaultArgs instead
-     */
-    export type TaskInstanceCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskInstanceCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use ShipstationProductCountOutputTypeDefaultArgs instead
      */
@@ -129235,10 +117882,6 @@ export namespace Prisma {
      * @deprecated Use FormSubmissionDefaultArgs instead
      */
     export type FormSubmissionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FormSubmissionDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use TaskDefaultArgs instead
-     */
-    export type TaskArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskDefaultArgs<ExtArgs>
     /**
      * @deprecated Use RecordDefaultArgs instead
      */
@@ -129339,18 +117982,6 @@ export namespace Prisma {
      * @deprecated Use AuditLogDefaultArgs instead
      */
     export type AuditLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AuditLogDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use TaskTemplateDefaultArgs instead
-     */
-    export type TaskTemplateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskTemplateDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use TaskInstanceDefaultArgs instead
-     */
-    export type TaskInstanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskInstanceDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use TaskHistoryDefaultArgs instead
-     */
-    export type TaskHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskHistoryDefaultArgs<ExtArgs>
     /**
      * @deprecated Use StockAlertAcknowledgmentDefaultArgs instead
      */

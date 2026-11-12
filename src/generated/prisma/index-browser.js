@@ -156,25 +156,7 @@ exports.Prisma.FormSubmissionScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   submittedById: 'submittedById',
-  approvedById: 'approvedById',
-  taskId: 'taskId'
-};
-
-exports.Prisma.TaskScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  description: 'description',
-  status: 'status',
-  priority: 'priority',
-  dueDate: 'dueDate',
-  completedAt: 'completedAt',
-  recurrence: 'recurrence',
-  location: 'location',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  formId: 'formId',
-  assignedToId: 'assignedToId',
-  createdById: 'createdById'
+  approvedById: 'approvedById'
 };
 
 exports.Prisma.RecordScalarFieldEnum = {
@@ -610,56 +592,6 @@ exports.Prisma.AuditLogScalarFieldEnum = {
   userName: 'userName',
   details: 'details',
   createdAt: 'createdAt'
-};
-
-exports.Prisma.TaskTemplateScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  description: 'description',
-  category: 'category',
-  priority: 'priority',
-  assignedTo: 'assignedTo',
-  taskType: 'taskType',
-  formLink: 'formLink',
-  recurrenceType: 'recurrenceType',
-  recurrenceConfig: 'recurrenceConfig',
-  firstDueDate: 'firstDueDate',
-  isActive: 'isActive',
-  createdById: 'createdById',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.TaskInstanceScalarFieldEnum = {
-  id: 'id',
-  templateId: 'templateId',
-  title: 'title',
-  description: 'description',
-  category: 'category',
-  priority: 'priority',
-  assignedTo: 'assignedTo',
-  taskType: 'taskType',
-  formLink: 'formLink',
-  dueDate: 'dueDate',
-  status: 'status',
-  completedById: 'completedById',
-  completedAt: 'completedAt',
-  completionNote: 'completionNote',
-  skippedById: 'skippedById',
-  skippedAt: 'skippedAt',
-  skipReason: 'skipReason',
-  formSubmissionId: 'formSubmissionId',
-  instanceNumber: 'instanceNumber',
-  createdAt: 'createdAt'
-};
-
-exports.Prisma.TaskHistoryScalarFieldEnum = {
-  id: 'id',
-  instanceId: 'instanceId',
-  action: 'action',
-  performedById: 'performedById',
-  performedAt: 'performedAt',
-  note: 'note'
 };
 
 exports.Prisma.StockAlertAcknowledgmentScalarFieldEnum = {
@@ -1116,28 +1048,6 @@ exports.SubmissionStatus = exports.$Enums.SubmissionStatus = {
   REJECTED: 'REJECTED'
 };
 
-exports.TaskStatus = exports.$Enums.TaskStatus = {
-  PENDING: 'PENDING',
-  IN_PROGRESS: 'IN_PROGRESS',
-  COMPLETED: 'COMPLETED',
-  OVERDUE: 'OVERDUE',
-  CANCELLED: 'CANCELLED'
-};
-
-exports.TaskPriority = exports.$Enums.TaskPriority = {
-  LOW: 'LOW',
-  MEDIUM: 'MEDIUM',
-  HIGH: 'HIGH',
-  CRITICAL: 'CRITICAL'
-};
-
-exports.RecurrenceType = exports.$Enums.RecurrenceType = {
-  NONE: 'NONE',
-  DAILY: 'DAILY',
-  WEEKLY: 'WEEKLY',
-  MONTHLY: 'MONTHLY'
-};
-
 exports.PreOpShift = exports.$Enums.PreOpShift = {
   AM: 'AM',
   PM: 'PM'
@@ -1188,55 +1098,6 @@ exports.RequirementType = exports.$Enums.RequirementType = {
   PER_DELIVERY: 'PER_DELIVERY'
 };
 
-exports.TaskTemplateCategory = exports.$Enums.TaskTemplateCategory = {
-  sanitation: 'sanitation',
-  inspection: 'inspection',
-  production: 'production',
-  receiving_inventory: 'receiving_inventory',
-  documentation_compliance: 'documentation_compliance',
-  facility_maintenance: 'facility_maintenance',
-  administrative: 'administrative'
-};
-
-exports.TaskTemplatePriority = exports.$Enums.TaskTemplatePriority = {
-  high: 'high',
-  normal: 'normal',
-  low: 'low'
-};
-
-exports.TaskTemplateType = exports.$Enums.TaskTemplateType = {
-  manual: 'manual',
-  form_linked: 'form_linked'
-};
-
-exports.TaskRecurrenceType = exports.$Enums.TaskRecurrenceType = {
-  one_time: 'one_time',
-  daily: 'daily',
-  weekly: 'weekly',
-  biweekly: 'biweekly',
-  monthly: 'monthly',
-  every_2_months: 'every_2_months',
-  quarterly: 'quarterly',
-  every_6_months: 'every_6_months',
-  annual: 'annual',
-  custom: 'custom'
-};
-
-exports.TaskInstanceStatus = exports.$Enums.TaskInstanceStatus = {
-  pending: 'pending',
-  complete: 'complete',
-  overdue: 'overdue',
-  skipped: 'skipped'
-};
-
-exports.TaskHistoryAction = exports.$Enums.TaskHistoryAction = {
-  created: 'created',
-  completed: 'completed',
-  skipped: 'skipped',
-  overdue: 'overdue',
-  next_instance_generated: 'next_instance_generated'
-};
-
 exports.TaskRuleTriggerType = exports.$Enums.TaskRuleTriggerType = {
   RECURRING: 'RECURRING',
   PRODUCTION_DAY: 'PRODUCTION_DAY',
@@ -1266,7 +1127,6 @@ exports.Prisma.ModelName = {
   User: 'User',
   Form: 'Form',
   FormSubmission: 'FormSubmission',
-  Task: 'Task',
   Record: 'Record',
   PreOpInspection: 'PreOpInspection',
   BatchSheetTemplate: 'BatchSheetTemplate',
@@ -1292,9 +1152,6 @@ exports.Prisma.ModelName = {
   CycleCount: 'CycleCount',
   InitialStockEntry: 'InitialStockEntry',
   AuditLog: 'AuditLog',
-  TaskTemplate: 'TaskTemplate',
-  TaskInstance: 'TaskInstance',
-  TaskHistory: 'TaskHistory',
   StockAlertAcknowledgment: 'StockAlertAcknowledgment',
   ForecastExclusion: 'ForecastExclusion',
   InventoryAuditExclusion: 'InventoryAuditExclusion',
