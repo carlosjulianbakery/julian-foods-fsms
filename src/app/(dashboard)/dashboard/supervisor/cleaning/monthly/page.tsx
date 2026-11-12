@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 import {
   CheckCircle2, ChevronDown, ChevronUp, CalendarCheck,
   AlertCircle,
@@ -309,6 +310,8 @@ function SectionCard({ area, label, items, readOnly, userInitials, onItemChange 
 
 export default function MonthlyCleaningPage() {
   const { data: session } = useSession();
+  const searchParams = useSearchParams();
+  const taskId = searchParams.get("taskId");
   const isAdmin = (session?.user as { role?: string })?.role === "ADMIN";
   const userName = session?.user?.name ?? "";
   const userInitials = getInitials(userName);
@@ -410,7 +413,11 @@ export default function MonthlyCleaningPage() {
     if (!draft) return;
     setSubmitting(true);
     try {
-      const res = await fetch(`/api/forms/monthly-cleaning/${draft.id}/submit`, { method: "POST" });
+      const res = await fetch(`/api/forms/monthly-cleaning/${draft.id}/submit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ taskId: taskId ?? null }),
+      });
       if (!res.ok) throw new Error("Failed");
       const data = await res.json();
       setDraft((prev) => prev ? { ...prev, status: "submitted", submittedAt: data.submittedAt, submittedBy: "user" } : prev);

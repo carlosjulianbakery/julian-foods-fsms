@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   ClipboardCheck,
   CheckCircle2,
@@ -182,6 +182,8 @@ function AtpResultBadge({ result }: { result: "pass" | "warning" | "fail" | null
 export default function PreOpFormPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const taskId = searchParams.get("taskId");
 
   const sigRef = useRef<SignaturePadHandle>(null);
   const [date,             setDate]             = useState(() => new Date().toISOString().slice(0, 10));
@@ -334,6 +336,7 @@ export default function PreOpFormPage() {
           atpSwab:  atpPayload,
           correctiveAction,
           supervisorSignature: sigDataUrl,
+          ...(taskId ? { taskId } : {}),
         }),
       });
 

@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
   FolderOpen, CheckCircle2, AlertCircle, Search, X,
@@ -742,6 +742,8 @@ function makeManualRow(): ReceivingItemRow {
 export default function ReceivingPage() {
   const { data: session } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const taskId = searchParams.get("taskId");
   const inp = "w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-500";
   const inputStyle = { fontSize: 16 } as React.CSSProperties;
 
@@ -1049,7 +1051,7 @@ export default function ReceivingPage() {
       const res = await fetch("/api/receiving/batch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, ...(taskId ? { taskId } : {}) }),
       });
 
       if (!res.ok) {

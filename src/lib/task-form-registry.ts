@@ -6,7 +6,7 @@ export interface TaskFormEntry {
 export const TASK_FORM_REGISTRY: Record<string, TaskFormEntry> = {
   daily_cleaning: {
     label: "Daily Cleaning Checklist",
-    href: () => "/dashboard/supervisor/daily-cleaning",
+    href: () => "/dashboard/supervisor/cleaning/daily",
   },
   preop: {
     label: "Pre-Op Inspection",
@@ -14,7 +14,7 @@ export const TASK_FORM_REGISTRY: Record<string, TaskFormEntry> = {
   },
   monthly_cleaning: {
     label: "Monthly Cleaning",
-    href: () => "/dashboard/supervisor/monthly-cleaning",
+    href: () => "/dashboard/supervisor/cleaning/monthly",
   },
   batch_sheet: {
     label: "Batch Sheet",

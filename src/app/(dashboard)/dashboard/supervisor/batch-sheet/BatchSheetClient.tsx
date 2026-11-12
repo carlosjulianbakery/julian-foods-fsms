@@ -2061,6 +2061,7 @@ export function BatchSheetClient({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const taskId = searchParams.get("taskId");
   const [selected, setSelected] = useState<Template | null>(null);
   const [form, setForm] = useState<FormState | null>(null);
   const [allergen, setAllergen] = useState<AllergenState>(initAllergen());
@@ -3301,6 +3302,7 @@ export function BatchSheetClient({
           id: draftId ?? undefined,
           baseUnitName:       selected.baseUnitName,
           baseUnitIsFinished: selected.baseUnitIsFinished,
+          ...(taskId ? { taskId } : {}),
         }),
       });
       if (!res.ok) throw new Error((await res.json()).error ?? "Submit failed");

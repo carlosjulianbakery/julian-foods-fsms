@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   CheckCircle2, ChevronDown, ChevronUp, AlertCircle, ClipboardList,
   MessageSquare, X, Info,
@@ -471,6 +471,8 @@ const todayYMD = () => new Date().toISOString().split("T")[0];
 export default function DailyCleaningPage() {
   const { data: session } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const taskId = searchParams.get("taskId");
 
   const [date, setDate]             = useState(todayYMD());
   const [selectedAreas, setSelectedAreas] = useState<Set<string>>(new Set());
@@ -543,6 +545,7 @@ export default function DailyCleaningPage() {
           items: submittedItems,
           checkedBy: checkedBy.trim(),
           notes,
+          ...(taskId ? { taskId } : {}),
         }),
       });
       if (!res.ok) {

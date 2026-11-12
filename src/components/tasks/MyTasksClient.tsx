@@ -219,6 +219,7 @@ export function MyTasksClient({ instances, role, userId, facilities, owners, tod
   const [expandedUpcoming, setExpandedUpcoming] = useState(false);
   const [expandedDone, setExpandedDone] = useState(false);
   const [startingId, setStartingId] = useState<string | null>(null);
+  const [startError, setStartError] = useState<string | null>(null);
   const [actionId, setActionId] = useState<string | null>(null);
   const [missedModalInst, setMissedModalInst] = useState<TaskInstance | null>(null);
   const [doneModalInst, setDoneModalInst] = useState<TaskInstance | null>(null);
@@ -241,14 +242,23 @@ export function MyTasksClient({ instances, role, userId, facilities, owners, tod
 
   async function handleStart(inst: TaskInstance) {
     setStartingId(inst.id);
+    setStartError(null);
     try {
       const res = await fetch(`/api/task-instances/${inst.id}/start`, { method: "POST" });
-      if (!res.ok) return;
-      startTransition(() => router.refresh());
-      if (inst.formKey && TASK_FORM_REGISTRY[inst.formKey]) {
-        const href = TASK_FORM_REGISTRY[inst.formKey].href(inst.id);
-        if (href) router.push(`${href}?taskId=${inst.id}`);
+      if (!res.ok) {
+        setStartError("Failed to start task. Please try again.");
+        return;
       }
+      startTransition(() => router.refresh());
+      const entry = inst.formKey ? TASK_FORM_REGISTRY[inst.formKey] : null;
+      const href = entry?.href(inst.id) ?? null;
+      if (href) {
+        router.push(`${href}?taskId=${inst.id}`);
+      } else if (inst.formKey && inst.formKey !== "manual") {
+        setStartError("No form page found for this task type.");
+      }
+    } catch {
+      setStartError("An unexpected error occurred.");
     } finally {
       setStartingId(null);
     }
@@ -485,6 +495,12 @@ export function MyTasksClient({ instances, role, userId, facilities, owners, tod
           onClose={() => setMissedModalInst(null)}
           onConfirm={(reason) => handleMarkMissed(missedModalInst, reason)}
         />
+      )}
+      {startError && (
+        <div className="mb-3 flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 px-4 py-2.5 text-sm text-red-700">
+          <span>{startError}</span>
+          <button onClick={() => setStartError(null)} className="ml-auto text-red-400 hover:text-red-600">✕</button>
+        </div>
       )}
       <div id="my-tasks" className="max-w-5xl space-y-1 mb-6">
         <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
