@@ -605,6 +605,8 @@ interface TaskCalendarProps {
   role: string;
   userId: string;
   showMyTasksOnly: boolean;
+  facilityFilter: string;
+  ownerFilter: string;
 }
 
 export function TaskCalendar({
@@ -614,6 +616,8 @@ export function TaskCalendar({
   role,
   userId,
   showMyTasksOnly,
+  facilityFilter,
+  ownerFilter,
 }: TaskCalendarProps) {
   const [view, setView] = useState<"week" | "month">("week");
   const [weekStart, setWeekStart] = useState(initialWeekStart);
@@ -625,7 +629,10 @@ export function TaskCalendar({
   const [loading, setLoading] = useState(false);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [showWeekend, setShowWeekend] = useState(false);
-  const [facilityFilter, setFacilityFilter] = useState<string | null>(null);
+  const facilityFilterRef = useRef(facilityFilter);
+  facilityFilterRef.current = facilityFilter;
+  const ownerFilterRef = useRef(ownerFilter);
+  ownerFilterRef.current = ownerFilter;
   const [outOfSyncNote, setOutOfSyncNote] = useState<"this" | "next" | null>(null);
   const productionDataRef = useRef<Map<string, Array<{product_name: string; base_unit_count: number | null; base_unit_label: string | null; comments: string | null}>>>(new Map());
 
@@ -644,10 +651,12 @@ export function TaskCalendar({
     async (from: string, to: string) => {
       setLoading(true);
       try {
-        const params = new URLSearchParams({
-          from, to,
-          myOnly: showMyTasksOnly || role !== "ADMIN" ? "1" : "0",
-        });
+        const isMyOnly = showMyTasksOnly || role !== "ADMIN";
+        const params = new URLSearchParams({ from, to, myOnly: isMyOnly ? "1" : "0" });
+        if (!isMyOnly && role === "ADMIN") {
+          if (facilityFilterRef.current) params.set("facilityId", facilityFilterRef.current);
+          if (ownerFilterRef.current) params.set("ownerId", ownerFilterRef.current);
+        }
         const res = await fetch(`/api/task-instances/range?${params}`);
         if (res.ok) {
           const data: TaskInstance[] = await res.json();
@@ -667,6 +676,14 @@ export function TaskCalendar({
     const { from, to } = currentRange();
     fetchRange(from, to);
   }, [showMyTasksOnly]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Refetch when admin filters change
+  const isFirstFilterRender = useRef(true);
+  useEffect(() => {
+    if (isFirstFilterRender.current) { isFirstFilterRender.current = false; return; }
+    const { from, to } = currentRange();
+    fetchRange(from, to);
+  }, [facilityFilter, ownerFilter]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Navigate week
   async function goWeek(delta: number) {
@@ -720,15 +737,7 @@ export function TaskCalendar({
   }
 
   // Get instances for a specific day
-  const dayInstances = (date: string) => {
-    let insts = instances.filter((i) => i.dueDate === date);
-    if (facilityFilter && role === "ADMIN") {
-      insts = facilityFilter === "624"
-        ? insts.filter(i => i.facilityName.includes("624"))
-        : insts.filter(i => !i.facilityName.includes("624"));
-    }
-    return insts;
-  };
+  const dayInstances = (date: string) => instances.filter((i) => i.dueDate === date);
 
   // Panel refresh — refetch current range
   const handleRefresh = useCallback(() => {
@@ -747,11 +756,6 @@ export function TaskCalendar({
       setOutOfSyncNote(null);
       fetchRange(target, addDaysToDateStr(target, 6));
     };
-    const handleProductionFacility = (e: Event) => {
-      if (role !== "ADMIN") return;
-      const { tab } = (e as CustomEvent<{tab: string | null}>).detail;
-      setFacilityFilter(tab);
-    };
     const handleProductionDataLoaded = (e: Event) => {
       const { days } = (e as CustomEvent<{days: Array<{isoDate: string; items: Array<{product_name: string; base_unit_count: number | null; base_unit_label: string | null; comments: string | null}>}>}>).detail;
       days.forEach(({ isoDate, items }) => productionDataRef.current.set(isoDate, items));
@@ -765,12 +769,10 @@ export function TaskCalendar({
       fetchRange(mon, addDaysToDateStr(mon, 6));
     };
     window.addEventListener("production-week-changed", handleProductionWeek);
-    window.addEventListener("production-facility-changed", handleProductionFacility);
     window.addEventListener("production-data-loaded", handleProductionDataLoaded);
     window.addEventListener("production-product-clicked", handleProductionProductClicked);
     return () => {
       window.removeEventListener("production-week-changed", handleProductionWeek);
-      window.removeEventListener("production-facility-changed", handleProductionFacility);
       window.removeEventListener("production-data-loaded", handleProductionDataLoaded);
       window.removeEventListener("production-product-clicked", handleProductionProductClicked);
     };
@@ -836,17 +838,6 @@ export function TaskCalendar({
         <div className="flex items-center gap-2 flex-wrap">
           {loading && (
             <span className="text-xs text-gray-400">Loading…</span>
-          )}
-          {/* Facility filter chip (admin only) */}
-          {role === "ADMIN" && facilityFilter && (
-            <button
-              onClick={() => setFacilityFilter(null)}
-              className="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-medium rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200 hover:bg-indigo-100 transition-colors"
-              title="Clear facility filter"
-            >
-              {facilityFilter === "624" ? "624" : "Julian Bakery"}
-              <X className="w-2.5 h-2.5" />
-            </button>
           )}
           {/* Weekend toggle */}
           <button

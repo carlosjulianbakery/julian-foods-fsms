@@ -17,6 +17,9 @@ export async function GET(req: NextRequest) {
   const from = searchParams.get("from");
   const to = searchParams.get("to");
   const myOnly = searchParams.get("myOnly") === "1";
+  // Admin-only filter params — ignored for non-admins
+  const reqFacilityId = role === "ADMIN" ? (searchParams.get("facilityId") ?? null) : null;
+  const reqOwnerId = role === "ADMIN" ? (searchParams.get("ownerId") ?? null) : null;
 
   if (
     !from || !to ||
@@ -41,11 +44,28 @@ export async function GET(req: NextRequest) {
   const statusFilter: Prisma.RuleInstanceWhereInput =
     role !== "ADMIN" ? { status: { not: "SKIPPED" } } : {};
 
+  // Admin facility filter — by rule's facility ID
+  const facilityFilter: Prisma.RuleInstanceWhereInput = reqFacilityId
+    ? { rule: { facility: { id: reqFacilityId } } }
+    : {};
+
+  // Admin owner filter — by effective owner (ownerUserId, else rule owner)
+  const ownerFilter: Prisma.RuleInstanceWhereInput = reqOwnerId
+    ? {
+        OR: [
+          { ownerUserId: reqOwnerId },
+          { ownerUserId: null, rule: { ownerId: reqOwnerId } },
+        ],
+      }
+    : {};
+
   const instances = await prisma.ruleInstance.findMany({
     where: {
       AND: [
         visibilityFilter,
         statusFilter,
+        facilityFilter,
+        ownerFilter,
         {
           dueDate: {
             gte: new Date(from + "T00:00:00Z"),

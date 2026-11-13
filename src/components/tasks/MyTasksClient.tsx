@@ -759,6 +759,20 @@ export function MyTasksClient({
   const [isPending, startTransition] = useTransition();
   const [facilityFilter, setFacilityFilter] = useState("");
   const [ownerFilter, setOwnerFilter] = useState("");
+
+  // Keep facility filter in sync with ProductionScheduleCard tab changes
+  const facilitiesRef = useRef(facilities);
+  facilitiesRef.current = facilities;
+  useEffect(() => {
+    const handleProductionFacility = (e: Event) => {
+      const { tab } = (e as CustomEvent<{tab: string | null}>).detail;
+      if (!tab) { setFacilityFilter(""); return; }
+      const match = facilitiesRef.current.find((f) => f.name.includes(tab) || f.id === tab);
+      setFacilityFilter(match ? match.id : "");
+    };
+    window.addEventListener("production-facility-changed", handleProductionFacility);
+    return () => window.removeEventListener("production-facility-changed", handleProductionFacility);
+  }, []);
   const [showMyTasksOnly, setShowMyTasksOnly] = useState(role === "ADMIN");
   const [expandedSkipped, setExpandedSkipped] = useState(false);
   const [startingId, setStartingId] = useState<string | null>(null);
@@ -774,17 +788,14 @@ export function MyTasksClient({
     if (role === "ADMIN" && showMyTasksOnly) {
       if ((i.ownerUserId ?? i.ownerId) !== userId) return false;
     }
-    if (facilityFilter && i.facilityId !== facilityFilter) return false;
-    if (ownerFilter && i.ownerId !== ownerFilter) return false;
+    if (!showMyTasksOnly && facilityFilter && i.facilityId !== facilityFilter) return false;
+    if (!showMyTasksOnly && ownerFilter && (i.ownerUserId ?? i.ownerId) !== ownerFilter) return false;
     return true;
   });
 
   const filteredSkipped = skippedInstances.filter((i) => {
-    if (role === "ADMIN" && showMyTasksOnly) {
-      if ((i.ownerUserId ?? i.ownerId) !== userId) return false;
-    }
-    if (facilityFilter && i.facilityId !== facilityFilter) return false;
-    if (ownerFilter && i.ownerId !== ownerFilter) return false;
+    if (!showMyTasksOnly && facilityFilter && i.facilityId !== facilityFilter) return false;
+    if (!showMyTasksOnly && ownerFilter && (i.ownerUserId ?? i.ownerId) !== ownerFilter) return false;
     return true;
   });
 
@@ -925,9 +936,10 @@ export function MyTasksClient({
         {role === "ADMIN" && (
           <div className="flex items-center gap-2 mb-4 flex-wrap">
             <select
-              className="text-xs border border-gray-200 rounded-md px-2 py-1.5 bg-white text-gray-700"
+              className={`text-xs border rounded-md px-2 py-1.5 ${showMyTasksOnly ? "bg-gray-50 border-gray-100 text-gray-400 cursor-not-allowed" : "border-gray-200 bg-white text-gray-700"}`}
               value={facilityFilter}
               onChange={(e) => setFacilityFilter(e.target.value)}
+              disabled={showMyTasksOnly}
             >
               <option value="">All facilities</option>
               {facilities.map((f) => (
@@ -935,15 +947,27 @@ export function MyTasksClient({
               ))}
             </select>
             <select
-              className="text-xs border border-gray-200 rounded-md px-2 py-1.5 bg-white text-gray-700"
+              className={`text-xs border rounded-md px-2 py-1.5 ${showMyTasksOnly ? "bg-gray-50 border-gray-100 text-gray-400 cursor-not-allowed" : "border-gray-200 bg-white text-gray-700"}`}
               value={ownerFilter}
               onChange={(e) => setOwnerFilter(e.target.value)}
+              disabled={showMyTasksOnly}
             >
               <option value="">All owners</option>
               {owners.map((u) => (
                 <option key={u.id} value={u.id}>{u.name}</option>
               ))}
             </select>
+            {showMyTasksOnly && (
+              <span className="text-[11px] text-gray-400 italic">Switch to Everyone to filter</span>
+            )}
+            {!showMyTasksOnly && (facilityFilter || ownerFilter) && (
+              <button
+                onClick={() => { setFacilityFilter(""); setOwnerFilter(""); }}
+                className="text-[11px] text-gray-500 hover:text-gray-700 underline"
+              >
+                Clear filters
+              </button>
+            )}
           </div>
         )}
 
@@ -1011,6 +1035,8 @@ export function MyTasksClient({
             role={role}
             userId={userId}
             showMyTasksOnly={showMyTasksOnly}
+            facilityFilter={showMyTasksOnly ? "" : facilityFilter}
+            ownerFilter={showMyTasksOnly ? "" : ownerFilter}
           />
         </div>
 
