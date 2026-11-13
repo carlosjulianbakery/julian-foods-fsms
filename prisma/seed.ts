@@ -387,7 +387,7 @@ async function main() {
   await prisma.batchSheetSubmission.deleteMany({});
   await prisma.preOpInspection.deleteMany({});
   await prisma.formSubmission.deleteMany({});
-  await prisma.task.deleteMany({});
+
   await prisma.record.deleteMany({});
   await prisma.form.deleteMany({});
   console.log("🗑   Cleared submissions, inspections, forms, tasks, records\n");

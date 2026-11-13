@@ -329,7 +329,7 @@ export async function POST(req: NextRequest) {
       formKey: "receiving",
       submissionId: createdRecords[0]?.id ?? "",
       userId,
-      submissionDate: toPacificDateStr(new Date(date)),
+      submissionDate: toPacificDateStr(new Date(date + "T12:00:00Z")),
       taskId: null,
       prismaClient: prisma,
     });
