@@ -50,10 +50,12 @@ export async function completeRuleInstanceForSubmission(params: {
     return;
   }
 
-  // Best-match path: find open instances for this facility + formKey
-  const candidates = await prismaClient.ruleInstance.findMany({
+  // Best-match path: find open + upcoming instances for this facility + formKey.
+  // UPCOMING is included so a submission for today (or a past date) can still match
+  // an instance that wasn't promoted by the cron yet.
+  const allCandidates = await prismaClient.ruleInstance.findMany({
     where: {
-      status: { in: [...OPEN_STATUSES] },
+      status: { in: [...OPEN_STATUSES, "UPCOMING"] },
       rule: {
         formKey,
         facility: { name: facilityName },
@@ -65,20 +67,35 @@ export async function completeRuleInstanceForSubmission(params: {
     orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
   });
 
-  if (candidates.length === 0) {
+  if (allCandidates.length === 0) {
     console.log(`[task-completion] no open instances for formKey=${formKey} facility=${facilityName}`);
     return;
   }
 
-  // Prefer exact due-date match; fall back to oldest OVERDUE
-  const exact = candidates.find(
+  // Exact match wins over any fallback, even if the instance is still UPCOMING.
+  // dueDate is @db.Date → reads as midnight UTC → .slice(0,10) gives UTC date string,
+  // which equals the Pacific date string the form sends when both represent the same calendar day.
+  const exact = allCandidates.find(
     (i) => i.dueDate.toISOString().slice(0, 10) === submissionDate
   );
 
+  if (exact) {
+    await markDone({ instance: exact, ruleOwnerId: exact.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
+    return;
+  }
+
+  // No exact match: fall back to open (non-UPCOMING) candidates only
+  const openCandidates = allCandidates.filter(
+    (i) => (OPEN_STATUSES as readonly string[]).includes(i.status)
+  );
+  if (openCandidates.length === 0) {
+    console.log(`[task-completion] no open/matching instances for formKey=${formKey} facility=${facilityName} date=${submissionDate}`);
+    return;
+  }
+
   const target =
-    exact ??
-    candidates.find((i) => i.status === "OVERDUE") ??
-    candidates[0];
+    openCandidates.find((i) => i.status === "OVERDUE") ??
+    openCandidates[0];
 
   if (!target) return;
 

@@ -86,29 +86,48 @@ function advance(dateStr: string, unit: string, every: number): string {
 
 /**
  * Updates statuses:
+ * - Any UPCOMING/DUE_TODAY/IN_PROGRESS with dueDate before today → OVERDUE immediately
  * - UPCOMING → DUE_TODAY for instances whose dueDate is today
  * - DUE_TODAY / IN_PROGRESS → OVERDUE when end-of-day Pacific has passed
+ *
+ * Note: dueDate is @db.Date (PostgreSQL DATE), which Prisma always reads back as
+ * midnight UTC (T00:00:00.000Z). Comparisons must use midnight UTC, not T12:00:00Z.
  */
 export async function updateStatuses(): Promise<{ updated: number }> {
   const today = getPacificToday();
   const now = new Date();
   let updated = 0;
 
+  // @db.Date reads as midnight UTC — midnight UTC for today
+  const todayMidnightUTC = new Date(`${today}T00:00:00Z`);
+
+  // Any open instance with dueDate BEFORE today → OVERDUE regardless of current status
+  const pastToOverdue = await prisma.ruleInstance.updateMany({
+    where: {
+      status: { in: ["UPCOMING", "DUE_TODAY", "IN_PROGRESS"] },
+      dueDate: { lt: todayMidnightUTC },
+    },
+    data: { status: "OVERDUE", updatedAt: now },
+  });
+  updated += pastToOverdue.count;
+
+  // UPCOMING → DUE_TODAY for today's instances
   const toDueToday = await prisma.ruleInstance.updateMany({
     where: {
       status: "UPCOMING",
-      dueDate: new Date(`${today}T12:00:00Z`),
+      dueDate: todayMidnightUTC,
     },
     data: { status: "DUE_TODAY", updatedAt: now },
   });
   updated += toDueToday.count;
 
+  // After 11:59:59 PM Pacific: DUE_TODAY/IN_PROGRESS → OVERDUE for today
   const endOfToday = getEndOfDayPacific(today);
   if (now > endOfToday) {
     const toOverdue = await prisma.ruleInstance.updateMany({
       where: {
         status: { in: ["DUE_TODAY", "IN_PROGRESS"] },
-        dueDate: new Date(`${today}T12:00:00Z`),
+        dueDate: todayMidnightUTC,
       },
       data: { status: "OVERDUE", updatedAt: now },
     });

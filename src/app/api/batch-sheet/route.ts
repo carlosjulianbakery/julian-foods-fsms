@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { autoCompleteFormLinkedTasks } from "@/lib/tasks";
 import { completeRuleInstanceForSubmission } from "@/lib/task-completion";
 import { toPacificDateStr } from "@/lib/pacific-time";
 import { checkMaterialStockLevel } from "@/lib/inventoryUtils";
@@ -609,7 +610,8 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      try { await completeRuleInstanceForSubmission({ formKey: "batch_sheet", submissionId: submission.id, userId: user.id, submissionDate: toPacificDateStr(new Date(productionDate as string)), taskId: (body as Record<string, unknown>).taskId as string ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] batch_sheet:", e); }
+      try { await autoCompleteFormLinkedTasks({ formType: "batch_sheet", submittingUserId: user.id, submittedAt: new Date(), submissionId: submission.id, prismaClient: prisma }); } catch (e) { console.error("[task auto-complete] batch_sheet:", e); }
+      try { await completeRuleInstanceForSubmission({ formKey: "batch_sheet", submissionId: submission.id, userId: user.id, submissionDate: toPacificDateStr(new Date((productionDate as string) + "T12:00:00Z")), taskId: (body as Record<string, unknown>).taskId as string ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] batch_sheet:", e); }
 
       // Create inventory lot for WIP (internal) products when their batch sheet is submitted.
       // The lot quantity = total input weight in section3 (dry blend ≈ 100% yield).
