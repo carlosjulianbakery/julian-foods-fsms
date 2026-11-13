@@ -44,7 +44,6 @@ interface Props {
   role: string;
   userId: string;
   firstName: string;
-  facilities: { id: string; name: string }[];
   owners: { id: string; name: string }[];
   today: string; // YYYY-MM-DD
 }
@@ -286,7 +285,7 @@ function HeroHeader({
   doneToday: TaskInstance[];
   role: string;
   showMyTasksOnly: boolean;
-  setShowMyTasksOnly: (v: boolean) => void;
+  setShowMyTasksOnly?: (v: boolean) => void;
   nextUpcoming: TaskInstance | null;
 }) {
   const [greeting, setGreeting] = useState("");
@@ -370,23 +369,6 @@ function HeroHeader({
             </div>
           )}
 
-          {/* Admin toggle */}
-          {role === "ADMIN" && (
-            <div className="flex rounded-lg border border-gray-200 overflow-hidden text-xs">
-              <button
-                onClick={() => setShowMyTasksOnly(true)}
-                className={`px-3 py-1.5 font-medium transition-colors ${showMyTasksOnly ? "bg-[#C41E3A] text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
-              >
-                My tasks
-              </button>
-              <button
-                onClick={() => setShowMyTasksOnly(false)}
-                className={`px-3 py-1.5 font-medium transition-colors ${!showMyTasksOnly ? "bg-[#C41E3A] text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
-              >
-                Everyone
-              </button>
-            </div>
-          )}
         </div>
       </div>
 
@@ -751,29 +733,23 @@ export function MyTasksClient({
   role,
   userId,
   firstName,
-  facilities,
   owners,
   today,
 }: Props) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [facilityFilter, setFacilityFilter] = useState("");
-  const [ownerFilter, setOwnerFilter] = useState("");
 
-  // Keep facility filter in sync with ProductionScheduleCard tab changes
-  const facilitiesRef = useRef(facilities);
-  facilitiesRef.current = facilities;
-  useEffect(() => {
-    const handleProductionFacility = (e: Event) => {
-      const { tab } = (e as CustomEvent<{tab: string | null}>).detail;
-      if (!tab) { setFacilityFilter(""); return; }
-      const match = facilitiesRef.current.find((f) => f.name.includes(tab) || f.id === tab);
-      setFacilityFilter(match ? match.id : "");
-    };
-    window.addEventListener("production-facility-changed", handleProductionFacility);
-    return () => window.removeEventListener("production-facility-changed", handleProductionFacility);
-  }, []);
-  const [showMyTasksOnly, setShowMyTasksOnly] = useState(role === "ADMIN");
+  const [viewMode, setViewMode] = useState<"my" | "everyone" | "byOwner">(() => {
+    try { return (sessionStorage.getItem("adminViewMode") as "my" | "everyone" | "byOwner") ?? (role === "ADMIN" ? "my" : "everyone"); }
+    catch { return role === "ADMIN" ? "my" : "everyone"; }
+  });
+  const [selectedOwnerId, setSelectedOwnerId] = useState<string>(() => {
+    try { return sessionStorage.getItem("adminSelectedOwner") ?? ""; }
+    catch { return ""; }
+  });
+  useEffect(() => { try { sessionStorage.setItem("adminViewMode", viewMode); } catch {} }, [viewMode]);
+  useEffect(() => { try { sessionStorage.setItem("adminSelectedOwner", selectedOwnerId); } catch {} }, [selectedOwnerId]);
+
   const [expandedSkipped, setExpandedSkipped] = useState(false);
   const [startingId, setStartingId] = useState<string | null>(null);
   const [startError, setStartError] = useState<string | null>(null);
@@ -784,18 +760,34 @@ export function MyTasksClient({
 
   const tomorrow = addDaysToDateStr(today, 1);
 
-  const filtered = instances.filter((i) => {
-    if (role === "ADMIN" && showMyTasksOnly) {
-      if ((i.ownerUserId ?? i.ownerId) !== userId) return false;
+  // Owner chips — built from all instances so counts are always accurate
+  const ownerChips: { id: string; name: string; open: number; hasOverdue: boolean }[] = [];
+  if (role === "ADMIN") {
+    const map = new Map<string, { name: string; open: number; hasOverdue: boolean }>();
+    for (const inst of instances) {
+      const eid = inst.ownerUserId ?? inst.ownerId;
+      const isOpen = inst.status !== "DONE" && inst.status !== "SKIPPED";
+      const isOverdue = inst.status === "OVERDUE" || inst.status === "MISSED";
+      const ex = map.get(eid);
+      if (ex) { if (isOpen) ex.open++; if (isOverdue) ex.hasOverdue = true; }
+      else map.set(eid, { name: inst.ownerName, open: isOpen ? 1 : 0, hasOverdue: isOverdue });
     }
-    if (!showMyTasksOnly && facilityFilter && i.facilityId !== facilityFilter) return false;
-    if (!showMyTasksOnly && ownerFilter && (i.ownerUserId ?? i.ownerId) !== ownerFilter) return false;
+    map.forEach((v, k) => ownerChips.push({ id: k, ...v }));
+    ownerChips.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  const showMyTasksOnly = viewMode === "my"; // alias for HeroHeader compat
+
+  const filtered = instances.filter((i) => {
+    if (role !== "ADMIN") return true;
+    if (viewMode === "my") return (i.ownerUserId ?? i.ownerId) === userId;
+    if (viewMode === "byOwner" && selectedOwnerId) return (i.ownerUserId ?? i.ownerId) === selectedOwnerId;
     return true;
   });
 
   const filteredSkipped = skippedInstances.filter((i) => {
-    if (!showMyTasksOnly && facilityFilter && i.facilityId !== facilityFilter) return false;
-    if (!showMyTasksOnly && ownerFilter && (i.ownerUserId ?? i.ownerId) !== ownerFilter) return false;
+    if (role !== "ADMIN") return true;
+    if (viewMode === "byOwner" && selectedOwnerId) return (i.ownerUserId ?? i.ownerId) === selectedOwnerId;
     return true;
   });
 
@@ -932,41 +924,63 @@ export function MyTasksClient({
       )}
 
       <div id="my-tasks" className="max-w-5xl mb-6">
-        {/* Admin filters */}
+        {/* Admin view control */}
         {role === "ADMIN" && (
-          <div className="flex items-center gap-2 mb-4 flex-wrap">
-            <select
-              className={`text-xs border rounded-md px-2 py-1.5 ${showMyTasksOnly ? "bg-gray-50 border-gray-100 text-gray-400 cursor-not-allowed" : "border-gray-200 bg-white text-gray-700"}`}
-              value={facilityFilter}
-              onChange={(e) => setFacilityFilter(e.target.value)}
-              disabled={showMyTasksOnly}
-            >
-              <option value="">All facilities</option>
-              {facilities.map((f) => (
-                <option key={f.id} value={f.id}>{f.name}</option>
-              ))}
-            </select>
-            <select
-              className={`text-xs border rounded-md px-2 py-1.5 ${showMyTasksOnly ? "bg-gray-50 border-gray-100 text-gray-400 cursor-not-allowed" : "border-gray-200 bg-white text-gray-700"}`}
-              value={ownerFilter}
-              onChange={(e) => setOwnerFilter(e.target.value)}
-              disabled={showMyTasksOnly}
-            >
-              <option value="">All owners</option>
-              {owners.map((u) => (
-                <option key={u.id} value={u.id}>{u.name}</option>
-              ))}
-            </select>
-            {showMyTasksOnly && (
-              <span className="text-[11px] text-gray-400 italic">Switch to Everyone to filter</span>
+          <div className="mb-4">
+            <div className="flex items-center gap-3 flex-wrap mb-2">
+              <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden text-xs">
+                {(["my", "everyone", "byOwner"] as const).map((mode) => (
+                  <button
+                    key={mode}
+                    onClick={() => {
+                      setViewMode(mode);
+                      if (mode === "byOwner" && !selectedOwnerId && ownerChips.length > 0) {
+                        setSelectedOwnerId(ownerChips[0].id);
+                      }
+                    }}
+                    className={`px-3 py-1.5 font-medium transition-colors ${viewMode === mode ? "bg-[#C41E3A] text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
+                  >
+                    {mode === "my" ? "My Tasks" : mode === "everyone" ? "Everyone" : "By Owner"}
+                  </button>
+                ))}
+              </div>
+              <span className="text-[11px] text-gray-400 italic">
+                {viewMode === "my" ? "Showing: your tasks"
+                  : viewMode === "everyone" ? "Showing: everyone's tasks"
+                  : `Showing: ${ownerChips.find((c) => c.id === selectedOwnerId)?.name ?? "..."}'s tasks`}
+              </span>
+            </div>
+
+            {/* Owner chips — only in By Owner mode */}
+            {viewMode === "byOwner" && ownerChips.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {ownerChips.map((chip) => (
+                  <button
+                    key={chip.id}
+                    onClick={() => setSelectedOwnerId(chip.id)}
+                    className={`min-h-[44px] inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
+                      selectedOwnerId === chip.id
+                        ? "bg-[#C41E3A] text-white border-[#C41E3A]"
+                        : "bg-white text-gray-700 border-gray-200 active:bg-gray-100"
+                    }`}
+                  >
+                    {chip.hasOverdue && (
+                      <span className={`w-2 h-2 rounded-full shrink-0 ${selectedOwnerId === chip.id ? "bg-white" : "bg-red-500"}`} />
+                    )}
+                    <span>{chip.name}</span>
+                    <span className={`text-[11px] font-bold px-1.5 py-0.5 rounded-full leading-none ${selectedOwnerId === chip.id ? "bg-white/25 text-white" : "bg-gray-100 text-gray-600"}`}>
+                      {chip.open}
+                    </span>
+                  </button>
+                ))}
+              </div>
             )}
-            {!showMyTasksOnly && (facilityFilter || ownerFilter) && (
-              <button
-                onClick={() => { setFacilityFilter(""); setOwnerFilter(""); }}
-                className="text-[11px] text-gray-500 hover:text-gray-700 underline"
-              >
-                Clear filters
-              </button>
+
+            {/* Empty state for By Owner with no open tasks */}
+            {viewMode === "byOwner" && selectedOwnerId && ownerChips.find((c) => c.id === selectedOwnerId)?.open === 0 && (
+              <p className="text-sm text-gray-400 italic mt-1">
+                No open tasks for {ownerChips.find((c) => c.id === selectedOwnerId)?.name}.
+              </p>
             )}
           </div>
         )}
@@ -981,7 +995,6 @@ export function MyTasksClient({
           doneToday={doneToday}
           role={role}
           showMyTasksOnly={showMyTasksOnly}
-          setShowMyTasksOnly={setShowMyTasksOnly}
           nextUpcoming={nextUpcoming}
         />
 
@@ -1034,9 +1047,8 @@ export function MyTasksClient({
             today={today}
             role={role}
             userId={userId}
-            showMyTasksOnly={showMyTasksOnly}
-            facilityFilter={showMyTasksOnly ? "" : facilityFilter}
-            ownerFilter={showMyTasksOnly ? "" : ownerFilter}
+            viewMode={viewMode}
+            selectedOwnerId={viewMode !== "byOwner" ? "" : selectedOwnerId}
           />
         </div>
 

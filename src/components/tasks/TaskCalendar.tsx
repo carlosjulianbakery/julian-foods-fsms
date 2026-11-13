@@ -604,9 +604,8 @@ interface TaskCalendarProps {
   today: string;
   role: string;
   userId: string;
-  showMyTasksOnly: boolean;
-  facilityFilter: string;
-  ownerFilter: string;
+  viewMode: "my" | "everyone" | "byOwner";
+  selectedOwnerId: string;
 }
 
 export function TaskCalendar({
@@ -615,9 +614,8 @@ export function TaskCalendar({
   today,
   role,
   userId,
-  showMyTasksOnly,
-  facilityFilter,
-  ownerFilter,
+  viewMode,
+  selectedOwnerId,
 }: TaskCalendarProps) {
   const [view, setView] = useState<"week" | "month">("week");
   const [weekStart, setWeekStart] = useState(initialWeekStart);
@@ -629,10 +627,8 @@ export function TaskCalendar({
   const [loading, setLoading] = useState(false);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [showWeekend, setShowWeekend] = useState(false);
-  const facilityFilterRef = useRef(facilityFilter);
-  facilityFilterRef.current = facilityFilter;
-  const ownerFilterRef = useRef(ownerFilter);
-  ownerFilterRef.current = ownerFilter;
+  const selectedOwnerIdRef = useRef(selectedOwnerId);
+  selectedOwnerIdRef.current = selectedOwnerId;
   const [outOfSyncNote, setOutOfSyncNote] = useState<"this" | "next" | null>(null);
   const productionDataRef = useRef<Map<string, Array<{product_name: string; base_unit_count: number | null; base_unit_label: string | null; comments: string | null}>>>(new Map());
 
@@ -651,11 +647,10 @@ export function TaskCalendar({
     async (from: string, to: string) => {
       setLoading(true);
       try {
-        const isMyOnly = showMyTasksOnly || role !== "ADMIN";
+        const isMyOnly = viewMode === "my" || role !== "ADMIN";
         const params = new URLSearchParams({ from, to, myOnly: isMyOnly ? "1" : "0" });
-        if (!isMyOnly && role === "ADMIN") {
-          if (facilityFilterRef.current) params.set("facilityId", facilityFilterRef.current);
-          if (ownerFilterRef.current) params.set("ownerId", ownerFilterRef.current);
+        if (!isMyOnly && role === "ADMIN" && viewMode === "byOwner" && selectedOwnerIdRef.current) {
+          params.set("ownerId", selectedOwnerIdRef.current);
         }
         const res = await fetch(`/api/task-instances/range?${params}`);
         if (res.ok) {
@@ -666,24 +661,24 @@ export function TaskCalendar({
         setLoading(false);
       }
     },
-    [showMyTasksOnly, role],
+    [viewMode, role],
   );
 
-  // Refetch when showMyTasksOnly changes (after initial render)
+  // Refetch when viewMode changes (after initial render)
   const isFirstRender = useRef(true);
   useEffect(() => {
     if (isFirstRender.current) { isFirstRender.current = false; return; }
     const { from, to } = currentRange();
     fetchRange(from, to);
-  }, [showMyTasksOnly]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [viewMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Refetch when admin filters change
+  // Refetch when selected owner changes
   const isFirstFilterRender = useRef(true);
   useEffect(() => {
     if (isFirstFilterRender.current) { isFirstFilterRender.current = false; return; }
     const { from, to } = currentRange();
     fetchRange(from, to);
-  }, [facilityFilter, ownerFilter]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [selectedOwnerId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Navigate week
   async function goWeek(delta: number) {

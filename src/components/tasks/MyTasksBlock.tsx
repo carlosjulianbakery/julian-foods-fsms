@@ -147,13 +147,9 @@ export async function MyTasksBlock() {
   const serializedSkipped: TaskInstance[] = (skippedInstances as typeof instances).map(serializeInst);
   const serializedCalendar: TaskInstance[] = (calendarInstances as typeof instances).map(serializeInst);
 
-  let facilities: { id: string; name: string }[] = [];
   let owners: { id: string; name: string }[] = [];
   if (role === "ADMIN") {
-    [facilities, owners] = await Promise.all([
-      prisma.facility.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } }),
-      prisma.user.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } }),
-    ]);
+    owners = await prisma.user.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } });
   }
 
   const firstName = (session.user as { name?: string }).name?.split(" ")[0] ?? "there";
@@ -167,7 +163,6 @@ export async function MyTasksBlock() {
       role={role}
       userId={userId}
       firstName={firstName}
-      facilities={facilities}
       owners={owners.map((u) => ({ id: u.id, name: u.name ?? "" }))}
       today={today}
     />
