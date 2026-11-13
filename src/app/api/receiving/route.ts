@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { put } from "@vercel/blob";
-import { autoCompleteFormLinkedTasks } from "@/lib/tasks";
 import { completeRuleInstanceForSubmission } from "@/lib/task-completion";
 import { toPacificDateStr } from "@/lib/pacific-time";
 import { checkMaterialStockLevel } from "@/lib/inventoryUtils";
@@ -313,7 +312,6 @@ export async function POST(req: NextRequest) {
 
   const quarantineRecord = null;
 
-  try { await autoCompleteFormLinkedTasks({ formType: "receiving", submittingUserId: userId, submittedAt: new Date(), submissionId: record.id, prismaClient: prisma }); } catch (e) { console.error("[task auto-complete] receiving:", e); }
   try { await completeRuleInstanceForSubmission({ formKey: "receiving", submissionId: record.id, userId: userId as string, submissionDate: toPacificDateStr(new Date((date as string) + "T12:00:00Z")), taskId: (body as Record<string, unknown>).taskId as string ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] receiving:", e); }
 
   return NextResponse.json({
