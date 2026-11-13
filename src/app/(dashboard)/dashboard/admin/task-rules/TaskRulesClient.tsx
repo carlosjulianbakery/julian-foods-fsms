@@ -73,6 +73,7 @@ const FORM_KEYS = [
 function triggerLabel(rule: Rule): string {
   if (rule.triggerType === "ONE_OFF") return "One-off";
   if (rule.triggerType === "PRODUCTION_DAY") return "Production day";
+  if (rule.triggerType === "PRODUCTION_ANY") return "Batch Sheet (every production)";
   if (rule.triggerType === "PRODUCTION_PRODUCT")
     return rule.productName ? `Product: ${rule.productName}` : "Production product";
   const every = rule.recurrenceEvery ?? 1;
@@ -580,6 +581,7 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
                   <option value="ONE_OFF">One-off</option>
                   <option value="PRODUCTION_DAY">Production day (any production scheduled)</option>
                   <option value="PRODUCTION_PRODUCT">Production product (specific product name)</option>
+                  <option value="PRODUCTION_ANY">Batch Sheet (every production)</option>
                 </select>
               </div>
               {form.triggerType === "PRODUCTION_PRODUCT" && (

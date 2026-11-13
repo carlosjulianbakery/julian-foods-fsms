@@ -39,7 +39,7 @@ export async function generateCalendarInstances(opts: CalendarGeneratorOpts = {}
       where: {
         isActive: true,
         isArchived: false,
-        triggerType: { in: ["PRODUCTION_DAY", "PRODUCTION_PRODUCT"] },
+        triggerType: { in: ["PRODUCTION_DAY", "PRODUCTION_PRODUCT", "PRODUCTION_ANY"] },
         ...(opts.facilityId ? { facilityId: opts.facilityId } : {}),
       },
     }),
@@ -195,6 +195,21 @@ async function processOneFacility(
             ruleId: rule.id,
             dueDate: day.iso_date,
             label,
+            calendarKey: `prod:${day.iso_date}:${normalizeProductName(item.product_name)}:${idx}`,
+          });
+        });
+      }
+    } else if (rule.triggerType === "PRODUCTION_ANY") {
+      for (const day of days) {
+        const productions = day.items.filter((i) => i.item_type === "production");
+        productions.forEach((item, idx) => {
+          const qty = item.base_unit_count != null
+            ? ` (${item.base_unit_count}${item.base_unit_label ? " " + item.base_unit_label : ""})`
+            : "";
+          allExpected.push({
+            ruleId: rule.id,
+            dueDate: day.iso_date,
+            label: `${item.product_name}${qty}`,
             calendarKey: `prod:${day.iso_date}:${normalizeProductName(item.product_name)}:${idx}`,
           });
         });

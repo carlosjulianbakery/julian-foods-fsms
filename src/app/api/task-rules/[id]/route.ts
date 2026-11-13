@@ -160,7 +160,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     let generatorResult: { created: number; facilityName: string } | null = null;
     if (
       rule.isActive &&
-      (rule.triggerType === "PRODUCTION_DAY" || rule.triggerType === "PRODUCTION_PRODUCT")
+      (rule.triggerType === "PRODUCTION_DAY" || rule.triggerType === "PRODUCTION_PRODUCT" || rule.triggerType === "PRODUCTION_ANY")
     ) {
       try {
         const genResult = await generateCalendarInstances({ facilityId: rule.facilityId });

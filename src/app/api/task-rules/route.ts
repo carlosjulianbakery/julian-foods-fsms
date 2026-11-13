@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
     });
 
     let generatorResult: { created: number; facilityName: string } | null = null;
-    if (rule.triggerType === "PRODUCTION_DAY" || rule.triggerType === "PRODUCTION_PRODUCT") {
+    if (rule.triggerType === "PRODUCTION_DAY" || rule.triggerType === "PRODUCTION_PRODUCT" || rule.triggerType === "PRODUCTION_ANY") {
       try {
         const genResult = await generateCalendarInstances({ facilityId: rule.facilityId });
         const fac = genResult.results.find((r) => r.facilityId === rule.facilityId);
