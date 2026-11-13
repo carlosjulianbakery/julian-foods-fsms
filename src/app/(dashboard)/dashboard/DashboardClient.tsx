@@ -1636,22 +1636,8 @@ export default function DashboardClient({ role, firstName }: { role: string; fir
       .catch(() => { setError(true); setLoading(false); });
   }, [endpoint]);
 
-  const greetLabel = greeting();
-  const dayLabel = todayLabel();
-
   return (
     <div className="max-w-5xl space-y-5">
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="page-title mb-0">
-            {greetLabel}, {data?.greeting_name ?? firstName} 👋
-          </h1>
-          <p className="page-subtitle">{dayLabel}</p>
-        </div>
-        <Heart className="w-7 h-7 text-[#D64D4D] opacity-20 shrink-0 mt-1" />
-      </div>
-
       {loading && (
         <div className="space-y-4">
           {role === "ADMIN" && (

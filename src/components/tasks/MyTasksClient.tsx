@@ -303,7 +303,7 @@ function HeroHeader({
   if (nothingToday) {
     summary = "Nothing due today.";
   } else if (allDone) {
-    summary = `All ${doneToday.length} task${doneToday.length !== 1 ? "s" : ""} complete — great work!`;
+    summary = `All ${doneToday.length} task${doneToday.length !== 1 ? "s" : ""} complete.`;
   } else {
     const parts: string[] = [];
     const todayCount = dueToday.length + inProgress.length;
