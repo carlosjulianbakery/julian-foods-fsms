@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { computeDueDates, generateInstances } from "@/lib/task-generator";
 import { getPacificToday, addDaysToDateStr } from "@/lib/pacific-time";
+import { generateCalendarInstances } from "@/lib/calendar-generator";
 
 export const dynamic = "force-dynamic";
 
@@ -156,7 +157,21 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       await generateInstances();
     }
 
-    return NextResponse.json(rule);
+    let generatorResult: { created: number; facilityName: string } | null = null;
+    if (
+      rule.isActive &&
+      (rule.triggerType === "PRODUCTION_DAY" || rule.triggerType === "PRODUCTION_PRODUCT")
+    ) {
+      try {
+        const genResult = await generateCalendarInstances({ facilityId: rule.facilityId });
+        const fac = genResult.results.find((r) => r.facilityId === rule.facilityId);
+        generatorResult = { created: fac?.created ?? 0, facilityName: fac?.facilityName ?? "" };
+      } catch (genErr) {
+        console.error("[task-rules PATCH] calendar generator error:", genErr);
+      }
+    }
+
+    return NextResponse.json({ ...rule, generatorResult });
   } catch (err) {
     console.error("PATCH /api/task-rules/[id]:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

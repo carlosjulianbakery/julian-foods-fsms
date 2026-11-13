@@ -150,6 +150,7 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
   const [permDeleteConfirm, setPermDeleteConfirm] = useState("");
   const [permDeleting, setPermDeleting] = useState(false);
   const [permDeleteError, setPermDeleteError] = useState("");
+  const [saveMsg, setSaveMsg] = useState<string | null>(null);
 
   const staleSyncs = syncStatuses.filter((s) => {
     if (s.activeCalendarRuleCount === 0) return false;
@@ -208,6 +209,7 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
         productName: form.triggerType === "PRODUCTION_PRODUCT" ? form.productName || null : null,
       };
 
+      setSaveMsg(null);
       if (editingRule) {
         const res = await fetch(`/api/task-rules/${editingRule.id}`, {
           method: "PATCH",
@@ -223,6 +225,10 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
               : r
           )
         );
+        if (updated.generatorResult != null) {
+          const { created } = updated.generatorResult;
+          setSaveMsg(created > 0 ? `Created ${created} task${created !== 1 ? "s" : ""} from the calendar.` : "No matching productions in the next 7 days.");
+        }
       } else {
         const res = await fetch("/api/task-rules", {
           method: "POST",
@@ -235,6 +241,10 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
           { ...created, recurrenceStart: normDateStr(created.recurrenceStart), facilityName: created.facility.name, ownerName: created.owner.name, instanceCount: 0, openInstanceCount: 0 },
           ...prev,
         ]);
+        if (created.generatorResult != null) {
+          const { created: n } = created.generatorResult;
+          setSaveMsg(n > 0 ? `Created ${n} task${n !== 1 ? "s" : ""} from the calendar.` : "No matching productions in the next 7 days.");
+        }
       }
       setShowModal(false);
       router.refresh();
@@ -347,6 +357,13 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
             : <>not refreshed since {formatPT(s.lastSyncAt)}</>}
         </div>
       ))}
+
+      {saveMsg && (
+        <div className="mb-3 rounded-lg border border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-700 px-4 py-3 text-sm text-green-800 dark:text-green-200 flex items-center justify-between">
+          <span>✓ {saveMsg}</span>
+          <button onClick={() => setSaveMsg(null)} className="text-green-600 hover:text-green-800 dark:text-green-400 ml-4">✕</button>
+        </div>
+      )}
 
       <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
         <div className="flex items-center gap-3">

@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@/generated/prisma";
 import { getPacificToday, addDaysToDateStr } from "@/lib/pacific-time";
 import { MyTasksClient, type TaskInstance } from "./MyTasksClient";
 
@@ -17,7 +18,7 @@ export async function MyTasksBlock() {
   // Effective-owner: show if explicitly assigned, OR if not reassigned and rule.ownerId matches.
   // ownerUserId null means "not reassigned" — still belongs to rule owner.
   // ownerUserId non-null means reassigned — only the assignee sees it, not the original rule owner.
-  const visibilityFilter =
+  const visibilityFilter: Prisma.RuleInstanceWhereInput =
     role !== "ADMIN"
       ? {
           OR: [
@@ -42,22 +43,26 @@ export async function MyTasksBlock() {
     skippedBy: { select: { id: true, name: true } },
   };
 
+  const statusConditions: Prisma.RuleInstanceWhereInput = {
+    OR: [
+      { status: { in: ["OVERDUE", "MISSED", "DUE_TODAY", "IN_PROGRESS"] } },
+      {
+        status: "UPCOMING",
+        dueDate: { lte: new Date(sevenDaysOut + "T23:59:59Z") },
+      },
+      {
+        status: "DONE",
+        doneAt: { gte: new Date(today + "T00:00:00Z") },
+      },
+    ],
+  };
+
   const [instances, skippedInstances] = await Promise.all([
     prisma.ruleInstance.findMany({
-      where: {
-        ...visibilityFilter,
-        OR: [
-          { status: { in: ["OVERDUE", "MISSED", "DUE_TODAY", "IN_PROGRESS"] } },
-          {
-            status: "UPCOMING",
-            dueDate: { lte: new Date(sevenDaysOut + "T23:59:59Z") },
-          },
-          {
-            status: "DONE",
-            doneAt: { gte: new Date(today + "T00:00:00Z") },
-          },
-        ],
-      },
+      where:
+        role !== "ADMIN"
+          ? { AND: [visibilityFilter, statusConditions] }
+          : statusConditions,
       include: instanceInclude,
       orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
     }),
@@ -81,6 +86,7 @@ export async function MyTasksBlock() {
       facilityId: inst.rule.facility.id,
       facilityName: inst.rule.facility.name,
       ownerId: inst.rule.ownerId,
+      ownerUserId: inst.ownerUserId ?? null,
       ownerName: inst.rule.owner.name ?? "",
       formKey: inst.rule.formKey,
       label: inst.label,

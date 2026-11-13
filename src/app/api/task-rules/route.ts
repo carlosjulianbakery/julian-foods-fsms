@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { generateCalendarInstances } from "@/lib/calendar-generator";
 
 export const dynamic = "force-dynamic";
 
@@ -85,7 +86,18 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json(rule, { status: 201 });
+    let generatorResult: { created: number; facilityName: string } | null = null;
+    if (rule.triggerType === "PRODUCTION_DAY" || rule.triggerType === "PRODUCTION_PRODUCT") {
+      try {
+        const genResult = await generateCalendarInstances({ facilityId: rule.facilityId });
+        const fac = genResult.results.find((r) => r.facilityId === rule.facilityId);
+        generatorResult = { created: fac?.created ?? 0, facilityName: fac?.facilityName ?? "" };
+      } catch (genErr) {
+        console.error("[task-rules POST] calendar generator error:", genErr);
+      }
+    }
+
+    return NextResponse.json({ ...rule, generatorResult }, { status: 201 });
   } catch (err) {
     console.error("POST /api/task-rules:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

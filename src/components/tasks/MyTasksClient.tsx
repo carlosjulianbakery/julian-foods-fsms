@@ -11,6 +11,7 @@ export interface TaskInstance {
   facilityId: string;
   facilityName: string;
   ownerId: string;
+  ownerUserId: string | null;
   ownerName: string;
   formKey: string | null;
   label: string;
@@ -282,6 +283,7 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
   const [isPending, startTransition] = useTransition();
   const [facilityFilter, setFacilityFilter] = useState("");
   const [ownerFilter, setOwnerFilter] = useState("");
+  const [showMyTasksOnly, setShowMyTasksOnly] = useState(role === "ADMIN");
   const [expandedUpcoming, setExpandedUpcoming] = useState(false);
   const [expandedDone, setExpandedDone] = useState(false);
   const [expandedSkipped, setExpandedSkipped] = useState(false);
@@ -295,6 +297,20 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
   const tomorrow = addDaysToDateStr(today, 1);
 
   const filtered = instances.filter((i) => {
+    if (role === "ADMIN" && showMyTasksOnly) {
+      const effectiveOwner = i.ownerUserId ?? i.ownerId;
+      if (effectiveOwner !== userId) return false;
+    }
+    if (facilityFilter && i.facilityId !== facilityFilter) return false;
+    if (ownerFilter && i.ownerId !== ownerFilter) return false;
+    return true;
+  });
+
+  const filteredSkipped = skippedInstances.filter((i) => {
+    if (role === "ADMIN" && showMyTasksOnly) {
+      const effectiveOwner = i.ownerUserId ?? i.ownerId;
+      if (effectiveOwner !== userId) return false;
+    }
     if (facilityFilter && i.facilityId !== facilityFilter) return false;
     if (ownerFilter && i.ownerId !== ownerFilter) return false;
     return true;
@@ -407,9 +423,9 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
     return inst.dueDate <= tomorrow;
   }
 
-  // Effective owner check (mirrors server logic)
   function isEffectiveOwner(inst: TaskInstance): boolean {
-    return inst.ownerId === userId; // ownerUserId not currently passed down — rule.ownerId is the proxy
+    const effectiveOwner = inst.ownerUserId ?? inst.ownerId;
+    return effectiveOwner === userId;
   }
 
   function TaskRow({ inst, showOwner }: { inst: TaskInstance; showOwner: boolean }) {
@@ -634,10 +650,24 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
       <div id="my-tasks" className="max-w-5xl space-y-1 mb-6">
         <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
           <h2 className="text-base font-semibold text-gray-900 dark:text-white">
-            My Tasks
+            {role === "ADMIN" && showMyTasksOnly ? "My Tasks" : role === "ADMIN" ? "All Tasks" : "My Tasks"}
           </h2>
           {role === "ADMIN" && (
             <div className="flex items-center gap-2">
+              <div className="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden text-xs">
+                <button
+                  onClick={() => setShowMyTasksOnly(true)}
+                  className={`px-3 py-1.5 font-medium transition-colors ${showMyTasksOnly ? "bg-[#C41E3A] text-white" : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
+                >
+                  My tasks
+                </button>
+                <button
+                  onClick={() => setShowMyTasksOnly(false)}
+                  className={`px-3 py-1.5 font-medium transition-colors ${!showMyTasksOnly ? "bg-[#C41E3A] text-white" : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
+                >
+                  Everyone
+                </button>
+              </div>
               <select
                 className="text-xs border border-gray-200 dark:border-gray-700 rounded-md px-2 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
                 value={facilityFilter}
@@ -699,20 +729,20 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
             />
           </>
         )}
-        {role === "ADMIN" && skippedInstances.length > 0 && (
+        {role === "ADMIN" && filteredSkipped.length > 0 && (
           <div className="mb-1 mt-2">
             <button
               onClick={() => setExpandedSkipped((v) => !v)}
               className="w-full flex items-center justify-between px-4 py-2 bg-gray-100 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400 rounded-t-lg cursor-pointer hover:opacity-90"
             >
               <span className="text-sm font-semibold">
-                Skipped ({skippedInstances.length})
+                Skipped ({filteredSkipped.length})
               </span>
               {expandedSkipped ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
             {expandedSkipped && (
               <div className="border border-t-0 border-gray-200 dark:border-gray-700 rounded-b-lg overflow-hidden bg-white dark:bg-gray-900">
-                {skippedInstances.map((inst) => (
+                {filteredSkipped.map((inst) => (
                   <SkippedTaskRow key={inst.id} inst={inst} />
                 ))}
               </div>
