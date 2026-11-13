@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { PreOpShift, PreOpStatus } from "@/generated/prisma";
-import { autoCompleteFormLinkedTasks } from "@/lib/tasks";
 import { completeRuleInstanceForSubmission } from "@/lib/task-completion";
 import { toPacificDateStr } from "@/lib/pacific-time";
 
@@ -156,7 +155,6 @@ export async function POST(req: NextRequest) {
       select: { id: true, status: true },
     });
 
-    try { await autoCompleteFormLinkedTasks({ formType: "pre_op", submittingUserId: user.id, submittedAt: new Date(), submissionId: row.id, prismaClient: prisma }); } catch (e) { console.error("[task auto-complete] pre_op:", e); }
     try { await completeRuleInstanceForSubmission({ formKey: "preop", submissionId: row.id, userId: user.id, submissionDate: toPacificDateStr(new Date(date! + "T12:00:00Z")), taskId: body.taskId ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] preop:", e); }
 
     return NextResponse.json({ id: row.id, status: row.status }, { status: 201 });

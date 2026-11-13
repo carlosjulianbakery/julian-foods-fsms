@@ -4,7 +4,6 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { CleaningArea, CleaningStatus } from "@/generated/prisma";
 import { Prisma } from "@/generated/prisma";
-import { autoCompleteFormLinkedTasks } from "@/lib/tasks";
 import { completeRuleInstanceForSubmission } from "@/lib/task-completion";
 import { toPacificDateStr } from "@/lib/pacific-time";
 
@@ -78,7 +77,6 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      try { await autoCompleteFormLinkedTasks({ formType: "daily_cleaning", submittingUserId: user.id, submittedAt: new Date(), submissionId: record.id, prismaClient: prisma }); } catch (e) { console.error("[task auto-complete] daily_cleaning:", e); }
       try { await completeRuleInstanceForSubmission({ formKey: "daily_cleaning", submissionId: record.id, userId: user.id, submissionDate: toPacificDateStr(new Date(date + "T12:00:00Z")), taskId: body.taskId ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] daily_cleaning:", e); }
 
       return NextResponse.json(record, { status: 201 });
@@ -116,7 +114,6 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    try { await autoCompleteFormLinkedTasks({ formType: "daily_cleaning", submittingUserId: user.id, submittedAt: new Date(), submissionId: record.id, prismaClient: prisma }); } catch (e) { console.error("[task auto-complete] daily_cleaning:", e); }
     try { await completeRuleInstanceForSubmission({ formKey: "daily_cleaning", submissionId: record.id, userId: user.id, submissionDate: toPacificDateStr(new Date(date + "T12:00:00Z")), taskId: body.taskId ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] daily_cleaning:", e); }
 
     return NextResponse.json(record, { status: 201 });
