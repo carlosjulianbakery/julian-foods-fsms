@@ -211,11 +211,14 @@ function DayCell({
       </p>
       <div className="space-y-1">
         {instances.length === 0 && !isPast && (
-          <span className="text-[9px] text-gray-300 italic">No production</span>
+          <span className="text-[9px] text-gray-300 italic">No tasks</span>
         )}
         {instances.map((inst) => (
           <TaskChip key={inst.id} inst={inst} />
         ))}
+        {instances.length > 0 && instances.every(isQuietTask) && (
+          <span className="text-[9px] text-gray-400 italic block">No batch sheets</span>
+        )}
       </div>
     </button>
   );
@@ -320,9 +323,11 @@ function DotsMenu({ options }: { options: { label: string; onClick: () => void; 
 
 // ─── Day panel task card ──────────────────────────────────────────────────────
 
+type ProductionItem = {product_name: string; base_unit_count: number | null; base_unit_label: string | null; comments: string | null};
+
 function PanelTaskCard({
   inst, today, role, userId, isStartable,
-  startingId, actionId, isPending,
+  startingId, actionId, isPending, productionItems,
   onStart, onMarkDone, onMarkMissed, onSkip, onReopen,
 }: {
   inst: TaskInstance;
@@ -333,6 +338,7 @@ function PanelTaskCard({
   startingId: string | null;
   actionId: string | null;
   isPending: boolean;
+  productionItems?: ProductionItem[];
   onStart: (i: TaskInstance) => void;
   onMarkDone: (i: TaskInstance) => void;
   onMarkMissed: (i: TaskInstance) => void;
@@ -376,6 +382,20 @@ function PanelTaskCard({
             <>
               <p className="text-sm font-bold text-gray-900">{batchParsed.product}</p>
               {batchParsed.qty && <p className="text-xs text-gray-500">{batchParsed.qty} · Due end of day</p>}
+              {(() => {
+                const prodItem = productionItems?.find(p =>
+                  batchParsed.product.toLowerCase().includes(p.product_name.toLowerCase()) ||
+                  p.product_name.toLowerCase().includes(batchParsed.product.toLowerCase())
+                );
+                if (!prodItem) return null;
+                const bowlInfo = [prodItem.base_unit_count, prodItem.base_unit_label].filter(Boolean).join(" ");
+                return (
+                  <p className="text-[11px] text-indigo-600 mt-0.5">
+                    {bowlInfo && `${bowlInfo}`}
+                    {prodItem.comments && ` · ${prodItem.comments}`}
+                  </p>
+                );
+              })()}
             </>
           ) : (
             <p className="text-sm font-bold text-gray-900">{inst.ruleTitle}</p>
@@ -432,13 +452,14 @@ function PanelTaskCard({
 
 function DayPanel({
   date, instances, today, role, userId,
-  onClose, onRefresh,
+  productionItems, onClose, onRefresh,
 }: {
   date: string;
   instances: TaskInstance[];
   today: string;
   role: string;
   userId: string;
+  productionItems?: ProductionItem[];
   onClose: () => void;
   onRefresh: () => void;
 }) {
@@ -559,6 +580,7 @@ function DayPanel({
                   startingId={startingId}
                   actionId={actionId}
                   isPending={isPending}
+                  productionItems={productionItems}
                   onStart={handleStart}
                   onMarkDone={(i) => setDoneInst(i)}
                   onMarkMissed={(i) => setMissedInst(i)}
@@ -602,6 +624,10 @@ export function TaskCalendar({
   const [instances, setInstances] = useState<TaskInstance[]>(initialInstances);
   const [loading, setLoading] = useState(false);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  const [showWeekend, setShowWeekend] = useState(false);
+  const [facilityFilter, setFacilityFilter] = useState<string | null>(null);
+  const [outOfSyncNote, setOutOfSyncNote] = useState<"this" | "next" | null>(null);
+  const productionDataRef = useRef<Map<string, Array<{product_name: string; base_unit_count: number | null; base_unit_label: string | null; comments: string | null}>>>(new Map());
 
   // Determine range to fetch for current view
   const currentRange = useCallback((): { from: string; to: string } => {
@@ -646,6 +672,7 @@ export function TaskCalendar({
   async function goWeek(delta: number) {
     const next = addDaysToDateStr(weekStart, delta * 7);
     setWeekStart(next);
+    window.dispatchEvent(new CustomEvent("calendar-week-changed", { detail: { weekStart: next } }));
     await fetchRange(next, addDaysToDateStr(next, 6));
   }
 
@@ -653,6 +680,7 @@ export function TaskCalendar({
   async function goToday() {
     const mon = getMondayOf(today);
     setWeekStart(mon);
+    window.dispatchEvent(new CustomEvent("calendar-week-changed", { detail: { weekStart: mon } }));
     if (view === "week") {
       await fetchRange(mon, addDaysToDateStr(mon, 6));
     } else {
@@ -680,6 +708,7 @@ export function TaskCalendar({
     if (v === "week") {
       const mon = getMondayOf(today);
       setWeekStart(mon);
+      window.dispatchEvent(new CustomEvent("calendar-week-changed", { detail: { weekStart: mon } }));
       await fetchRange(mon, addDaysToDateStr(mon, 6));
     } else {
       const [y, m] = today.split("-");
@@ -691,7 +720,15 @@ export function TaskCalendar({
   }
 
   // Get instances for a specific day
-  const dayInstances = (date: string) => instances.filter((i) => i.dueDate === date);
+  const dayInstances = (date: string) => {
+    let insts = instances.filter((i) => i.dueDate === date);
+    if (facilityFilter && role === "ADMIN") {
+      insts = facilityFilter === "624"
+        ? insts.filter(i => i.facilityName.includes("624"))
+        : insts.filter(i => !i.facilityName.includes("624"));
+    }
+    return insts;
+  };
 
   // Panel refresh — refetch current range
   const handleRefresh = useCallback(() => {
@@ -699,13 +736,66 @@ export function TaskCalendar({
     fetchRange(from, to);
   }, [currentRange, fetchRange]);
 
+  // Sync with ProductionScheduleCard via window custom events
+  useEffect(() => {
+    const handleProductionWeek = (e: Event) => {
+      const { week } = (e as CustomEvent<{week: "this" | "next"}>).detail;
+      const mon = getMondayOf(today);
+      const target = week === "next" ? addDaysToDateStr(mon, 7) : mon;
+      setWeekStart(target);
+      setView("week");
+      setOutOfSyncNote(null);
+      fetchRange(target, addDaysToDateStr(target, 6));
+    };
+    const handleProductionFacility = (e: Event) => {
+      if (role !== "ADMIN") return;
+      const { tab } = (e as CustomEvent<{tab: string | null}>).detail;
+      setFacilityFilter(tab);
+    };
+    const handleProductionDataLoaded = (e: Event) => {
+      const { days } = (e as CustomEvent<{days: Array<{isoDate: string; items: Array<{product_name: string; base_unit_count: number | null; base_unit_label: string | null; comments: string | null}>}>}>).detail;
+      days.forEach(({ isoDate, items }) => productionDataRef.current.set(isoDate, items));
+    };
+    const handleProductionProductClicked = (e: Event) => {
+      const { isoDate } = (e as CustomEvent<{isoDate: string}>).detail;
+      const mon = getMondayOf(isoDate);
+      setWeekStart(mon);
+      setView("week");
+      setSelectedDay(isoDate);
+      fetchRange(mon, addDaysToDateStr(mon, 6));
+    };
+    window.addEventListener("production-week-changed", handleProductionWeek);
+    window.addEventListener("production-facility-changed", handleProductionFacility);
+    window.addEventListener("production-data-loaded", handleProductionDataLoaded);
+    window.addEventListener("production-product-clicked", handleProductionProductClicked);
+    return () => {
+      window.removeEventListener("production-week-changed", handleProductionWeek);
+      window.removeEventListener("production-facility-changed", handleProductionFacility);
+      window.removeEventListener("production-data-loaded", handleProductionDataLoaded);
+      window.removeEventListener("production-product-clicked", handleProductionProductClicked);
+    };
+  }, [today, role, fetchRange]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // ── Week view ──────────────────────────────────────────────────────────────
   const weekDays = getWeekDays(weekStart);
   const isCurrentWeek = weekStart === getMondayOf(today);
+  const weekendDaysWithTasks = weekDays.slice(4).filter(d => dayInstances(d).length > 0);
+  const showWeekendCols = showWeekend || weekendDaysWithTasks.length > 0;
+  const visibleWeekDays = showWeekendCols ? weekDays : weekDays.slice(0, 4);
 
   // ── Month view ─────────────────────────────────────────────────────────────
   const { days: monthDays } = getMonthBounds(monthStart);
   const isCurrentMonth = monthStart === `${today.slice(0, 7)}-01`;
+  const monthHasWeekendTasks = monthDays.some(d => {
+    const dow = new Date(d + "T12:00:00Z").getUTCDay();
+    return (dow === 0 || dow === 6) && dayInstances(d).length > 0;
+  });
+  const showMonthWeekend = showWeekend || monthHasWeekendTasks;
+  const visibleMonthDays = showMonthWeekend ? monthDays : monthDays.filter(d => {
+    const dow = new Date(d + "T12:00:00Z").getUTCDay();
+    return dow !== 0 && dow !== 6;
+  });
+  const visibleDOWLabels = showMonthWeekend ? DOW_LABELS : DOW_LABELS.slice(0, 5);
 
   return (
     <div>
@@ -743,10 +833,35 @@ export function TaskCalendar({
           )}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           {loading && (
             <span className="text-xs text-gray-400">Loading…</span>
           )}
+          {/* Facility filter chip (admin only) */}
+          {role === "ADMIN" && facilityFilter && (
+            <button
+              onClick={() => setFacilityFilter(null)}
+              className="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-medium rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200 hover:bg-indigo-100 transition-colors"
+              title="Clear facility filter"
+            >
+              {facilityFilter === "624" ? "624" : "Julian Bakery"}
+              <X className="w-2.5 h-2.5" />
+            </button>
+          )}
+          {/* Weekend toggle */}
+          <button
+            onClick={() => setShowWeekend(v => !v)}
+            className={`px-2 py-1 text-[10px] font-medium rounded-lg border transition-colors ${
+              showWeekend
+                ? "bg-[#C41E3A] text-white border-[#C41E3A]"
+                : (view === "week" ? showWeekendCols : showMonthWeekend) && !showWeekend
+                ? "border-gray-300 text-gray-500 bg-gray-50"
+                : "border-gray-200 text-gray-400 hover:bg-gray-50"
+            }`}
+            title={showWeekend ? "Hide Fri–Sun" : "Show Fri–Sun"}
+          >
+            {showWeekend ? "Hide Fri–Sun" : "+ Fri–Sun"}
+          </button>
           {/* Week/Month toggle */}
           <div className="flex rounded-lg border border-gray-200 overflow-hidden text-xs">
             <button
@@ -765,13 +880,21 @@ export function TaskCalendar({
         </div>
       </div>
 
+      {/* Out-of-sync note */}
+      {outOfSyncNote && view === "week" && (
+        <p className="text-[10px] text-gray-400 italic mb-2">
+          Production schedule shows {outOfSyncNote} week only
+        </p>
+      )}
+
       {/* Week view */}
       {view === "week" && (
         <div className="overflow-x-auto pb-1">
-          <div className="min-w-[560px]">
+          <div style={{ minWidth: `${visibleWeekDays.length * 80}px` }}>
             {/* Day headers */}
-            <div className="grid grid-cols-7 gap-1 mb-1">
-              {weekDays.map((day, i) => {
+            <div className="gap-1 mb-1" style={{ display: "grid", gridTemplateColumns: `repeat(${visibleWeekDays.length}, minmax(0, 1fr))` }}>
+              {visibleWeekDays.map((day) => {
+                const i = weekDays.indexOf(day);
                 const isToday = day === today;
                 const isWeekend = i >= 5;
                 return (
@@ -784,8 +907,8 @@ export function TaskCalendar({
               })}
             </div>
             {/* Day cells */}
-            <div className="grid grid-cols-7 gap-1">
-              {weekDays.map((day) => (
+            <div className="gap-1" style={{ display: "grid", gridTemplateColumns: `repeat(${visibleWeekDays.length}, minmax(0, 1fr))` }}>
+              {visibleWeekDays.map((day) => (
                 <DayCell
                   key={day}
                   date={day}
@@ -803,18 +926,18 @@ export function TaskCalendar({
       {/* Month view */}
       {view === "month" && (
         <div className="overflow-x-auto pb-1">
-          <div className="min-w-[480px]">
+          <div style={{ minWidth: `${(showMonthWeekend ? 7 : 5) * 70}px` }}>
             {/* Day-of-week header */}
-            <div className="grid grid-cols-7 gap-1 mb-1">
-              {DOW_LABELS.map((label) => (
+            <div className="gap-1 mb-1" style={{ display: "grid", gridTemplateColumns: `repeat(${showMonthWeekend ? 7 : 5}, minmax(0, 1fr))` }}>
+              {visibleDOWLabels.map((label) => (
                 <div key={label} className="text-center text-[10px] font-bold uppercase tracking-wide py-1 text-gray-400">
                   {label}
                 </div>
               ))}
             </div>
             {/* Month grid */}
-            <div className="grid grid-cols-7 gap-1">
-              {monthDays.map((day) => {
+            <div className="gap-1" style={{ display: "grid", gridTemplateColumns: `repeat(${showMonthWeekend ? 7 : 5}, minmax(0, 1fr))` }}>
+              {visibleMonthDays.map((day) => {
                 const insts = dayInstances(day);
                 const urgent = mostUrgentStatus(insts);
                 const isToday = day === today;
@@ -872,6 +995,7 @@ export function TaskCalendar({
           today={today}
           role={role}
           userId={userId}
+          productionItems={productionDataRef.current.get(selectedDay)}
           onClose={() => setSelectedDay(null)}
           onRefresh={handleRefresh}
         />

@@ -1597,11 +1597,11 @@ function InventoryAuditCard() {
 function AdminDashboard({ data }: { data: AdminData }) {
   return (
     <>
+      <ProductionScheduleCard />
       <QuickStatsCard stats={data.quick_stats} />
       <StorageDashboardTile />
       <InventoryAuditCard />
       {data.active_draft && <ActiveDraftCard draft={data.active_draft} />}
-      <ProductionScheduleCard />
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
         <div className="lg:col-span-3">
           <TodayActivityCard activity={data.today_activity} />

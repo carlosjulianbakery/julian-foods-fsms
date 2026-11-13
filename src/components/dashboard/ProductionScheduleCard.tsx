@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import {
   Calendar,
   RefreshCw,
@@ -10,6 +10,23 @@ import {
   CheckCircle2,
   AlertCircle,
 } from "lucide-react";
+import { getPacificToday, addDaysToDateStr } from "@/lib/pacific-time";
+
+function getMondayOf(dateStr: string): string {
+  const d = new Date(dateStr + "T12:00:00Z");
+  const dow = d.getUTCDay();
+  const daysBack = dow === 0 ? -6 : 1 - dow;
+  const result = new Date(d);
+  result.setUTCDate(d.getUTCDate() + daysBack);
+  return result.toISOString().slice(0, 10);
+}
+
+function parseWeekStartISO(weekLabel: string): string | null {
+  const match = weekLabel.match(/(\d+)\/(\d+)\s*[–-]\s*\d+\/\d+\/(\d+)/);
+  if (!match) return null;
+  const [, m, dayStr, y] = match;
+  return `${y}-${m.padStart(2, "0")}-${dayStr.padStart(2, "0")}`;
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -159,7 +176,7 @@ function ScheduleSkeleton() {
 
 // ─── Day column ───────────────────────────────────────────────────────────────
 
-function DayColumn({ day }: { day: DaySchedule }) {
+function DayColumn({ day, isoDate }: { day: DaySchedule; isoDate?: string }) {
   const badge = getDaySummary(day.items);
   return (
     <div className="min-w-0">
@@ -184,8 +201,11 @@ function DayColumn({ day }: { day: DaySchedule }) {
                 ) : item.item_type === "unmatched_production" ? (
                   <p className="text-gray-400">{item.raw_text}</p>
                 ) : (
-                  <div className="flex items-start gap-1.5">
-                    <StatusIcon status={item.status} className="w-3 h-3 mt-0.5" />
+                  <button
+                    onClick={() => isoDate && window.dispatchEvent(new CustomEvent("production-product-clicked", { detail: { isoDate } }))}
+                    className={`flex items-start gap-1.5 text-left w-full ${isoDate ? "hover:opacity-70 transition-opacity cursor-pointer" : ""}`}
+                  >
+                    <StatusIcon status={item.status} className="w-3 h-3 mt-0.5 shrink-0" />
                     <div className="min-w-0">
                       <span className="text-gray-700 font-medium">
                         {item.product_name}
@@ -201,7 +221,7 @@ function DayColumn({ day }: { day: DaySchedule }) {
                         <p className="text-gray-400 text-[11px] mt-0.5">{item.comments}</p>
                       )}
                     </div>
-                  </div>
+                  </button>
                 )}
               </li>
             ))}
@@ -221,7 +241,9 @@ export function ProductionScheduleCard() {
   const [refreshing, setRefreshing] = useState(false);
   const [activeWeekTab, setActiveWeekTab] = useState<"this" | "next">("this");
   const [sheetTab, setSheetTab] = useState<SheetTab>("julian-bakery");
+  const [outOfSyncNote, setOutOfSyncNote] = useState<"this" | "next" | null>(null);
   const [, forceUpdate] = useState(0);
+  const isFirstWeekRender = useRef(true);
 
   // Re-render every minute to keep "X min ago" fresh
   useEffect(() => {
@@ -239,6 +261,19 @@ export function ProductionScheduleCard() {
       const res = await fetch(url);
       const json: ScheduleData = await res.json();
       setDataByTab((prev) => ({ ...prev, [tab]: json }));
+      // Dispatch production data for TaskCalendar cross-reference
+      const days: Array<{isoDate: string; items: ScheduleItem[]}> = [];
+      for (const week of [json.this_week, json.next_week]) {
+        if (!week) continue;
+        const startISO = parseWeekStartISO(week.week_label);
+        if (!startISO) continue;
+        week.days.forEach((day, i) => {
+          days.push({ isoDate: addDaysToDateStr(startISO, i), items: day.items });
+        });
+      }
+      if (days.length > 0) {
+        window.dispatchEvent(new CustomEvent("production-data-loaded", { detail: { days } }));
+      }
     } catch {
       setDataByTab((prev) => {
         const existing = prev[tab];
@@ -256,8 +291,36 @@ export function ProductionScheduleCard() {
     load("julian-bakery");
   }, [load]);
 
+  // Listen for TaskCalendar week navigation
+  useEffect(() => {
+    const today = getPacificToday();
+    const thisMonday = getMondayOf(today);
+    const nextMonday = addDaysToDateStr(thisMonday, 7);
+    const handleCalendarWeek = (e: Event) => {
+      const { weekStart } = (e as CustomEvent<{weekStart: string}>).detail;
+      if (weekStart === thisMonday) {
+        setActiveWeekTab("this");
+        setOutOfSyncNote(null);
+      } else if (weekStart === nextMonday) {
+        setActiveWeekTab("next");
+        setOutOfSyncNote(null);
+      } else {
+        setOutOfSyncNote(weekStart < thisMonday ? "this" : "next");
+      }
+    };
+    window.addEventListener("calendar-week-changed", handleCalendarWeek);
+    return () => window.removeEventListener("calendar-week-changed", handleCalendarWeek);
+  }, []);
+
+  // Dispatch production-week-changed when activeWeekTab changes (skip first render)
+  useEffect(() => {
+    if (isFirstWeekRender.current) { isFirstWeekRender.current = false; return; }
+    window.dispatchEvent(new CustomEvent("production-week-changed", { detail: { week: activeWeekTab } }));
+  }, [activeWeekTab]);
+
   const handleSheetTabChange = useCallback((tab: SheetTab) => {
     setSheetTab(tab);
+    window.dispatchEvent(new CustomEvent("production-facility-changed", { detail: { tab } }));
     // Fetch if we don't have data yet for this tab
     if (!dataByTab[tab]) {
       load(tab);
@@ -369,6 +432,11 @@ export function ProductionScheduleCard() {
             {data.last_fetched ? minutesAgo(data.last_fetched) : "unknown"}
           </div>
         )}
+        {outOfSyncNote && (
+          <p className="text-[10px] text-gray-400 italic mt-1.5">
+            Production schedule shows {outOfSyncNote} week only
+          </p>
+        )}
       </div>
 
       {/* Body */}
@@ -399,9 +467,11 @@ export function ProductionScheduleCard() {
           </div>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-5">
-            {activeWeek.days.map((day) => (
-              <DayColumn key={day.day} day={day} />
-            ))}
+            {activeWeek.days.map((day, i) => {
+              const startISO = parseWeekStartISO(activeWeek.week_label);
+              const isoDate = startISO ? addDaysToDateStr(startISO, i) : undefined;
+              return <DayColumn key={day.day} day={day} isoDate={isoDate} />;
+            })}
           </div>
         )}
       </div>
