@@ -1,9 +1,14 @@
 "use client";
-import { useState, useTransition, useRef } from "react";
+import { useState, useTransition, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronDown, ChevronUp, Play, AlertTriangle, X } from "lucide-react";
+import {
+  Play, AlertTriangle, X, MoreHorizontal, CheckCircle2,
+  ChevronDown, ChevronUp, Users2, Brush, FlaskConical,
+} from "lucide-react";
 import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
 import { addDaysToDateStr } from "@/lib/pacific-time";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface TaskInstance {
   id: string;
@@ -35,9 +40,32 @@ interface Props {
   skippedInstances: TaskInstance[];
   role: string;
   userId: string;
+  firstName: string;
   facilities: { id: string; name: string }[];
   owners: { id: string; name: string }[];
   today: string; // YYYY-MM-DD
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function getPacificGreeting(firstName: string): string {
+  const h = parseInt(
+    new Date().toLocaleString("en-US", {
+      timeZone: "America/Los_Angeles",
+      hour: "numeric",
+      hour12: false,
+    }),
+    10,
+  );
+  const salutation = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+  return `${salutation}, ${firstName}`;
+}
+
+function formatBigDate(today: string): string {
+  const [y, m, d] = today.split("-");
+  const dt = new Date(`${today}T12:00:00Z`);
+  const weekday = dt.toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" });
+  return `${weekday}, ${m}/${d}/${y}`;
 }
 
 function formatDueDate(dateStr: string): string {
@@ -46,16 +74,17 @@ function formatDueDate(dateStr: string): string {
 }
 
 function formatCompletedAt(isoStr: string): string {
-  const d = new Date(isoStr);
-  return d.toLocaleString("en-US", {
-    timeZone: "America/Los_Angeles",
-    month: "2-digit",
-    day: "2-digit",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  }) + " PT";
+  return (
+    new Date(isoStr).toLocaleString("en-US", {
+      timeZone: "America/Los_Angeles",
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    }) + " PT"
+  );
 }
 
 function daysOverdue(dueDateStr: string, today: string): number {
@@ -64,33 +93,22 @@ function daysOverdue(dueDateStr: string, today: string): number {
   return Math.max(0, Math.floor((tod.getTime() - due.getTime()) / (1000 * 60 * 60 * 24)));
 }
 
-function statusPill(status: string) {
-  const styles: Record<string, string> = {
-    UPCOMING: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
-    DUE_TODAY: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300",
-    IN_PROGRESS: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300",
-    DONE: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
-    OVERDUE: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
-    MISSED: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
-    SKIPPED: "bg-gray-100 text-gray-500",
-  };
-  return styles[status] ?? "bg-gray-100 text-gray-500";
+function parseBatchLabel(label: string): { product: string; qty: string | null } {
+  const match = label.match(/^(.+?)\s+\((\d+\s*\S+)\)$/);
+  if (match) return { product: match[1], qty: match[2] };
+  return { product: label, qty: null };
 }
 
-function statusLabel(status: string): string {
-  const labels: Record<string, string> = {
-    UPCOMING: "Upcoming",
-    DUE_TODAY: "Due Today",
-    IN_PROGRESS: "In Progress",
-    DONE: "Done",
-    OVERDUE: "Overdue",
-    MISSED: "Missed",
-    SKIPPED: "Skipped",
-  };
-  return labels[status] ?? status;
+function isQuietTask(inst: TaskInstance): boolean {
+  return (
+    inst.formKey === "pre_op" ||
+    /daily.?clean/i.test(inst.ruleTitle) ||
+    /pre-?op/i.test(inst.ruleTitle)
+  );
 }
 
-// Modal for "Mark as done" (manual tasks)
+// ─── Modals ───────────────────────────────────────────────────────────────────
+
 function MarkDoneModal({
   inst,
   onClose,
@@ -103,44 +121,35 @@ function MarkDoneModal({
   const [note, setNote] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  async function handleSubmit() {
-    if (note.trim().length < 10) return;
-    setSubmitting(true);
-    onConfirm(note.trim());
-  }
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
-      <div
-        className="bg-white dark:bg-gray-900 rounded-xl shadow-xl w-full max-w-md p-6"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base font-semibold text-gray-900 dark:text-white">Mark as Done</h3>
+          <h3 className="text-base font-semibold text-gray-900">Mark as Done</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
         </div>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+        <p className="text-sm text-gray-600 mb-1">
           <span className="font-medium">{inst.ruleTitle}</span>
           {inst.label && <span> — {inst.label}</span>}
           <span> (due {formatDueDate(inst.dueDate)})</span>
         </p>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mt-4 mb-1">
+        <label className="block text-sm font-medium text-gray-700 mt-4 mb-1">
           Completion note <span className="text-gray-400 font-normal">(min 10 characters)</span>
         </label>
         <textarea
           value={note}
           onChange={(e) => setNote(e.target.value)}
           rows={3}
-          className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none focus:outline-none focus:ring-2 focus:ring-[#C41E3A]"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white text-gray-900 resize-none focus:outline-none focus:ring-2 focus:ring-[#C41E3A]"
           placeholder="Describe what was done…"
         />
         <p className="text-xs text-gray-400 mt-1">{note.trim().length}/10 minimum</p>
         <div className="flex justify-end gap-2 mt-4">
-          <button onClick={onClose} className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
+          <button onClick={onClose} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
             Cancel
           </button>
           <button
-            onClick={handleSubmit}
+            onClick={() => { if (note.trim().length < 10) return; setSubmitting(true); onConfirm(note.trim()); }}
             disabled={note.trim().length < 10 || submitting}
             className="px-4 py-2 text-sm font-medium text-white bg-[#C41E3A] hover:bg-[#a3172f] rounded-lg disabled:opacity-50"
           >
@@ -152,7 +161,6 @@ function MarkDoneModal({
   );
 }
 
-// Modal for "Skip task"
 function SkipModal({
   inst,
   onClose,
@@ -165,44 +173,32 @@ function SkipModal({
   const [reason, setReason] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  async function handleSubmit() {
-    if (reason.trim().length < 10) return;
-    setSubmitting(true);
-    onConfirm(reason.trim());
-  }
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
-      <div
-        className="bg-white dark:bg-gray-900 rounded-xl shadow-xl w-full max-w-md p-6"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base font-semibold text-gray-900 dark:text-white">Skip Task</h3>
+          <h3 className="text-base font-semibold text-gray-900">Skip Task</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
         </div>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+        <p className="text-sm text-gray-600 mb-1">
           <span className="font-medium">{inst.ruleTitle}</span>
           {inst.label && <span> — {inst.label}</span>}
-          <span> (due {formatDueDate(inst.dueDate)})</span>
         </p>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mt-4 mb-1">
+        <label className="block text-sm font-medium text-gray-700 mt-4 mb-1">
           Reason <span className="text-gray-400 font-normal">(min 10 characters)</span>
         </label>
         <textarea
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           rows={3}
-          className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none focus:outline-none focus:ring-2 focus:ring-[#C41E3A]"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white text-gray-900 resize-none focus:outline-none focus:ring-2 focus:ring-[#C41E3A]"
           placeholder="Explain why this task is being skipped…"
         />
         <p className="text-xs text-gray-400 mt-1">{reason.trim().length}/10 minimum</p>
         <div className="flex justify-end gap-2 mt-4">
-          <button onClick={onClose} className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
-            Cancel
-          </button>
+          <button onClick={onClose} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">Cancel</button>
           <button
-            onClick={handleSubmit}
+            onClick={() => { if (reason.trim().length < 10) return; setSubmitting(true); onConfirm(reason.trim()); }}
             disabled={reason.trim().length < 10 || submitting}
             className="px-4 py-2 text-sm font-medium text-white bg-[#C41E3A] hover:bg-[#a3172f] rounded-lg disabled:opacity-50"
           >
@@ -214,7 +210,6 @@ function SkipModal({
   );
 }
 
-// Modal for "Mark as missed"
 function MarkMissedModal({
   inst,
   onClose,
@@ -228,28 +223,18 @@ function MarkMissedModal({
   const [submitting, setSubmitting] = useState(false);
   const textRef = useRef<HTMLTextAreaElement>(null);
 
-  async function handleSubmit() {
-    if (reason.trim().length < 10) return;
-    setSubmitting(true);
-    onConfirm(reason.trim());
-  }
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
-      <div
-        className="bg-white dark:bg-gray-900 rounded-xl shadow-xl w-full max-w-md p-6"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base font-semibold text-gray-900 dark:text-white">Mark as Missed</h3>
+          <h3 className="text-base font-semibold text-gray-900">Mark as Missed</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
         </div>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+        <p className="text-sm text-gray-600 mb-1">
           <span className="font-medium">{inst.ruleTitle}</span>
           {inst.label && <span> — {inst.label}</span>}
-          <span> (due {formatDueDate(inst.dueDate)})</span>
         </p>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mt-4 mb-1">
+        <label className="block text-sm font-medium text-gray-700 mt-4 mb-1">
           Reason <span className="text-gray-400 font-normal">(min 10 characters)</span>
         </label>
         <textarea
@@ -257,16 +242,14 @@ function MarkMissedModal({
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           rows={3}
-          className="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none focus:outline-none focus:ring-2 focus:ring-[#C41E3A]"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white text-gray-900 resize-none focus:outline-none focus:ring-2 focus:ring-[#C41E3A]"
           placeholder="Explain why this task was missed…"
         />
         <p className="text-xs text-gray-400 mt-1">{reason.trim().length}/10 minimum</p>
         <div className="flex justify-end gap-2 mt-4">
-          <button onClick={onClose} className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
-            Cancel
-          </button>
+          <button onClick={onClose} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">Cancel</button>
           <button
-            onClick={handleSubmit}
+            onClick={() => { if (reason.trim().length < 10) return; setSubmitting(true); onConfirm(reason.trim()); }}
             disabled={reason.trim().length < 10 || submitting}
             className="px-4 py-2 text-sm font-medium text-white bg-[#C41E3A] hover:bg-[#a3172f] rounded-lg disabled:opacity-50"
           >
@@ -278,14 +261,501 @@ function MarkMissedModal({
   );
 }
 
-export function MyTasksClient({ instances, skippedInstances, role, userId, facilities, owners, today }: Props) {
+// ─── Hero Header ──────────────────────────────────────────────────────────────
+
+function HeroHeader({
+  today,
+  firstName,
+  overdue,
+  dueToday,
+  inProgress,
+  doneToday,
+  role,
+  showMyTasksOnly,
+  setShowMyTasksOnly,
+  nextUpcoming,
+}: {
+  today: string;
+  firstName: string;
+  overdue: TaskInstance[];
+  dueToday: TaskInstance[];
+  inProgress: TaskInstance[];
+  doneToday: TaskInstance[];
+  role: string;
+  showMyTasksOnly: boolean;
+  setShowMyTasksOnly: (v: boolean) => void;
+  nextUpcoming: TaskInstance | null;
+}) {
+  const [greeting, setGreeting] = useState("");
+  useEffect(() => { setGreeting(getPacificGreeting(firstName)); }, [firstName]);
+
+  const totalActive = overdue.length + dueToday.length + inProgress.length;
+  const totalToday = totalActive + doneToday.length;
+  const allDone = totalActive === 0 && doneToday.length > 0;
+  const nothingToday = totalToday === 0;
+  const pct = totalToday > 0 ? Math.round((doneToday.length / totalToday) * 100) : 0;
+
+  // Summary line
+  let summary = "";
+  if (nothingToday) {
+    summary = "Nothing due today.";
+  } else if (allDone) {
+    summary = `All ${doneToday.length} task${doneToday.length !== 1 ? "s" : ""} complete — great work!`;
+  } else {
+    const parts: string[] = [];
+    const todayCount = dueToday.length + inProgress.length;
+    if (todayCount > 0) parts.push(`${todayCount} task${todayCount !== 1 ? "s" : ""} today`);
+    if (overdue.length > 0) parts.push(`${overdue.length} overdue`);
+    summary = parts.join(", ");
+  }
+
+  // Admin team strip: users with overdue tasks (only in "Everyone" mode)
+  const teamStrip: { id: string; name: string; count: number }[] = [];
+  if (role === "ADMIN" && !showMyTasksOnly && overdue.length > 0) {
+    const map = new Map<string, { name: string; count: number }>();
+    for (const inst of overdue) {
+      const eid = inst.ownerUserId ?? inst.ownerId;
+      const existing = map.get(eid);
+      if (existing) existing.count++;
+      else map.set(eid, { name: inst.ownerName, count: 1 });
+    }
+    map.forEach((v, k) => teamStrip.push({ id: k, name: v.name, count: v.count }));
+    teamStrip.sort((a, b) => b.count - a.count);
+  }
+
+  return (
+    <div
+      className={`rounded-2xl mb-6 p-5 md:p-6 border transition-colors ${
+        allDone
+          ? "bg-green-50 border-green-200"
+          : "bg-white border-gray-200 shadow-sm"
+      }`}
+    >
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+        {/* Left: greeting + date + summary */}
+        <div className="flex-1 min-w-0">
+          <p className={`text-sm font-medium mb-0.5 ${allDone ? "text-green-700" : "text-gray-500"}`}>
+            {greeting || `Hello, ${firstName}`}
+          </p>
+          <p className={`text-xl md:text-2xl font-bold mb-1 ${allDone ? "text-green-900" : "text-gray-900"}`}>
+            {formatBigDate(today)}
+          </p>
+          <p className={`text-sm ${allDone ? "text-green-700 font-medium" : overdue.length > 0 ? "text-red-600 font-medium" : "text-gray-600"}`}>
+            {summary}
+            {nothingToday && nextUpcoming && (
+              <span className="text-gray-500 font-normal">
+                {" "}Next: {formatDueDate(nextUpcoming.dueDate)}, {nextUpcoming.ruleTitle}
+              </span>
+            )}
+          </p>
+        </div>
+
+        {/* Right: progress + admin toggle */}
+        <div className="flex flex-col items-end gap-3 shrink-0">
+          {/* Progress bar */}
+          {totalToday > 0 && (
+            <div className="flex items-center gap-2">
+              <div className="w-24 md:w-32 h-2 rounded-full bg-gray-100 overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all ${allDone ? "bg-green-500" : "bg-[#C41E3A]"}`}
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+              <span className={`text-xs font-medium tabular-nums ${allDone ? "text-green-600" : "text-gray-500"}`}>
+                {doneToday.length}/{totalToday}
+              </span>
+            </div>
+          )}
+
+          {/* Admin toggle */}
+          {role === "ADMIN" && (
+            <div className="flex rounded-lg border border-gray-200 overflow-hidden text-xs">
+              <button
+                onClick={() => setShowMyTasksOnly(true)}
+                className={`px-3 py-1.5 font-medium transition-colors ${showMyTasksOnly ? "bg-[#C41E3A] text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
+              >
+                My tasks
+              </button>
+              <button
+                onClick={() => setShowMyTasksOnly(false)}
+                className={`px-3 py-1.5 font-medium transition-colors ${!showMyTasksOnly ? "bg-[#C41E3A] text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
+              >
+                Everyone
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* All done badge */}
+      {allDone && (
+        <div className="flex items-center gap-2 mt-3 text-green-700">
+          <CheckCircle2 className="w-4 h-4 shrink-0" />
+          <span className="text-sm font-semibold">All done for today!</span>
+        </div>
+      )}
+
+      {/* Admin team strip — users with overdue */}
+      {teamStrip.length > 0 && (
+        <div className="mt-4 pt-4 border-t border-gray-100">
+          <div className="flex items-center gap-2 mb-2">
+            <Users2 className="w-3.5 h-3.5 text-red-500 shrink-0" />
+            <span className="text-xs font-semibold text-red-600 uppercase tracking-wide">Overdue by team</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {teamStrip.map((u) => (
+              <span
+                key={u.id}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-100"
+              >
+                {u.name}
+                <span className="bg-red-200 text-red-800 rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none">{u.count}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Large Task Card ──────────────────────────────────────────────────────────
+
+function DotsMenu({ options }: { options: { label: string; onClick: () => void; danger?: boolean }[] }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function close(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-10 h-14 flex items-center justify-center rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-500 transition-colors shrink-0"
+        aria-label="More options"
+      >
+        <MoreHorizontal className="w-4 h-4" />
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1 z-30 bg-white rounded-xl shadow-lg border border-gray-100 min-w-[160px] overflow-hidden">
+          {options.map((opt) => (
+            <button
+              key={opt.label}
+              onClick={() => { opt.onClick(); setOpen(false); }}
+              className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors ${opt.danger ? "text-red-600 hover:bg-red-50" : "text-gray-700 hover:bg-gray-50"}`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function HeroTaskCard({
+  inst,
+  isNext,
+  today,
+  role,
+  userId,
+  startingId,
+  actionId,
+  isPending,
+  onStart,
+  onMarkDone,
+  onMarkMissed,
+  onSkip,
+}: {
+  inst: TaskInstance;
+  isNext: boolean;
+  today: string;
+  role: string;
+  userId: string;
+  startingId: string | null;
+  actionId: string | null;
+  isPending: boolean;
+  onStart: (inst: TaskInstance) => void;
+  onMarkDone: (inst: TaskInstance) => void;
+  onMarkMissed: (inst: TaskInstance) => void;
+  onSkip: (inst: TaskInstance) => void;
+}) {
+  const isOverdue = inst.status === "OVERDUE" || inst.status === "MISSED";
+  const isDueToday = inst.status === "DUE_TODAY";
+  const isInProgress = inst.status === "IN_PROGRESS";
+  const isBusy = actionId === inst.id || isPending;
+  const isAdmin = role === "ADMIN";
+  const effectiveOwner = inst.ownerUserId ?? inst.ownerId;
+  const isOwner = effectiveOwner === userId;
+  const isManual = inst.formKey === "manual";
+  const isBatchSheet = inst.formKey === "batch_sheet";
+  const isQuiet = isQuietTask(inst);
+  const days = isOverdue ? daysOverdue(inst.dueDate, today) : 0;
+  const isStartable = ["OVERDUE", "DUE_TODAY", "UPCOMING", "IN_PROGRESS"].includes(inst.status);
+
+  const borderColor = isOverdue
+    ? "border-red-400"
+    : isDueToday
+    ? "border-amber-400"
+    : "border-blue-400";
+  const bgColor = isOverdue
+    ? "bg-red-50/40"
+    : isDueToday
+    ? "bg-amber-50/40"
+    : "bg-blue-50/30";
+  const badgeBg = isOverdue
+    ? "bg-red-100 text-red-700"
+    : isDueToday
+    ? "bg-amber-100 text-amber-700"
+    : "bg-blue-100 text-blue-700";
+
+  // Dots menu options
+  const dotsOptions: { label: string; onClick: () => void; danger?: boolean }[] = [];
+  if (isOverdue && (isAdmin || isOwner)) {
+    dotsOptions.push({ label: "Mark as missed", onClick: () => onMarkMissed(inst), danger: true });
+  }
+  if (isAdmin && inst.status !== "DONE" && inst.status !== "SKIPPED") {
+    dotsOptions.push({ label: "Skip task", onClick: () => onSkip(inst) });
+  }
+
+  // Batch sheet label parsing
+  const batchParsed = isBatchSheet && inst.label ? parseBatchLabel(inst.label) : null;
+
+  return (
+    <div
+      className={`rounded-xl border-l-4 ${borderColor} ${bgColor} border border-l-[inherit] border-gray-100 p-4 md:p-5 transition-shadow hover:shadow-sm`}
+    >
+      <div className="flex items-start gap-3">
+        {/* Icon for quiet tasks */}
+        {isQuiet && (
+          <div className="shrink-0 mt-1">
+            {/pre-?op/i.test(inst.ruleTitle) ? (
+              <FlaskConical className="w-4 h-4 text-gray-400" />
+            ) : (
+              <Brush className="w-4 h-4 text-gray-400" />
+            )}
+          </div>
+        )}
+
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2 mb-1">
+            {isNext && (
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#C41E3A] text-white">
+                Next up
+              </span>
+            )}
+            <span
+              className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${badgeBg}`}
+            >
+              {isOverdue
+                ? days > 0
+                  ? `${days} day${days !== 1 ? "s" : ""} overdue`
+                  : "Overdue"
+                : isDueToday
+                ? "Due today"
+                : "In progress"}
+            </span>
+            {inst.needsAdminReview && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-red-100 text-red-700 shrink-0">
+                <AlertTriangle className="w-3 h-3" />
+                Needs review
+              </span>
+            )}
+          </div>
+
+          {/* Title */}
+          {isBatchSheet && batchParsed ? (
+            <>
+              <p className="text-base font-bold text-gray-900 leading-tight">{batchParsed.product}</p>
+              {batchParsed.qty && (
+                <p className="text-xs text-gray-500 mt-0.5">{batchParsed.qty} · Due end of day</p>
+              )}
+            </>
+          ) : (
+            <>
+              <p className={`text-base font-bold text-gray-900 leading-tight ${isQuiet ? "text-gray-700" : ""}`}>
+                {inst.ruleTitle}
+              </p>
+              {inst.label && inst.label !== inst.ruleTitle && (
+                <p className="text-xs text-gray-500 mt-0.5">{inst.label}</p>
+              )}
+              {isDueToday && (
+                <p className="text-xs text-amber-600 mt-0.5">Due end of day</p>
+              )}
+            </>
+          )}
+
+          {/* Facility + owner */}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1.5 text-xs text-gray-500">
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-600 font-medium text-[11px]">
+              {inst.facilityName}
+            </span>
+            {isAdmin && <span>Owner: {inst.ownerName}</span>}
+            {inst.doneByName && <span>Done by {inst.doneByName}</span>}
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center gap-2 shrink-0">
+          {isStartable && isManual && (
+            <button
+              onClick={() => onMarkDone(inst)}
+              disabled={isBusy}
+              className="inline-flex items-center justify-center px-4 min-h-[56px] rounded-xl bg-[#C41E3A] hover:bg-[#a3172f] text-white text-sm font-semibold transition-colors disabled:opacity-50"
+            >
+              Mark done
+            </button>
+          )}
+          {isStartable && !isManual && (
+            <button
+              onClick={() => onStart(inst)}
+              disabled={startingId === inst.id || isPending}
+              className="inline-flex items-center justify-center gap-1.5 px-4 min-h-[56px] rounded-xl bg-[#C41E3A] hover:bg-[#a3172f] text-white text-sm font-semibold transition-colors disabled:opacity-50"
+            >
+              <Play className="w-4 h-4" />
+              {startingId === inst.id ? "Starting…" : isInProgress ? "Continue" : "Start"}
+            </button>
+          )}
+          {dotsOptions.length > 0 && (
+            <DotsMenu options={dotsOptions} />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Done strip (one-line green) ─────────────────────────────────────────────
+
+function DoneStrip({
+  inst,
+  role,
+  userId,
+  actionId,
+  isPending,
+  onReopen,
+}: {
+  inst: TaskInstance;
+  role: string;
+  userId: string;
+  actionId: string | null;
+  isPending: boolean;
+  onReopen: (inst: TaskInstance) => void;
+}) {
+  const isAdmin = role === "ADMIN";
+  const isBusy = actionId === inst.id || isPending;
+
+  return (
+    <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-green-50 border border-green-100">
+      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
+      <div className="flex-1 min-w-0">
+        <span className="text-sm font-medium text-green-800">{inst.ruleTitle}</span>
+        {inst.label && inst.label !== inst.ruleTitle && (
+          <span className="text-xs text-green-600 ml-1.5">{inst.label}</span>
+        )}
+        {inst.doneAt && (
+          <span className="text-xs text-green-500 ml-2">{formatCompletedAt(inst.doneAt)}</span>
+        )}
+        {inst.completedLate && inst.daysLate != null && inst.daysLate > 0 && (
+          <span className="ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-700">
+            Late {inst.daysLate}d
+          </span>
+        )}
+      </div>
+      <div className="flex items-center gap-2 shrink-0">
+        <span className="text-[11px] font-semibold text-green-600 px-2 py-0.5 rounded-full bg-green-100">Done</span>
+        {isAdmin && (
+          <button
+            onClick={() => onReopen(inst)}
+            disabled={isBusy}
+            className="text-xs text-blue-600 hover:text-blue-800 transition-colors disabled:opacity-50 font-medium"
+          >
+            Reopen
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Skipped task row ─────────────────────────────────────────────────────────
+
+function SkippedTaskRow({
+  inst,
+  actionId,
+  isPending,
+  onReopen,
+}: {
+  inst: TaskInstance;
+  actionId: string | null;
+  isPending: boolean;
+  onReopen: (inst: TaskInstance) => void;
+}) {
+  const isBusy = actionId === inst.id || isPending;
+  const skippedBy = inst.skippedByName?.trim() || "System";
+  const skippedWhen = inst.skippedAt ? formatCompletedAt(inst.skippedAt) : "";
+
+  return (
+    <div className="flex items-start gap-3 px-4 py-3 border-b last:border-b-0 border-gray-100">
+      <div className="flex-1 min-w-0">
+        <div className="flex flex-wrap items-center gap-2 mb-0.5">
+          <span className="font-medium text-sm text-gray-900">{inst.ruleTitle}</span>
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-indigo-100 text-indigo-700 shrink-0">
+            {inst.facilityName}
+          </span>
+        </div>
+        {inst.label && (
+          <p className="text-xs text-gray-500 mb-0.5">{inst.label}</p>
+        )}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-gray-500">
+          <span>Due {formatDueDate(inst.dueDate)}</span>
+          {inst.skipReason && <span>Reason: {inst.skipReason}</span>}
+          <span>Skipped by {skippedBy}</span>
+          {skippedWhen && <span>{skippedWhen}</span>}
+        </div>
+      </div>
+      <div className="flex items-center gap-2 shrink-0">
+        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-gray-100 text-gray-500">
+          Skipped
+        </span>
+        <button
+          onClick={() => onReopen(inst)}
+          disabled={isBusy}
+          className="inline-flex items-center px-2.5 min-h-[44px] rounded-lg border border-blue-300 text-blue-700 hover:bg-blue-50 text-xs font-medium transition-colors disabled:opacity-50 shrink-0"
+        >
+          Reopen
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main export ──────────────────────────────────────────────────────────────
+
+export function MyTasksClient({
+  instances,
+  skippedInstances,
+  role,
+  userId,
+  firstName,
+  facilities,
+  owners,
+  today,
+}: Props) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [facilityFilter, setFacilityFilter] = useState("");
   const [ownerFilter, setOwnerFilter] = useState("");
   const [showMyTasksOnly, setShowMyTasksOnly] = useState(role === "ADMIN");
   const [expandedUpcoming, setExpandedUpcoming] = useState(false);
-  const [expandedDone, setExpandedDone] = useState(false);
   const [expandedSkipped, setExpandedSkipped] = useState(false);
   const [startingId, setStartingId] = useState<string | null>(null);
   const [startError, setStartError] = useState<string | null>(null);
@@ -298,8 +768,7 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
 
   const filtered = instances.filter((i) => {
     if (role === "ADMIN" && showMyTasksOnly) {
-      const effectiveOwner = i.ownerUserId ?? i.ownerId;
-      if (effectiveOwner !== userId) return false;
+      if ((i.ownerUserId ?? i.ownerId) !== userId) return false;
     }
     if (facilityFilter && i.facilityId !== facilityFilter) return false;
     if (ownerFilter && i.ownerId !== ownerFilter) return false;
@@ -308,8 +777,7 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
 
   const filteredSkipped = skippedInstances.filter((i) => {
     if (role === "ADMIN" && showMyTasksOnly) {
-      const effectiveOwner = i.ownerUserId ?? i.ownerId;
-      if (effectiveOwner !== userId) return false;
+      if ((i.ownerUserId ?? i.ownerId) !== userId) return false;
     }
     if (facilityFilter && i.facilityId !== facilityFilter) return false;
     if (ownerFilter && i.ownerId !== ownerFilter) return false;
@@ -322,7 +790,8 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
   const upcoming = filtered.filter((i) => i.status === "UPCOMING");
   const doneToday = filtered.filter((i) => i.status === "DONE");
 
-  const totalActive = overdue.length + dueToday.length + inProgress.length + upcoming.length;
+  const activeTodayCards = [...overdue, ...dueToday, ...inProgress];
+  const nextUpcoming = upcoming[0] ?? null;
 
   function dispatchTaskAction() {
     window.dispatchEvent(new CustomEvent("task-action"));
@@ -333,10 +802,7 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
     setStartError(null);
     try {
       const res = await fetch(`/api/task-instances/${inst.id}/start`, { method: "POST" });
-      if (!res.ok) {
-        setStartError("Failed to start task. Please try again.");
-        return;
-      }
+      if (!res.ok) { setStartError("Failed to start task. Please try again."); return; }
       dispatchTaskAction();
       startTransition(() => router.refresh());
       const entry = inst.formKey ? TASK_FORM_REGISTRY[inst.formKey] : null;
@@ -379,7 +845,7 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        setStartError(data.error ?? "Failed to skip task.");
+        setStartError((data as { error?: string }).error ?? "Failed to skip task.");
         return;
       }
       setSkipModalInst(null);
@@ -418,208 +884,9 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
     }
   }
 
-  function isStartable(inst: TaskInstance): boolean {
-    if (!["UPCOMING", "DUE_TODAY", "OVERDUE", "IN_PROGRESS"].includes(inst.status)) return false;
-    return inst.dueDate <= tomorrow;
-  }
-
-  function isEffectiveOwner(inst: TaskInstance): boolean {
-    const effectiveOwner = inst.ownerUserId ?? inst.ownerId;
-    return effectiveOwner === userId;
-  }
-
-  function TaskRow({ inst, showOwner }: { inst: TaskInstance; showOwner: boolean }) {
-    const startable = isStartable(inst);
-    const isManual = inst.formKey === "manual";
-    const isRedStatus = inst.status === "OVERDUE" || inst.status === "MISSED";
-    const days = inst.status === "OVERDUE" ? daysOverdue(inst.dueDate, today) : 0;
-    const isAdmin = role === "ADMIN";
-    const isBusy = actionId === inst.id || isPending;
-    const canMarkMissed = inst.status === "OVERDUE" && (isAdmin || isEffectiveOwner(inst));
-
-    return (
-      <div
-        className={`flex items-start gap-3 px-4 py-3 border-b last:border-b-0 border-gray-100 dark:border-gray-700 ${
-          isRedStatus ? "bg-red-50/50 dark:bg-red-900/10" : ""
-        }`}
-      >
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center gap-2 mb-0.5">
-            <span className="font-medium text-sm text-gray-900 dark:text-white">{inst.ruleTitle}</span>
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 shrink-0">
-              {inst.facilityName}
-            </span>
-            {inst.needsAdminReview && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300 shrink-0">
-                <AlertTriangle className="w-3 h-3" />
-                Needs review{inst.reviewReason ? `: ${inst.reviewReason}` : ""}
-              </span>
-            )}
-            {inst.completedLate && inst.daysLate != null && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300 shrink-0">
-                Late {inst.daysLate}d
-              </span>
-            )}
-          </div>
-          {inst.label && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">{inst.label}</p>
-          )}
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-gray-500 dark:text-gray-400">
-            <span>Due {formatDueDate(inst.dueDate)}</span>
-            {inst.status === "OVERDUE" && days > 0 && (
-              <span className="text-red-600 dark:text-red-400 font-medium">{days} day{days !== 1 ? "s" : ""} overdue</span>
-            )}
-            {inst.status === "DUE_TODAY" && <span className="text-amber-600 font-medium">Due end of day</span>}
-            {inst.status === "DONE" && inst.doneAt && (
-              <span className="text-green-700 dark:text-green-400">Completed {formatCompletedAt(inst.doneAt)}</span>
-            )}
-            {inst.status === "MISSED" && inst.missedReason && (
-              <span className="text-red-600 dark:text-red-400">Reason: {inst.missedReason}</span>
-            )}
-            {showOwner && <span>Owner: {inst.ownerName}</span>}
-            {inst.doneByName && <span>Done by {inst.doneByName}</span>}
-          </div>
-        </div>
-        <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
-          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium ${statusPill(inst.status)}`}>
-            {statusLabel(inst.status)}
-          </span>
-          {startable && isManual && (
-            <button
-              onClick={() => setDoneModalInst(inst)}
-              disabled={isBusy}
-              className="inline-flex items-center gap-1.5 px-3 min-h-[44px] rounded-lg bg-[#C41E3A] hover:bg-[#a3172f] text-white text-xs font-medium transition-colors disabled:opacity-50 shrink-0"
-            >
-              Mark done
-            </button>
-          )}
-          {startable && !isManual && (
-            <button
-              onClick={() => handleStart(inst)}
-              disabled={startingId === inst.id || isPending}
-              className="inline-flex items-center gap-1.5 px-3 min-h-[44px] rounded-lg bg-[#C41E3A] hover:bg-[#a3172f] text-white text-xs font-medium transition-colors disabled:opacity-50 shrink-0"
-            >
-              <Play className="w-3 h-3" />
-              {startingId === inst.id ? "Starting…" : "Start"}
-            </button>
-          )}
-          {canMarkMissed && (
-            <button
-              onClick={() => setMissedModalInst(inst)}
-              disabled={isBusy}
-              className="inline-flex items-center px-2.5 min-h-[44px] rounded-lg border border-red-300 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-xs font-medium transition-colors disabled:opacity-50 shrink-0"
-            >
-              Mark missed
-            </button>
-          )}
-          {isAdmin && !["DONE", "SKIPPED"].includes(inst.status) && (
-            <button
-              onClick={() => setSkipModalInst(inst)}
-              disabled={isBusy}
-              className="inline-flex items-center px-2.5 min-h-[44px] rounded-lg border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 text-xs font-medium transition-colors disabled:opacity-50 shrink-0"
-            >
-              Skip
-            </button>
-          )}
-          {isAdmin && ["DONE", "MISSED", "SKIPPED"].includes(inst.status) && (
-            <button
-              onClick={() => handleReopen(inst)}
-              disabled={isBusy}
-              className="inline-flex items-center px-2.5 min-h-[44px] rounded-lg border border-blue-300 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-xs font-medium transition-colors disabled:opacity-50 shrink-0"
-            >
-              Reopen
-            </button>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  function SkippedTaskRow({ inst }: { inst: TaskInstance }) {
-    const isBusy = actionId === inst.id || isPending;
-    const skippedBy = inst.skippedByName?.trim() || "System";
-    const skippedWhen = inst.skippedAt ? formatCompletedAt(inst.skippedAt) : "";
-
-    return (
-      <div className="flex items-start gap-3 px-4 py-3 border-b last:border-b-0 border-gray-100 dark:border-gray-700">
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center gap-2 mb-0.5">
-            <span className="font-medium text-sm text-gray-900 dark:text-white">{inst.ruleTitle}</span>
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 shrink-0">
-              {inst.facilityName}
-            </span>
-          </div>
-          {inst.label && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">{inst.label}</p>
-          )}
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-gray-500 dark:text-gray-400">
-            <span>Due {formatDueDate(inst.dueDate)}</span>
-            {inst.skipReason && <span>Reason: {inst.skipReason}</span>}
-            <span>Skipped by {skippedBy}</span>
-            {skippedWhen && <span>{skippedWhen}</span>}
-          </div>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium ${statusPill("SKIPPED")}`}>
-            Skipped
-          </span>
-          <button
-            onClick={() => handleReopen(inst)}
-            disabled={isBusy}
-            className="inline-flex items-center px-2.5 min-h-[44px] rounded-lg border border-blue-300 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-xs font-medium transition-colors disabled:opacity-50 shrink-0"
-          >
-            Reopen
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  function Section({
-    title,
-    items,
-    colorClass,
-    expanded,
-    onToggle,
-  }: {
-    title: string;
-    items: TaskInstance[];
-    colorClass: string;
-    expanded?: boolean;
-    onToggle?: () => void;
-  }) {
-    const isCollapsible = onToggle !== undefined;
-    const show = isCollapsible ? (expanded ?? false) : true;
-
-    if (items.length === 0) return null;
-
-    return (
-      <div className="mb-1">
-        <button
-          onClick={onToggle}
-          disabled={!isCollapsible}
-          className={`w-full flex items-center justify-between px-4 py-2 ${colorClass} rounded-t-lg ${isCollapsible ? "cursor-pointer hover:opacity-90" : "cursor-default"}`}
-        >
-          <span className="text-sm font-semibold">
-            {title} ({items.length})
-          </span>
-          {isCollapsible && (
-            show ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
-          )}
-        </button>
-        {show && (
-          <div className="border border-t-0 border-gray-200 dark:border-gray-700 rounded-b-lg overflow-hidden bg-white dark:bg-gray-900">
-            {items.map((inst) => (
-              <TaskRow key={inst.id} inst={inst} showOwner={role === "ADMIN"} />
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  }
-
   return (
     <>
+      {/* Modals */}
       {doneModalInst && (
         <MarkDoneModal
           inst={doneModalInst}
@@ -641,109 +908,151 @@ export function MyTasksClient({ instances, skippedInstances, role, userId, facil
           onConfirm={(reason) => handleSkip(skipModalInst, reason)}
         />
       )}
+
       {startError && (
         <div className="mb-3 flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 px-4 py-2.5 text-sm text-red-700">
           <span>{startError}</span>
           <button onClick={() => setStartError(null)} className="ml-auto text-red-400 hover:text-red-600">✕</button>
         </div>
       )}
-      <div id="my-tasks" className="max-w-5xl space-y-1 mb-6">
-        <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-          <h2 className="text-base font-semibold text-gray-900 dark:text-white">
-            {role === "ADMIN" && showMyTasksOnly ? "My Tasks" : role === "ADMIN" ? "All Tasks" : "My Tasks"}
-          </h2>
-          {role === "ADMIN" && (
-            <div className="flex items-center gap-2">
-              <div className="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden text-xs">
-                <button
-                  onClick={() => setShowMyTasksOnly(true)}
-                  className={`px-3 py-1.5 font-medium transition-colors ${showMyTasksOnly ? "bg-[#C41E3A] text-white" : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
-                >
-                  My tasks
-                </button>
-                <button
-                  onClick={() => setShowMyTasksOnly(false)}
-                  className={`px-3 py-1.5 font-medium transition-colors ${!showMyTasksOnly ? "bg-[#C41E3A] text-white" : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
-                >
-                  Everyone
-                </button>
-              </div>
-              <select
-                className="text-xs border border-gray-200 dark:border-gray-700 rounded-md px-2 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
-                value={facilityFilter}
-                onChange={(e) => setFacilityFilter(e.target.value)}
-              >
-                <option value="">All facilities</option>
-                {facilities.map((f) => (
-                  <option key={f.id} value={f.id}>{f.name}</option>
-                ))}
-              </select>
-              <select
-                className="text-xs border border-gray-200 dark:border-gray-700 rounded-md px-2 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"
-                value={ownerFilter}
-                onChange={(e) => setOwnerFilter(e.target.value)}
-              >
-                <option value="">All owners</option>
-                {owners.map((u) => (
-                  <option key={u.id} value={u.id}>{u.name}</option>
-                ))}
-              </select>
-            </div>
-          )}
-        </div>
 
-        {totalActive === 0 && doneToday.length === 0 ? (
-          <div className="card p-6 text-center text-gray-500 text-sm">
-            No tasks due. You&apos;re all caught up.
+      <div id="my-tasks" className="max-w-5xl mb-6">
+        {/* Admin filters */}
+        {role === "ADMIN" && (
+          <div className="flex items-center gap-2 mb-4 flex-wrap">
+            <select
+              className="text-xs border border-gray-200 rounded-md px-2 py-1.5 bg-white text-gray-700"
+              value={facilityFilter}
+              onChange={(e) => setFacilityFilter(e.target.value)}
+            >
+              <option value="">All facilities</option>
+              {facilities.map((f) => (
+                <option key={f.id} value={f.id}>{f.name}</option>
+              ))}
+            </select>
+            <select
+              className="text-xs border border-gray-200 rounded-md px-2 py-1.5 bg-white text-gray-700"
+              value={ownerFilter}
+              onChange={(e) => setOwnerFilter(e.target.value)}
+            >
+              <option value="">All owners</option>
+              {owners.map((u) => (
+                <option key={u.id} value={u.id}>{u.name}</option>
+              ))}
+            </select>
           </div>
-        ) : (
-          <>
-            <Section
-              title="Overdue"
-              items={overdue}
-              colorClass="bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200"
-            />
-            <Section
-              title="Due today"
-              items={dueToday}
-              colorClass="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200"
-            />
-            <Section
-              title="In progress"
-              items={inProgress}
-              colorClass="bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200"
-            />
-            <Section
-              title="Upcoming (next 7 days)"
-              items={upcoming}
-              colorClass="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200"
-              expanded={expandedUpcoming}
-              onToggle={() => setExpandedUpcoming((v) => !v)}
-            />
-            <Section
-              title="Completed today"
-              items={doneToday}
-              colorClass="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200"
-              expanded={expandedDone}
-              onToggle={() => setExpandedDone((v) => !v)}
-            />
-          </>
         )}
+
+        {/* Hero header */}
+        <HeroHeader
+          today={today}
+          firstName={firstName}
+          overdue={overdue}
+          dueToday={dueToday}
+          inProgress={inProgress}
+          doneToday={doneToday}
+          role={role}
+          showMyTasksOnly={showMyTasksOnly}
+          setShowMyTasksOnly={setShowMyTasksOnly}
+          nextUpcoming={nextUpcoming}
+        />
+
+        {/* Task cards: overdue + due today + in progress */}
+        {activeTodayCards.length > 0 && (
+          <div className="space-y-3 mb-4">
+            {activeTodayCards.map((inst, idx) => (
+              <HeroTaskCard
+                key={inst.id}
+                inst={inst}
+                isNext={idx === 0}
+                today={today}
+                role={role}
+                userId={userId}
+                startingId={startingId}
+                actionId={actionId}
+                isPending={isPending}
+                onStart={handleStart}
+                onMarkDone={(i) => setDoneModalInst(i)}
+                onMarkMissed={(i) => setMissedModalInst(i)}
+                onSkip={(i) => setSkipModalInst(i)}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Done strips */}
+        {doneToday.length > 0 && (
+          <div className="space-y-1.5 mb-4">
+            {doneToday.map((inst) => (
+              <DoneStrip
+                key={inst.id}
+                inst={inst}
+                role={role}
+                userId={userId}
+                actionId={actionId}
+                isPending={isPending}
+                onReopen={handleReopen}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Upcoming section */}
+        {upcoming.length > 0 && (
+          <div className="mt-4">
+            <button
+              onClick={() => setExpandedUpcoming((v) => !v)}
+              className="w-full flex items-center justify-between px-4 py-2 bg-blue-50 text-blue-800 rounded-t-lg cursor-pointer hover:opacity-90"
+            >
+              <span className="text-sm font-semibold">Upcoming — next 7 days ({upcoming.length})</span>
+              {expandedUpcoming ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </button>
+            {expandedUpcoming && (
+              <div className="border border-t-0 border-gray-200 rounded-b-lg overflow-hidden bg-white">
+                {upcoming.map((inst) => (
+                  <div
+                    key={inst.id}
+                    className="flex items-start gap-3 px-4 py-3 border-b last:border-b-0 border-gray-100"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2 mb-0.5">
+                        <span className="font-medium text-sm text-gray-900">{inst.ruleTitle}</span>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-indigo-100 text-indigo-700 shrink-0">
+                          {inst.facilityName}
+                        </span>
+                      </div>
+                      {inst.label && inst.label !== inst.ruleTitle && (
+                        <p className="text-xs text-gray-500 mb-0.5">{inst.label}</p>
+                      )}
+                      <p className="text-xs text-gray-500">Due {formatDueDate(inst.dueDate)}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Admin skipped section */}
         {role === "ADMIN" && filteredSkipped.length > 0 && (
-          <div className="mb-1 mt-2">
+          <div className="mt-4">
             <button
               onClick={() => setExpandedSkipped((v) => !v)}
-              className="w-full flex items-center justify-between px-4 py-2 bg-gray-100 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400 rounded-t-lg cursor-pointer hover:opacity-90"
+              className="w-full flex items-center justify-between px-4 py-2 bg-gray-100 text-gray-600 rounded-t-lg cursor-pointer hover:opacity-90"
             >
-              <span className="text-sm font-semibold">
-                Skipped ({filteredSkipped.length})
-              </span>
+              <span className="text-sm font-semibold">Skipped ({filteredSkipped.length})</span>
               {expandedSkipped ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
             {expandedSkipped && (
-              <div className="border border-t-0 border-gray-200 dark:border-gray-700 rounded-b-lg overflow-hidden bg-white dark:bg-gray-900">
+              <div className="border border-t-0 border-gray-200 rounded-b-lg overflow-hidden bg-white">
                 {filteredSkipped.map((inst) => (
-                  <SkippedTaskRow key={inst.id} inst={inst} />
+                  <SkippedTaskRow
+                    key={inst.id}
+                    inst={inst}
+                    actionId={actionId}
+                    isPending={isPending}
+                    onReopen={handleReopen}
+                  />
                 ))}
               </div>
             )}

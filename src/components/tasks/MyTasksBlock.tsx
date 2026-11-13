@@ -118,12 +118,15 @@ export async function MyTasksBlock() {
     ]);
   }
 
+  const firstName = (session.user as { name?: string }).name?.split(" ")[0] ?? "there";
+
   return (
     <MyTasksClient
       instances={serialized}
       skippedInstances={serializedSkipped}
       role={role}
       userId={userId}
+      firstName={firstName}
       facilities={facilities}
       owners={owners.map((u) => ({ id: u.id, name: u.name ?? "" }))}
       today={today}
