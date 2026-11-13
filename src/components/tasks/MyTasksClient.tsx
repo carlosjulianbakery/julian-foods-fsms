@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
 import { addDaysToDateStr } from "@/lib/pacific-time";
+import { TaskCalendar } from "./TaskCalendar";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -38,6 +39,8 @@ export interface TaskInstance {
 interface Props {
   instances: TaskInstance[];
   skippedInstances: TaskInstance[];
+  calendarInstances: TaskInstance[];
+  calendarWeekStart: string;
   role: string;
   userId: string;
   firstName: string;
@@ -743,6 +746,8 @@ function SkippedTaskRow({
 export function MyTasksClient({
   instances,
   skippedInstances,
+  calendarInstances,
+  calendarWeekStart,
   role,
   userId,
   firstName,
@@ -755,7 +760,6 @@ export function MyTasksClient({
   const [facilityFilter, setFacilityFilter] = useState("");
   const [ownerFilter, setOwnerFilter] = useState("");
   const [showMyTasksOnly, setShowMyTasksOnly] = useState(role === "ADMIN");
-  const [expandedUpcoming, setExpandedUpcoming] = useState(false);
   const [expandedSkipped, setExpandedSkipped] = useState(false);
   const [startingId, setStartingId] = useState<string | null>(null);
   const [startError, setStartError] = useState<string | null>(null);
@@ -997,41 +1001,18 @@ export function MyTasksClient({
           </div>
         )}
 
-        {/* Upcoming section */}
-        {upcoming.length > 0 && (
-          <div className="mt-4">
-            <button
-              onClick={() => setExpandedUpcoming((v) => !v)}
-              className="w-full flex items-center justify-between px-4 py-2 bg-blue-50 text-blue-800 rounded-t-lg cursor-pointer hover:opacity-90"
-            >
-              <span className="text-sm font-semibold">Upcoming — next 7 days ({upcoming.length})</span>
-              {expandedUpcoming ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </button>
-            {expandedUpcoming && (
-              <div className="border border-t-0 border-gray-200 rounded-b-lg overflow-hidden bg-white">
-                {upcoming.map((inst) => (
-                  <div
-                    key={inst.id}
-                    className="flex items-start gap-3 px-4 py-3 border-b last:border-b-0 border-gray-100"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-wrap items-center gap-2 mb-0.5">
-                        <span className="font-medium text-sm text-gray-900">{inst.ruleTitle}</span>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-indigo-100 text-indigo-700 shrink-0">
-                          {inst.facilityName}
-                        </span>
-                      </div>
-                      {inst.label && inst.label !== inst.ruleTitle && (
-                        <p className="text-xs text-gray-500 mb-0.5">{inst.label}</p>
-                      )}
-                      <p className="text-xs text-gray-500">Due {formatDueDate(inst.dueDate)}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
+        {/* Calendar */}
+        <div className="mt-4 bg-white rounded-xl border border-gray-200 p-3 shadow-sm">
+          <p className="text-xs font-bold uppercase tracking-wide text-gray-400 mb-3">Schedule</p>
+          <TaskCalendar
+            initialInstances={calendarInstances}
+            initialWeekStart={calendarWeekStart}
+            today={today}
+            role={role}
+            userId={userId}
+            showMyTasksOnly={showMyTasksOnly}
+          />
+        </div>
 
         {/* Admin skipped section */}
         {role === "ADMIN" && filteredSkipped.length > 0 && (

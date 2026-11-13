@@ -5,6 +5,13 @@ import type { Prisma } from "@/generated/prisma";
 import { getPacificToday, addDaysToDateStr } from "@/lib/pacific-time";
 import { MyTasksClient, type TaskInstance } from "./MyTasksClient";
 
+function getMondayOf(dateStr: string): string {
+  const d = new Date(dateStr + "T12:00:00Z");
+  const dow = d.getUTCDay(); // 0=Sun
+  const daysBack = dow === 0 ? -6 : 1 - dow;
+  return addDaysToDateStr(dateStr, daysBack);
+}
+
 export async function MyTasksBlock() {
   const session = await getServerSession(authOptions);
   if (!session) return null;
@@ -14,6 +21,8 @@ export async function MyTasksBlock() {
   const today = getPacificToday();
   const sevenDaysOut = addDaysToDateStr(today, 7);
   const sevenDaysAgo = addDaysToDateStr(today, -7);
+  const calendarWeekStart = getMondayOf(today);
+  const calendarWeekEnd = addDaysToDateStr(calendarWeekStart, 6);
 
   // Effective-owner: show if explicitly assigned, OR if not reassigned and rule.ownerId matches.
   // ownerUserId null means "not reassigned" — still belongs to rule owner.
@@ -57,7 +66,18 @@ export async function MyTasksBlock() {
     ],
   };
 
-  const [instances, skippedInstances] = await Promise.all([
+  // Calendar visibility filter — admins see all by default
+  const calendarVisibilityFilter: Prisma.RuleInstanceWhereInput =
+    role !== "ADMIN"
+      ? {
+          OR: [
+            { ownerUserId: userId },
+            { ownerUserId: null, rule: { ownerId: userId } },
+          ],
+        }
+      : {};
+
+  const [instances, skippedInstances, calendarInstances] = await Promise.all([
     prisma.ruleInstance.findMany({
       where:
         role !== "ADMIN"
@@ -77,6 +97,23 @@ export async function MyTasksBlock() {
           orderBy: [{ skippedAt: "desc" }],
         })
       : Promise.resolve([]),
+    // Calendar — current week Mon-Sun (all statuses for admins, no SKIPPED for supervisors)
+    prisma.ruleInstance.findMany({
+      where: {
+        AND: [
+          calendarVisibilityFilter,
+          role !== "ADMIN" ? { status: { not: "SKIPPED" } } : {},
+          {
+            dueDate: {
+              gte: new Date(calendarWeekStart + "T00:00:00Z"),
+              lte: new Date(calendarWeekEnd + "T23:59:59Z"),
+            },
+          },
+        ],
+      },
+      include: instanceInclude,
+      orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
+    }),
   ]);
 
   function serializeInst(inst: typeof instances[number]): TaskInstance {
@@ -108,6 +145,7 @@ export async function MyTasksBlock() {
 
   const serialized: TaskInstance[] = instances.map(serializeInst);
   const serializedSkipped: TaskInstance[] = (skippedInstances as typeof instances).map(serializeInst);
+  const serializedCalendar: TaskInstance[] = (calendarInstances as typeof instances).map(serializeInst);
 
   let facilities: { id: string; name: string }[] = [];
   let owners: { id: string; name: string }[] = [];
@@ -124,6 +162,8 @@ export async function MyTasksBlock() {
     <MyTasksClient
       instances={serialized}
       skippedInstances={serializedSkipped}
+      calendarInstances={serializedCalendar}
+      calendarWeekStart={calendarWeekStart}
       role={role}
       userId={userId}
       firstName={firstName}
