@@ -1003,7 +1003,7 @@ export function MyTasksClient({
 
         {/* Calendar */}
         <div className="mt-4 bg-white rounded-xl border border-gray-200 p-3 shadow-sm">
-          <p className="text-xs font-bold uppercase tracking-wide text-gray-400 mb-3">Schedule</p>
+          <p className="text-xs font-bold uppercase tracking-wide text-gray-400 mb-3">Task Schedule</p>
           <TaskCalendar
             initialInstances={calendarInstances}
             initialWeekStart={calendarWeekStart}
