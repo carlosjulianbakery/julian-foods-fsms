@@ -21,12 +21,22 @@ export async function DELETE(
 
   await prisma.preOp624Inspection.delete({ where: { id: params.id } });
 
-  // Reopen the linked task instance so it can be completed again
-  reopenInstanceForSubmissionDeletion({
-    submissionId: params.id,
-    userId: session.user.id,
-    prismaClient: prisma as never,
-  }).catch((e) => console.error("[DELETE pre-op-624] task reopen failed:", e));
+  // Reopen the linked task instance so it can be completed again.
+  // Failure is logged and surfaced as a warning but never blocks the deletion.
+  let reopenWarning: string | undefined;
+  try {
+    await reopenInstanceForSubmissionDeletion({
+      submissionId: params.id,
+      userId: session.user.id,
+      prismaClient: prisma as never,
+    });
+  } catch (e) {
+    console.error("[DELETE pre-op-624] task reopen failed:", e);
+    reopenWarning = "task_reopen_failed";
+  }
 
-  return NextResponse.json({ deleted: true });
+  return NextResponse.json({
+    deleted: true,
+    ...(reopenWarning ? { warning: reopenWarning } : {}),
+  });
 }

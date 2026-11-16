@@ -22,26 +22,25 @@ interface RowDef {
 }
 
 const ROWS: RowDef[] = [
-  // Personnel & Hygiene
-  { key: "hairnet",        label: "Hair nets / beard nets worn",             section: "Personnel & Hygiene" },
-  { key: "gloves",         label: "Gloves in good condition, changed between tasks", section: "Personnel & Hygiene" },
-  { key: "uniforms",       label: "Clean uniforms / aprons",                 section: "Personnel & Hygiene" },
-  // Equipment & Surfaces
-  { key: "surfaces",       label: "Food-contact surfaces clean & sanitized", section: "Equipment & Surfaces" },
-  { key: "equipment",      label: "Equipment in good repair, no damage",     section: "Equipment & Surfaces" },
-  { key: "utensils",       label: "Utensils clean & stored properly",        section: "Equipment & Surfaces" },
-  // Temperature
-  { key: "fridge_temp",    label: `Refrigerator temp (OK ≤ ${FRIDGE_MAX_F}°F)`, section: "Temperature", tempLimit: FRIDGE_MAX_F },
-  { key: "freezer_temp",   label: `Freezer temp (OK ≤ ${FREEZER_MAX_F}°F)`, section: "Temperature", tempLimit: FREEZER_MAX_F },
-  // Facility
-  { key: "pests",          label: "No evidence of pests",                    section: "Facility" },
-  { key: "trash",          label: "Trash cans emptied & lined",              section: "Facility" },
-  { key: "floors",         label: "Floors clean & dry",                      section: "Facility" },
-  // Supplies & Labels
-  { key: "sanitizer",      label: "Sanitizer buckets at correct concentration", section: "Supplies & Labels" },
-  { key: "labels",         label: "Products properly labeled / dated",       section: "Supplies & Labels" },
-  // ATP
-  { key: "atp_swab",       label: `ATP swab result (OK ≤ ${ATP_MAX_RLU} RLU)`, section: "ATP Swab", atpLimit: ATP_MAX_RLU },
+  // ── General ──────────────────────────────────────────────────────────────────
+  { key: "ppe",             label: "PPE: Hairnet, apron, gloves available in place.",                                 section: "General" },
+  { key: "sink_stations",   label: "Sink Stations: Hot water, soap, sanitizer, disposable towels, and trash available at hand washing sinks.", section: "General" },
+  { key: "trash_bins",      label: "Trash Cans/Bins: Trash is empty, labeled, and in designated areas. Cardboard bin empty.", section: "General" },
+  // ── Storage & Products ───────────────────────────────────────────────────────
+  { key: "ingredient_bins", label: "Ingredient Bins and other ingredient containers: Free of damage, and clearly labeled.", section: "Storage & Products" },
+  { key: "finished_products", label: "Finished Products: Covered and with Lot information.",                         section: "Storage & Products" },
+  // ── Facility & Equipment ─────────────────────────────────────────────────────
+  { key: "floor_drains",    label: "Production Floor/Drains: Floor is free of dirt, water, and not damaged. Drains have a strainer, clean, free of debris, mineral and pooling water.", section: "Facility & Equipment" },
+  { key: "utensils",        label: "Production Utensils: Utensils are clean, covered as necessary, free of damage and stored in designated locations.", section: "Facility & Equipment" },
+  { key: "equipment",       label: "Equipment and Machinery: Clean, free of leaks, rust, and in good repair. Cables, lights, air ducts do not have missing parts, loose labels, flaking paint or any type of physical contaminant.", section: "Facility & Equipment" },
+  { key: "thermometer",     label: "Thermometer: Plastic dial covers on thermometers are in good shape.",            section: "Facility & Equipment" },
+  // ── Temperature ──────────────────────────────────────────────────────────────
+  { key: "fridge_temp",     label: `Temperature check – Walk-in Fridge (limit ≤ ${FRIDGE_MAX_F}°F)`,  section: "Temperature", tempLimit: FRIDGE_MAX_F },
+  { key: "freezer_temp",    label: `Temperature check – Walk-in Freezer (limit ≤ ${FREEZER_MAX_F}°F)`, section: "Temperature", tempLimit: FREEZER_MAX_F },
+  // ── Quality & ATP ────────────────────────────────────────────────────────────
+  { key: "production_area", label: "Production Area: Tables, racks and carts are clean, free of damage and in designated areas.", section: "Quality & ATP" },
+  { key: "atp_swab",        label: `ATP Swabs: ATP swab done on one random food-contact area (OK ≤ ${ATP_MAX_RLU} RLU).`, section: "Quality & ATP", atpLimit: ATP_MAX_RLU },
+  { key: "gmps",            label: "GMPs: Personnel wearing hairnet correctly, clean uniform, closed shoes, no uncovered cuts, no sick personnel, no jewelry.", section: "Quality & ATP" },
 ];
 
 const SECTIONS = Array.from(new Set(ROWS.map((r) => r.section)));
@@ -52,6 +51,11 @@ function draftKey(userId: string, date: string) {
 
 // ─── Initial row state ────────────────────────────────────────────────────────
 
+const TEMP_PREFILL: Record<string, number> = {
+  fridge_temp:  38,
+  freezer_temp: 0,
+};
+
 function makeInitialRows(conductedBy: string): RowSnapshot[] {
   return ROWS.map((def) => ({
     key:              def.key,
@@ -61,7 +65,7 @@ function makeInitialRows(conductedBy: string): RowSnapshot[] {
     correctiveAction: "",
     reInspected:      false,
     reInspectedAt:    null,
-    tempValue:        null,
+    tempValue:        TEMP_PREFILL[def.key] ?? null,
     tempLimit:        def.tempLimit ?? null,
     reInspectTempValue: null,
     atpRlu:           null,
