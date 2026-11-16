@@ -46,7 +46,9 @@ const ROWS: RowDef[] = [
 
 const SECTIONS = Array.from(new Set(ROWS.map((r) => r.section)));
 
-const DRAFT_KEY = "preop_624_draft";
+function draftKey(userId: string, date: string) {
+  return `preop_624_draft:${userId}:${date}`;
+}
 
 // ─── Initial row state ────────────────────────────────────────────────────────
 
@@ -89,38 +91,47 @@ export default function PreOp624Page() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [draftSaved, setDraftSaved] = useState(false);
+  const [draftResumed, setDraftResumed] = useState(false);
   const draftTimer = useRef<NodeJS.Timeout | null>(null);
+  const draftLoadedRef = useRef(false);
 
-  // Load draft from localStorage on mount
+  // Load draft from localStorage once session is available (keyed by userId+date)
   useEffect(() => {
+    if (!session?.user?.id || draftLoadedRef.current) return;
+    draftLoadedRef.current = true;
     try {
-      const raw = localStorage.getItem(DRAFT_KEY);
+      const key = draftKey(session.user.id, today);
+      const raw = localStorage.getItem(key);
       if (!raw) return;
       const draft = JSON.parse(raw) as {
         date: string; time: string; conductedBy: string; rows: RowSnapshot[];
       };
-      if (draft.rows?.length === ROWS.length) {
+      // Only resume if the draft is for today and has the right number of rows
+      if (draft.date === today && draft.rows?.length === ROWS.length) {
         setDate(draft.date);
         setTime(draft.time);
         setConductedBy(draft.conductedBy);
         setRows(draft.rows);
+        setDraftResumed(true);
       }
     } catch {
       // corrupted draft — ignore
     }
-  }, []);
+  }, [session?.user?.id, today]);
 
-  // Auto-save draft 1s after last change
+  // Auto-save draft 1s after last change (only once session is available)
   const saveDraft = useCallback(() => {
+    if (!session?.user?.id) return;
     if (draftTimer.current) clearTimeout(draftTimer.current);
     draftTimer.current = setTimeout(() => {
       try {
-        localStorage.setItem(DRAFT_KEY, JSON.stringify({ date, time, conductedBy, rows }));
+        const key = draftKey(session.user.id, date);
+        localStorage.setItem(key, JSON.stringify({ date, time, conductedBy, rows }));
         setDraftSaved(true);
         setTimeout(() => setDraftSaved(false), 2000);
       } catch {}
     }, 1000);
-  }, [date, time, conductedBy, rows]);
+  }, [session?.user?.id, date, time, conductedBy, rows]);
 
   useEffect(() => { saveDraft(); }, [date, time, conductedBy, rows, saveDraft]);
 
@@ -163,7 +174,9 @@ export default function PreOp624Page() {
         return;
       }
       // Clear draft
-      try { localStorage.removeItem(DRAFT_KEY); } catch {}
+      try {
+        if (session?.user?.id) localStorage.removeItem(draftKey(session.user.id, date));
+      } catch {}
       setSubmitted(true);
     } catch {
       setError("Network error — please check your connection and try again.");
@@ -207,7 +220,26 @@ export default function PreOp624Page() {
           <p className="page-subtitle">Complete all 14 items. Rows default to OK.</p>
         </div>
         <div className="flex items-center gap-2 text-xs text-gray-400">
-          {draftSaved && (
+          {draftResumed && (
+            <span className="flex items-center gap-2 text-blue-600 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded px-2 py-1">
+              Resumed saved draft —{" "}
+              <button
+                className="underline font-medium"
+                onClick={() => {
+                  try {
+                    if (session?.user?.id) localStorage.removeItem(draftKey(session.user.id, today));
+                  } catch {}
+                  setRows(makeInitialRows(""));
+                  setConductedBy("");
+                  setDate(today);
+                  setDraftResumed(false);
+                }}
+              >
+                Start fresh
+              </button>
+            </span>
+          )}
+          {draftSaved && !draftResumed && (
             <span className="flex items-center gap-1 text-emerald-600">
               <Save className="w-3 h-3" /> Draft saved
             </span>
