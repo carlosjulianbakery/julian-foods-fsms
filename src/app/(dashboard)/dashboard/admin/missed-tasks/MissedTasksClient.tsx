@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAutoRefresh } from "@/hooks/useAutoRefresh";
 
 interface MissedRow {
   id: string;
@@ -31,6 +32,7 @@ interface Props {
 export function MissedTasksClient({ rows, users, ownerFilter, fromFilter, toFilter }: Props) {
   const router = useRouter();
   const [reopening, setReopening] = useState<string | null>(null);
+  useAutoRefresh(() => router.refresh());
 
   function applyFilters(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

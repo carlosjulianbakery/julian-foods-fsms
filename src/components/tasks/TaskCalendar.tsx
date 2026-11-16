@@ -8,6 +8,7 @@ import {
 import type { TaskInstance } from "./MyTasksClient";
 import { addDaysToDateStr } from "@/lib/pacific-time";
 import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
+import { useAutoRefresh } from "@/hooks/useAutoRefresh";
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
 
@@ -746,6 +747,8 @@ export function TaskCalendar({
     const { from, to } = currentRange();
     fetchRange(from, to);
   }, [currentRange, fetchRange]);
+
+  useAutoRefresh(handleRefresh);
 
   // Sync with ProductionScheduleCard via window custom events
   useEffect(() => {

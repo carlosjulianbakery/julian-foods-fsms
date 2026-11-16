@@ -8,6 +8,7 @@ import {
 import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
 import { addDaysToDateStr } from "@/lib/pacific-time";
 import { computeBannerState, type BannerState } from "@/lib/banner-state";
+import { useAutoRefresh } from "@/hooks/useAutoRefresh";
 import { TaskCalendar } from "./TaskCalendar";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -804,6 +805,8 @@ export function MyTasksClient({
   function dispatchTaskAction() {
     window.dispatchEvent(new CustomEvent("task-action"));
   }
+
+  useAutoRefresh(() => startTransition(() => router.refresh()));
 
   async function handleStart(inst: TaskInstance) {
     setStartingId(inst.id);

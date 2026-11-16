@@ -188,6 +188,7 @@ export default function PreOp624Page() {
       try {
         if (session?.user?.id) localStorage.removeItem(draftKey(session.user.id, date));
       } catch {}
+      window.dispatchEvent(new CustomEvent("task-action"));
       setSubmitted(true);
     } catch {
       setError("Network error — please check your connection and try again.");
