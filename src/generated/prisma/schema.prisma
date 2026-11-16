@@ -65,6 +65,7 @@ model User {
   markedMissedRuleInstances RuleInstance[]                 @relation("RuleInstanceMarkedMissedBy")
   taskInstanceAuditLogs     TaskInstanceAudit[]            @relation("TaskInstanceAuditUser")
   notifications             Notification[]
+  preOp624Inspections       PreOp624Inspection[]           @relation("PreOp624Submissions")
 
   @@map("users")
 }
@@ -148,6 +149,28 @@ model PreOpInspection {
   submittedById String
 
   @@map("pre_op_inspections")
+}
+
+// ─── Pre-Op Inspection — 624 Facility ────────────────────────────────────────
+// Separate model from PreOpInspection: different checklist, OK/Not OK rows,
+// numeric temperature inputs, single ATP RLU field, no signature pad.
+model PreOp624Inspection {
+  id          String   @id @default(cuid())
+  date        DateTime @db.Date
+  conductedBy String // initials applied to all rows
+  rows        Json // RowSnapshot[] — full label+condition+limits snapshot at submission time
+  hasNotOk    Boolean  @default(false) // indexed for records filter
+  overallOk   Boolean // true = all rows OK; false = at least one Not OK or re-inspection pending
+  submittedAt DateTime @default(now())
+
+  submittedBy   User   @relation("PreOp624Submissions", fields: [submittedById], references: [id])
+  submittedById String
+
+  linkedInstanceId String? // task instance completed by this submission
+
+  @@index([date])
+  @@index([hasNotOk])
+  @@map("pre_op_624_inspections")
 }
 
 model BatchSheetTemplate {

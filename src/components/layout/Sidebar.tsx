@@ -70,6 +70,12 @@ const formsNav = [
     roles: ["SUPERVISOR", "ADMIN"],
   },
   {
+    label: "Pre-Op — 624",
+    href: "/dashboard/supervisor/pre-op-624",
+    icon: ClipboardCheck,
+    roles: ["SUPERVISOR", "ADMIN"],
+  },
+  {
     label: "Batch Sheet",
     href: "/dashboard/supervisor/batch-sheet",
     icon: ScrollText,

@@ -39,6 +39,11 @@ export type Record = $Result.DefaultSelection<Prisma.$RecordPayload>
  */
 export type PreOpInspection = $Result.DefaultSelection<Prisma.$PreOpInspectionPayload>
 /**
+ * Model PreOp624Inspection
+ * 
+ */
+export type PreOp624Inspection = $Result.DefaultSelection<Prisma.$PreOp624InspectionPayload>
+/**
  * Model BatchSheetTemplate
  * 
  */
@@ -655,6 +660,16 @@ export class PrismaClient<
     * ```
     */
   get preOpInspection(): Prisma.PreOpInspectionDelegate<ExtArgs>;
+
+  /**
+   * `prisma.preOp624Inspection`: Exposes CRUD operations for the **PreOp624Inspection** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PreOp624Inspections
+    * const preOp624Inspections = await prisma.preOp624Inspection.findMany()
+    * ```
+    */
+  get preOp624Inspection(): Prisma.PreOp624InspectionDelegate<ExtArgs>;
 
   /**
    * `prisma.batchSheetTemplate`: Exposes CRUD operations for the **BatchSheetTemplate** model.
@@ -1621,6 +1636,7 @@ export namespace Prisma {
     FormSubmission: 'FormSubmission',
     Record: 'Record',
     PreOpInspection: 'PreOpInspection',
+    PreOp624Inspection: 'PreOp624Inspection',
     BatchSheetTemplate: 'BatchSheetTemplate',
     BatchSheetSubmission: 'BatchSheetSubmission',
     DailyCleaningChecklist: 'DailyCleaningChecklist',
@@ -1688,7 +1704,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "record" | "preOpInspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "notification"
+      modelProps: "user" | "form" | "formSubmission" | "record" | "preOpInspection" | "preOp624Inspection" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2039,6 +2055,76 @@ export namespace Prisma {
           count: {
             args: Prisma.PreOpInspectionCountArgs<ExtArgs>
             result: $Utils.Optional<PreOpInspectionCountAggregateOutputType> | number
+          }
+        }
+      }
+      PreOp624Inspection: {
+        payload: Prisma.$PreOp624InspectionPayload<ExtArgs>
+        fields: Prisma.PreOp624InspectionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PreOp624InspectionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreOp624InspectionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PreOp624InspectionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreOp624InspectionPayload>
+          }
+          findFirst: {
+            args: Prisma.PreOp624InspectionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreOp624InspectionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PreOp624InspectionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreOp624InspectionPayload>
+          }
+          findMany: {
+            args: Prisma.PreOp624InspectionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreOp624InspectionPayload>[]
+          }
+          create: {
+            args: Prisma.PreOp624InspectionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreOp624InspectionPayload>
+          }
+          createMany: {
+            args: Prisma.PreOp624InspectionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PreOp624InspectionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreOp624InspectionPayload>[]
+          }
+          delete: {
+            args: Prisma.PreOp624InspectionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreOp624InspectionPayload>
+          }
+          update: {
+            args: Prisma.PreOp624InspectionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreOp624InspectionPayload>
+          }
+          deleteMany: {
+            args: Prisma.PreOp624InspectionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PreOp624InspectionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PreOp624InspectionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PreOp624InspectionPayload>
+          }
+          aggregate: {
+            args: Prisma.PreOp624InspectionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePreOp624Inspection>
+          }
+          groupBy: {
+            args: Prisma.PreOp624InspectionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PreOp624InspectionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PreOp624InspectionCountArgs<ExtArgs>
+            result: $Utils.Optional<PreOp624InspectionCountAggregateOutputType> | number
           }
         }
       }
@@ -5877,6 +5963,7 @@ export namespace Prisma {
     markedMissedRuleInstances: number
     taskInstanceAuditLogs: number
     notifications: number
+    preOp624Inspections: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5914,6 +6001,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: boolean | UserCountOutputTypeCountMarkedMissedRuleInstancesArgs
     taskInstanceAuditLogs?: boolean | UserCountOutputTypeCountTaskInstanceAuditLogsArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+    preOp624Inspections?: boolean | UserCountOutputTypeCountPreOp624InspectionsArgs
   }
 
   // Custom InputTypes
@@ -6163,6 +6251,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NotificationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPreOp624InspectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PreOp624InspectionWhereInput
   }
 
 
@@ -7317,6 +7412,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: boolean | User$markedMissedRuleInstancesArgs<ExtArgs>
     taskInstanceAuditLogs?: boolean | User$taskInstanceAuditLogsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    preOp624Inspections?: boolean | User$preOp624InspectionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -7379,6 +7475,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: boolean | User$markedMissedRuleInstancesArgs<ExtArgs>
     taskInstanceAuditLogs?: boolean | User$taskInstanceAuditLogsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    preOp624Inspections?: boolean | User$preOp624InspectionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -7420,6 +7517,7 @@ export namespace Prisma {
       markedMissedRuleInstances: Prisma.$RuleInstancePayload<ExtArgs>[]
       taskInstanceAuditLogs: Prisma.$TaskInstanceAuditPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
+      preOp624Inspections: Prisma.$PreOp624InspectionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7829,6 +7927,7 @@ export namespace Prisma {
     markedMissedRuleInstances<T extends User$markedMissedRuleInstancesArgs<ExtArgs> = {}>(args?: Subset<T, User$markedMissedRuleInstancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RuleInstancePayload<ExtArgs>, T, "findMany"> | Null>
     taskInstanceAuditLogs<T extends User$taskInstanceAuditLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$taskInstanceAuditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskInstanceAuditPayload<ExtArgs>, T, "findMany"> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany"> | Null>
+    preOp624Inspections<T extends User$preOp624InspectionsArgs<ExtArgs> = {}>(args?: Subset<T, User$preOp624InspectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreOp624InspectionPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8858,6 +8957,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * User.preOp624Inspections
+   */
+  export type User$preOp624InspectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreOp624Inspection
+     */
+    select?: PreOp624InspectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreOp624InspectionInclude<ExtArgs> | null
+    where?: PreOp624InspectionWhereInput
+    orderBy?: PreOp624InspectionOrderByWithRelationInput | PreOp624InspectionOrderByWithRelationInput[]
+    cursor?: PreOp624InspectionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PreOp624InspectionScalarFieldEnum | PreOp624InspectionScalarFieldEnum[]
   }
 
   /**
@@ -12887,6 +13006,983 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: PreOpInspectionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PreOp624Inspection
+   */
+
+  export type AggregatePreOp624Inspection = {
+    _count: PreOp624InspectionCountAggregateOutputType | null
+    _min: PreOp624InspectionMinAggregateOutputType | null
+    _max: PreOp624InspectionMaxAggregateOutputType | null
+  }
+
+  export type PreOp624InspectionMinAggregateOutputType = {
+    id: string | null
+    date: Date | null
+    conductedBy: string | null
+    hasNotOk: boolean | null
+    overallOk: boolean | null
+    submittedAt: Date | null
+    submittedById: string | null
+    linkedInstanceId: string | null
+  }
+
+  export type PreOp624InspectionMaxAggregateOutputType = {
+    id: string | null
+    date: Date | null
+    conductedBy: string | null
+    hasNotOk: boolean | null
+    overallOk: boolean | null
+    submittedAt: Date | null
+    submittedById: string | null
+    linkedInstanceId: string | null
+  }
+
+  export type PreOp624InspectionCountAggregateOutputType = {
+    id: number
+    date: number
+    conductedBy: number
+    rows: number
+    hasNotOk: number
+    overallOk: number
+    submittedAt: number
+    submittedById: number
+    linkedInstanceId: number
+    _all: number
+  }
+
+
+  export type PreOp624InspectionMinAggregateInputType = {
+    id?: true
+    date?: true
+    conductedBy?: true
+    hasNotOk?: true
+    overallOk?: true
+    submittedAt?: true
+    submittedById?: true
+    linkedInstanceId?: true
+  }
+
+  export type PreOp624InspectionMaxAggregateInputType = {
+    id?: true
+    date?: true
+    conductedBy?: true
+    hasNotOk?: true
+    overallOk?: true
+    submittedAt?: true
+    submittedById?: true
+    linkedInstanceId?: true
+  }
+
+  export type PreOp624InspectionCountAggregateInputType = {
+    id?: true
+    date?: true
+    conductedBy?: true
+    rows?: true
+    hasNotOk?: true
+    overallOk?: true
+    submittedAt?: true
+    submittedById?: true
+    linkedInstanceId?: true
+    _all?: true
+  }
+
+  export type PreOp624InspectionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PreOp624Inspection to aggregate.
+     */
+    where?: PreOp624InspectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreOp624Inspections to fetch.
+     */
+    orderBy?: PreOp624InspectionOrderByWithRelationInput | PreOp624InspectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PreOp624InspectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreOp624Inspections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreOp624Inspections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PreOp624Inspections
+    **/
+    _count?: true | PreOp624InspectionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PreOp624InspectionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PreOp624InspectionMaxAggregateInputType
+  }
+
+  export type GetPreOp624InspectionAggregateType<T extends PreOp624InspectionAggregateArgs> = {
+        [P in keyof T & keyof AggregatePreOp624Inspection]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePreOp624Inspection[P]>
+      : GetScalarType<T[P], AggregatePreOp624Inspection[P]>
+  }
+
+
+
+
+  export type PreOp624InspectionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PreOp624InspectionWhereInput
+    orderBy?: PreOp624InspectionOrderByWithAggregationInput | PreOp624InspectionOrderByWithAggregationInput[]
+    by: PreOp624InspectionScalarFieldEnum[] | PreOp624InspectionScalarFieldEnum
+    having?: PreOp624InspectionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PreOp624InspectionCountAggregateInputType | true
+    _min?: PreOp624InspectionMinAggregateInputType
+    _max?: PreOp624InspectionMaxAggregateInputType
+  }
+
+  export type PreOp624InspectionGroupByOutputType = {
+    id: string
+    date: Date
+    conductedBy: string
+    rows: JsonValue
+    hasNotOk: boolean
+    overallOk: boolean
+    submittedAt: Date
+    submittedById: string
+    linkedInstanceId: string | null
+    _count: PreOp624InspectionCountAggregateOutputType | null
+    _min: PreOp624InspectionMinAggregateOutputType | null
+    _max: PreOp624InspectionMaxAggregateOutputType | null
+  }
+
+  type GetPreOp624InspectionGroupByPayload<T extends PreOp624InspectionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PreOp624InspectionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PreOp624InspectionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PreOp624InspectionGroupByOutputType[P]>
+            : GetScalarType<T[P], PreOp624InspectionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PreOp624InspectionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    date?: boolean
+    conductedBy?: boolean
+    rows?: boolean
+    hasNotOk?: boolean
+    overallOk?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    linkedInstanceId?: boolean
+    submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["preOp624Inspection"]>
+
+  export type PreOp624InspectionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    date?: boolean
+    conductedBy?: boolean
+    rows?: boolean
+    hasNotOk?: boolean
+    overallOk?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    linkedInstanceId?: boolean
+    submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["preOp624Inspection"]>
+
+  export type PreOp624InspectionSelectScalar = {
+    id?: boolean
+    date?: boolean
+    conductedBy?: boolean
+    rows?: boolean
+    hasNotOk?: boolean
+    overallOk?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    linkedInstanceId?: boolean
+  }
+
+  export type PreOp624InspectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type PreOp624InspectionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    submittedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $PreOp624InspectionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PreOp624Inspection"
+    objects: {
+      submittedBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      date: Date
+      conductedBy: string
+      rows: Prisma.JsonValue
+      hasNotOk: boolean
+      overallOk: boolean
+      submittedAt: Date
+      submittedById: string
+      linkedInstanceId: string | null
+    }, ExtArgs["result"]["preOp624Inspection"]>
+    composites: {}
+  }
+
+  type PreOp624InspectionGetPayload<S extends boolean | null | undefined | PreOp624InspectionDefaultArgs> = $Result.GetResult<Prisma.$PreOp624InspectionPayload, S>
+
+  type PreOp624InspectionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PreOp624InspectionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PreOp624InspectionCountAggregateInputType | true
+    }
+
+  export interface PreOp624InspectionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PreOp624Inspection'], meta: { name: 'PreOp624Inspection' } }
+    /**
+     * Find zero or one PreOp624Inspection that matches the filter.
+     * @param {PreOp624InspectionFindUniqueArgs} args - Arguments to find a PreOp624Inspection
+     * @example
+     * // Get one PreOp624Inspection
+     * const preOp624Inspection = await prisma.preOp624Inspection.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PreOp624InspectionFindUniqueArgs>(args: SelectSubset<T, PreOp624InspectionFindUniqueArgs<ExtArgs>>): Prisma__PreOp624InspectionClient<$Result.GetResult<Prisma.$PreOp624InspectionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PreOp624Inspection that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PreOp624InspectionFindUniqueOrThrowArgs} args - Arguments to find a PreOp624Inspection
+     * @example
+     * // Get one PreOp624Inspection
+     * const preOp624Inspection = await prisma.preOp624Inspection.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PreOp624InspectionFindUniqueOrThrowArgs>(args: SelectSubset<T, PreOp624InspectionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PreOp624InspectionClient<$Result.GetResult<Prisma.$PreOp624InspectionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PreOp624Inspection that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreOp624InspectionFindFirstArgs} args - Arguments to find a PreOp624Inspection
+     * @example
+     * // Get one PreOp624Inspection
+     * const preOp624Inspection = await prisma.preOp624Inspection.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PreOp624InspectionFindFirstArgs>(args?: SelectSubset<T, PreOp624InspectionFindFirstArgs<ExtArgs>>): Prisma__PreOp624InspectionClient<$Result.GetResult<Prisma.$PreOp624InspectionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PreOp624Inspection that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreOp624InspectionFindFirstOrThrowArgs} args - Arguments to find a PreOp624Inspection
+     * @example
+     * // Get one PreOp624Inspection
+     * const preOp624Inspection = await prisma.preOp624Inspection.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PreOp624InspectionFindFirstOrThrowArgs>(args?: SelectSubset<T, PreOp624InspectionFindFirstOrThrowArgs<ExtArgs>>): Prisma__PreOp624InspectionClient<$Result.GetResult<Prisma.$PreOp624InspectionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PreOp624Inspections that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreOp624InspectionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PreOp624Inspections
+     * const preOp624Inspections = await prisma.preOp624Inspection.findMany()
+     * 
+     * // Get first 10 PreOp624Inspections
+     * const preOp624Inspections = await prisma.preOp624Inspection.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const preOp624InspectionWithIdOnly = await prisma.preOp624Inspection.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PreOp624InspectionFindManyArgs>(args?: SelectSubset<T, PreOp624InspectionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreOp624InspectionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PreOp624Inspection.
+     * @param {PreOp624InspectionCreateArgs} args - Arguments to create a PreOp624Inspection.
+     * @example
+     * // Create one PreOp624Inspection
+     * const PreOp624Inspection = await prisma.preOp624Inspection.create({
+     *   data: {
+     *     // ... data to create a PreOp624Inspection
+     *   }
+     * })
+     * 
+     */
+    create<T extends PreOp624InspectionCreateArgs>(args: SelectSubset<T, PreOp624InspectionCreateArgs<ExtArgs>>): Prisma__PreOp624InspectionClient<$Result.GetResult<Prisma.$PreOp624InspectionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PreOp624Inspections.
+     * @param {PreOp624InspectionCreateManyArgs} args - Arguments to create many PreOp624Inspections.
+     * @example
+     * // Create many PreOp624Inspections
+     * const preOp624Inspection = await prisma.preOp624Inspection.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PreOp624InspectionCreateManyArgs>(args?: SelectSubset<T, PreOp624InspectionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PreOp624Inspections and returns the data saved in the database.
+     * @param {PreOp624InspectionCreateManyAndReturnArgs} args - Arguments to create many PreOp624Inspections.
+     * @example
+     * // Create many PreOp624Inspections
+     * const preOp624Inspection = await prisma.preOp624Inspection.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PreOp624Inspections and only return the `id`
+     * const preOp624InspectionWithIdOnly = await prisma.preOp624Inspection.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PreOp624InspectionCreateManyAndReturnArgs>(args?: SelectSubset<T, PreOp624InspectionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreOp624InspectionPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PreOp624Inspection.
+     * @param {PreOp624InspectionDeleteArgs} args - Arguments to delete one PreOp624Inspection.
+     * @example
+     * // Delete one PreOp624Inspection
+     * const PreOp624Inspection = await prisma.preOp624Inspection.delete({
+     *   where: {
+     *     // ... filter to delete one PreOp624Inspection
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PreOp624InspectionDeleteArgs>(args: SelectSubset<T, PreOp624InspectionDeleteArgs<ExtArgs>>): Prisma__PreOp624InspectionClient<$Result.GetResult<Prisma.$PreOp624InspectionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PreOp624Inspection.
+     * @param {PreOp624InspectionUpdateArgs} args - Arguments to update one PreOp624Inspection.
+     * @example
+     * // Update one PreOp624Inspection
+     * const preOp624Inspection = await prisma.preOp624Inspection.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PreOp624InspectionUpdateArgs>(args: SelectSubset<T, PreOp624InspectionUpdateArgs<ExtArgs>>): Prisma__PreOp624InspectionClient<$Result.GetResult<Prisma.$PreOp624InspectionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PreOp624Inspections.
+     * @param {PreOp624InspectionDeleteManyArgs} args - Arguments to filter PreOp624Inspections to delete.
+     * @example
+     * // Delete a few PreOp624Inspections
+     * const { count } = await prisma.preOp624Inspection.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PreOp624InspectionDeleteManyArgs>(args?: SelectSubset<T, PreOp624InspectionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PreOp624Inspections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreOp624InspectionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PreOp624Inspections
+     * const preOp624Inspection = await prisma.preOp624Inspection.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PreOp624InspectionUpdateManyArgs>(args: SelectSubset<T, PreOp624InspectionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PreOp624Inspection.
+     * @param {PreOp624InspectionUpsertArgs} args - Arguments to update or create a PreOp624Inspection.
+     * @example
+     * // Update or create a PreOp624Inspection
+     * const preOp624Inspection = await prisma.preOp624Inspection.upsert({
+     *   create: {
+     *     // ... data to create a PreOp624Inspection
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PreOp624Inspection we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PreOp624InspectionUpsertArgs>(args: SelectSubset<T, PreOp624InspectionUpsertArgs<ExtArgs>>): Prisma__PreOp624InspectionClient<$Result.GetResult<Prisma.$PreOp624InspectionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PreOp624Inspections.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreOp624InspectionCountArgs} args - Arguments to filter PreOp624Inspections to count.
+     * @example
+     * // Count the number of PreOp624Inspections
+     * const count = await prisma.preOp624Inspection.count({
+     *   where: {
+     *     // ... the filter for the PreOp624Inspections we want to count
+     *   }
+     * })
+    **/
+    count<T extends PreOp624InspectionCountArgs>(
+      args?: Subset<T, PreOp624InspectionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PreOp624InspectionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PreOp624Inspection.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreOp624InspectionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PreOp624InspectionAggregateArgs>(args: Subset<T, PreOp624InspectionAggregateArgs>): Prisma.PrismaPromise<GetPreOp624InspectionAggregateType<T>>
+
+    /**
+     * Group by PreOp624Inspection.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PreOp624InspectionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PreOp624InspectionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PreOp624InspectionGroupByArgs['orderBy'] }
+        : { orderBy?: PreOp624InspectionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PreOp624InspectionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPreOp624InspectionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PreOp624Inspection model
+   */
+  readonly fields: PreOp624InspectionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PreOp624Inspection.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PreOp624InspectionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    submittedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PreOp624Inspection model
+   */ 
+  interface PreOp624InspectionFieldRefs {
+    readonly id: FieldRef<"PreOp624Inspection", 'String'>
+    readonly date: FieldRef<"PreOp624Inspection", 'DateTime'>
+    readonly conductedBy: FieldRef<"PreOp624Inspection", 'String'>
+    readonly rows: FieldRef<"PreOp624Inspection", 'Json'>
+    readonly hasNotOk: FieldRef<"PreOp624Inspection", 'Boolean'>
+    readonly overallOk: FieldRef<"PreOp624Inspection", 'Boolean'>
+    readonly submittedAt: FieldRef<"PreOp624Inspection", 'DateTime'>
+    readonly submittedById: FieldRef<"PreOp624Inspection", 'String'>
+    readonly linkedInstanceId: FieldRef<"PreOp624Inspection", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PreOp624Inspection findUnique
+   */
+  export type PreOp624InspectionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreOp624Inspection
+     */
+    select?: PreOp624InspectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreOp624InspectionInclude<ExtArgs> | null
+    /**
+     * Filter, which PreOp624Inspection to fetch.
+     */
+    where: PreOp624InspectionWhereUniqueInput
+  }
+
+  /**
+   * PreOp624Inspection findUniqueOrThrow
+   */
+  export type PreOp624InspectionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreOp624Inspection
+     */
+    select?: PreOp624InspectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreOp624InspectionInclude<ExtArgs> | null
+    /**
+     * Filter, which PreOp624Inspection to fetch.
+     */
+    where: PreOp624InspectionWhereUniqueInput
+  }
+
+  /**
+   * PreOp624Inspection findFirst
+   */
+  export type PreOp624InspectionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreOp624Inspection
+     */
+    select?: PreOp624InspectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreOp624InspectionInclude<ExtArgs> | null
+    /**
+     * Filter, which PreOp624Inspection to fetch.
+     */
+    where?: PreOp624InspectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreOp624Inspections to fetch.
+     */
+    orderBy?: PreOp624InspectionOrderByWithRelationInput | PreOp624InspectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PreOp624Inspections.
+     */
+    cursor?: PreOp624InspectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreOp624Inspections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreOp624Inspections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PreOp624Inspections.
+     */
+    distinct?: PreOp624InspectionScalarFieldEnum | PreOp624InspectionScalarFieldEnum[]
+  }
+
+  /**
+   * PreOp624Inspection findFirstOrThrow
+   */
+  export type PreOp624InspectionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreOp624Inspection
+     */
+    select?: PreOp624InspectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreOp624InspectionInclude<ExtArgs> | null
+    /**
+     * Filter, which PreOp624Inspection to fetch.
+     */
+    where?: PreOp624InspectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreOp624Inspections to fetch.
+     */
+    orderBy?: PreOp624InspectionOrderByWithRelationInput | PreOp624InspectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PreOp624Inspections.
+     */
+    cursor?: PreOp624InspectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreOp624Inspections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreOp624Inspections.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PreOp624Inspections.
+     */
+    distinct?: PreOp624InspectionScalarFieldEnum | PreOp624InspectionScalarFieldEnum[]
+  }
+
+  /**
+   * PreOp624Inspection findMany
+   */
+  export type PreOp624InspectionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreOp624Inspection
+     */
+    select?: PreOp624InspectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreOp624InspectionInclude<ExtArgs> | null
+    /**
+     * Filter, which PreOp624Inspections to fetch.
+     */
+    where?: PreOp624InspectionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PreOp624Inspections to fetch.
+     */
+    orderBy?: PreOp624InspectionOrderByWithRelationInput | PreOp624InspectionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PreOp624Inspections.
+     */
+    cursor?: PreOp624InspectionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PreOp624Inspections from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PreOp624Inspections.
+     */
+    skip?: number
+    distinct?: PreOp624InspectionScalarFieldEnum | PreOp624InspectionScalarFieldEnum[]
+  }
+
+  /**
+   * PreOp624Inspection create
+   */
+  export type PreOp624InspectionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreOp624Inspection
+     */
+    select?: PreOp624InspectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreOp624InspectionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PreOp624Inspection.
+     */
+    data: XOR<PreOp624InspectionCreateInput, PreOp624InspectionUncheckedCreateInput>
+  }
+
+  /**
+   * PreOp624Inspection createMany
+   */
+  export type PreOp624InspectionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PreOp624Inspections.
+     */
+    data: PreOp624InspectionCreateManyInput | PreOp624InspectionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PreOp624Inspection createManyAndReturn
+   */
+  export type PreOp624InspectionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreOp624Inspection
+     */
+    select?: PreOp624InspectionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PreOp624Inspections.
+     */
+    data: PreOp624InspectionCreateManyInput | PreOp624InspectionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreOp624InspectionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PreOp624Inspection update
+   */
+  export type PreOp624InspectionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreOp624Inspection
+     */
+    select?: PreOp624InspectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreOp624InspectionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PreOp624Inspection.
+     */
+    data: XOR<PreOp624InspectionUpdateInput, PreOp624InspectionUncheckedUpdateInput>
+    /**
+     * Choose, which PreOp624Inspection to update.
+     */
+    where: PreOp624InspectionWhereUniqueInput
+  }
+
+  /**
+   * PreOp624Inspection updateMany
+   */
+  export type PreOp624InspectionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PreOp624Inspections.
+     */
+    data: XOR<PreOp624InspectionUpdateManyMutationInput, PreOp624InspectionUncheckedUpdateManyInput>
+    /**
+     * Filter which PreOp624Inspections to update
+     */
+    where?: PreOp624InspectionWhereInput
+  }
+
+  /**
+   * PreOp624Inspection upsert
+   */
+  export type PreOp624InspectionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreOp624Inspection
+     */
+    select?: PreOp624InspectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreOp624InspectionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PreOp624Inspection to update in case it exists.
+     */
+    where: PreOp624InspectionWhereUniqueInput
+    /**
+     * In case the PreOp624Inspection found by the `where` argument doesn't exist, create a new PreOp624Inspection with this data.
+     */
+    create: XOR<PreOp624InspectionCreateInput, PreOp624InspectionUncheckedCreateInput>
+    /**
+     * In case the PreOp624Inspection was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PreOp624InspectionUpdateInput, PreOp624InspectionUncheckedUpdateInput>
+  }
+
+  /**
+   * PreOp624Inspection delete
+   */
+  export type PreOp624InspectionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreOp624Inspection
+     */
+    select?: PreOp624InspectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreOp624InspectionInclude<ExtArgs> | null
+    /**
+     * Filter which PreOp624Inspection to delete.
+     */
+    where: PreOp624InspectionWhereUniqueInput
+  }
+
+  /**
+   * PreOp624Inspection deleteMany
+   */
+  export type PreOp624InspectionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PreOp624Inspections to delete
+     */
+    where?: PreOp624InspectionWhereInput
+  }
+
+  /**
+   * PreOp624Inspection without action
+   */
+  export type PreOp624InspectionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PreOp624Inspection
+     */
+    select?: PreOp624InspectionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PreOp624InspectionInclude<ExtArgs> | null
   }
 
 
@@ -69149,6 +70245,21 @@ export namespace Prisma {
   export type PreOpInspectionScalarFieldEnum = (typeof PreOpInspectionScalarFieldEnum)[keyof typeof PreOpInspectionScalarFieldEnum]
 
 
+  export const PreOp624InspectionScalarFieldEnum: {
+    id: 'id',
+    date: 'date',
+    conductedBy: 'conductedBy',
+    rows: 'rows',
+    hasNotOk: 'hasNotOk',
+    overallOk: 'overallOk',
+    submittedAt: 'submittedAt',
+    submittedById: 'submittedById',
+    linkedInstanceId: 'linkedInstanceId'
+  };
+
+  export type PreOp624InspectionScalarFieldEnum = (typeof PreOp624InspectionScalarFieldEnum)[keyof typeof PreOp624InspectionScalarFieldEnum]
+
+
   export const BatchSheetTemplateScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -70499,6 +71610,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceListRelationFilter
     taskInstanceAuditLogs?: TaskInstanceAuditListRelationFilter
     notifications?: NotificationListRelationFilter
+    preOp624Inspections?: PreOp624InspectionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -70545,6 +71657,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceOrderByRelationAggregateInput
     taskInstanceAuditLogs?: TaskInstanceAuditOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
+    preOp624Inspections?: PreOp624InspectionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -70594,6 +71707,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceListRelationFilter
     taskInstanceAuditLogs?: TaskInstanceAuditListRelationFilter
     notifications?: NotificationListRelationFilter
+    preOp624Inspections?: PreOp624InspectionListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -70945,6 +72059,81 @@ export namespace Prisma {
     supervisorSignature?: StringNullableWithAggregatesFilter<"PreOpInspection"> | string | null
     submittedAt?: DateTimeWithAggregatesFilter<"PreOpInspection"> | Date | string
     submittedById?: StringWithAggregatesFilter<"PreOpInspection"> | string
+  }
+
+  export type PreOp624InspectionWhereInput = {
+    AND?: PreOp624InspectionWhereInput | PreOp624InspectionWhereInput[]
+    OR?: PreOp624InspectionWhereInput[]
+    NOT?: PreOp624InspectionWhereInput | PreOp624InspectionWhereInput[]
+    id?: StringFilter<"PreOp624Inspection"> | string
+    date?: DateTimeFilter<"PreOp624Inspection"> | Date | string
+    conductedBy?: StringFilter<"PreOp624Inspection"> | string
+    rows?: JsonFilter<"PreOp624Inspection">
+    hasNotOk?: BoolFilter<"PreOp624Inspection"> | boolean
+    overallOk?: BoolFilter<"PreOp624Inspection"> | boolean
+    submittedAt?: DateTimeFilter<"PreOp624Inspection"> | Date | string
+    submittedById?: StringFilter<"PreOp624Inspection"> | string
+    linkedInstanceId?: StringNullableFilter<"PreOp624Inspection"> | string | null
+    submittedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type PreOp624InspectionOrderByWithRelationInput = {
+    id?: SortOrder
+    date?: SortOrder
+    conductedBy?: SortOrder
+    rows?: SortOrder
+    hasNotOk?: SortOrder
+    overallOk?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrderInput | SortOrder
+    submittedBy?: UserOrderByWithRelationInput
+  }
+
+  export type PreOp624InspectionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PreOp624InspectionWhereInput | PreOp624InspectionWhereInput[]
+    OR?: PreOp624InspectionWhereInput[]
+    NOT?: PreOp624InspectionWhereInput | PreOp624InspectionWhereInput[]
+    date?: DateTimeFilter<"PreOp624Inspection"> | Date | string
+    conductedBy?: StringFilter<"PreOp624Inspection"> | string
+    rows?: JsonFilter<"PreOp624Inspection">
+    hasNotOk?: BoolFilter<"PreOp624Inspection"> | boolean
+    overallOk?: BoolFilter<"PreOp624Inspection"> | boolean
+    submittedAt?: DateTimeFilter<"PreOp624Inspection"> | Date | string
+    submittedById?: StringFilter<"PreOp624Inspection"> | string
+    linkedInstanceId?: StringNullableFilter<"PreOp624Inspection"> | string | null
+    submittedBy?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type PreOp624InspectionOrderByWithAggregationInput = {
+    id?: SortOrder
+    date?: SortOrder
+    conductedBy?: SortOrder
+    rows?: SortOrder
+    hasNotOk?: SortOrder
+    overallOk?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrderInput | SortOrder
+    _count?: PreOp624InspectionCountOrderByAggregateInput
+    _max?: PreOp624InspectionMaxOrderByAggregateInput
+    _min?: PreOp624InspectionMinOrderByAggregateInput
+  }
+
+  export type PreOp624InspectionScalarWhereWithAggregatesInput = {
+    AND?: PreOp624InspectionScalarWhereWithAggregatesInput | PreOp624InspectionScalarWhereWithAggregatesInput[]
+    OR?: PreOp624InspectionScalarWhereWithAggregatesInput[]
+    NOT?: PreOp624InspectionScalarWhereWithAggregatesInput | PreOp624InspectionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PreOp624Inspection"> | string
+    date?: DateTimeWithAggregatesFilter<"PreOp624Inspection"> | Date | string
+    conductedBy?: StringWithAggregatesFilter<"PreOp624Inspection"> | string
+    rows?: JsonWithAggregatesFilter<"PreOp624Inspection">
+    hasNotOk?: BoolWithAggregatesFilter<"PreOp624Inspection"> | boolean
+    overallOk?: BoolWithAggregatesFilter<"PreOp624Inspection"> | boolean
+    submittedAt?: DateTimeWithAggregatesFilter<"PreOp624Inspection"> | Date | string
+    submittedById?: StringWithAggregatesFilter<"PreOp624Inspection"> | string
+    linkedInstanceId?: StringNullableWithAggregatesFilter<"PreOp624Inspection"> | string | null
   }
 
   export type BatchSheetTemplateWhereInput = {
@@ -76227,6 +77416,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -76273,6 +77463,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUpdateInput = {
@@ -76319,6 +77510,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -76365,6 +77557,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -76749,6 +77942,89 @@ export namespace Prisma {
     supervisorSignature?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submittedById?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PreOp624InspectionCreateInput = {
+    id?: string
+    date: Date | string
+    conductedBy: string
+    rows: JsonNullValueInput | InputJsonValue
+    hasNotOk?: boolean
+    overallOk: boolean
+    submittedAt?: Date | string
+    linkedInstanceId?: string | null
+    submittedBy: UserCreateNestedOneWithoutPreOp624InspectionsInput
+  }
+
+  export type PreOp624InspectionUncheckedCreateInput = {
+    id?: string
+    date: Date | string
+    conductedBy: string
+    rows: JsonNullValueInput | InputJsonValue
+    hasNotOk?: boolean
+    overallOk: boolean
+    submittedAt?: Date | string
+    submittedById: string
+    linkedInstanceId?: string | null
+  }
+
+  export type PreOp624InspectionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    rows?: JsonNullValueInput | InputJsonValue
+    hasNotOk?: BoolFieldUpdateOperationsInput | boolean
+    overallOk?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedBy?: UserUpdateOneRequiredWithoutPreOp624InspectionsNestedInput
+  }
+
+  export type PreOp624InspectionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    rows?: JsonNullValueInput | InputJsonValue
+    hasNotOk?: BoolFieldUpdateOperationsInput | boolean
+    overallOk?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedById?: StringFieldUpdateOperationsInput | string
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PreOp624InspectionCreateManyInput = {
+    id?: string
+    date: Date | string
+    conductedBy: string
+    rows: JsonNullValueInput | InputJsonValue
+    hasNotOk?: boolean
+    overallOk: boolean
+    submittedAt?: Date | string
+    submittedById: string
+    linkedInstanceId?: string | null
+  }
+
+  export type PreOp624InspectionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    rows?: JsonNullValueInput | InputJsonValue
+    hasNotOk?: BoolFieldUpdateOperationsInput | boolean
+    overallOk?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PreOp624InspectionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    rows?: JsonNullValueInput | InputJsonValue
+    hasNotOk?: BoolFieldUpdateOperationsInput | boolean
+    overallOk?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedById?: StringFieldUpdateOperationsInput | string
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BatchSheetTemplateCreateInput = {
@@ -82900,6 +84176,12 @@ export namespace Prisma {
     none?: NotificationWhereInput
   }
 
+  export type PreOp624InspectionListRelationFilter = {
+    every?: PreOp624InspectionWhereInput
+    some?: PreOp624InspectionWhereInput
+    none?: PreOp624InspectionWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -83022,6 +84304,10 @@ export namespace Prisma {
   }
 
   export type NotificationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PreOp624InspectionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -83423,6 +84709,40 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPreOpStatusFilter<$PrismaModel>
     _max?: NestedEnumPreOpStatusFilter<$PrismaModel>
+  }
+
+  export type PreOp624InspectionCountOrderByAggregateInput = {
+    id?: SortOrder
+    date?: SortOrder
+    conductedBy?: SortOrder
+    rows?: SortOrder
+    hasNotOk?: SortOrder
+    overallOk?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrder
+  }
+
+  export type PreOp624InspectionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    date?: SortOrder
+    conductedBy?: SortOrder
+    hasNotOk?: SortOrder
+    overallOk?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrder
+  }
+
+  export type PreOp624InspectionMinOrderByAggregateInput = {
+    id?: SortOrder
+    date?: SortOrder
+    conductedBy?: SortOrder
+    hasNotOk?: SortOrder
+    overallOk?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrder
   }
 
   export type FloatNullableFilter<$PrismaModel = never> = {
@@ -87124,6 +88444,13 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
+  export type PreOp624InspectionCreateNestedManyWithoutSubmittedByInput = {
+    create?: XOR<PreOp624InspectionCreateWithoutSubmittedByInput, PreOp624InspectionUncheckedCreateWithoutSubmittedByInput> | PreOp624InspectionCreateWithoutSubmittedByInput[] | PreOp624InspectionUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: PreOp624InspectionCreateOrConnectWithoutSubmittedByInput | PreOp624InspectionCreateOrConnectWithoutSubmittedByInput[]
+    createMany?: PreOp624InspectionCreateManySubmittedByInputEnvelope
+    connect?: PreOp624InspectionWhereUniqueInput | PreOp624InspectionWhereUniqueInput[]
+  }
+
   export type FormUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -87360,6 +88687,13 @@ export namespace Prisma {
     connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
     createMany?: NotificationCreateManyUserInputEnvelope
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput = {
+    create?: XOR<PreOp624InspectionCreateWithoutSubmittedByInput, PreOp624InspectionUncheckedCreateWithoutSubmittedByInput> | PreOp624InspectionCreateWithoutSubmittedByInput[] | PreOp624InspectionUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: PreOp624InspectionCreateOrConnectWithoutSubmittedByInput | PreOp624InspectionCreateOrConnectWithoutSubmittedByInput[]
+    createMany?: PreOp624InspectionCreateManySubmittedByInputEnvelope
+    connect?: PreOp624InspectionWhereUniqueInput | PreOp624InspectionWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -87858,6 +89192,20 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput = {
+    create?: XOR<PreOp624InspectionCreateWithoutSubmittedByInput, PreOp624InspectionUncheckedCreateWithoutSubmittedByInput> | PreOp624InspectionCreateWithoutSubmittedByInput[] | PreOp624InspectionUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: PreOp624InspectionCreateOrConnectWithoutSubmittedByInput | PreOp624InspectionCreateOrConnectWithoutSubmittedByInput[]
+    upsert?: PreOp624InspectionUpsertWithWhereUniqueWithoutSubmittedByInput | PreOp624InspectionUpsertWithWhereUniqueWithoutSubmittedByInput[]
+    createMany?: PreOp624InspectionCreateManySubmittedByInputEnvelope
+    set?: PreOp624InspectionWhereUniqueInput | PreOp624InspectionWhereUniqueInput[]
+    disconnect?: PreOp624InspectionWhereUniqueInput | PreOp624InspectionWhereUniqueInput[]
+    delete?: PreOp624InspectionWhereUniqueInput | PreOp624InspectionWhereUniqueInput[]
+    connect?: PreOp624InspectionWhereUniqueInput | PreOp624InspectionWhereUniqueInput[]
+    update?: PreOp624InspectionUpdateWithWhereUniqueWithoutSubmittedByInput | PreOp624InspectionUpdateWithWhereUniqueWithoutSubmittedByInput[]
+    updateMany?: PreOp624InspectionUpdateManyWithWhereWithoutSubmittedByInput | PreOp624InspectionUpdateManyWithWhereWithoutSubmittedByInput[]
+    deleteMany?: PreOp624InspectionScalarWhereInput | PreOp624InspectionScalarWhereInput[]
+  }
+
   export type FormUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -88334,6 +89682,20 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput = {
+    create?: XOR<PreOp624InspectionCreateWithoutSubmittedByInput, PreOp624InspectionUncheckedCreateWithoutSubmittedByInput> | PreOp624InspectionCreateWithoutSubmittedByInput[] | PreOp624InspectionUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: PreOp624InspectionCreateOrConnectWithoutSubmittedByInput | PreOp624InspectionCreateOrConnectWithoutSubmittedByInput[]
+    upsert?: PreOp624InspectionUpsertWithWhereUniqueWithoutSubmittedByInput | PreOp624InspectionUpsertWithWhereUniqueWithoutSubmittedByInput[]
+    createMany?: PreOp624InspectionCreateManySubmittedByInputEnvelope
+    set?: PreOp624InspectionWhereUniqueInput | PreOp624InspectionWhereUniqueInput[]
+    disconnect?: PreOp624InspectionWhereUniqueInput | PreOp624InspectionWhereUniqueInput[]
+    delete?: PreOp624InspectionWhereUniqueInput | PreOp624InspectionWhereUniqueInput[]
+    connect?: PreOp624InspectionWhereUniqueInput | PreOp624InspectionWhereUniqueInput[]
+    update?: PreOp624InspectionUpdateWithWhereUniqueWithoutSubmittedByInput | PreOp624InspectionUpdateWithWhereUniqueWithoutSubmittedByInput[]
+    updateMany?: PreOp624InspectionUpdateManyWithWhereWithoutSubmittedByInput | PreOp624InspectionUpdateManyWithWhereWithoutSubmittedByInput[]
+    deleteMany?: PreOp624InspectionScalarWhereInput | PreOp624InspectionScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutCreatedFormsInput = {
     create?: XOR<UserCreateWithoutCreatedFormsInput, UserUncheckedCreateWithoutCreatedFormsInput>
     connectOrCreate?: UserCreateOrConnectWithoutCreatedFormsInput
@@ -88489,6 +89851,20 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutPreOpInspectionsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPreOpInspectionsInput, UserUpdateWithoutPreOpInspectionsInput>, UserUncheckedUpdateWithoutPreOpInspectionsInput>
+  }
+
+  export type UserCreateNestedOneWithoutPreOp624InspectionsInput = {
+    create?: XOR<UserCreateWithoutPreOp624InspectionsInput, UserUncheckedCreateWithoutPreOp624InspectionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPreOp624InspectionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutPreOp624InspectionsNestedInput = {
+    create?: XOR<UserCreateWithoutPreOp624InspectionsInput, UserUncheckedCreateWithoutPreOp624InspectionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPreOp624InspectionsInput
+    upsert?: UserUpsertWithoutPreOp624InspectionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPreOp624InspectionsInput, UserUpdateWithoutPreOp624InspectionsInput>, UserUncheckedUpdateWithoutPreOp624InspectionsInput>
   }
 
   export type UserCreateNestedOneWithoutCreatedBatchTemplatesInput = {
@@ -94240,6 +95616,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PreOp624InspectionCreateWithoutSubmittedByInput = {
+    id?: string
+    date: Date | string
+    conductedBy: string
+    rows: JsonNullValueInput | InputJsonValue
+    hasNotOk?: boolean
+    overallOk: boolean
+    submittedAt?: Date | string
+    linkedInstanceId?: string | null
+  }
+
+  export type PreOp624InspectionUncheckedCreateWithoutSubmittedByInput = {
+    id?: string
+    date: Date | string
+    conductedBy: string
+    rows: JsonNullValueInput | InputJsonValue
+    hasNotOk?: boolean
+    overallOk: boolean
+    submittedAt?: Date | string
+    linkedInstanceId?: string | null
+  }
+
+  export type PreOp624InspectionCreateOrConnectWithoutSubmittedByInput = {
+    where: PreOp624InspectionWhereUniqueInput
+    create: XOR<PreOp624InspectionCreateWithoutSubmittedByInput, PreOp624InspectionUncheckedCreateWithoutSubmittedByInput>
+  }
+
+  export type PreOp624InspectionCreateManySubmittedByInputEnvelope = {
+    data: PreOp624InspectionCreateManySubmittedByInput | PreOp624InspectionCreateManySubmittedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FormUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: FormWhereUniqueInput
     update: XOR<FormUpdateWithoutCreatedByInput, FormUncheckedUpdateWithoutCreatedByInput>
@@ -95402,6 +96810,37 @@ export namespace Prisma {
     readAt?: DateTimeNullableFilter<"Notification"> | Date | string | null
   }
 
+  export type PreOp624InspectionUpsertWithWhereUniqueWithoutSubmittedByInput = {
+    where: PreOp624InspectionWhereUniqueInput
+    update: XOR<PreOp624InspectionUpdateWithoutSubmittedByInput, PreOp624InspectionUncheckedUpdateWithoutSubmittedByInput>
+    create: XOR<PreOp624InspectionCreateWithoutSubmittedByInput, PreOp624InspectionUncheckedCreateWithoutSubmittedByInput>
+  }
+
+  export type PreOp624InspectionUpdateWithWhereUniqueWithoutSubmittedByInput = {
+    where: PreOp624InspectionWhereUniqueInput
+    data: XOR<PreOp624InspectionUpdateWithoutSubmittedByInput, PreOp624InspectionUncheckedUpdateWithoutSubmittedByInput>
+  }
+
+  export type PreOp624InspectionUpdateManyWithWhereWithoutSubmittedByInput = {
+    where: PreOp624InspectionScalarWhereInput
+    data: XOR<PreOp624InspectionUpdateManyMutationInput, PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByInput>
+  }
+
+  export type PreOp624InspectionScalarWhereInput = {
+    AND?: PreOp624InspectionScalarWhereInput | PreOp624InspectionScalarWhereInput[]
+    OR?: PreOp624InspectionScalarWhereInput[]
+    NOT?: PreOp624InspectionScalarWhereInput | PreOp624InspectionScalarWhereInput[]
+    id?: StringFilter<"PreOp624Inspection"> | string
+    date?: DateTimeFilter<"PreOp624Inspection"> | Date | string
+    conductedBy?: StringFilter<"PreOp624Inspection"> | string
+    rows?: JsonFilter<"PreOp624Inspection">
+    hasNotOk?: BoolFilter<"PreOp624Inspection"> | boolean
+    overallOk?: BoolFilter<"PreOp624Inspection"> | boolean
+    submittedAt?: DateTimeFilter<"PreOp624Inspection"> | Date | string
+    submittedById?: StringFilter<"PreOp624Inspection"> | string
+    linkedInstanceId?: StringNullableFilter<"PreOp624Inspection"> | string | null
+  }
+
   export type UserCreateWithoutCreatedFormsInput = {
     id?: string
     name: string
@@ -95445,6 +96884,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFormsInput = {
@@ -95490,6 +96930,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFormsInput = {
@@ -95583,6 +97024,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFormsInput = {
@@ -95628,6 +97070,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutFormInput = {
@@ -95720,6 +97163,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -95765,6 +97209,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -95815,6 +97260,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSubmissionsInput = {
@@ -95860,6 +97306,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSubmissionsInput = {
@@ -95958,6 +97405,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -96003,6 +97451,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutApprovedSubmissionsInput = {
@@ -96059,6 +97508,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSubmissionsInput = {
@@ -96104,6 +97554,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutRecordsInput = {
@@ -96149,6 +97600,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRecordsInput = {
@@ -96194,6 +97646,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRecordsInput = {
@@ -96255,6 +97708,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecordsInput = {
@@ -96300,6 +97754,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutPreOpInspectionsInput = {
@@ -96345,6 +97800,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOpInspectionsInput = {
@@ -96390,6 +97846,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOpInspectionsInput = {
@@ -96451,6 +97908,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOpInspectionsInput = {
@@ -96467,6 +97925,207 @@ export namespace Prisma {
     submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
     records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserCreateWithoutPreOp624InspectionsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPreOp624InspectionsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPreOp624InspectionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPreOp624InspectionsInput, UserUncheckedCreateWithoutPreOp624InspectionsInput>
+  }
+
+  export type UserUpsertWithoutPreOp624InspectionsInput = {
+    update: XOR<UserUpdateWithoutPreOp624InspectionsInput, UserUncheckedUpdateWithoutPreOp624InspectionsInput>
+    create: XOR<UserCreateWithoutPreOp624InspectionsInput, UserUncheckedCreateWithoutPreOp624InspectionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPreOp624InspectionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPreOp624InspectionsInput, UserUncheckedUpdateWithoutPreOp624InspectionsInput>
+  }
+
+  export type UserUpdateWithoutPreOp624InspectionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPreOp624InspectionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
     createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
     createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -96541,6 +98200,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBatchTemplatesInput = {
@@ -96586,6 +98246,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
@@ -96770,6 +98431,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBatchTemplatesInput = {
@@ -96815,6 +98477,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductUpsertWithoutTemplatesInput = {
@@ -97000,6 +98663,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchSheetSubmissionsInput = {
@@ -97045,6 +98709,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
@@ -97256,6 +98921,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchSheetSubmissionsInput = {
@@ -97301,6 +98967,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductUpsertWithoutSubmissionsInput = {
@@ -97419,6 +99086,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyCleaningChecklistsInput = {
@@ -97464,6 +99132,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyCleaningChecklistsInput = {
@@ -97525,6 +99194,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyCleaningChecklistsInput = {
@@ -97570,6 +99240,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -97615,6 +99286,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -97660,6 +99332,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput = {
@@ -97721,6 +99394,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput = {
@@ -97766,6 +99440,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductCreateWithoutWipMaterialsInput = {
@@ -99768,6 +101443,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutFormTemplatesInput = {
@@ -99813,6 +101489,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutFormTemplatesInput = {
@@ -99919,6 +101596,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFormTemplatesInput = {
@@ -99964,6 +101642,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SupplierCreateWithoutDocumentsInput = {
@@ -101109,6 +102788,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductsInput = {
@@ -101154,6 +102834,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductsInput = {
@@ -101469,6 +103150,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductsInput = {
@@ -101514,6 +103196,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput = {
@@ -101704,6 +103387,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutPurchaseOrdersInput = {
@@ -101749,6 +103433,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutPurchaseOrdersInput = {
@@ -101985,6 +103670,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPurchaseOrdersInput = {
@@ -102030,6 +103716,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type PurchaseOrderItemUpsertWithWhereUniqueWithoutPoInput = {
@@ -102355,6 +104042,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutReceivingRecordsInput = {
@@ -102400,6 +104088,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutReceivingRecordsInput = {
@@ -102804,6 +104493,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -102849,6 +104539,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialUpsertWithoutReceivingRecordsInput = {
@@ -103296,6 +104987,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutResolvedQuarantineRecordsInput = {
@@ -103341,6 +105033,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutResolvedQuarantineRecordsInput = {
@@ -103479,6 +105172,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput = {
@@ -103524,6 +105218,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutInventoryLotsInput = {
@@ -104319,6 +106014,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutInventoryMovementsInput = {
@@ -104364,6 +106060,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutInventoryMovementsInput = {
@@ -104561,6 +106258,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -104606,6 +106304,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutCycleCountsInput = {
@@ -104775,6 +106474,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCycleCountsInput = {
@@ -104820,6 +106520,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCycleCountsInput = {
@@ -105017,6 +106718,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCycleCountsInput = {
@@ -105062,6 +106764,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutInitialStockEntriesInput = {
@@ -105286,6 +106989,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutInitialStockEntriesInput = {
@@ -105331,6 +107035,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutInitialStockEntriesInput = {
@@ -105589,6 +107294,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInitialStockEntriesInput = {
@@ -105634,6 +107340,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -105750,6 +107457,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -105795,6 +107503,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutStockAlertAcknowledgmentsInput = {
@@ -105933,6 +107642,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStockAlertAcknowledgmentsInput = {
@@ -105978,6 +107688,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutForecastExclusionsInput = {
@@ -106023,6 +107734,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutForecastExclusionsInput = {
@@ -106068,6 +107780,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutForecastExclusionsInput = {
@@ -106180,6 +107893,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForecastExclusionsInput = {
@@ -106225,6 +107939,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductUpsertWithoutForecastExclusionsInput = {
@@ -106465,6 +108180,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutAuditExclusionsInput = {
@@ -106510,6 +108226,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutAuditExclusionsInput = {
@@ -106721,6 +108438,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditExclusionsInput = {
@@ -106766,6 +108484,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ShipstationBundleComponentCreateWithoutBundleProductInput = {
@@ -107568,6 +109287,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdIngredientsInput = {
@@ -107613,6 +109333,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdIngredientsInput = {
@@ -107674,6 +109395,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdIngredientsInput = {
@@ -107719,6 +109441,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutRdProjectsInput = {
@@ -107764,6 +109487,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdProjectsInput = {
@@ -107809,6 +109533,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdProjectsInput = {
@@ -107942,6 +109667,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdProjectsInput = {
@@ -107987,6 +109713,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type RdIterationUpsertWithWhereUniqueWithoutProjectInput = {
@@ -108562,6 +110289,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdAttachmentsInput = {
@@ -108607,6 +110335,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdAttachmentsInput = {
@@ -108741,6 +110470,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdAttachmentsInput = {
@@ -108786,6 +110516,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutRdNutritionProfilesInput = {
@@ -108831,6 +110562,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdNutritionProfilesInput = {
@@ -108876,6 +110608,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdNutritionProfilesInput = {
@@ -108937,6 +110670,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdNutritionProfilesInput = {
@@ -108982,6 +110716,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutAuditAcknowledgmentsInput = {
@@ -109098,6 +110833,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutAuditAcknowledgmentsInput = {
@@ -109143,6 +110879,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutAuditAcknowledgmentsInput = {
@@ -109281,6 +111018,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditAcknowledgmentsInput = {
@@ -109326,6 +111064,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SopCertificationScopeCreateWithoutCertificationInput = {
@@ -109413,6 +111152,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSopDocumentsInput = {
@@ -109458,6 +111198,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSopDocumentsInput = {
@@ -109613,6 +111354,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSopDocumentsInput = {
@@ -109658,6 +111400,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SopCertificationScopeUpsertWithWhereUniqueWithoutSopInput = {
@@ -110132,6 +111875,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSopReviewLogsInput = {
@@ -110177,6 +111921,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSopReviewLogsInput = {
@@ -110287,6 +112032,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSopReviewLogsInput = {
@@ -110332,6 +112078,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SopDocumentCreateWithoutRemindersInput = {
@@ -110558,6 +112305,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutOwnedTaskRulesInput = {
@@ -110603,6 +112351,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutOwnedTaskRulesInput = {
@@ -110755,6 +112504,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedTaskRulesInput = {
@@ -110800,6 +112550,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type RuleInstanceUpsertWithWhereUniqueWithoutRuleInput = {
@@ -110906,6 +112657,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutDoneRuleInstancesInput = {
@@ -110951,6 +112703,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutDoneRuleInstancesInput = {
@@ -111001,6 +112754,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSkippedRuleInstancesInput = {
@@ -111046,6 +112800,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSkippedRuleInstancesInput = {
@@ -111096,6 +112851,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedRuleInstancesInput = {
@@ -111141,6 +112897,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedRuleInstancesInput = {
@@ -111191,6 +112948,7 @@ export namespace Prisma {
     assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutMarkedMissedRuleInstancesInput = {
@@ -111236,6 +112994,7 @@ export namespace Prisma {
     assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutMarkedMissedRuleInstancesInput = {
@@ -111374,6 +113133,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDoneRuleInstancesInput = {
@@ -111419,6 +113179,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutSkippedRuleInstancesInput = {
@@ -111475,6 +113236,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSkippedRuleInstancesInput = {
@@ -111520,6 +113282,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutAssignedRuleInstancesInput = {
@@ -111576,6 +113339,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedRuleInstancesInput = {
@@ -111621,6 +113385,7 @@ export namespace Prisma {
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutMarkedMissedRuleInstancesInput = {
@@ -111677,6 +113442,7 @@ export namespace Prisma {
     assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMarkedMissedRuleInstancesInput = {
@@ -111722,6 +113488,7 @@ export namespace Prisma {
     assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type TaskInstanceAuditUpsertWithWhereUniqueWithoutInstanceInput = {
@@ -111840,6 +113607,7 @@ export namespace Prisma {
     assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutTaskInstanceAuditLogsInput = {
@@ -111885,6 +113653,7 @@ export namespace Prisma {
     assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutTaskInstanceAuditLogsInput = {
@@ -112009,6 +113778,7 @@ export namespace Prisma {
     assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskInstanceAuditLogsInput = {
@@ -112054,6 +113824,7 @@ export namespace Prisma {
     assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -112099,6 +113870,7 @@ export namespace Prisma {
     assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
     markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -112144,6 +113916,7 @@ export namespace Prisma {
     assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
     markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -112205,6 +113978,7 @@ export namespace Prisma {
     assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
     markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -112250,6 +114024,7 @@ export namespace Prisma {
     assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
     markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type FormCreateManyCreatedByInput = {
@@ -112834,6 +114609,17 @@ export namespace Prisma {
     dedupeKey: string
     createdAt?: Date | string
     readAt?: Date | string | null
+  }
+
+  export type PreOp624InspectionCreateManySubmittedByInput = {
+    id?: string
+    date: Date | string
+    conductedBy: string
+    rows: JsonNullValueInput | InputJsonValue
+    hasNotOk?: boolean
+    overallOk: boolean
+    submittedAt?: Date | string
+    linkedInstanceId?: string | null
   }
 
   export type FormUpdateWithoutCreatedByInput = {
@@ -114632,6 +116418,39 @@ export namespace Prisma {
     dedupeKey?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PreOp624InspectionUpdateWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    rows?: JsonNullValueInput | InputJsonValue
+    hasNotOk?: BoolFieldUpdateOperationsInput | boolean
+    overallOk?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PreOp624InspectionUncheckedUpdateWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    rows?: JsonNullValueInput | InputJsonValue
+    hasNotOk?: BoolFieldUpdateOperationsInput | boolean
+    overallOk?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    rows?: JsonNullValueInput | InputJsonValue
+    hasNotOk?: BoolFieldUpdateOperationsInput | boolean
+    overallOk?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type FormSubmissionCreateManyFormInput = {
@@ -117981,6 +119800,10 @@ export namespace Prisma {
      * @deprecated Use PreOpInspectionDefaultArgs instead
      */
     export type PreOpInspectionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PreOpInspectionDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PreOp624InspectionDefaultArgs instead
+     */
+    export type PreOp624InspectionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PreOp624InspectionDefaultArgs<ExtArgs>
     /**
      * @deprecated Use BatchSheetTemplateDefaultArgs instead
      */
