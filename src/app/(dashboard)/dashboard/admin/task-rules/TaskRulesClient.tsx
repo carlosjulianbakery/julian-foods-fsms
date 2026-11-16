@@ -636,46 +636,21 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Linked Form</label>
-                {(() => {
-                  const currentFacilityName = facilities.find((f) => f.id === form.facilityId)?.name ?? "";
-                  const allOptions = getFormKeyOptions();
-                  const facilityOptions = allOptions.filter(
-                    (fk) => fk.facility === null || fk.facility === currentFacilityName
-                  );
-                  const otherOptions = allOptions.filter(
-                    (fk) => fk.facility !== null && fk.facility !== currentFacilityName
-                  );
-                  const unknownFormKey =
-                    form.formKey && !TASK_FORM_REGISTRY[form.formKey] ? form.formKey : null;
-                  return (
-                    <select
-                      className="input w-full"
-                      value={form.formKey}
-                      onChange={(e) => setForm((f) => ({ ...f, formKey: e.target.value }))}
-                    >
-                      <option value="">— none —</option>
-                      {unknownFormKey && (
-                        <option value={unknownFormKey}>
-                          Unknown form ({unknownFormKey}) — fix
-                        </option>
-                      )}
-                      {facilityOptions.length > 0 && (
-                        <optgroup label={currentFacilityName ? `${currentFacilityName} forms` : "Forms"}>
-                          {facilityOptions.map((fk) => (
-                            <option key={fk.value} value={fk.value}>{fk.label}</option>
-                          ))}
-                        </optgroup>
-                      )}
-                      {otherOptions.length > 0 && (
-                        <optgroup label="Other forms">
-                          {otherOptions.map((fk) => (
-                            <option key={fk.value} value={fk.value}>{fk.label}</option>
-                          ))}
-                        </optgroup>
-                      )}
-                    </select>
-                  );
-                })()}
+                <select
+                  className="input w-full"
+                  value={form.formKey}
+                  onChange={(e) => setForm((f) => ({ ...f, formKey: e.target.value }))}
+                >
+                  <option value="">— none —</option>
+                  {form.formKey && !TASK_FORM_REGISTRY[form.formKey] && (
+                    <option value={form.formKey}>
+                      Unknown form ({form.formKey}) — fix
+                    </option>
+                  )}
+                  {getFormKeyOptions().map((fk) => (
+                    <option key={fk.value} value={fk.value}>{fk.label}</option>
+                  ))}
+                </select>
               </div>
             </div>
 

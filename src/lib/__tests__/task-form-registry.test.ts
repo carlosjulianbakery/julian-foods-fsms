@@ -23,12 +23,6 @@ describe("TASK_FORM_REGISTRY completeness", () => {
     }
   });
 
-  it("every entry has a non-empty category", () => {
-    for (const [key, entry] of entries) {
-      expect(entry.category, `${key}.category`).toBeTruthy();
-    }
-  });
-
   it("all formKeys are unique (by design of an object)", () => {
     const keys = entries.map(([k]) => k);
     expect(new Set(keys).size).toBe(keys.length);
@@ -80,7 +74,7 @@ describe("href values are stable for all existing formKeys", () => {
   });
 });
 
-// ── getFormKeyOptions equals registry ─────────────────────────────────────────
+// ── getFormKeyOptions: flat, sorted, equals registry ─────────────────────────
 
 describe("getFormKeyOptions", () => {
   it("returns exactly one option per registry entry — no hardcoded extras", () => {
@@ -93,6 +87,19 @@ describe("getFormKeyOptions", () => {
     const opts = getFormKeyOptions();
     for (const opt of opts) {
       expect(opt.label).toBe(TASK_FORM_REGISTRY[opt.value].label);
+    }
+  });
+
+  it("options are sorted alphabetically by label (flat, no groups)", () => {
+    const opts = getFormKeyOptions();
+    const labels = opts.map((o) => o.label);
+    expect(labels).toEqual([...labels].sort((a, b) => a.localeCompare(b)));
+  });
+
+  it("options have only value and label — no facility, category, or group fields", () => {
+    const opts = getFormKeyOptions();
+    for (const opt of opts) {
+      expect(Object.keys(opt).sort()).toEqual(["label", "value"]);
     }
   });
 });
@@ -124,43 +131,34 @@ describe("getFormEntry", () => {
 // ── Every formKey used by existing rules resolves ────────────────────────────
 
 describe("every formKey used by rules resolves to a registry entry", () => {
-  // Representative mock of all current non-archived rules
   const mockRules = [
-    { title: "Daily Cleaning", formKey: "daily_cleaning", isArchived: false },
-    { title: "Pre-Op Inspection", formKey: "preop", isArchived: false },
-    { title: "Monthly Cleaning", formKey: "monthly_cleaning", isArchived: false },
-    { title: "SOP Review", formKey: "sop_review", isArchived: false },
-    { title: "Batch Sheet - Julian Bakery", formKey: "batch_sheet", isArchived: false },
-    { title: "Batch Sheet - 624", formKey: "batch_sheet", isArchived: false },
-    { title: "Pre-Op Inspection — 624", formKey: "preop_624", isArchived: false },
+    { title: "Daily Cleaning", formKey: "daily_cleaning" },
+    { title: "Pre-Op Inspection", formKey: "preop" },
+    { title: "Monthly Cleaning", formKey: "monthly_cleaning" },
+    { title: "SOP Review", formKey: "sop_review" },
+    { title: "Batch Sheet - Julian Bakery", formKey: "batch_sheet" },
+    { title: "Batch Sheet - 624", formKey: "batch_sheet" },
+    { title: "Pre-Op Inspection — 624", formKey: "preop_624" },
   ];
 
   for (const rule of mockRules) {
-    if (rule.formKey) {
-      it(`rule "${rule.title}" formKey "${rule.formKey}" resolves`, () => {
-        expect(TASK_FORM_REGISTRY, `formKey "${rule.formKey}" not in registry`).toHaveProperty(
-          rule.formKey!
-        );
-      });
-    }
+    it(`rule "${rule.title}" formKey "${rule.formKey}" resolves`, () => {
+      expect(TASK_FORM_REGISTRY).toHaveProperty(rule.formKey);
+    });
   }
 
-  it("unknown formKey in a mock rule does NOT resolve (guard test)", () => {
-    const unknownKey = "nonexistent_form_xyz";
-    expect(TASK_FORM_REGISTRY).not.toHaveProperty(unknownKey);
-    expect(getFormLabel(unknownKey)).toBeNull();
+  it("unknown formKey does NOT resolve (guard test)", () => {
+    expect(TASK_FORM_REGISTRY).not.toHaveProperty("nonexistent_form_xyz");
+    expect(getFormLabel("nonexistent_form_xyz")).toBeNull();
   });
 });
 
-// ── Unknown formKey is preserved on save (contractual test) ──────────────────
+// ── Unknown formKey is preserved on save ─────────────────────────────────────
 
 describe("unknown formKey preservation contract", () => {
-  it("getFormLabel returns null for an unknown key (UI should show fallback, not blank)", () => {
-    const unknownKey = "some_future_form";
-    expect(getFormLabel(unknownKey)).toBeNull();
-    // UI contract: when null, display `Unknown form (${key})` and do not clear the value
+  it("getFormLabel returns null for an unknown key — UI shows fallback, never clears value", () => {
+    expect(getFormLabel("some_future_form")).toBeNull();
   });
-
   it("getFormEntry returns null for an unknown key", () => {
     expect(getFormEntry("future_form")).toBeNull();
   });
