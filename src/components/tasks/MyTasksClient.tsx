@@ -1,12 +1,13 @@
 "use client";
-import { useState, useTransition, useRef, useEffect } from "react";
+import { useState, useTransition, useRef, useEffect, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import {
   Play, AlertTriangle, X, MoreHorizontal, CheckCircle2,
-  ChevronDown, ChevronUp, Users2, Brush, FlaskConical,
+  ChevronDown, ChevronUp, Brush, FlaskConical,
 } from "lucide-react";
 import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
 import { addDaysToDateStr } from "@/lib/pacific-time";
+import { computeBannerState, type BannerState } from "@/lib/banner-state";
 import { TaskCalendar } from "./TaskCalendar";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -46,6 +47,7 @@ interface Props {
   firstName: string;
   owners: { id: string; name: string }[];
   today: string; // YYYY-MM-DD
+  facilitySyncInfo: { id: string; lastCalendarSyncAt: string | null; lastCalendarSyncError: string | null }[];
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -268,136 +270,114 @@ function MarkMissedModal({
 function HeroHeader({
   today,
   firstName,
-  overdue,
-  dueToday,
-  inProgress,
-  doneToday,
-  role,
-  showMyTasksOnly,
-  setShowMyTasksOnly,
-  nextUpcoming,
+  bannerState,
+  teamOverdueCount,
 }: {
   today: string;
   firstName: string;
-  overdue: TaskInstance[];
-  dueToday: TaskInstance[];
-  inProgress: TaskInstance[];
-  doneToday: TaskInstance[];
-  role: string;
-  showMyTasksOnly: boolean;
-  setShowMyTasksOnly?: (v: boolean) => void;
-  nextUpcoming: TaskInstance | null;
+  bannerState: BannerState;
+  teamOverdueCount: number;
 }) {
   const [greeting, setGreeting] = useState("");
   useEffect(() => { setGreeting(getPacificGreeting(firstName)); }, [firstName]);
 
-  const totalActive = overdue.length + dueToday.length + inProgress.length;
-  const totalToday = totalActive + doneToday.length;
-  const allDone = totalActive === 0 && doneToday.length > 0;
-  const nothingToday = totalToday === 0;
-  const pct = totalToday > 0 ? Math.round((doneToday.length / totalToday) * 100) : 0;
+  const isSuccess = bannerState.kind === "success";
+  const isOverdue = bannerState.kind === "overdue";
+  const isStale = bannerState.kind === "staleSync";
 
-  // Summary line
-  let summary = "";
-  if (nothingToday) {
-    summary = "Nothing due today.";
-  } else if (allDone) {
-    summary = `All ${doneToday.length} task${doneToday.length !== 1 ? "s" : ""} complete.`;
-  } else {
+  const cardClass = isSuccess
+    ? "bg-green-50 border-green-200"
+    : isOverdue
+    ? "bg-red-50 border-red-200"
+    : isStale
+    ? "bg-amber-50 border-amber-200"
+    : "bg-white border-gray-200 shadow-sm";
+
+  let summaryEl: ReactNode = null;
+  let progressBar: ReactNode = null;
+  let badge: ReactNode = null;
+
+  if (bannerState.kind === "success") {
+    summaryEl = <span className="text-green-700 font-medium">All tasks complete.</span>;
+    badge = (
+      <div className="flex items-center gap-2 mt-3 text-green-700">
+        <CheckCircle2 className="w-4 h-4 shrink-0" />
+        <span className="text-sm font-semibold">All done for today.</span>
+      </div>
+    );
+  } else if (bannerState.kind === "inProgress") {
+    const { done, total, remaining } = bannerState;
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    summaryEl = (
+      <span className="text-gray-600">
+        {done} of {total} done, {remaining} remaining
+      </span>
+    );
+    progressBar = (
+      <div className="flex items-center gap-2">
+        <div className="w-24 md:w-32 h-2 rounded-full bg-gray-100 overflow-hidden">
+          <div className="h-full rounded-full transition-all bg-[#C41E3A]" style={{ width: `${pct}%` }} />
+        </div>
+        <span className="text-xs font-medium tabular-nums text-gray-500">{done}/{total}</span>
+      </div>
+    );
+  } else if (bannerState.kind === "overdue") {
+    summaryEl = (
+      <span className="text-red-600 font-medium">
+        {bannerState.count} task{bannerState.count !== 1 ? "s" : ""} overdue
+      </span>
+    );
+  } else if (bannerState.kind === "noTasks") {
+    summaryEl = (
+      <span className="text-gray-500">
+        No tasks today.
+        {bannerState.nextTask && (
+          <> Next: {formatDueDate(bannerState.nextTask.dueDate)}, {bannerState.nextTask.ruleTitle}</>
+        )}
+      </span>
+    );
+  } else if (bannerState.kind === "closed") {
+    const { done, missed, skipped } = bannerState;
     const parts: string[] = [];
-    const todayCount = dueToday.length + inProgress.length;
-    if (todayCount > 0) parts.push(`${todayCount} task${todayCount !== 1 ? "s" : ""} today`);
-    if (overdue.length > 0) parts.push(`${overdue.length} overdue`);
-    summary = parts.join(", ");
-  }
-
-  // Admin team strip: users with overdue tasks (only in "Everyone" mode)
-  const teamStrip: { id: string; name: string; count: number }[] = [];
-  if (role === "ADMIN" && !showMyTasksOnly && overdue.length > 0) {
-    const map = new Map<string, { name: string; count: number }>();
-    for (const inst of overdue) {
-      const eid = inst.ownerUserId ?? inst.ownerId;
-      const existing = map.get(eid);
-      if (existing) existing.count++;
-      else map.set(eid, { name: inst.ownerName, count: 1 });
-    }
-    map.forEach((v, k) => teamStrip.push({ id: k, name: v.name, count: v.count }));
-    teamStrip.sort((a, b) => b.count - a.count);
+    if (done > 0) parts.push(`${done} done`);
+    if (missed > 0) parts.push(`${missed} missed`);
+    if (skipped > 0) parts.push(`${skipped} skipped`);
+    summaryEl = <span className="text-gray-600">Today: {parts.join(", ")}</span>;
+  } else if (bannerState.kind === "staleSync") {
+    summaryEl = <span className="text-amber-700 font-medium">Schedule may be incomplete — calendar sync is overdue.</span>;
   }
 
   return (
-    <div
-      className={`rounded-2xl mb-6 p-5 md:p-6 border transition-colors ${
-        allDone
-          ? "bg-green-50 border-green-200"
-          : "bg-white border-gray-200 shadow-sm"
-      }`}
-    >
+    <div className={`rounded-2xl mb-6 p-5 md:p-6 border transition-colors ${cardClass}`}>
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         {/* Left: greeting + date + summary */}
         <div className="flex-1 min-w-0">
-          <p className={`text-sm font-medium mb-0.5 ${allDone ? "text-green-700" : "text-gray-500"}`}>
+          <p className={`text-sm font-medium mb-0.5 ${isSuccess ? "text-green-700" : "text-gray-500"}`}>
             {greeting || `Hello, ${firstName}`}
           </p>
-          <p className={`text-xl md:text-2xl font-bold mb-1 ${allDone ? "text-green-900" : "text-gray-900"}`}>
+          <p className={`text-xl md:text-2xl font-bold mb-1 ${isSuccess ? "text-green-900" : "text-gray-900"}`}>
             {formatBigDate(today)}
           </p>
-          <p className={`text-sm ${allDone ? "text-green-700 font-medium" : overdue.length > 0 ? "text-red-600 font-medium" : "text-gray-600"}`}>
-            {summary}
-            {nothingToday && nextUpcoming && (
-              <span className="text-gray-500 font-normal">
-                {" "}Next: {formatDueDate(nextUpcoming.dueDate)}, {nextUpcoming.ruleTitle}
-              </span>
-            )}
-          </p>
+          <p className="text-sm">{summaryEl}</p>
         </div>
 
-        {/* Right: progress + admin toggle */}
-        <div className="flex flex-col items-end gap-3 shrink-0">
-          {/* Progress bar */}
-          {totalToday > 0 && (
-            <div className="flex items-center gap-2">
-              <div className="w-24 md:w-32 h-2 rounded-full bg-gray-100 overflow-hidden">
-                <div
-                  className={`h-full rounded-full transition-all ${allDone ? "bg-green-500" : "bg-[#C41E3A]"}`}
-                  style={{ width: `${pct}%` }}
-                />
-              </div>
-              <span className={`text-xs font-medium tabular-nums ${allDone ? "text-green-600" : "text-gray-500"}`}>
-                {doneToday.length}/{totalToday}
-              </span>
-            </div>
-          )}
-
-        </div>
+        {/* Right: progress bar */}
+        {progressBar && (
+          <div className="flex flex-col items-end gap-3 shrink-0">
+            {progressBar}
+          </div>
+        )}
       </div>
 
-      {/* All done badge */}
-      {allDone && (
-        <div className="flex items-center gap-2 mt-3 text-green-700">
-          <CheckCircle2 className="w-4 h-4 shrink-0" />
-          <span className="text-sm font-semibold">All done for today!</span>
-        </div>
-      )}
+      {badge}
 
-      {/* Admin team strip — users with overdue */}
-      {teamStrip.length > 0 && (
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          <div className="flex items-center gap-2 mb-2">
-            <Users2 className="w-3.5 h-3.5 text-red-500 shrink-0" />
-            <span className="text-xs font-semibold text-red-600 uppercase tracking-wide">Overdue by team</span>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {teamStrip.map((u) => (
-              <span
-                key={u.id}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-100"
-              >
-                {u.name}
-                <span className="bg-red-200 text-red-800 rounded-full px-1.5 py-0.5 text-[10px] font-bold leading-none">{u.count}</span>
-              </span>
-            ))}
-          </div>
+      {/* Admin My Tasks — team overdue line */}
+      {teamOverdueCount > 0 && (
+        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
+          <AlertTriangle className="w-3.5 h-3.5 text-red-500 shrink-0" />
+          <span className="text-xs text-red-600 font-medium">
+            Team: {teamOverdueCount} overdue
+          </span>
         </div>
       )}
     </div>
@@ -735,6 +715,7 @@ export function MyTasksClient({
   firstName,
   owners,
   today,
+  facilitySyncInfo,
 }: Props) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -776,8 +757,6 @@ export function MyTasksClient({
     ownerChips.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  const showMyTasksOnly = viewMode === "my"; // alias for HeroHeader compat
-
   const filtered = instances.filter((i) => {
     if (role !== "ADMIN") return true;
     if (viewMode === "my") return (i.ownerUserId ?? i.ownerId) === userId;
@@ -799,6 +778,31 @@ export function MyTasksClient({
 
   const activeTodayCards = [...overdue, ...dueToday, ...inProgress];
   const nextUpcoming = upcoming[0] ?? null;
+
+  // Sync staleness: any facility in-scope with no sync in 24h or a sync error
+  const filteredFacilityIds = new Set(filtered.map((i) => i.facilityId));
+  const syncStale = facilitySyncInfo.some((f) => {
+    if (!filteredFacilityIds.has(f.id)) return false;
+    if (f.lastCalendarSyncError) return true;
+    if (!f.lastCalendarSyncAt) return true;
+    return Date.now() - new Date(f.lastCalendarSyncAt).getTime() > 24 * 60 * 60 * 1000;
+  });
+
+  // Team overdue for admin My Tasks view: all instances, not just filtered
+  const teamOverdueCount =
+    role === "ADMIN" && viewMode === "my"
+      ? instances.filter(
+          (i) => i.status === "OVERDUE" || (i.status === "MISSED" && i.dueDate < today)
+        ).length
+      : 0;
+
+  const bannerState = computeBannerState({
+    today,
+    instances: filtered,
+    skippedInstances: filteredSkipped,
+    nextUpcoming: nextUpcoming ? { dueDate: nextUpcoming.dueDate, ruleTitle: nextUpcoming.ruleTitle } : null,
+    syncStale,
+  });
 
   function dispatchTaskAction() {
     window.dispatchEvent(new CustomEvent("task-action"));
@@ -989,13 +993,8 @@ export function MyTasksClient({
         <HeroHeader
           today={today}
           firstName={firstName}
-          overdue={overdue}
-          dueToday={dueToday}
-          inProgress={inProgress}
-          doneToday={doneToday}
-          role={role}
-          showMyTasksOnly={showMyTasksOnly}
-          nextUpcoming={nextUpcoming}
+          bannerState={bannerState}
+          teamOverdueCount={teamOverdueCount}
         />
 
         {/* Task cards: overdue + due today + in progress */}

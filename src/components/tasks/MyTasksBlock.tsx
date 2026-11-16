@@ -152,6 +152,15 @@ export async function MyTasksBlock() {
     owners = await prisma.user.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } });
   }
 
+  const facilitySyncInfoRaw = await prisma.facility.findMany({
+    select: { id: true, lastCalendarSyncAt: true, lastCalendarSyncError: true },
+  });
+  const facilitySyncInfo = facilitySyncInfoRaw.map((f) => ({
+    id: f.id,
+    lastCalendarSyncAt: f.lastCalendarSyncAt?.toISOString() ?? null,
+    lastCalendarSyncError: f.lastCalendarSyncError ?? null,
+  }));
+
   const firstName = (session.user as { name?: string }).name?.split(" ")[0] ?? "there";
 
   return (
@@ -165,6 +174,7 @@ export async function MyTasksBlock() {
       firstName={firstName}
       owners={owners.map((u) => ({ id: u.id, name: u.name ?? "" }))}
       today={today}
+      facilitySyncInfo={facilitySyncInfo}
     />
   );
 }
