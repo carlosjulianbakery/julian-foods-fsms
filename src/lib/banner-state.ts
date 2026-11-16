@@ -16,17 +16,22 @@ export interface BannerInput {
   syncStale: boolean;
 }
 
+const OPEN_STATUSES = ["DUE_TODAY", "IN_PROGRESS", "UPCOMING"];
+
 export function computeBannerState(input: BannerInput): BannerState {
   const { today, instances, skippedInstances, nextUpcoming, syncStale } = input;
 
   const todayDone    = instances.filter(i => i.dueDate === today && i.status === "DONE");
   const todayMissed  = instances.filter(i => i.dueDate === today && i.status === "MISSED");
-  const todayActive  = instances.filter(i => i.dueDate === today && (i.status === "DUE_TODAY" || i.status === "IN_PROGRESS"));
+  // UPCOMING with today's dueDate counts as open — cron may not have promoted it yet
+  const todayActive  = instances.filter(i => i.dueDate === today && OPEN_STATUSES.includes(i.status));
   const todaySkipped = skippedInstances.filter(i => i.dueDate === today);
 
-  // Overdue: status OVERDUE, or MISSED on a past date
+  // Overdue: OVERDUE status, MISSED on past date, or any open instance with a past date
   const overdueCount = instances.filter(
-    i => i.status === "OVERDUE" || (i.status === "MISSED" && i.dueDate < today)
+    i => i.status === "OVERDUE" ||
+         (i.status === "MISSED" && i.dueDate < today) ||
+         (OPEN_STATUSES.includes(i.status) && i.dueDate < today)
   ).length;
 
   // Priority 1 — overdue

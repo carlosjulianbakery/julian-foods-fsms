@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { generateCalendarInstances } from "@/lib/calendar-generator";
+import { updateStatuses } from "@/lib/task-generator";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,7 @@ export async function POST(req: NextRequest) {
       facilityId,
       invalidateCache: true,
     });
+    if (!dryRun) await updateStatuses();
     return NextResponse.json(result);
   } catch (err) {
     console.error("[task-rules/refresh]", err);

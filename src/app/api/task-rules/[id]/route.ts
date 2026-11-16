@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { computeDueDates, generateInstances } from "@/lib/task-generator";
+import { computeDueDates, generateInstances, updateStatuses } from "@/lib/task-generator";
 import { getPacificToday, addDaysToDateStr } from "@/lib/pacific-time";
 import { generateCalendarInstances } from "@/lib/calendar-generator";
 
@@ -170,6 +170,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         console.error("[task-rules PATCH] calendar generator error:", genErr);
       }
     }
+    // Promote any UPCOMING-today instances created before the cron ran
+    await updateStatuses().catch((e) => console.error("[task-rules PATCH] updateStatuses:", e));
 
     return NextResponse.json({ ...rule, generatorResult });
   } catch (err) {

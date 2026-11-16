@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { generateCalendarInstances } from "@/lib/calendar-generator";
+import { updateStatuses } from "@/lib/task-generator";
 
 export const dynamic = "force-dynamic";
 
@@ -96,6 +97,8 @@ export async function POST(req: NextRequest) {
         console.error("[task-rules POST] calendar generator error:", genErr);
       }
     }
+    // Promote any UPCOMING-today instances created before the cron ran
+    await updateStatuses().catch((e) => console.error("[task-rules POST] updateStatuses:", e));
 
     return NextResponse.json({ ...rule, generatorResult }, { status: 201 });
   } catch (err) {

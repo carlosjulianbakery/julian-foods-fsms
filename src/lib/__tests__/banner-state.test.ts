@@ -72,6 +72,54 @@ describe("computeBannerState", () => {
     expect(computeBannerState(input).kind).toBe("inProgress");
   });
 
+  // ── UPCOMING-today (cron hasn't promoted yet) ─────────────────────────────────
+
+  it("UPCOMING with today dueDate counts as open → inProgress", () => {
+    const input = mk({ instances: [{ status: "UPCOMING", dueDate: TODAY }] });
+    expect(computeBannerState(input)).toEqual({ kind: "inProgress", done: 0, total: 1, remaining: 1 });
+  });
+
+  it("2 DONE + 1 UPCOMING-today (real data shape) → inProgress, not success", () => {
+    // Replicates the observed bug: Everyone mode with 2 done + 1 pending UPCOMING
+    const input = mk({
+      instances: [
+        { status: "DONE", dueDate: TODAY },
+        { status: "DONE", dueDate: TODAY },
+        { status: "UPCOMING", dueDate: TODAY },
+      ],
+    });
+    expect(computeBannerState(input)).toEqual({ kind: "inProgress", done: 2, total: 3, remaining: 1 });
+  });
+
+  it("By Owner with 1 UPCOMING-today → inProgress, not noTasks", () => {
+    // Replicates observed bug: By Owner (Hugo Ayala) with 1 pending UPCOMING
+    const input = mk({ instances: [{ status: "UPCOMING", dueDate: TODAY }] });
+    const result = computeBannerState(input);
+    expect(result.kind).toBe("inProgress");
+  });
+
+  it("2 DONE + 1 UPCOMING-today (By Owner) → inProgress, not success/done", () => {
+    // Replicates observed bug: By Owner (Ivan Torres) 2 done + 1 pending
+    const input = mk({
+      instances: [
+        { status: "DONE", dueDate: TODAY },
+        { status: "DONE", dueDate: TODAY },
+        { status: "UPCOMING", dueDate: TODAY },
+      ],
+    });
+    expect(computeBannerState(input).kind).toBe("inProgress");
+  });
+
+  it("UPCOMING with past dueDate counts as overdue", () => {
+    const input = mk({ instances: [{ status: "UPCOMING", dueDate: YESTERDAY }] });
+    expect(computeBannerState(input)).toEqual({ kind: "overdue", count: 1 });
+  });
+
+  it("UPCOMING-today does not say noTasks", () => {
+    const input = mk({ instances: [{ status: "UPCOMING", dueDate: TODAY }] });
+    expect(computeBannerState(input).kind).not.toBe("noTasks");
+  });
+
   // ── Overdue ───────────────────────────────────────────────────────────────────
 
   it("1 OVERDUE (yesterday) + all today done → overdue (highest priority)", () => {

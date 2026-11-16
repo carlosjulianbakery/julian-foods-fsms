@@ -770,10 +770,19 @@ export function MyTasksClient({
     return true;
   });
 
-  const overdue = filtered.filter((i) => i.status === "OVERDUE" || i.status === "MISSED");
-  const dueToday = filtered.filter((i) => i.status === "DUE_TODAY");
+  // Open past-due: OVERDUE status, MISSED on past date, or any open instance with past date
+  const overdue = filtered.filter((i) =>
+    i.status === "OVERDUE" ||
+    (i.status === "MISSED" && i.dueDate < today) ||
+    (["UPCOMING", "DUE_TODAY", "IN_PROGRESS"].includes(i.status) && i.dueDate < today)
+  );
+  // Open today: DUE_TODAY + UPCOMING-with-today-date (cron may not have promoted yet)
+  const dueToday = filtered.filter((i) =>
+    i.status === "DUE_TODAY" || (i.status === "UPCOMING" && i.dueDate === today)
+  );
   const inProgress = filtered.filter((i) => i.status === "IN_PROGRESS");
-  const upcoming = filtered.filter((i) => i.status === "UPCOMING");
+  // Upcoming: only future-dated UPCOMING (excludes today's)
+  const upcoming = filtered.filter((i) => i.status === "UPCOMING" && i.dueDate > today);
   const doneToday = filtered.filter((i) => i.status === "DONE");
 
   const activeTodayCards = [...overdue, ...dueToday, ...inProgress];
@@ -792,7 +801,10 @@ export function MyTasksClient({
   const teamOverdueCount =
     role === "ADMIN" && viewMode === "my"
       ? instances.filter(
-          (i) => i.status === "OVERDUE" || (i.status === "MISSED" && i.dueDate < today)
+          (i) =>
+            i.status === "OVERDUE" ||
+            (i.status === "MISSED" && i.dueDate < today) ||
+            (["UPCOMING", "DUE_TODAY", "IN_PROGRESS"].includes(i.status) && i.dueDate < today)
         ).length
       : 0;
 
