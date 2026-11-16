@@ -38,16 +38,17 @@ export async function completeRuleInstanceForSubmission(params: {
     });
 
     if (!instance) {
-      console.warn(`[task-completion] taskId ${taskId} not found — skipping`);
-      return;
-    }
-    if (instance.status === "DONE" || instance.status === "SKIPPED" || instance.status === "MISSED") {
-      console.log(`[task-completion] taskId ${taskId} already in terminal status ${instance.status} — skipping`);
-      return;
-    }
+      console.warn(`[task-completion] taskId ${taskId} not found — falling through to best-match`);
+      // fall through to best-match path below
+    } else {
+      if (instance.status === "DONE" || instance.status === "SKIPPED" || instance.status === "MISSED") {
+        console.log(`[task-completion] taskId ${taskId} already in terminal status ${instance.status} — skipping`);
+        return;
+      }
 
-    await markDone({ instance, ruleOwnerId: instance.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
-    return;
+      await markDone({ instance, ruleOwnerId: instance.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
+      return;
+    }
   }
 
   // Best-match path: find open + upcoming instances for this facility + formKey.

@@ -30,7 +30,7 @@ export const TASK_FORM_REGISTRY: Record<string, TaskFormEntry> = {
   },
   preop_624: {
     label: "Pre-Op Inspection — 624",
-    href: (instanceId) => `/dashboard/supervisor/pre-op-624?taskId=${instanceId}`,
+    href: () => "/dashboard/supervisor/pre-op-624",
   },
   manual: {
     label: "Manual Task",
