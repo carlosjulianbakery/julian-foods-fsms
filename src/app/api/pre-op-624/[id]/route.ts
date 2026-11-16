@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { reopenInstanceForSubmissionDeletion } from "@/lib/task-completion";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +20,13 @@ export async function DELETE(
   if (!insp) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   await prisma.preOp624Inspection.delete({ where: { id: params.id } });
+
+  // Reopen the linked task instance so it can be completed again
+  reopenInstanceForSubmissionDeletion({
+    submissionId: params.id,
+    userId: session.user.id,
+    prismaClient: prisma as never,
+  }).catch((e) => console.error("[DELETE pre-op-624] task reopen failed:", e));
 
   return NextResponse.json({ deleted: true });
 }

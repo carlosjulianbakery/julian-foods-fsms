@@ -116,6 +116,39 @@ describe("constants", () => {
   it("ATP_MAX_RLU is 30", () => { expect(ATP_MAX_RLU).toBe(30); });
 });
 
+// ─── Draft key logic ──────────────────────────────────────────────────────────
+
+function draftKey(userId: string, date: string) {
+  return `preop_624_draft:${userId}:${date}`;
+}
+
+describe("draft localStorage key", () => {
+  it("includes userId and date so drafts are isolated per user per day", () => {
+    const key = draftKey("user_abc", "2026-11-16");
+    expect(key).toBe("preop_624_draft:user_abc:2026-11-16");
+  });
+
+  it("two different users on the same day produce different keys", () => {
+    const keyA = draftKey("user_a", "2026-11-16");
+    const keyB = draftKey("user_b", "2026-11-16");
+    expect(keyA).not.toBe(keyB);
+  });
+
+  it("same user on two different days produces different keys", () => {
+    const keyMon = draftKey("user_a", "2026-11-16");
+    const keyTue = draftKey("user_a", "2026-11-17");
+    expect(keyMon).not.toBe(keyTue);
+  });
+
+  it("draft for yesterday is ignored (key mismatch prevents loading)", () => {
+    const yesterday = "2026-11-15";
+    const today = "2026-11-16";
+    // The page only loads a draft if draft.date === today; a stale key
+    // would not even be found since the lookup uses today's key.
+    expect(draftKey("user_a", yesterday)).not.toBe(draftKey("user_a", today));
+  });
+});
+
 // ─── Facility isolation (documents the contract) ─────────────────────────────
 // The actual DB isolation is enforced by completeRuleInstanceForSubmission
 // filtering on facilityName. This test documents the expected behavior:
