@@ -237,7 +237,7 @@ describe("POST /api/pre-op-624 — fridge 44°F corrected to 38°F", () => {
     });
 
     const res = await POST(req as never);
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(201);
     const json = await res.json();
     expect(json.id).toBe("insp_test_001");
 
@@ -295,5 +295,118 @@ describe("facility isolation contract", () => {
     const FACILITY_NAME_624 = "624";
     const FACILITY_NAME_JB  = "Julian Bakery";
     expect(FACILITY_NAME_624).not.toBe(FACILITY_NAME_JB);
+  });
+});
+
+// ─── API POST: all 14 rows OK, default temps, empty ATP ──────────────────────
+
+describe("POST /api/pre-op-624 — all 14 rows OK (happy path)", () => {
+  beforeEach(() => { vi.clearAllMocks(); });
+
+  it("returns 201 and stores hasNotOk=false overallOk=true", async () => {
+    const { getServerSession } = await import("next-auth");
+    const { prisma } = await import("@/lib/prisma");
+    const { POST } = await import("@/app/api/pre-op-624/route");
+
+    (getServerSession as ReturnType<typeof vi.fn>).mockResolvedValue({
+      user: { id: "user_hugo", role: "SUPERVISOR" },
+    });
+
+    // Simulate the exact payload the page produces for 14 rows all OK
+    const rows14: RowSnapshot[] = [
+      { key: "ppe",              label: "PPE: Hairnet, apron, gloves available in place.", condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: null, tempLimit: null, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+      { key: "sink_stations",    label: "Sink Stations: ...", condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: null, tempLimit: null, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+      { key: "trash_bins",       label: "Trash Cans/Bins: ...", condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: null, tempLimit: null, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+      { key: "ingredient_bins",  label: "Ingredient Bins: ...", condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: null, tempLimit: null, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+      { key: "finished_products", label: "Finished Products: ...", condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: null, tempLimit: null, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+      { key: "floor_drains",     label: "Floor/Drains: ...", condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: null, tempLimit: null, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+      { key: "utensils",         label: "Utensils: ...", condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: null, tempLimit: null, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+      { key: "equipment",        label: "Equipment: ...", condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: null, tempLimit: null, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+      { key: "thermometer",      label: "Thermometer: Plastic dial covers on thermometers are in good shape.", condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: null, tempLimit: null, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+      { key: "fridge_temp",      label: `Temperature check – Walk-in Fridge (limit ≤ ${FRIDGE_MAX_F}°F)`, condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: 38, tempLimit: FRIDGE_MAX_F, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+      { key: "freezer_temp",     label: `Temperature check – Walk-in Freezer (limit ≤ ${FREEZER_MAX_F}°F)`, condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: 0, tempLimit: FREEZER_MAX_F, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+      { key: "production_area",  label: "Production Area: ...", condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: null, tempLimit: null, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+      { key: "atp_swab",         label: `ATP Swabs: ATP swab done on one random food-contact area (OK ≤ ${ATP_MAX_RLU} RLU).`, condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: null, tempLimit: null, reInspectTempValue: null, atpRlu: null, atpLimit: ATP_MAX_RLU },
+      { key: "gmps",             label: "GMPs: Personnel wearing hairnet correctly...", condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: null, tempLimit: null, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+    ];
+
+    const mockRecord = { id: "insp_ok_all_001" };
+    (prisma.preOp624Inspection.create as ReturnType<typeof vi.fn>).mockResolvedValue(mockRecord);
+
+    const req = new Request("http://localhost/api/pre-op-624", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ date: "2026-11-16", conductedBy: "HA", rows: rows14 }),
+    });
+
+    const res = await POST(req as never);
+    expect(res.status).toBe(201);
+    const json = await res.json();
+    expect(json.id).toBe("insp_ok_all_001");
+
+    const createCall = (prisma.preOp624Inspection.create as ReturnType<typeof vi.fn>).mock.calls[0][0];
+    expect(createCall.data.hasNotOk).toBe(false);
+    expect(createCall.data.overallOk).toBe(true);
+    expect(createCall.data.conductedBy).toBe("HA");
+
+    // Verify default temps are snapshotted
+    const storedRows = createCall.data.rows as RowSnapshot[];
+    const fridge = storedRows.find((r) => r.key === "fridge_temp");
+    expect(fridge?.tempValue).toBe(38);
+    expect(fridge?.tempLimit).toBe(FRIDGE_MAX_F);
+    const freezer = storedRows.find((r) => r.key === "freezer_temp");
+    expect(freezer?.tempValue).toBe(0);
+    expect(freezer?.tempLimit).toBe(FREEZER_MAX_F);
+    // ATP null (not measured)
+    const atp = storedRows.find((r) => r.key === "atp_swab");
+    expect(atp?.atpRlu).toBeNull();
+    expect(atp?.atpLimit).toBe(ATP_MAX_RLU);
+  });
+});
+
+// ─── API POST: one row NOT_OK with corrective action and re-inspection ────────
+
+describe("POST /api/pre-op-624 — one NOT_OK row corrected and re-inspected", () => {
+  beforeEach(() => { vi.clearAllMocks(); });
+
+  it("returns 201 with hasNotOk=true overallOk=true when NOT_OK row is re-inspected", async () => {
+    const { getServerSession } = await import("next-auth");
+    const { prisma } = await import("@/lib/prisma");
+    const { POST } = await import("@/app/api/pre-op-624/route");
+
+    (getServerSession as ReturnType<typeof vi.fn>).mockResolvedValue({
+      user: { id: "user_hugo", role: "SUPERVISOR" },
+    });
+
+    const rows: RowSnapshot[] = [
+      // All OK except trash_bins
+      { key: "ppe",             label: "PPE: ...", condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: null, tempLimit: null, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+      { key: "trash_bins",      label: "Trash Cans/Bins: ...", condition: "NOT_OK", initials: "HA", correctiveAction: "Emptied and relabeled bins", reInspected: true, reInspectedAt: "2026-11-16T14:40:00.000Z", tempValue: null, tempLimit: null, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+      { key: "fridge_temp",     label: `Temperature check – Walk-in Fridge (limit ≤ ${FRIDGE_MAX_F}°F)`, condition: "OK", initials: "HA", correctiveAction: "", reInspected: false, reInspectedAt: null, tempValue: 38, tempLimit: FRIDGE_MAX_F, reInspectTempValue: null, atpRlu: null, atpLimit: null },
+    ];
+
+    const mockRecord = { id: "insp_notok_001" };
+    (prisma.preOp624Inspection.create as ReturnType<typeof vi.fn>).mockResolvedValue(mockRecord);
+
+    const req = new Request("http://localhost/api/pre-op-624", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ date: "2026-11-16", conductedBy: "HA", rows }),
+    });
+
+    const res = await POST(req as never);
+    expect(res.status).toBe(201);
+    const json = await res.json();
+    expect(json.id).toBe("insp_notok_001");
+
+    const createCall = (prisma.preOp624Inspection.create as ReturnType<typeof vi.fn>).mock.calls[0][0];
+    expect(createCall.data.hasNotOk).toBe(true);
+    expect(createCall.data.overallOk).toBe(true);  // re-inspected so overallOk=true
+
+    const storedRows = createCall.data.rows as RowSnapshot[];
+    const trash = storedRows.find((r) => r.key === "trash_bins");
+    expect(trash?.condition).toBe("NOT_OK");
+    expect(trash?.correctiveAction).toBe("Emptied and relabeled bins");
+    expect(trash?.reInspected).toBe(true);
   });
 });

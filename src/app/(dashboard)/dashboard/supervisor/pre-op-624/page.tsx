@@ -174,7 +174,14 @@ export default function PreOp624Page() {
       });
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
-        setError(j.error ?? "Submission failed — please try again.");
+        const errorMessages: Record<string, string> = {
+          db_setup_error: "Server error (form not configured) — contact your admin.",
+          db_error:       "Server error — please try again.",
+          Unauthorized:   "Session expired — please refresh and sign in again.",
+          Forbidden:      "You do not have permission to submit this form.",
+        };
+        const raw = j.error as string | undefined;
+        setError(raw ? (errorMessages[raw] ?? `Server error: ${raw}`) : "Submission failed — please try again.");
         return;
       }
       // Clear draft

@@ -78,17 +78,27 @@ export async function POST(req: NextRequest) {
   const hasNotOk = rows.some((r) => r.condition === "NOT_OK");
   const overallOk = !hasNotOk || rows.filter((r) => r.condition === "NOT_OK").every((r) => r.reInspected);
 
-  const inspection = await prisma.preOp624Inspection.create({
-    data: {
-      date:             new Date(body.date),
-      conductedBy:      body.conductedBy.toUpperCase(),
-      rows:             rows as never,
-      hasNotOk,
-      overallOk,
-      submittedById:    session.user.id,
-      linkedInstanceId: body.taskInstanceId ?? null,
-    },
-  });
+  let inspection;
+  try {
+    inspection = await prisma.preOp624Inspection.create({
+      data: {
+        date:             new Date(body.date),
+        conductedBy:      body.conductedBy.toUpperCase(),
+        rows:             rows as never,
+        hasNotOk,
+        overallOk,
+        submittedById:    session.user.id,
+        linkedInstanceId: body.taskInstanceId ?? null,
+      },
+    });
+  } catch (err) {
+    console.error("[pre-op-624 POST] create failed:", err);
+    const msg = err instanceof Error ? err.message : String(err);
+    if (msg.includes("does not exist") || (err as { code?: string }).code === "P2021") {
+      return NextResponse.json({ error: "db_setup_error" }, { status: 500 });
+    }
+    return NextResponse.json({ error: "db_error" }, { status: 500 });
+  }
 
   // Complete linked task instance (facility "624")
   try {
@@ -106,5 +116,5 @@ export async function POST(req: NextRequest) {
     console.error("[pre-op-624 POST] task completion error:", err);
   }
 
-  return NextResponse.json({ id: inspection.id });
+  return NextResponse.json({ id: inspection.id }, { status: 201 });
 }

@@ -44,6 +44,21 @@ import { cn } from "@/lib/utils";
 
 
 // ---------------------------------------------------------------------------
+// Nav active-state helper
+// ---------------------------------------------------------------------------
+
+/**
+ * Returns true when `pathname` matches `href` as an active nav item.
+ * Uses exact match for the root dashboard and any item marked `exact`.
+ * For all other items: exact match OR a path-segment-boundary prefix
+ * (href + "/") — prevents "/pre-op" activating when at "/pre-op-624".
+ */
+export function isNavActive(pathname: string, href: string, exact?: boolean): boolean {
+  if (href === "/dashboard" || exact) return pathname === href;
+  return pathname === href || pathname.startsWith(href + "/");
+}
+
+// ---------------------------------------------------------------------------
 // Nav structure
 // ---------------------------------------------------------------------------
 const generalNav = [
@@ -419,10 +434,7 @@ export function Sidebar() {
   const visibleAdmin       = adminNav.filter((item)       => item.roles.includes(role));
 
   function NavLink({ item }: { item: (typeof generalNav)[number] & { exact?: boolean; badge?: boolean } }) {
-    const active =
-      item.href === "/dashboard" || item.exact
-        ? pathname === item.href
-        : pathname.startsWith(item.href);
+    const active = isNavActive(pathname, item.href, item.exact);
 
     let badgeCount: number;
     let badgeColor: string;
