@@ -602,11 +602,8 @@ function HeroTaskCard({
 
 function DoneStrip({
   inst,
-  role,
-  userId,
   actionId,
   isPending,
-  onReopen,
 }: {
   inst: TaskInstance;
   role: string;
@@ -615,9 +612,6 @@ function DoneStrip({
   isPending: boolean;
   onReopen: (inst: TaskInstance) => void;
 }) {
-  const isAdmin = role === "ADMIN";
-  const isBusy = actionId === inst.id || isPending;
-
   return (
     <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-green-50 border border-green-100">
       <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
@@ -637,15 +631,6 @@ function DoneStrip({
       </div>
       <div className="flex items-center gap-2 shrink-0">
         <span className="text-[11px] font-semibold text-green-600 px-2 py-0.5 rounded-full bg-green-100">Done</span>
-        {isAdmin && (
-          <button
-            onClick={() => onReopen(inst)}
-            disabled={isBusy}
-            className="text-xs text-blue-600 hover:text-blue-800 transition-colors disabled:opacity-50 font-medium"
-          >
-            Reopen
-          </button>
-        )}
       </div>
     </div>
   );
@@ -899,9 +884,16 @@ export function MyTasksClient({
     if (!confirm(`Reopen "${inst.ruleTitle}"?`)) return;
     setActionId(inst.id);
     try {
-      await fetch(`/api/task-instances/${inst.id}/reopen`, { method: "POST" });
+      const res = await fetch(`/api/task-instances/${inst.id}/reopen`, { method: "POST" });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        alert(j.error ?? "Failed to reopen");
+        return;
+      }
       dispatchTaskAction();
       startTransition(() => router.refresh());
+    } catch {
+      alert("Network error — could not reopen task");
     } finally {
       setActionId(null);
     }

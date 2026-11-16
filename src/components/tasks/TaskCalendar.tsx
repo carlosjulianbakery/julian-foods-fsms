@@ -367,7 +367,7 @@ function PanelTaskCard({
   const dots: { label: string; onClick: () => void; danger?: boolean }[] = [];
   if (isOverdue && (isAdmin || isOwner)) dots.push({ label: "Mark as missed", onClick: () => onMarkMissed(inst), danger: true });
   if (isAdmin && !["DONE", "SKIPPED"].includes(inst.status)) dots.push({ label: "Skip task", onClick: () => onSkip(inst) });
-  if (isAdmin && ["DONE", "MISSED", "SKIPPED"].includes(inst.status)) dots.push({ label: "Reopen", onClick: () => onReopen(inst) });
+  if (isAdmin && ["MISSED", "SKIPPED"].includes(inst.status)) dots.push({ label: "Reopen", onClick: () => onReopen(inst) });
 
   return (
     <div className={`rounded-xl border-l-4 ${borderColor} ${bgColor} border border-l-[inherit] border-gray-100 p-4`}>
@@ -505,8 +505,15 @@ function DayPanel({
     if (!confirm(`Reopen "${inst.ruleTitle}"?`)) return;
     setActionId(inst.id);
     try {
-      await fetch(`/api/task-instances/${inst.id}/reopen`, { method: "POST" });
+      const res = await fetch(`/api/task-instances/${inst.id}/reopen`, { method: "POST" });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        alert(j.error ?? "Failed to reopen");
+        return;
+      }
       dispatch(); startTransition(() => router.refresh()); onRefresh();
+    } catch {
+      alert("Network error — could not reopen task");
     } finally { setActionId(null); }
   }
 

@@ -20,6 +20,13 @@ export async function POST(
   const instance = await prisma.ruleInstance.findUnique({ where: { id: params.id } });
   if (!instance) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
+  if (!["MISSED", "SKIPPED"].includes(instance.status)) {
+    return NextResponse.json(
+      { error: `Cannot reopen a task with status ${instance.status}` },
+      { status: 400 }
+    );
+  }
+
   const today = getPacificToday();
   const dueDateStr = instance.dueDate.toISOString().slice(0, 10);
 
@@ -28,7 +35,7 @@ export async function POST(
   else if (dueDateStr === today) reopenedStatus = "DUE_TODAY";
   else reopenedStatus = "UPCOMING";
 
-  const body = await req.json() as { note?: string };
+  const body = await req.json().catch(() => ({})) as { note?: string };
   const note = (body.note ?? "").trim() || `Reopened by admin to ${reopenedStatus}`;
 
   await prisma.$transaction([
@@ -47,6 +54,8 @@ export async function POST(
         missedReason: null,
         markedMissedById: null,
         markedMissedAt: null,
+        // unfreeze owner so the task follows the rule owner again
+        ownerUserId: null,
       },
     }),
     prisma.taskInstanceAudit.create({

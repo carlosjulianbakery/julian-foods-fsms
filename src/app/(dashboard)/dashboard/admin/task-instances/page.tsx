@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getPacificToday } from "@/lib/pacific-time";
 import { TaskInstanceFilters } from "./TaskInstanceFilters";
+import { ReopenButton } from "./ReopenButton";
 
 function statusBadge(status: string): string {
   const map: Record<string, string> = {
@@ -155,6 +156,7 @@ export default async function TaskInstancesPage({ searchParams }: PageProps) {
                 <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Status</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Done By</th>
                 <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Review</th>
+                <th className="px-4 py-3" />
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
@@ -203,6 +205,9 @@ export default async function TaskInstancesPage({ searchParams }: PageProps) {
                         🚩 Review
                       </span>
                     )}
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <ReopenButton id={inst.id} status={inst.status} />
                   </td>
                 </tr>
               ))}
