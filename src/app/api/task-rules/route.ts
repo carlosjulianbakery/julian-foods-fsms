@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { generateCalendarInstances } from "@/lib/calendar-generator";
+import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
 import { updateStatuses } from "@/lib/task-generator";
 
 export const dynamic = "force-dynamic";
@@ -67,6 +68,9 @@ export async function POST(req: NextRequest) {
     if (!facilityId) return NextResponse.json({ error: "Facility is required" }, { status: 400 });
     if (!ownerId) return NextResponse.json({ error: "Owner is required" }, { status: 400 });
     if (!recurrenceStart) return NextResponse.json({ error: "Start date is required" }, { status: 400 });
+    if (formKey && !TASK_FORM_REGISTRY[formKey]) {
+      return NextResponse.json({ error: `Unknown formKey: "${formKey}". Add it to the registry first.` }, { status: 400 });
+    }
 
     const rule = await prisma.taskRule.create({
       data: {

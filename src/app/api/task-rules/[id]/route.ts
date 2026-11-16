@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { computeDueDates, generateInstances, updateStatuses } from "@/lib/task-generator";
 import { getPacificToday, addDaysToDateStr } from "@/lib/pacific-time";
 import { generateCalendarInstances } from "@/lib/calendar-generator";
+import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,14 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
           { status: 400 }
         );
       }
+    }
+
+    // Validate formKey against registry
+    if (formKey !== undefined && formKey && !TASK_FORM_REGISTRY[formKey]) {
+      return NextResponse.json(
+        { error: `Unknown formKey: "${formKey}". Add it to the registry first.` },
+        { status: 400 }
+      );
     }
 
     const data: Record<string, unknown> = {};

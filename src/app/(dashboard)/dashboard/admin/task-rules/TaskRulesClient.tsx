@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { TASK_FORM_REGISTRY, getFormKeyOptions, getFormLabel } from "@/lib/task-form-registry";
 
 interface Rule {
   id: string;
@@ -61,14 +62,7 @@ interface Props {
   syncStatuses: SyncStatus[];
 }
 
-const FORM_KEYS = [
-  { value: "", label: "— none —" },
-  { value: "daily_cleaning", label: "Daily Cleaning" },
-  { value: "preop", label: "Pre-Op Inspection" },
-  { value: "monthly_cleaning", label: "Monthly Cleaning" },
-  { value: "batch_sheet", label: "Batch Sheet" },
-  { value: "receiving", label: "Receiving Record" },
-];
+
 
 function triggerLabel(rule: Rule): string {
   if (rule.triggerType === "ONE_OFF") return "One-off";
@@ -451,12 +445,17 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
                   key={rule.id}
                   className={`hover:bg-gray-50 dark:hover:bg-gray-800/50 ${rule.isArchived ? "opacity-60" : ""}`}
                 >
-                  <td className="px-4 py-3 font-medium">
-                    {rule.title}
+                  <td className="px-4 py-3">
+                    <span className="font-medium">{rule.title}</span>
                     {rule.isArchived && (
                       <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
                         Archived
                       </span>
+                    )}
+                    {rule.formKey && (
+                      <div className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 font-normal">
+                        {getFormLabel(rule.formKey) ?? `Unknown form (${rule.formKey})`}
+                      </div>
                     )}
                   </td>
                   <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{rule.facilityName}</td>
@@ -637,15 +636,46 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Linked Form</label>
-                <select
-                  className="input w-full"
-                  value={form.formKey}
-                  onChange={(e) => setForm((f) => ({ ...f, formKey: e.target.value }))}
-                >
-                  {FORM_KEYS.map((fk) => (
-                    <option key={fk.value} value={fk.value}>{fk.label}</option>
-                  ))}
-                </select>
+                {(() => {
+                  const currentFacilityName = facilities.find((f) => f.id === form.facilityId)?.name ?? "";
+                  const allOptions = getFormKeyOptions();
+                  const facilityOptions = allOptions.filter(
+                    (fk) => fk.facility === null || fk.facility === currentFacilityName
+                  );
+                  const otherOptions = allOptions.filter(
+                    (fk) => fk.facility !== null && fk.facility !== currentFacilityName
+                  );
+                  const unknownFormKey =
+                    form.formKey && !TASK_FORM_REGISTRY[form.formKey] ? form.formKey : null;
+                  return (
+                    <select
+                      className="input w-full"
+                      value={form.formKey}
+                      onChange={(e) => setForm((f) => ({ ...f, formKey: e.target.value }))}
+                    >
+                      <option value="">— none —</option>
+                      {unknownFormKey && (
+                        <option value={unknownFormKey}>
+                          Unknown form ({unknownFormKey}) — fix
+                        </option>
+                      )}
+                      {facilityOptions.length > 0 && (
+                        <optgroup label={currentFacilityName ? `${currentFacilityName} forms` : "Forms"}>
+                          {facilityOptions.map((fk) => (
+                            <option key={fk.value} value={fk.value}>{fk.label}</option>
+                          ))}
+                        </optgroup>
+                      )}
+                      {otherOptions.length > 0 && (
+                        <optgroup label="Other forms">
+                          {otherOptions.map((fk) => (
+                            <option key={fk.value} value={fk.value}>{fk.label}</option>
+                          ))}
+                        </optgroup>
+                      )}
+                    </select>
+                  );
+                })()}
               </div>
             </div>
 
