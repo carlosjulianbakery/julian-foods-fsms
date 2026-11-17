@@ -561,9 +561,15 @@ function HeroTaskCard({
 
           {/* Facility + owner */}
           <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1.5 text-xs text-gray-500">
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-600 font-medium text-[11px]">
-              {inst.facilityName}
-            </span>
+            {inst.facilityName ? (
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-600 font-medium text-[11px]">
+                {inst.facilityName}
+              </span>
+            ) : (
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 font-medium text-[11px]">
+                All facilities
+              </span>
+            )}
             {isAdmin && <span>Owner: {inst.ownerName}</span>}
             {inst.doneByName && <span>Done by {inst.doneByName}</span>}
           </div>
@@ -659,9 +665,15 @@ function SkippedTaskRow({
       <div className="flex-1 min-w-0">
         <div className="flex flex-wrap items-center gap-2 mb-0.5">
           <span className="font-medium text-sm text-gray-900">{inst.ruleTitle}</span>
-          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-indigo-100 text-indigo-700 shrink-0">
-            {inst.facilityName}
-          </span>
+          {inst.facilityName ? (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-indigo-100 text-indigo-700 shrink-0">
+              {inst.facilityName}
+            </span>
+          ) : (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-gray-100 text-gray-500 shrink-0">
+              All facilities
+            </span>
+          )}
         </div>
         {inst.label && (
           <p className="text-xs text-gray-500 mb-0.5">{inst.label}</p>

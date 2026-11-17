@@ -124,6 +124,18 @@ function dotColor(status: string): string {
 
 // ─── Chip ─────────────────────────────────────────────────────────────────────
 
+function FacilityTag({ name }: { name: string | null }) {
+  return name ? (
+    <span className="inline-block mt-0.5 text-[9px] px-1 py-0.5 rounded bg-indigo-100 text-indigo-600 leading-none shrink-0">
+      {name}
+    </span>
+  ) : (
+    <span className="inline-block mt-0.5 text-[9px] px-1 py-0.5 rounded bg-gray-100 text-gray-500 leading-none shrink-0">
+      All facilities
+    </span>
+  );
+}
+
 function TaskChip({ inst }: { inst: TaskInstance }) {
   const c = statusChipColors(inst.status);
   const quiet = isQuietTask(inst);
@@ -132,14 +144,17 @@ function TaskChip({ inst }: { inst: TaskInstance }) {
 
   if (quiet) {
     return (
-      <div className={`flex items-center gap-1 px-1.5 py-1 rounded-md text-[10px] font-medium min-h-[28px] ${c.bg} ${c.text} border ${c.border}`}>
-        {/pre-?op/i.test(inst.ruleTitle)
-          ? <FlaskConical className="w-2.5 h-2.5 shrink-0" />
-          : <Brush className="w-2.5 h-2.5 shrink-0" />}
-        <span className="truncate leading-tight">
-          {/pre-?op/i.test(inst.ruleTitle) ? "Pre-Op" : "Cleaning"}
-        </span>
-        {isLate && <span className="ml-auto text-orange-500 font-bold text-[9px]">L</span>}
+      <div className={`flex flex-col px-1.5 py-1 rounded-md text-[10px] font-medium min-h-[42px] ${c.bg} ${c.text} border ${c.border}`}>
+        <div className="flex items-center gap-1">
+          {/pre-?op/i.test(inst.ruleTitle)
+            ? <FlaskConical className="w-2.5 h-2.5 shrink-0" />
+            : <Brush className="w-2.5 h-2.5 shrink-0" />}
+          <span className="truncate leading-tight">
+            {/pre-?op/i.test(inst.ruleTitle) ? "Pre-Op" : "Cleaning"}
+          </span>
+          {isLate && <span className="ml-auto text-orange-500 font-bold text-[9px]">L</span>}
+        </div>
+        <FacilityTag name={inst.facilityName} />
       </div>
     );
   }
@@ -150,9 +165,7 @@ function TaskChip({ inst }: { inst: TaskInstance }) {
       <div className={`px-1.5 py-1 rounded-md text-[10px] font-medium min-h-[44px] border ${c.bg} ${c.text} ${c.border}`}>
         <p className="font-semibold truncate leading-tight">{product}</p>
         {qty && <p className="opacity-70 text-[9px]">{qty}</p>}
-        <span className="inline-block mt-0.5 text-[9px] px-1 py-0.5 rounded bg-indigo-100 text-indigo-600 leading-none">
-          {inst.facilityName}
-        </span>
+        <FacilityTag name={inst.facilityName} />
         {isLate && (
           <span className="ml-1 text-orange-500 font-bold text-[9px]">Late</span>
         )}
@@ -161,9 +174,10 @@ function TaskChip({ inst }: { inst: TaskInstance }) {
   }
 
   return (
-    <div className={`px-1.5 py-1 rounded-md text-[10px] font-medium min-h-[32px] truncate border ${c.bg} ${c.text} ${c.border}`}>
-      {inst.ruleTitle}
-      {isLate && <span className="ml-1 text-orange-500 font-bold">L</span>}
+    <div className={`px-1.5 py-1 rounded-md text-[10px] font-medium min-h-[42px] border ${c.bg} ${c.text} ${c.border}`}>
+      <p className="truncate leading-tight">{inst.ruleTitle}</p>
+      <FacilityTag name={inst.facilityName} />
+      {isLate && <span className="mt-0.5 text-orange-500 font-bold text-[9px]">Late</span>}
     </div>
   );
 }
@@ -405,9 +419,15 @@ function PanelTaskCard({
             <p className="text-xs text-gray-500 mt-0.5">{inst.label}</p>
           )}
           <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1 text-xs text-gray-500">
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-600 text-[10px] font-medium">
-              {inst.facilityName}
-            </span>
+            {inst.facilityName ? (
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-600 text-[10px] font-medium">
+                {inst.facilityName}
+              </span>
+            ) : (
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 text-[10px] font-medium">
+                All facilities
+              </span>
+            )}
             {isDone && inst.doneAt && (
               <span className="text-green-600">{formatCompletedAt(inst.doneAt)}</span>
             )}
