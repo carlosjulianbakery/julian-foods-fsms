@@ -41,7 +41,7 @@ function buildPdfHtml(insp: Inspection624): string {
     .fail { background: #fee2e2; color: #991b1b; }
   </style></head><body>
   <h1>Pre-Op Inspection — 624 Facility</h1>
-  <p class="sub">Date: ${insp.date} &nbsp;|&nbsp; Conducted by: ${insp.conductedBy} &nbsp;|&nbsp; Submitted: ${new Date(insp.submittedAt).toLocaleString("en-US", { timeZone: "America/Los_Angeles" })} by ${insp.submittedBy.name}</p>
+  <p class="sub">Date: ${insp.date} &nbsp;|&nbsp; Initials: ${insp.conductedBy} &nbsp;|&nbsp; Name: ${insp.submittedBy.name ?? "—"} &nbsp;|&nbsp; Submitted: ${new Date(insp.submittedAt).toLocaleString("en-US", { timeZone: "America/Los_Angeles" })}</p>
   <p class="sub">
     Overall: <span class="badge ${!insp.hasNotOk ? "ok" : insp.overallOk ? "issues" : "fail"}">${!insp.hasNotOk ? "All OK" : insp.overallOk ? "Issues — Corrected" : "Has Issues"}</span>
   </p>
@@ -191,6 +191,10 @@ export default function PreOp624RecordsPage() {
               initials={viewTarget.conductedBy}
               readOnly
             />
+
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              <span className="font-medium">Name:</span> {viewTarget.submittedBy.name ?? "—"}
+            </p>
 
             <div className="space-y-2">
               {viewTarget.rows.map((row) => (

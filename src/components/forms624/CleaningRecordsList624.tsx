@@ -46,7 +46,7 @@ export function CleaningRecordsList624({
           <tr>
             <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Date</th>
             <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300 hidden sm:table-cell">Time</th>
-            <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Conducted By</th>
+            <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Name</th>
             <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300 hidden lg:table-cell">Initials</th>
             <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300 hidden md:table-cell">Summary</th>
             <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Status</th>

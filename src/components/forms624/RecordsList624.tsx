@@ -44,10 +44,10 @@ export function RecordsList624({
         <thead className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
           <tr>
             <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Date</th>
-            <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Conducted By</th>
+            <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Name</th>
+            <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Initials</th>
             <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Status</th>
             <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Submitted</th>
-            <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">By</th>
             <th className="px-4 py-3" />
           </tr>
         </thead>
@@ -55,6 +55,7 @@ export function RecordsList624({
           {inspections.map((insp) => (
             <tr key={insp.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
               <td className="px-4 py-3 font-mono text-sm">{insp.date}</td>
+              <td className="px-4 py-3 text-gray-600 text-sm">{insp.submittedBy.name ?? "—"}</td>
               <td className="px-4 py-3 font-mono text-sm uppercase">{insp.conductedBy}</td>
               <td className="px-4 py-3">
                 <StatusBadge hasNotOk={insp.hasNotOk} overallOk={insp.overallOk} />
@@ -65,7 +66,6 @@ export function RecordsList624({
                   year: "2-digit", hour: "numeric", minute: "2-digit", hour12: true,
                 })}
               </td>
-              <td className="px-4 py-3 text-gray-600 text-sm">{insp.submittedBy.name}</td>
               <td className="px-4 py-3">
                 <div className="flex items-center justify-end gap-2">
                   <button

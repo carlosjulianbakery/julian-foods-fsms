@@ -358,6 +358,39 @@ describe("POST /api/daily-cleaning-624 (mocked)", () => {
     expect(body.error).toBe("db_setup_error");
   });
 
+
+  it("uses session user name as conductedBy — ignores client-sent value", async () => {
+    // Session has name "Test User"; payload sends conductedBy "Client Name"
+    // The route must use the session name, not the client-sent value
+    vi.mocked(getServerSession).mockResolvedValueOnce({
+      user: { id: "user-1", role: "SUPERVISOR", name: "Test User" },
+    } as never);
+    const rows = makeValidRows("DONE");
+    const req = makeRequest({ ...BASE_PAYLOAD, conductedBy: "Client Name", rows });
+    const res = await POST(req as never);
+    expect(res.status).toBe(201);
+    const createCall = vi.mocked(prisma.dailyClean624Record.create).mock.calls.at(-1)![0];
+    expect(createCall.data.conductedBy).toBe("Test User");
+    expect(createCall.data.conductedBy).not.toBe("Client Name");
+  });
+
+  it("falls back to email prefix when session user has no name", async () => {
+    vi.mocked(getServerSession).mockResolvedValueOnce({
+      user: { id: "user-1", role: "SUPERVISOR", name: null, email: "hugo@julianbakery.com" },
+    } as never);
+    vi.mocked(prisma.dailyClean624Record.create).mockResolvedValueOnce({
+      id: "rec-2", date: new Date("2026-11-16"), time: "09:00", facility: "624",
+      conductedBy: "hugo", initials: "HGA", rows: [], doneCount: 19, naCount: 0, notDoneCount: 0,
+      notes: null, instructionsVer: "v1.0", submittedAt: new Date(), submittedById: "user-1", linkedInstanceId: null,
+    } as never);
+    const rows = makeValidRows("DONE");
+    const req = makeRequest({ ...BASE_PAYLOAD, rows });
+    const res = await POST(req as never);
+    expect(res.status).toBe(201);
+    const createCall = vi.mocked(prisma.dailyClean624Record.create).mock.calls.at(-1)![0];
+    expect(createCall.data.conductedBy).toBe("hugo");
+  });
+
   it("old record payload with allergenChange field is accepted (backward compat)", async () => {
     // Old clients may still send allergenChange; the route silently ignores it
     const rows = makeValidRows("DONE");
