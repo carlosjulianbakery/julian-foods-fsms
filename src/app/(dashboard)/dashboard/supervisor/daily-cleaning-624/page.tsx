@@ -10,20 +10,11 @@ import { cn } from "@/lib/utils";
 import { FormHeader624 } from "@/components/forms624/FormHeader624";
 import { DoneNaRow624 } from "@/components/forms624/DoneNaRow624";
 import { saveDraft624, loadDraft624, clearDraft624 } from "@/components/forms624/draftStorage624";
+import { deriveInitials } from "@/components/forms624/initialsHelper";
 import { ACTIVITIES, CHEMICAL_MAP, INSTRUCTIONS_TEXT, INSTRUCTIONS_VER } from "./config";
 import type { RowState, CleaningRowSnapshot } from "@/components/forms624/types";
 
 const FORM_PREFIX = "daily_cleaning_624";
-
-// Derive initials from full name ("Hugo Garcia Ayala" → "HGA")
-function nameToInitials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((w) => w[0].toUpperCase())
-    .join("")
-    .slice(0, 6);
-}
 
 function getPTNow(): { dateYMD: string; time24: string } {
   const now = new Date();
@@ -59,7 +50,6 @@ function buildRows(): RowEntry[] {
 interface DraftData {
   date: string;
   time: string;
-  conductedBy: string;
   initials: string;
   rows: RowEntry[];
   notes: string;
@@ -75,7 +65,6 @@ export default function DailyCleaning624Page() {
 
   const [date, setDate] = useState(todayYMD);
   const [time, setTime] = useState(nowTime);
-  const [conductedBy, setConductedBy] = useState("");
   const [initials, setInitials] = useState("");
   const [rows, setRows] = useState<RowEntry[]>(buildRows);
   const [notes, setNotes] = useState("");
@@ -88,12 +77,12 @@ export default function DailyCleaning624Page() {
   const draftLoadedRef = useRef(false);
   const draftTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Prefill name and initials from session
+  // Prefill initials from session
   useEffect(() => {
-    if (!session?.user?.name) return;
-    if (!conductedBy) setConductedBy(session.user.name);
-    if (!initials)    setInitials(nameToInitials(session.user.name));
-  }, [session?.user?.name]);
+    if (!session?.user) return;
+    if (!initials) setInitials(deriveInitials(session.user.name, session.user.email));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session?.user?.name, session?.user?.email]);
 
   // Load draft once session is available
   useEffect(() => {
@@ -103,7 +92,6 @@ export default function DailyCleaning624Page() {
     if (draft && draft.rows?.length === ACTIVITIES.length) {
       setDate(draft.date);
       setTime(draft.time);
-      setConductedBy(draft.conductedBy);
       setInitials(draft.initials ?? "");
       setRows(draft.rows);
       setNotes(draft.notes ?? "");
@@ -117,12 +105,12 @@ export default function DailyCleaning624Page() {
     if (draftTimer.current) clearTimeout(draftTimer.current);
     draftTimer.current = setTimeout(() => {
       saveDraft624(FORM_PREFIX, session.user.id!, todayYMD, {
-        date, time, conductedBy, initials, rows, notes,
+        date, time, initials, rows, notes,
       });
       setDraftSaved(true);
     }, 1000);
     return () => { if (draftTimer.current) clearTimeout(draftTimer.current); };
-  }, [date, time, conductedBy, initials, rows, notes, session?.user?.id, todayYMD]);
+  }, [date, time, initials, rows, notes, session?.user?.id, todayYMD]);
 
   useEffect(() => {
     fetch(`/api/daily-cleaning-624?date=${todayYMD}`)
@@ -169,7 +157,6 @@ export default function DailyCleaning624Page() {
     const payload = {
       date,
       time,
-      conductedBy: conductedBy.trim(),
       initials: initials.trim().toUpperCase(),
       rows: rows.map((r): CleaningRowSnapshot => ({
         key: r.key,
@@ -255,10 +242,7 @@ export default function DailyCleaning624Page() {
                 if (session?.user?.id) clearDraft624(FORM_PREFIX, session.user.id, todayYMD);
                 setRows(buildRows());
                 setNotes("");
-                if (session?.user?.name) {
-                  setConductedBy(session.user.name);
-                  setInitials(nameToInitials(session.user.name));
-                }
+                setInitials(deriveInitials(session?.user?.name, session?.user?.email));
                 setDraftResumed(false);
               }}
             >
@@ -272,13 +256,9 @@ export default function DailyCleaning624Page() {
         <FormHeader624
           date={date}
           time={time}
-          conductedBy={conductedBy}
+          initials={initials}
           onDateChange={setDate}
           onTimeChange={setTime}
-          onConductedByChange={setConductedBy}
-          conductedByLabel="Conducted by"
-          showInitialsField
-          initials={initials}
           onInitialsChange={setInitials}
         />
 

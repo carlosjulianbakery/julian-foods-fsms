@@ -324,11 +324,8 @@ export default function DailyCleaning624RecordsPage() {
             <FormHeader624
               date={viewTarget.date}
               time={viewTarget.time}
-              conductedBy={viewTarget.conductedBy}
-              readOnly
-              conductedByLabel="Conducted by"
-              showInitialsField
               initials={viewTarget.initials}
+              readOnly
             />
 
             <div className="space-y-2">

@@ -188,7 +188,7 @@ export default function PreOp624RecordsPage() {
               time={new Date(viewTarget.submittedAt).toLocaleTimeString("en-US", {
                 timeZone: "America/Los_Angeles", hour: "2-digit", minute: "2-digit", hour12: false,
               })}
-              conductedBy={viewTarget.conductedBy}
+              initials={viewTarget.conductedBy}
               readOnly
             />
 

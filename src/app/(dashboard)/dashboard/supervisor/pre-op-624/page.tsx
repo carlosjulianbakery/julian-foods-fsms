@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { CheckCircle2, AlertTriangle, Save } from "lucide-react";
@@ -8,36 +8,32 @@ import { cn } from "@/lib/utils";
 import { getPacificToday } from "@/lib/pacific-time";
 import { FormHeader624 } from "@/components/forms624/FormHeader624";
 import { OkNotOkRow } from "@/components/forms624/OkNotOkRow";
+import { deriveInitials } from "@/components/forms624/initialsHelper";
 import type { RowSnapshot, RowCondition } from "@/components/forms624/types";
 import { FRIDGE_MAX_F, FREEZER_MAX_F, ATP_MAX_RLU } from "@/components/forms624/types";
 
-// ─── Checklist definition ─────────────────────────────────────────────────────
+// ─── Checklist definition ─────────────────────────────────────────────────────────────────────────────────
 
 interface RowDef {
   key: string;
   label: string;
   section: string;
-  tempLimit?: number;  // present = temperature row; value = limit in °F
-  atpLimit?: number;   // present = ATP row; value = RLU limit
+  tempLimit?: number;
+  atpLimit?: number;
 }
 
 const ROWS: RowDef[] = [
-  // ── General ──────────────────────────────────────────────────────────────────
   { key: "ppe",             label: "PPE: Hairnet, apron, gloves available in place.",                                 section: "General" },
   { key: "sink_stations",   label: "Sink Stations: Hot water, soap, sanitizer, disposable towels, and trash available at hand washing sinks.", section: "General" },
   { key: "trash_bins",      label: "Trash Cans/Bins: Trash is empty, labeled, and in designated areas. Cardboard bin empty.", section: "General" },
-  // ── Storage & Products ───────────────────────────────────────────────────────
   { key: "ingredient_bins", label: "Ingredient Bins and other ingredient containers: Free of damage, and clearly labeled.", section: "Storage & Products" },
   { key: "finished_products", label: "Finished Products: Covered and with Lot information.",                         section: "Storage & Products" },
-  // ── Facility & Equipment ─────────────────────────────────────────────────────
   { key: "floor_drains",    label: "Production Floor/Drains: Floor is free of dirt, water, and not damaged. Drains have a strainer, clean, free of debris, mineral and pooling water.", section: "Facility & Equipment" },
   { key: "utensils",        label: "Production Utensils: Utensils are clean, covered as necessary, free of damage and stored in designated locations.", section: "Facility & Equipment" },
   { key: "equipment",       label: "Equipment and Machinery: Clean, free of leaks, rust, and in good repair. Cables, lights, air ducts do not have missing parts, loose labels, flaking paint or any type of physical contaminant.", section: "Facility & Equipment" },
   { key: "thermometer",     label: "Thermometer: Plastic dial covers on thermometers are in good shape.",            section: "Facility & Equipment" },
-  // ── Temperature ──────────────────────────────────────────────────────────────
   { key: "fridge_temp",     label: `Temperature check – Walk-in Fridge (limit ≤ ${FRIDGE_MAX_F}°F)`,  section: "Temperature", tempLimit: FRIDGE_MAX_F },
   { key: "freezer_temp",    label: `Temperature check – Walk-in Freezer (limit ≤ ${FREEZER_MAX_F}°F)`, section: "Temperature", tempLimit: FREEZER_MAX_F },
-  // ── Quality & ATP ────────────────────────────────────────────────────────────
   { key: "production_area", label: "Production Area: Tables, racks and carts are clean, free of damage and in designated areas.", section: "Quality & ATP" },
   { key: "atp_swab",        label: `ATP Swabs: ATP swab done on one random food-contact area (OK ≤ ${ATP_MAX_RLU} RLU).`, section: "Quality & ATP", atpLimit: ATP_MAX_RLU },
   { key: "gmps",            label: "GMPs: Personnel wearing hairnet correctly, clean uniform, closed shoes, no uncovered cuts, no sick personnel, no jewelry.", section: "Quality & ATP" },
@@ -49,19 +45,17 @@ function draftKey(userId: string, date: string) {
   return `preop_624_draft:${userId}:${date}`;
 }
 
-// ─── Initial row state ────────────────────────────────────────────────────────
-
 const TEMP_PREFILL: Record<string, number> = {
   fridge_temp:  38,
   freezer_temp: 0,
 };
 
-function makeInitialRows(conductedBy: string): RowSnapshot[] {
+function makeInitialRows(initials: string): RowSnapshot[] {
   return ROWS.map((def) => ({
     key:              def.key,
     label:            def.label,
     condition:        "OK" as RowCondition,
-    initials:         conductedBy,
+    initials,
     correctiveAction: "",
     reInspected:      false,
     reInspectedAt:    null,
@@ -73,7 +67,7 @@ function makeInitialRows(conductedBy: string): RowSnapshot[] {
   }));
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
+// ─── Component ────────────────────────────────────────────────────────────────────────────────────
 
 export default function PreOp624Page() {
   const { data: session } = useSession();
@@ -89,7 +83,7 @@ export default function PreOp624Page() {
 
   const [date, setDate] = useState(today);
   const [time, setTime] = useState(nowTime);
-  const [conductedBy, setConductedBy] = useState("");
+  const [initials, setInitials] = useState("");
   const [rows, setRows] = useState<RowSnapshot[]>(() => makeInitialRows(""));
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -98,6 +92,13 @@ export default function PreOp624Page() {
   const [draftResumed, setDraftResumed] = useState(false);
   const draftTimer = useRef<NodeJS.Timeout | null>(null);
   const draftLoadedRef = useRef(false);
+
+  // Prefill initials from session
+  useEffect(() => {
+    if (!session?.user) return;
+    if (!initials) setInitials(deriveInitials(session.user.name, session.user.email));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session?.user?.name, session?.user?.email]);
 
   // Load draft from localStorage once session is available (keyed by userId+date)
   useEffect(() => {
@@ -108,13 +109,12 @@ export default function PreOp624Page() {
       const raw = localStorage.getItem(key);
       if (!raw) return;
       const draft = JSON.parse(raw) as {
-        date: string; time: string; conductedBy: string; rows: RowSnapshot[];
+        date: string; time: string; initials: string; rows: RowSnapshot[];
       };
-      // Only resume if the draft is for today and has the right number of rows
       if (draft.date === today && draft.rows?.length === ROWS.length) {
         setDate(draft.date);
         setTime(draft.time);
-        setConductedBy(draft.conductedBy);
+        setInitials(draft.initials ?? "");
         setRows(draft.rows);
         setDraftResumed(true);
       }
@@ -123,25 +123,25 @@ export default function PreOp624Page() {
     }
   }, [session?.user?.id, today]);
 
-  // Auto-save draft 1s after last change (only once session is available)
+  // Auto-save draft 1s after last change
   const saveDraft = useCallback(() => {
     if (!session?.user?.id) return;
     if (draftTimer.current) clearTimeout(draftTimer.current);
     draftTimer.current = setTimeout(() => {
       try {
         const key = draftKey(session.user.id, date);
-        localStorage.setItem(key, JSON.stringify({ date, time, conductedBy, rows }));
+        localStorage.setItem(key, JSON.stringify({ date, time, initials, rows }));
         setDraftSaved(true);
         setTimeout(() => setDraftSaved(false), 2000);
       } catch {}
     }, 1000);
-  }, [session?.user?.id, date, time, conductedBy, rows]);
+  }, [session?.user?.id, date, time, initials, rows]);
 
-  useEffect(() => { saveDraft(); }, [date, time, conductedBy, rows, saveDraft]);
+  useEffect(() => { saveDraft(); }, [date, time, initials, rows, saveDraft]);
 
-  // Apply global initials to all rows when conductedBy changes
-  function handleConductedByChange(val: string) {
-    setConductedBy(val);
+  // Apply global initials to all rows when initials change
+  function handleInitialsChange(val: string) {
+    setInitials(val);
     setRows((prev) => prev.map((r) => ({ ...r, initials: val })));
   }
 
@@ -155,7 +155,7 @@ export default function PreOp624Page() {
   const missingCorrectiveAction = notOkRows.filter((r) => !r.correctiveAction.trim());
 
   async function handleSubmit() {
-    if (!conductedBy.trim()) {
+    if (!initials.trim()) {
       setError("Enter your initials at the top before submitting.");
       return;
     }
@@ -170,7 +170,7 @@ export default function PreOp624Page() {
       const res = await fetch("/api/pre-op-624", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ date, conductedBy, rows, taskInstanceId }),
+        body: JSON.stringify({ date, conductedBy: initials.trim().toUpperCase(), rows, taskInstanceId }),
       });
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
@@ -184,7 +184,6 @@ export default function PreOp624Page() {
         setError(raw ? (errorMessages[raw] ?? `Server error: ${raw}`) : "Submission failed — please try again.");
         return;
       }
-      // Clear draft
       try {
         if (session?.user?.id) localStorage.removeItem(draftKey(session.user.id, date));
       } catch {}
@@ -212,7 +211,7 @@ export default function PreOp624Page() {
             : "All items passed inspection."}
         </p>
         <div className="flex gap-3 justify-center">
-          <button onClick={() => { setSubmitted(false); setRows(makeInitialRows(conductedBy)); setDate(today); }} className="btn btn-secondary">
+          <button onClick={() => { setSubmitted(false); setRows(makeInitialRows(initials)); setDate(today); }} className="btn btn-secondary">
             New Inspection
           </button>
           <button onClick={() => router.push("/dashboard/supervisor/pre-op-624/records")} className="btn btn-primary">
@@ -242,7 +241,7 @@ export default function PreOp624Page() {
                     if (session?.user?.id) localStorage.removeItem(draftKey(session.user.id, today));
                   } catch {}
                   setRows(makeInitialRows(""));
-                  setConductedBy("");
+                  setInitials("");
                   setDate(today);
                   setDraftResumed(false);
                 }}
@@ -267,10 +266,10 @@ export default function PreOp624Page() {
 
       {/* Form header */}
       <FormHeader624
-        date={date} time={time} conductedBy={conductedBy}
+        date={date} time={time} initials={initials}
         onDateChange={setDate}
         onTimeChange={setTime}
-        onConductedByChange={handleConductedByChange}
+        onInitialsChange={handleInitialsChange}
       />
 
       {/* Checklist sections */}
@@ -325,7 +324,7 @@ export default function PreOp624Page() {
 
           <button
             onClick={handleSubmit}
-            disabled={submitting || !conductedBy.trim()}
+            disabled={submitting || !initials.trim()}
             className="btn btn-primary"
           >
             {submitting ? "Submitting…" : "Submit Inspection"}

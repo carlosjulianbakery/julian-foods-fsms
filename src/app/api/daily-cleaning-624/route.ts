@@ -41,7 +41,6 @@ export async function GET(req: NextRequest) {
         doneCount: true,
         naCount: true,
         notDoneCount: true,
-        // allergenChange kept for backward compat — old records may have it set
         allergenChange: true,
         notes: true,
         instructionsVer: true,
@@ -79,7 +78,6 @@ export async function POST(req: NextRequest) {
   const body = await req.json() as {
     date: string;
     time: string;
-    conductedBy: string;
     initials: string;
     rows: CleaningRowSnapshot[];
     notes: string | null;
@@ -87,10 +85,9 @@ export async function POST(req: NextRequest) {
     taskId?: string;
   };
 
-  if (!body.date)        return NextResponse.json({ error: "date required" }, { status: 400 });
-  if (!body.time)        return NextResponse.json({ error: "time required" }, { status: 400 });
-  if (!body.conductedBy) return NextResponse.json({ error: "conductedBy required" }, { status: 400 });
-  if (!body.initials)    return NextResponse.json({ error: "initials required" }, { status: 400 });
+  if (!body.date)     return NextResponse.json({ error: "date required" }, { status: 400 });
+  if (!body.time)     return NextResponse.json({ error: "time required" }, { status: 400 });
+  if (!body.initials) return NextResponse.json({ error: "initials required" }, { status: 400 });
   if (!Array.isArray(body.rows) || body.rows.length !== 19)
     return NextResponse.json({ error: "rows must be 19 items" }, { status: 400 });
 
@@ -106,6 +103,9 @@ export async function POST(req: NextRequest) {
   const naCount      = body.rows.filter((r) => r.state === "NA").length;
   const notDoneCount = body.rows.filter((r) => r.state === "NOT_DONE").length;
 
+  // conductedBy is set server-side from the authenticated session — never trusted from client
+  const conductedBy = session.user.name?.trim() || session.user.email?.split("@")[0] || "";
+
   let record;
   try {
     record = await prisma.dailyClean624Record.create({
@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
         date:            new Date(body.date),
         time:            body.time,
         facility:        "624",
-        conductedBy:     body.conductedBy.trim(),
+        conductedBy,
         initials:        body.initials.toUpperCase().trim(),
         rows:            body.rows as never,
         doneCount,
