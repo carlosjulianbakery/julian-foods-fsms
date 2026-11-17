@@ -62,7 +62,6 @@ interface DraftData {
   conductedBy: string;
   initials: string;
   rows: RowEntry[];
-  allergenChange: boolean | null;
   notes: string;
 }
 
@@ -79,7 +78,6 @@ export default function DailyCleaning624Page() {
   const [conductedBy, setConductedBy] = useState("");
   const [initials, setInitials] = useState("");
   const [rows, setRows] = useState<RowEntry[]>(buildRows);
-  const [allergenChange, setAllergenChange] = useState<boolean | null>(null);
   const [notes, setNotes] = useState("");
   const [instrOpen, setInstrOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -108,7 +106,6 @@ export default function DailyCleaning624Page() {
       setConductedBy(draft.conductedBy);
       setInitials(draft.initials ?? "");
       setRows(draft.rows);
-      setAllergenChange(draft.allergenChange ?? null);
       setNotes(draft.notes ?? "");
       setDraftResumed(true);
     }
@@ -120,12 +117,12 @@ export default function DailyCleaning624Page() {
     if (draftTimer.current) clearTimeout(draftTimer.current);
     draftTimer.current = setTimeout(() => {
       saveDraft624(FORM_PREFIX, session.user.id!, todayYMD, {
-        date, time, conductedBy, initials, rows, allergenChange, notes,
+        date, time, conductedBy, initials, rows, notes,
       });
       setDraftSaved(true);
     }, 1000);
     return () => { if (draftTimer.current) clearTimeout(draftTimer.current); };
-  }, [date, time, conductedBy, initials, rows, allergenChange, notes, session?.user?.id, todayYMD]);
+  }, [date, time, conductedBy, initials, rows, notes, session?.user?.id, todayYMD]);
 
   useEffect(() => {
     fetch(`/api/daily-cleaning-624?date=${todayYMD}`)
@@ -182,7 +179,6 @@ export default function DailyCleaning624Page() {
         reason: r.reason.trim() || null,
         chemical: r.chemical,
       })),
-      allergenChange: allergenChange ?? false,
       notes: notes.trim() || null,
       instructionsVer: INSTRUCTIONS_VER,
       ...(taskId ? { taskId } : {}),
@@ -258,7 +254,6 @@ export default function DailyCleaning624Page() {
               onClick={() => {
                 if (session?.user?.id) clearDraft624(FORM_PREFIX, session.user.id, todayYMD);
                 setRows(buildRows());
-                setAllergenChange(null);
                 setNotes("");
                 if (session?.user?.name) {
                   setConductedBy(session.user.name);
@@ -281,21 +276,11 @@ export default function DailyCleaning624Page() {
           onDateChange={setDate}
           onTimeChange={setTime}
           onConductedByChange={setConductedBy}
+          conductedByLabel="Conducted by"
+          showInitialsField
+          initials={initials}
+          onInitialsChange={setInitials}
         />
-
-        {/* Initials field */}
-        <div className="card p-4">
-          <label className="label">Initials</label>
-          <input
-            type="text"
-            className="input mt-1 uppercase"
-            placeholder="e.g. HGA"
-            value={initials}
-            onChange={(e) => setInitials(e.target.value.toUpperCase().slice(0, 6))}
-            maxLength={6}
-          />
-          <p className="text-xs text-gray-400 mt-1">Auto-derived from your name. Edit if needed.</p>
-        </div>
 
         <div className="border border-amber-200 rounded-lg overflow-hidden">
           <button
@@ -378,50 +363,11 @@ export default function DailyCleaning624Page() {
           })}
         </div>
 
-        <div className="card p-4 space-y-3">
-          <p className="text-sm font-semibold text-gray-800">Was there an allergen change today?</p>
-          <div className="flex gap-3">
-            {([true, false] as const).map((val) => (
-              <button
-                key={String(val)}
-                type="button"
-                onClick={() => setAllergenChange(val)}
-                className={cn(
-                  "px-5 py-2.5 rounded-lg border-2 text-sm font-semibold transition-colors min-h-[44px]",
-                  allergenChange === val
-                    ? val
-                      ? "bg-amber-500 text-white border-amber-500"
-                      : "bg-emerald-500 text-white border-emerald-500"
-                    : "bg-white text-gray-600 border-gray-300 hover:border-gray-400"
-                )}
-              >
-                {val ? "Yes" : "No"}
-              </button>
-            ))}
-          </div>
-          {allergenChange === true && (
-            <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-sm text-amber-800">
-              <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-              <span>
-                Register it in the Allergen Changeover Form (Section 2 of the Batch Sheet).{" "}
-                <a
-                  href="/dashboard/logs/allergen-changeover"
-                  className="underline font-medium"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View Allergen Log
-                </a>
-              </span>
-            </div>
-          )}
-        </div>
-
         <div className="card p-4 space-y-2">
           <label className="label">Notes / issues found</label>
           <textarea
             className="input resize-none h-20"
-            placeholder="Optional observations\u2026"
+            placeholder="Optional observations…"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
           />
@@ -450,7 +396,7 @@ export default function DailyCleaning624Page() {
           {submitting ? (
             <>
               <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-              Submitting\u2026
+              Submitting…
             </>
           ) : (
             <>

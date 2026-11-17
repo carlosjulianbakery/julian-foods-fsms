@@ -185,7 +185,7 @@ model DailyClean624Record {
   doneCount       Int      @default(0)
   naCount         Int      @default(0)
   notDoneCount    Int      @default(0)
-  allergenChange  Boolean  @default(false)
+  allergenChange  Boolean  @default(false) // kept for historic records; new submissions always false
   notes           String?
   instructionsVer String   @default("v1.0")
   submittedAt     DateTime @default(now())

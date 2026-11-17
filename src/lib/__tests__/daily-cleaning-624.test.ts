@@ -286,7 +286,6 @@ const BASE_PAYLOAD = {
   time: "09:00",
   conductedBy: "Hugo Garcia Ayala",
   initials: "HGA",
-  allergenChange: false,
   notes: null,
   instructionsVer: "v1.0",
 };
@@ -307,7 +306,6 @@ describe("POST /api/daily-cleaning-624 (mocked)", () => {
       doneCount: 19,
       naCount: 0,
       notDoneCount: 0,
-      allergenChange: false,
       notes: null,
       instructionsVer: "v1.0",
       submittedAt: new Date(),
@@ -358,6 +356,14 @@ describe("POST /api/daily-cleaning-624 (mocked)", () => {
     expect(res.status).toBe(503);
     const body = await res.json();
     expect(body.error).toBe("db_setup_error");
+  });
+
+  it("old record payload with allergenChange field is accepted (backward compat)", async () => {
+    // Old clients may still send allergenChange; the route silently ignores it
+    const rows = makeValidRows("DONE");
+    const req = makeRequest({ ...BASE_PAYLOAD, allergenChange: false, rows });
+    const res = await POST(req as never);
+    expect(res.status).toBe(201);
   });
 });
 

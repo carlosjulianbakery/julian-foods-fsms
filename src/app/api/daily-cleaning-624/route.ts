@@ -41,6 +41,7 @@ export async function GET(req: NextRequest) {
         doneCount: true,
         naCount: true,
         notDoneCount: true,
+        // allergenChange kept for backward compat — old records may have it set
         allergenChange: true,
         notes: true,
         instructionsVer: true,
@@ -81,7 +82,6 @@ export async function POST(req: NextRequest) {
     conductedBy: string;
     initials: string;
     rows: CleaningRowSnapshot[];
-    allergenChange: boolean;
     notes: string | null;
     instructionsVer: string;
     taskId?: string;
@@ -119,7 +119,7 @@ export async function POST(req: NextRequest) {
         doneCount,
         naCount,
         notDoneCount,
-        allergenChange:  body.allergenChange ?? false,
+        allergenChange:  false,
         notes:           body.notes ?? null,
         instructionsVer: body.instructionsVer ?? "v1.0",
         submittedById:   session.user.id,

@@ -40,7 +40,6 @@ function buildPdfHtml(r: DailyClean624Record): string {
   <h1>Daily Cleaning and Sanitation \u2014 624 Facility</h1>
   <p class="sub">Date: ${r.date} &nbsp;|&nbsp; Time: ${r.time} &nbsp;|&nbsp; Conducted by: ${r.conductedBy} (${r.initials})</p>
   <p class="sub">Summary: ${r.doneCount} done &middot; ${r.naCount} N/A &middot; ${r.notDoneCount} not done
-    &nbsp;|&nbsp; Allergen change: ${r.allergenChange ? "Yes" : "No"}
     ${r.notes ? `&nbsp;|&nbsp; Notes: ${r.notes}` : ""}
   </p>
   <p class="sub">Status: <span class="badge ${r.notDoneCount === 0 ? "ok" : "issues"}">${r.notDoneCount === 0 ? "All done" : `${r.notDoneCount} not done`}</span></p>
@@ -327,12 +326,10 @@ export default function DailyCleaning624RecordsPage() {
               time={viewTarget.time}
               conductedBy={viewTarget.conductedBy}
               readOnly
+              conductedByLabel="Conducted by"
+              showInitialsField
+              initials={viewTarget.initials}
             />
-
-            {/* Initials display in modal */}
-            <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300 px-1">
-              <span><span className="font-medium text-gray-500">Initials:</span> <span className="font-mono uppercase">{viewTarget.initials}</span></span>
-            </div>
 
             <div className="space-y-2">
               {(viewTarget.rows as CleaningRowSnapshot[]).map((row) => (
@@ -348,12 +345,6 @@ export default function DailyCleaning624RecordsPage() {
                 />
               ))}
             </div>
-
-            {viewTarget.allergenChange && (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-sm text-amber-800">
-                Allergen change registered this day.
-              </div>
-            )}
 
             {viewTarget.notes && (
               <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-700">

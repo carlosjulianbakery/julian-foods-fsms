@@ -61,7 +61,7 @@ export interface DailyClean624Record {
   doneCount: number;
   naCount: number;
   notDoneCount: number;
-  allergenChange: boolean;
+  allergenChange?: boolean;  // kept for old records; new records always false
   notes: string | null;
   instructionsVer: string;
   submittedAt: string;
