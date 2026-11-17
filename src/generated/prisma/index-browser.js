@@ -196,6 +196,23 @@ exports.Prisma.PreOp624InspectionScalarFieldEnum = {
   linkedInstanceId: 'linkedInstanceId'
 };
 
+exports.Prisma.DailyClean624RecordScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  time: 'time',
+  conductedBy: 'conductedBy',
+  rows: 'rows',
+  doneCount: 'doneCount',
+  naCount: 'naCount',
+  notDoneCount: 'notDoneCount',
+  allergenChange: 'allergenChange',
+  notes: 'notes',
+  instructionsVer: 'instructionsVer',
+  submittedAt: 'submittedAt',
+  submittedById: 'submittedById',
+  linkedInstanceId: 'linkedInstanceId'
+};
+
 exports.Prisma.BatchSheetTemplateScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -1145,6 +1162,7 @@ exports.Prisma.ModelName = {
   Record: 'Record',
   PreOpInspection: 'PreOpInspection',
   PreOp624Inspection: 'PreOp624Inspection',
+  DailyClean624Record: 'DailyClean624Record',
   BatchSheetTemplate: 'BatchSheetTemplate',
   BatchSheetSubmission: 'BatchSheetSubmission',
   DailyCleaningChecklist: 'DailyCleaningChecklist',

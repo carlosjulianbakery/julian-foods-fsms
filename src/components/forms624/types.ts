@@ -37,3 +37,33 @@ export interface Inspection624 {
   submittedBy: { name: string };
   linkedInstanceId: string | null;
 }
+
+// ─── Daily Cleaning 624 ───────────────────────────────────────────────────────
+
+export type RowState = "DONE" | "NA" | "NOT_DONE" | "UNTOUCHED";
+
+export interface CleaningRowSnapshot {
+  key: string;
+  labelEn: string;      // English label as shown at submission time
+  labelEs: string;      // Spanish label as shown at submission time
+  state: Exclude<RowState, "UNTOUCHED">;   // DONE | NA | NOT_DONE  (never UNTOUCHED in DB)
+  reason: string | null;    // required when NOT_DONE
+  chemical: string | null;  // chemical hint text from config at submission time
+}
+
+export interface DailyClean624Record {
+  id: string;
+  date: string;          // YYYY-MM-DD
+  time: string;          // "HH:MM" 24h
+  conductedBy: string;   // initials
+  rows: CleaningRowSnapshot[];
+  doneCount: number;
+  naCount: number;
+  notDoneCount: number;
+  allergenChange: boolean;
+  notes: string | null;
+  instructionsVer: string;
+  submittedAt: string;
+  submittedBy: { name: string };
+  linkedInstanceId: string | null;
+}

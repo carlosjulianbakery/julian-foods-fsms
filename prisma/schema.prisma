@@ -66,6 +66,7 @@ model User {
   taskInstanceAuditLogs         TaskInstanceAudit[] @relation("TaskInstanceAuditUser")
   notifications                 Notification[]
   preOp624Inspections           PreOp624Inspection[] @relation("PreOp624Submissions")
+  dailyClean624Records          DailyClean624Record[] @relation("DailyClean624Submissions")
 
   @@map("users")
 }
@@ -172,6 +173,31 @@ model PreOp624Inspection {
   @@index([hasNotOk])
   @@map("pre_op_624_inspections")
 }
+// ─── Daily Cleaning 624 ────────────────────────────────────────────────────────────────────────────────────────
+model DailyClean624Record {
+  id              String   @id @default(cuid())
+  date            DateTime @db.Date
+  time            String   // "HH:MM" 24h
+  conductedBy     String   // initials
+  rows            Json     // CleaningRowSnapshot[]
+  doneCount       Int      @default(0)
+  naCount         Int      @default(0)
+  notDoneCount    Int      @default(0)
+  allergenChange  Boolean  @default(false)
+  notes           String?
+  instructionsVer String   @default("v1.0")
+  submittedAt     DateTime @default(now())
+
+  submittedBy      User   @relation("DailyClean624Submissions", fields: [submittedById], references: [id])
+  submittedById    String
+
+  linkedInstanceId String?
+
+  @@index([date])
+  @@index([notDoneCount])
+  @@map("daily_clean_624_records")
+}
+
 
 model BatchSheetTemplate {
   id                    String   @id @default(cuid())
