@@ -9,6 +9,7 @@ import type { TaskInstance } from "./MyTasksClient";
 import { addDaysToDateStr } from "@/lib/pacific-time";
 import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
 import { useAutoRefresh } from "@/hooks/useAutoRefresh";
+import { FacilityTag } from "@/components/tasks/FacilityTag";
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
 
@@ -123,18 +124,6 @@ function dotColor(status: string): string {
 }
 
 // ─── Chip ─────────────────────────────────────────────────────────────────────
-
-function FacilityTag({ name }: { name: string | null }) {
-  return name ? (
-    <span className="inline-block mt-0.5 text-[9px] px-1 py-0.5 rounded bg-indigo-100 text-indigo-600 leading-none shrink-0">
-      {name}
-    </span>
-  ) : (
-    <span className="inline-block mt-0.5 text-[9px] px-1 py-0.5 rounded bg-gray-100 text-gray-500 leading-none shrink-0">
-      All facilities
-    </span>
-  );
-}
 
 function TaskChip({ inst }: { inst: TaskInstance }) {
   const c = statusChipColors(inst.status);
@@ -419,15 +408,7 @@ function PanelTaskCard({
             <p className="text-xs text-gray-500 mt-0.5">{inst.label}</p>
           )}
           <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1 text-xs text-gray-500">
-            {inst.facilityName ? (
-              <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-600 text-[10px] font-medium">
-                {inst.facilityName}
-              </span>
-            ) : (
-              <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 text-[10px] font-medium">
-                All facilities
-              </span>
-            )}
+            <FacilityTag name={inst.facilityName} />
             {isDone && inst.doneAt && (
               <span className="text-green-600">{formatCompletedAt(inst.doneAt)}</span>
             )}
