@@ -77,9 +77,10 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      try { await completeRuleInstanceForSubmission({ formKey: "daily_cleaning", submissionId: record.id, userId: user.id, submissionDate: toPacificDateStr(new Date(date + "T12:00:00Z")), taskId: body.taskId ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] daily_cleaning:", e); }
+      let completedInstanceId1: string | null = null;
+      try { completedInstanceId1 = await completeRuleInstanceForSubmission({ formKey: "daily_cleaning", submissionId: record.id, userId: user.id, submissionDate: toPacificDateStr(new Date(date + "T12:00:00Z")), taskId: body.taskId ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] daily_cleaning:", e); }
 
-      return NextResponse.json(record, { status: 201 });
+      return NextResponse.json({ ...record, completedInstanceId: completedInstanceId1 }, { status: 201 });
     }
 
     // Legacy format (backward compat): old boolean fields
@@ -114,9 +115,10 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    try { await completeRuleInstanceForSubmission({ formKey: "daily_cleaning", submissionId: record.id, userId: user.id, submissionDate: toPacificDateStr(new Date(date + "T12:00:00Z")), taskId: body.taskId ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] daily_cleaning:", e); }
+    let completedInstanceId2: string | null = null;
+    try { completedInstanceId2 = await completeRuleInstanceForSubmission({ formKey: "daily_cleaning", submissionId: record.id, userId: user.id, submissionDate: toPacificDateStr(new Date(date + "T12:00:00Z")), taskId: body.taskId ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] daily_cleaning:", e); }
 
-    return NextResponse.json(record, { status: 201 });
+    return NextResponse.json({ ...record, completedInstanceId: completedInstanceId2 }, { status: 201 });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[POST /api/cleaning/daily]", msg);

@@ -13,6 +13,7 @@ import { saveDraft624, loadDraft624, clearDraft624 } from "@/components/forms624
 import { deriveInitials } from "@/components/forms624/initialsHelper";
 import { ACTIVITIES, CHEMICAL_MAP, INSTRUCTIONS_TEXT, INSTRUCTIONS_VER } from "./config";
 import type { RowState, CleaningRowSnapshot } from "@/components/forms624/types";
+import { navigateAfterSubmit } from "@/lib/afterSubmit";
 
 const FORM_PREFIX = "daily_cleaning_624";
 
@@ -186,8 +187,9 @@ export default function DailyCleaning624Page() {
         throw new Error(data.error ?? `HTTP ${res.status}`);
       }
       if (session?.user?.id) clearDraft624(FORM_PREFIX, session.user.id, date);
+      const resData = await res.json().catch(() => ({})) as { completedInstanceId?: string | null };
       window.dispatchEvent(new CustomEvent("task-action"));
-      router.push("/dashboard/supervisor/daily-cleaning-624/records");
+      navigateAfterSubmit(router, resData.completedInstanceId, "/dashboard/supervisor/daily-cleaning-624/records");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit.");
     } finally {

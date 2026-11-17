@@ -3,6 +3,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { markTaskCompleted } from "@/lib/completedTasks";
+import { navigateAfterSubmit } from "@/lib/afterSubmit";
 import Link from "next/link";
 import {
   FolderOpen, CheckCircle2, AlertCircle, Search, X,
@@ -1062,6 +1064,7 @@ export default function ReceivingPage() {
 
       const data = await res.json();
       const count = data.count ?? 1;
+      if (data.completedInstanceId) markTaskCompleted(data.completedInstanceId);
       setToast(`${count} receiving record${count !== 1 ? "s" : ""} submitted successfully.`);
 
       if (data.poFullyReceived && data.poId && data.poNumber) {
@@ -1090,7 +1093,7 @@ export default function ReceivingPage() {
       finally { setClosingPo(false); }
     }
     setPoClosureData(null);
-    router.push("/dashboard/supervisor/receiving/records");
+    navigateAfterSubmit(router, null, "/dashboard/supervisor/receiving/records");
   }
 
   // ── Derived UI state ─────────────────────────────────────────────────────────

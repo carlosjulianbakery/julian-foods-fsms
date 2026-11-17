@@ -10,6 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { toUpperCaseInput } from "@/lib/formatters";
 import { DateInput } from "@/components/DateInput";
+import { navigateAfterSubmit } from "@/lib/afterSubmit";
 
 // ─── Area / Section / Item Data ───────────────────────────────────────────────
 
@@ -552,7 +553,8 @@ export default function DailyCleaningPage() {
         const data = await res.json().catch(() => ({}));
         throw new Error((data as { error?: string }).error ?? `HTTP ${res.status}`);
       }
-      router.push("/dashboard/supervisor/cleaning/daily/records");
+      const resData = await res.json().catch(() => ({})) as { completedInstanceId?: string | null };
+      navigateAfterSubmit(router, resData.completedInstanceId, "/dashboard/supervisor/cleaning/daily/records");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit.");
     } finally {

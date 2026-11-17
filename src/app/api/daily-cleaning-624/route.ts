@@ -151,8 +151,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "save_failed", refId }, { status: 500 });
   }
 
+  let completedInstanceId: string | null = null;
   try {
-    await completeRuleInstanceForSubmission({
+    completedInstanceId = await completeRuleInstanceForSubmission({
       formKey:        "daily_cleaning_624",
       submissionDate: body.date,
       submissionId:   record.id,
@@ -165,5 +166,5 @@ export async function POST(req: NextRequest) {
     console.error("[daily-cleaning-624 POST] task completion error:", err);
   }
 
-  return NextResponse.json({ id: record.id }, { status: 201 });
+  return NextResponse.json({ id: record.id, completedInstanceId }, { status: 201 });
 }

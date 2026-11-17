@@ -10,6 +10,7 @@ export type AutoRefreshCleanup = () => void;
 export function setupAutoRefresh(
   refresh: () => void,
   intervalMs = 60_000,
+  initialRefresh = false,
 ): AutoRefreshCleanup {
   const handleTaskAction = () => refresh();
   const handleVisibility = () => { if (!document.hidden) refresh(); };
@@ -22,6 +23,8 @@ export function setupAutoRefresh(
   window.addEventListener("pageshow", handlePageShow as EventListener);
 
   const id = setInterval(() => { if (!document.hidden) refresh(); }, intervalMs);
+
+  if (initialRefresh) refresh();
 
   return () => {
     window.removeEventListener("task-action", handleTaskAction);
@@ -40,11 +43,12 @@ export function setupAutoRefresh(
  *  - pageshow with persisted (bfcache restore)
  *  - Every intervalMs ms while visible, paused when hidden
  */
-export function useAutoRefresh(refresh: () => void, intervalMs = 60_000): void {
+export function useAutoRefresh(refresh: () => void, intervalMs = 60_000, initialRefresh = false): void {
   const refreshRef = useRef(refresh);
   refreshRef.current = refresh;
   useEffect(
-    () => setupAutoRefresh(() => refreshRef.current(), intervalMs),
-    [intervalMs],
+    () => setupAutoRefresh(() => refreshRef.current(), intervalMs, initialRefresh),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [intervalMs, initialRefresh],
   );
 }

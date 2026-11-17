@@ -155,9 +155,10 @@ export async function POST(req: NextRequest) {
       select: { id: true, status: true },
     });
 
-    try { await completeRuleInstanceForSubmission({ formKey: "preop", submissionId: row.id, userId: user.id, submissionDate: toPacificDateStr(new Date(date! + "T12:00:00Z")), taskId: body.taskId ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] preop:", e); }
+    let completedInstanceId: string | null = null;
+    try { completedInstanceId = await completeRuleInstanceForSubmission({ formKey: "preop", submissionId: row.id, userId: user.id, submissionDate: toPacificDateStr(new Date(date! + "T12:00:00Z")), taskId: body.taskId ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] preop:", e); }
 
-    return NextResponse.json({ id: row.id, status: row.status }, { status: 201 });
+    return NextResponse.json({ id: row.id, status: row.status, completedInstanceId }, { status: 201 });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[POST /api/pre-op]", msg);

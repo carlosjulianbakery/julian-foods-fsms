@@ -324,8 +324,9 @@ export async function POST(req: NextRequest) {
   }
 
   // Close matching RuleInstances
+  let completedInstanceId: string | null = null;
   try {
-    await completeRuleInstanceForSubmission({
+    completedInstanceId = await completeRuleInstanceForSubmission({
       formKey: "receiving",
       submissionId: createdRecords[0]?.id ?? "",
       userId,
@@ -344,6 +345,7 @@ export async function POST(req: NextRequest) {
     poNumber: poNumber ?? null,
     poFullyReceived,
     poOutstandingItems,
+    completedInstanceId,
   }, { status: 201 });
   } catch (error) {
     console.error("[receiving/batch] submission error:", error);

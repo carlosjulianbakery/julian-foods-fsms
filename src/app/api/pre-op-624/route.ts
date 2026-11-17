@@ -112,8 +112,9 @@ export async function POST(req: NextRequest) {
   }
 
   // Complete linked task instance (facility "624")
+  let completedInstanceId: string | null = null;
   try {
-    await completeRuleInstanceForSubmission({
+    completedInstanceId = await completeRuleInstanceForSubmission({
       formKey:        "preop_624",
       submissionDate: body.date,
       submissionId:   inspection.id,
@@ -127,5 +128,5 @@ export async function POST(req: NextRequest) {
     console.error("[pre-op-624 POST] task completion error:", err);
   }
 
-  return NextResponse.json({ id: inspection.id }, { status: 201 });
+  return NextResponse.json({ id: inspection.id, completedInstanceId }, { status: 201 });
 }

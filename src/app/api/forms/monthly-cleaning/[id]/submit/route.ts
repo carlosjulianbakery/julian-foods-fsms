@@ -29,8 +29,9 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       data: { status: "submitted", submittedAt: new Date(), submittedBy: userId },
     });
 
+    let completedInstanceId: string | null = null;
     try {
-      await completeRuleInstanceForSubmission({
+      completedInstanceId = await completeRuleInstanceForSubmission({
         formKey: "monthly_cleaning",
         submissionId: updated.id,
         userId,
@@ -42,7 +43,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       console.error("[rule-instance-complete] monthly_cleaning:", e);
     }
 
-    return NextResponse.json({ success: true, submittedAt: updated.submittedAt });
+    return NextResponse.json({ success: true, submittedAt: updated.submittedAt, completedInstanceId });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[POST /api/forms/monthly-cleaning/[id]/submit]", msg);

@@ -20,6 +20,7 @@ import { toUpperCaseInput } from "@/lib/formatters";
 import dynamic from "next/dynamic";
 import type { SignaturePadHandle } from "@/components/SignaturePad";
 import { DateInput } from "@/components/DateInput";
+import { markTaskCompleted } from "@/lib/completedTasks";
 
 const SignaturePad = dynamic(() => import("@/components/SignaturePad"), { ssr: false });
 
@@ -347,6 +348,9 @@ export default function PreOpFormPage() {
         return;
       }
 
+      const resData = await res.json().catch(() => ({})) as { completedInstanceId?: string | null };
+      if (resData.completedInstanceId) markTaskCompleted(resData.completedInstanceId);
+      window.dispatchEvent(new CustomEvent("task-action"));
       setSuccess(true);
     } finally {
       setLoading(false);

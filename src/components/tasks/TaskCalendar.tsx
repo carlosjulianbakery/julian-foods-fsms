@@ -750,7 +750,7 @@ export function TaskCalendar({
     fetchRange(from, to);
   }, [currentRange, fetchRange]);
 
-  useAutoRefresh(handleRefresh);
+  useAutoRefresh(handleRefresh, 60_000, true);
   useCalendarSync(handleRefresh);
 
   // Sync with ProductionScheduleCard via window custom events

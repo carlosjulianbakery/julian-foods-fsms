@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CleaningItem, CleaningArea, DraftProgress } from "@/lib/monthly-cleaning-items";
+import { markTaskCompleted } from "@/lib/completedTasks";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -420,6 +421,8 @@ export default function MonthlyCleaningPage() {
       });
       if (!res.ok) throw new Error("Failed");
       const data = await res.json();
+      if (data.completedInstanceId) markTaskCompleted(data.completedInstanceId);
+      window.dispatchEvent(new CustomEvent("task-action"));
       setDraft((prev) => prev ? { ...prev, status: "submitted", submittedAt: data.submittedAt, submittedBy: "user" } : prev);
       setShowSubmitModal(false);
     } catch {

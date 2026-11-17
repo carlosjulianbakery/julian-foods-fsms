@@ -76,9 +76,10 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    try { await completeRuleInstanceForSubmission({ formKey: "monthly_cleaning", submissionId: record.id, userId: user.id, submissionDate: toPacificDateStr(new Date(date)), taskId: body.taskId ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] monthly_cleaning:", e); }
+    let completedInstanceId: string | null = null;
+    try { completedInstanceId = await completeRuleInstanceForSubmission({ formKey: "monthly_cleaning", submissionId: record.id, userId: user.id, submissionDate: toPacificDateStr(new Date(date)), taskId: body.taskId ?? null, prismaClient: prisma }); } catch (e) { console.error("[rule-instance-complete] monthly_cleaning:", e); }
 
-    return NextResponse.json(record, { status: 201 });
+    return NextResponse.json({ ...record, completedInstanceId }, { status: 201 });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[POST /api/cleaning/monthly]", msg);

@@ -11,6 +11,7 @@ import { OkNotOkRow } from "@/components/forms624/OkNotOkRow";
 import { deriveInitials } from "@/components/forms624/initialsHelper";
 import type { RowSnapshot, RowCondition } from "@/components/forms624/types";
 import { FRIDGE_MAX_F, FREEZER_MAX_F, ATP_MAX_RLU } from "@/components/forms624/types";
+import { markTaskCompleted } from "@/lib/completedTasks";
 
 // ─── Checklist definition ─────────────────────────────────────────────────────────────────────────────────
 
@@ -187,6 +188,8 @@ export default function PreOp624Page() {
       try {
         if (session?.user?.id) localStorage.removeItem(draftKey(session.user.id, date));
       } catch {}
+      const resData = await res.json().catch(() => ({})) as { completedInstanceId?: string | null };
+      if (resData.completedInstanceId) markTaskCompleted(resData.completedInstanceId);
       window.dispatchEvent(new CustomEvent("task-action"));
       setSubmitted(true);
     } catch {

@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { toUpperCaseInput } from "@/lib/formatters";
 import { convertUnit, convertToBase, convertFromBase, getUnitFamily } from "@/lib/unitConversion";
 import { formatQty, formatQtyUnit } from "@/lib/formatNumber";
+import { navigateAfterSubmit } from "@/lib/afterSubmit";
 
 const SignaturePad = dynamic(() => import("@/components/SignaturePad"), { ssr: false });
 
@@ -3306,10 +3307,11 @@ export function BatchSheetClient({
         }),
       });
       if (!res.ok) throw new Error((await res.json()).error ?? "Submit failed");
+      const resData = await res.json().catch(() => ({})) as { completedInstanceId?: string | null };
       setDraftId(null);
       setSigDataUrl("");
       setLastSavedAt(null);
-      router.push("/dashboard/supervisor/batch-sheet/records");
+      navigateAfterSubmit(router, resData.completedInstanceId, "/dashboard/supervisor/batch-sheet/records");
     } catch (err: unknown) {
       setSubmitError(err instanceof Error ? err.message : "Submit failed.");
     } finally {

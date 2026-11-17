@@ -589,6 +589,7 @@ export async function POST(req: NextRequest) {
     // The submission record is saved before this block so a failed deduction never blocks the supervisor.
     // All movements are wrapped in a single transaction — either all lots deduct or none do.
     let affectedMaterialIds = new Set<string>();
+    let completedInstanceId: string | null = null;
     if (FINISHED_STATUSES.has(String(data.status))) {
       try {
         affectedMaterialIds = await prisma.$transaction((tx) =>
@@ -610,7 +611,7 @@ export async function POST(req: NextRequest) {
       }
 
       try {
-        await completeBatchSheetInstance({
+        completedInstanceId = await completeBatchSheetInstance({
           submissionId: submission.id,
           userId: user.id,
           userRole: user.role,
@@ -630,7 +631,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    return NextResponse.json(submission, { status: 201 });
+    return NextResponse.json({ ...submission, completedInstanceId: completedInstanceId ?? null }, { status: 201 });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[POST /api/batch-sheet]", msg);

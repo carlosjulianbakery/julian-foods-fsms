@@ -1,5 +1,5 @@
 "use client";
-import { useState, useTransition, useRef, useEffect, type ReactNode } from "react";
+import { useState, useTransition, useRef, useEffect, useMemo, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import {
   Play, AlertTriangle, X, MoreHorizontal, CheckCircle2,
@@ -10,6 +10,7 @@ import { addDaysToDateStr } from "@/lib/pacific-time";
 import { computeBannerState, type BannerState } from "@/lib/banner-state";
 import { useAutoRefresh } from "@/hooks/useAutoRefresh";
 import { useCalendarSync } from "@/hooks/useCalendarSync";
+import { getCompletedTaskIds } from "@/lib/completedTasks";
 import { TaskCalendar } from "./TaskCalendar";
 import { FacilityTag } from "@/components/tasks/FacilityTag";
 
@@ -690,7 +691,7 @@ function SkippedTaskRow({
 // ─── Main export ──────────────────────────────────────────────────────────────
 
 export function MyTasksClient({
-  instances,
+  instances: propInstances,
   skippedInstances,
   calendarInstances,
   calendarWeekStart,
@@ -703,6 +704,15 @@ export function MyTasksClient({
 }: Props) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  const [optimisticDoneIds] = useState<Set<string>>(() => getCompletedTaskIds());
+  const instances = useMemo(
+    () => {
+      if (optimisticDoneIds.size === 0) return propInstances;
+      return propInstances.map((i) => optimisticDoneIds.has(i.id) ? { ...i, status: "DONE" } : i);
+    },
+    [propInstances, optimisticDoneIds],
+  );
 
   const [viewMode, setViewMode] = useState<"my" | "everyone" | "byOwner">(() => {
     try { return (sessionStorage.getItem("adminViewMode") as "my" | "everyone" | "byOwner") ?? (role === "ADMIN" ? "my" : "everyone"); }
@@ -804,7 +814,7 @@ export function MyTasksClient({
     window.dispatchEvent(new CustomEvent("task-action"));
   }
 
-  useAutoRefresh(() => startTransition(() => router.refresh()));
+  useAutoRefresh(() => startTransition(() => router.refresh()), 60_000, true);
   useCalendarSync(() => startTransition(() => router.refresh()));
 
   async function handleStart(inst: TaskInstance) {

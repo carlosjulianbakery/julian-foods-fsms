@@ -17,7 +17,7 @@ export async function completeRuleInstanceForSubmission(params: {
   /** If provided, complete this specific instance directly (skips best-match search). */
   taskId?: string | null;
   prismaClient: PrismaClient;
-}): Promise<void> {
+}): Promise<string | null> {
   const {
     formKey,
     facilityName = DEFAULT_FACILITY_NAME,
@@ -43,11 +43,10 @@ export async function completeRuleInstanceForSubmission(params: {
     } else {
       if (instance.status === "DONE" || instance.status === "SKIPPED" || instance.status === "MISSED") {
         console.log(`[task-completion] taskId ${taskId} already in terminal status ${instance.status} — skipping`);
-        return;
+        return null;
       }
 
-      await markDone({ instance, ruleOwnerId: instance.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
-      return;
+      return await markDone({ instance, ruleOwnerId: instance.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
     }
   }
 
@@ -70,7 +69,7 @@ export async function completeRuleInstanceForSubmission(params: {
 
   if (allCandidates.length === 0) {
     console.log(`[task-completion] no open instances for formKey=${formKey} facility=${facilityName}`);
-    return;
+    return null;
   }
 
   // Exact match wins over any fallback, even if the instance is still UPCOMING.
@@ -81,8 +80,7 @@ export async function completeRuleInstanceForSubmission(params: {
   );
 
   if (exact) {
-    await markDone({ instance: exact, ruleOwnerId: exact.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
-    return;
+    return await markDone({ instance: exact, ruleOwnerId: exact.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
   }
 
   // No exact match: fall back to open (non-UPCOMING) candidates only
@@ -91,16 +89,16 @@ export async function completeRuleInstanceForSubmission(params: {
   );
   if (openCandidates.length === 0) {
     console.log(`[task-completion] no open/matching instances for formKey=${formKey} facility=${facilityName} date=${submissionDate}`);
-    return;
+    return null;
   }
 
   const target =
     openCandidates.find((i) => i.status === "OVERDUE") ??
     openCandidates[0];
 
-  if (!target) return;
+  if (!target) return null;
 
-  await markDone({ instance: target, ruleOwnerId: target.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
+  return await markDone({ instance: target, ruleOwnerId: target.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
 }
 
 async function markDone(opts: {
@@ -111,7 +109,7 @@ async function markDone(opts: {
   submissionDate: string;
   today: string;
   prismaClient: PrismaClient;
-}): Promise<void> {
+}): Promise<string> {
   const { instance, ruleOwnerId, submissionId, userId, submissionDate, prismaClient } = opts;
 
   const dueDateStr = instance.dueDate.toISOString().slice(0, 10);
@@ -154,6 +152,7 @@ async function markDone(opts: {
     `[task-completion] completed instance ${instance.id} via submission ${submissionId}` +
       (completedLate ? ` — ${daysLate}d late` : "")
   );
+  return instance.id;
 }
 
 /**
@@ -173,7 +172,7 @@ export async function completeBatchSheetInstance(params: {
   productName: string | null;
   taskId?: string | null;
   prismaClient: PrismaClient;
-}): Promise<void> {
+}): Promise<string | null> {
   const { submissionId, userId, userRole, submissionDate, productName, taskId, prismaClient } = params;
   const today = getPacificToday();
 
@@ -185,28 +184,27 @@ export async function completeBatchSheetInstance(params: {
     });
     if (!instance) {
       console.warn(`[batch-sheet-completion] taskId ${taskId} not found — skipping`);
-      return;
+      return null;
     }
     if (instance.rule.formKey !== "batch_sheet") {
       console.warn(`[batch-sheet-completion] taskId ${taskId} has formKey=${instance.rule.formKey}, not batch_sheet — skipping`);
-      return;
+      return null;
     }
     if (instance.status === "DONE" || instance.status === "SKIPPED" || instance.status === "MISSED") {
       console.log(`[batch-sheet-completion] taskId ${taskId} already ${instance.status} — skipping`);
-      return;
+      return null;
     }
     const effectiveOwner = instance.ownerUserId ?? instance.rule.ownerId;
     if (effectiveOwner !== userId && userRole !== "ADMIN") {
       console.warn(`[batch-sheet-completion] user ${userId} is not owner of instance ${taskId} — skipping`);
-      return;
+      return null;
     }
-    await markDone({ instance, ruleOwnerId: instance.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
-    return;
+    return await markDone({ instance, ruleOwnerId: instance.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
   }
 
   if (!productName) {
     console.log(`[batch-sheet-completion] no productName and no taskId — skipping instance completion`);
-    return;
+    return null;
   }
 
   // ── (b) submitter's own PRODUCTION_ANY instances ───────────────────────────
@@ -228,8 +226,7 @@ export async function completeBatchSheetInstance(params: {
   // Exact date first
   const ownExact = ownProductMatches.find((i) => i.dueDate.toISOString().slice(0, 10) === submissionDate);
   if (ownExact) {
-    await markDone({ instance: ownExact, ruleOwnerId: ownExact.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
-    return;
+    return await markDone({ instance: ownExact, ruleOwnerId: ownExact.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
   }
 
   // Nearest ≤6 days
@@ -237,8 +234,7 @@ export async function completeBatchSheetInstance(params: {
     (i) => (OPEN_STATUSES as readonly string[]).includes(i.status)
   ), submissionDate, 6);
   if (ownNearest) {
-    await markDone({ instance: ownNearest, ruleOwnerId: ownNearest.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
-    return;
+    return await markDone({ instance: ownNearest, ruleOwnerId: ownNearest.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
   }
 
   // ── (c) cross-facility — same product/date, any facility ──────────────────
@@ -260,7 +256,7 @@ export async function completeBatchSheetInstance(params: {
 
   if (crossTarget) {
     console.warn(`[batch-sheet-completion] cross-facility match: user ${userId} completing instance ${crossTarget.id} owned by ${crossTarget.rule.ownerId}`);
-    await markDoneWithReview({
+    return await markDoneWithReview({
       instance: crossTarget,
       ruleOwnerId: crossTarget.rule.ownerId,
       submissionId,
@@ -270,11 +266,11 @@ export async function completeBatchSheetInstance(params: {
       reviewReason: "Completed by non-owner",
       prismaClient,
     });
-    return;
   }
 
   // ── (d) no match ───────────────────────────────────────────────────────────
   console.warn(`[batch-sheet-completion] no PRODUCTION_ANY instance matched product="${productName}" date=${submissionDate} for user ${userId} — submission saved without consuming an instance`);
+  return null;
 }
 
 function batchLabelMatchesProduct(label: string | null, productName: string): boolean {
@@ -312,7 +308,7 @@ async function markDoneWithReview(opts: {
   today: string;
   reviewReason: string;
   prismaClient: PrismaClient;
-}): Promise<void> {
+}): Promise<string> {
   const { instance, ruleOwnerId, submissionId, userId, submissionDate, reviewReason, prismaClient } = opts;
 
   const dueDateStr = instance.dueDate.toISOString().slice(0, 10);
@@ -346,6 +342,7 @@ async function markDoneWithReview(opts: {
       },
     }),
   ]);
+  return instance.id;
 }
 
 /**
