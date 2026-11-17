@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { INSTRUCTIONS_TEXT, INSTRUCTIONS_VER } from "@/app/(dashboard)/dashboard/supervisor/daily-cleaning-624/config";
 import { draftKey624, loadDraft624, saveDraft624, DRAFT_TTL_MS } from "@/components/forms624/draftStorage624";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -394,5 +395,18 @@ describe("DELETE /api/daily-cleaning-624/[id] (mocked)", () => {
     const body = await res.json();
     expect(body.deleted).toBe(true);
     expect(body.warning).toBe("task_reopen_failed");
+  });
+});
+
+// ─── Instructions constant ───────────────────────────────────────────────────
+
+describe("INSTRUCTIONS_TEXT / INSTRUCTIONS_VER", () => {
+  it("contains correct dish soap dilution (0.2 oz per gallon)", () => {
+    expect(INSTRUCTIONS_TEXT).toContain("0.2 oz per gallon");
+    expect(INSTRUCTIONS_TEXT).not.toContain("4/10");
+  });
+
+  it("version is v1.1", () => {
+    expect(INSTRUCTIONS_VER).toBe("v1.1");
   });
 });

@@ -1,12 +1,12 @@
 // Configuration for Daily Cleaning — 624 form.
 // All text constants live here so a wording change is a one-line edit.
 
-export const INSTRUCTIONS_VER = "v1.0";
+export const INSTRUCTIONS_VER = "v1.1";
 
 export const INSTRUCTIONS_TEXT =
   "Cleaning and Sanitation activities must be completed at least at the predetermined frequency. " +
   "If an allergen change occurs on the same day, it must be registered in the Allergen Changeover Form. " +
-  "Chemicals used for Food Contact Surfaces are Uline Dish Soap S-25783 (4/10 oz per gallon of water), " +
+  "Chemicals used for Food Contact Surfaces are Uline Dish Soap S-25783 (0.2 oz per gallon of water), " +
   "and Uline Germicidal Bleach S-19457 (1 tbsp per gallon of water or 200/400 ppm). " +
   "Cristal Simple Green Industrial Cleaner and Degreaser is used in Non-Food Contact Surfaces. " +
   "Multi Surface Cleaner Pine-Sol is used inside the facility for floors.";
