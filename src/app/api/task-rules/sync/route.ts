@@ -1,0 +1,64 @@
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { generateCalendarInstances } from "@/lib/calendar-generator";
+
+export const dynamic = "force-dynamic";
+
+const SYNC_THROTTLE_MS = 60_000;
+// Stable advisory lock key for calendar sync mutual exclusion
+const ADVISORY_LOCK_KEY = 1_234_567_890;
+
+export async function POST() {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json({ ran: false, error: "Unauthorized" }, { status: 401 });
+
+  try {
+    // Throttle: check most-recent lastCalendarSyncAt across all facilities
+    const agg = await prisma.facility.aggregate({ _max: { lastCalendarSyncAt: true } });
+    const lastSync = agg._max.lastCalendarSyncAt;
+    if (lastSync && Date.now() - lastSync.getTime() < SYNC_THROTTLE_MS) {
+      return NextResponse.json({
+        ran: false,
+        reason: "throttled",
+        lastSyncAt: lastSync.toISOString(),
+      });
+    }
+
+    // Advisory lock + timestamp update in one transaction
+    // Returns false if another caller holds the lock right now
+    const acquired = await prisma.$transaction(async (tx) => {
+      const [row] = await tx.$queryRawUnsafe<[{ acquired: boolean }]>(
+        `SELECT pg_try_advisory_xact_lock($1) AS acquired`,
+        ADVISORY_LOCK_KEY,
+      );
+      if (!row.acquired) return false;
+
+      await tx.facility.updateMany({ data: { lastCalendarSyncAt: new Date() } });
+      return true;
+    });
+
+    if (!acquired) {
+      return NextResponse.json({ ran: false, reason: "locked" });
+    }
+
+    // Run generator OUTSIDE the transaction (lock already released)
+    const result = await generateCalendarInstances({ invalidateCache: false });
+
+    const lastSyncAt = (
+      await prisma.facility.aggregate({ _max: { lastCalendarSyncAt: true } })
+    )._max.lastCalendarSyncAt;
+
+    return NextResponse.json({
+      ran: true,
+      created: result.totalCreated,
+      deleted: result.totalDeleted,
+      flagged: result.totalFlagged,
+      lastSyncAt: lastSyncAt?.toISOString() ?? null,
+    });
+  } catch (err) {
+    console.error("[task-rules/sync]", err);
+    return NextResponse.json({ ran: false, error: "Internal server error" }, { status: 500 });
+  }
+}

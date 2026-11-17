@@ -9,6 +9,7 @@ import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
 import { addDaysToDateStr } from "@/lib/pacific-time";
 import { computeBannerState, type BannerState } from "@/lib/banner-state";
 import { useAutoRefresh } from "@/hooks/useAutoRefresh";
+import { useCalendarSync } from "@/hooks/useCalendarSync";
 import { TaskCalendar } from "./TaskCalendar";
 import { FacilityTag } from "@/components/tasks/FacilityTag";
 
@@ -804,6 +805,7 @@ export function MyTasksClient({
   }
 
   useAutoRefresh(() => startTransition(() => router.refresh()));
+  useCalendarSync(() => startTransition(() => router.refresh()));
 
   async function handleStart(inst: TaskInstance) {
     setStartingId(inst.id);

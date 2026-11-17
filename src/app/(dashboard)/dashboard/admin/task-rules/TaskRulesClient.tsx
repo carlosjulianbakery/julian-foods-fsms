@@ -44,14 +44,14 @@ interface RefreshFacilityResult {
   daysFound: number;
   productionDaysFound: number;
   created: number;
-  skipped: number;
+  deleted: number;
   flagged: number;
 }
 
 interface RefreshResult {
   results: RefreshFacilityResult[];
   totalCreated: number;
-  totalSkipped: number;
+  totalDeleted: number;
   totalFlagged: number;
 }
 
@@ -407,14 +407,14 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
                 ) : (
                   <span className="ml-2 text-gray-600 dark:text-gray-300">
                     {r.daysFound} days in window ({r.productionDaysFound} with production) ·
-                    created: {r.created} · system-skipped: {r.skipped} · flagged: {r.flagged}
+                    created: {r.created} · deleted: {r.deleted} · flagged: {r.flagged}
                   </span>
                 )}
               </div>
             ))
           )}
           <div className="text-gray-500 text-xs pt-1">
-            Total — created: {refreshResult.totalCreated}, skipped: {refreshResult.totalSkipped}, flagged: {refreshResult.totalFlagged}
+            Total — created: {refreshResult.totalCreated}, deleted: {refreshResult.totalDeleted}, flagged: {refreshResult.totalFlagged}
           </div>
         </div>
       )}

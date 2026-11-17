@@ -12,7 +12,7 @@ export interface FacilitySyncResult {
   daysFound: number;
   productionDaysFound: number;
   created: number;
-  skipped: number;
+  deleted: number;
   flagged: number;
 }
 
@@ -25,7 +25,7 @@ export interface CalendarGeneratorOpts {
 export async function generateCalendarInstances(opts: CalendarGeneratorOpts = {}): Promise<{
   results: FacilitySyncResult[];
   totalCreated: number;
-  totalSkipped: number;
+  totalDeleted: number;
   totalFlagged: number;
 }> {
   // Fail fast when the API key is absent — prevents silent gviz fallback with stale data.
@@ -53,7 +53,7 @@ export async function generateCalendarInstances(opts: CalendarGeneratorOpts = {}
   ]);
 
   if (facilities.length === 0) {
-    return { results: [], totalCreated: 0, totalSkipped: 0, totalFlagged: 0 };
+    return { results: [], totalCreated: 0, totalDeleted: 0, totalFlagged: 0 };
   }
 
   // Group rules by facilityId
@@ -69,7 +69,7 @@ export async function generateCalendarInstances(opts: CalendarGeneratorOpts = {}
 
   const results: FacilitySyncResult[] = [];
   let totalCreated = 0;
-  let totalSkipped = 0;
+  let totalDeleted = 0;
   let totalFlagged = 0;
 
   for (const facility of facilities) {
@@ -77,11 +77,11 @@ export async function generateCalendarInstances(opts: CalendarGeneratorOpts = {}
     const r = await processOneFacility(facility, facRules, opts.dryRun ?? false, opts.invalidateCache ?? false);
     results.push(r);
     totalCreated += r.created;
-    totalSkipped += r.skipped;
+    totalDeleted += r.deleted;
     totalFlagged += r.flagged;
   }
 
-  return { results, totalCreated, totalSkipped, totalFlagged };
+  return { results, totalCreated, totalDeleted, totalFlagged };
 }
 
 async function processOneFacility(
@@ -96,7 +96,7 @@ async function processOneFacility(
     daysFound: 0,
     productionDaysFound: 0,
     created: 0,
-    skipped: 0,
+    deleted: 0,
     flagged: 0,
   };
 
@@ -241,11 +241,9 @@ async function processOneFacility(
       calendarKey: true,
       status: true,
       ownerUserId: true,
+      completedBySubmissionId: true,
     },
   });
-
-  // Map ruleId → ownerId for owner freeze on auto-skip
-  const ruleOwnerMap = new Map<string, string>(rules.map((r) => [r.id, r.ownerId]));
 
   // Map: `${ruleId}:${calendarKey}` → instance
   const existingByKey = new Map<string, typeof existingInstances[number]>();
@@ -283,45 +281,48 @@ async function processOneFacility(
   // Reconciliation: instances whose calendarKey is no longer in the expected set
   const allExpectedKeys = new Set(allExpected.map((e) => `${e.ruleId}:${e.calendarKey}`));
 
+  const toDelete: string[] = [];
+  const toFlag: string[] = [];
+
   for (const inst of existingInstances) {
     const lookupKey = `${inst.ruleId}:${inst.calendarKey}`;
-    if (!allExpectedKeys.has(lookupKey)) {
-      if (inst.status === "UPCOMING" || inst.status === "DUE_TODAY") {
-        result.skipped++;
-        if (!dryRun) {
-          const skipReason = "Removed from calendar";
-          const frozenOwner = inst.ownerUserId ?? ruleOwnerMap.get(inst.ruleId) ?? null;
-          await prisma.ruleInstance.update({
-            where: { id: inst.id },
-            data: {
-              status: "SKIPPED",
-              skippedAt: new Date(),
-              skipReason,
-              updatedAt: new Date(),
-              ...(frozenOwner ? { ownerUserId: frozenOwner } : {}),
-            },
-          });
-          await prisma.taskInstanceAudit.create({
-            data: {
-              instanceId: inst.id,
-              action: "auto_skipped",
-              note: skipReason,
-            },
-          });
-        }
-      } else if (inst.status === "IN_PROGRESS" || inst.status === "DONE") {
-        result.flagged++;
-        if (!dryRun) {
-          await prisma.ruleInstance.update({
-            where: { id: inst.id },
-            data: {
-              needsAdminReview: true,
-              reviewReason: "Production removed from calendar after work started",
-              updatedAt: new Date(),
-            },
-          });
-        }
-      }
+    if (allExpectedKeys.has(lookupKey)) continue;
+
+    const hasLinkedSubmission = inst.completedBySubmissionId != null;
+    const st = inst.status;
+
+    if (
+      (st === "UPCOMING" || st === "DUE_TODAY" || st === "OVERDUE") &&
+      !hasLinkedSubmission
+    ) {
+      // Untouched — safe to hard-delete
+      toDelete.push(inst.id);
+    } else if (st === "IN_PROGRESS" || st === "DONE" || hasLinkedSubmission) {
+      // Work started or submission linked — flag for admin review
+      toFlag.push(inst.id);
+    }
+    // SKIPPED / MISSED — leave alone
+  }
+
+  result.deleted += toDelete.length;
+  result.flagged += toFlag.length;
+
+  if (!dryRun) {
+    if (toDelete.length > 0) {
+      // Delete Notification rows first (no cascade on instanceId)
+      await prisma.notification.deleteMany({ where: { instanceId: { in: toDelete } } });
+      // Delete instances — TaskInstanceAudit cascades automatically
+      await prisma.ruleInstance.deleteMany({ where: { id: { in: toDelete } } });
+    }
+    if (toFlag.length > 0) {
+      await prisma.ruleInstance.updateMany({
+        where: { id: { in: toFlag } },
+        data: {
+          needsAdminReview: true,
+          reviewReason: "Production removed from calendar after work started",
+          updatedAt: new Date(),
+        },
+      });
     }
   }
 

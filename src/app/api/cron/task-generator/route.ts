@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
       recurring: { created: genResult.created },
       calendar: {
         totalCreated: calResult.totalCreated,
-        totalSkipped: calResult.totalSkipped,
+        totalDeleted: calResult.totalDeleted,
         totalFlagged: calResult.totalFlagged,
         facilities: calResult.results,
       },

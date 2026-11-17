@@ -31,13 +31,13 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const result = await generateCalendarInstances({
+    const { results, totalCreated, totalDeleted, totalFlagged } = await generateCalendarInstances({
       dryRun,
       facilityId,
       invalidateCache: true,
     });
     if (!dryRun) await updateStatuses();
-    return NextResponse.json(result);
+    return NextResponse.json({ results, totalCreated, totalDeleted, totalFlagged });
   } catch (err) {
     console.error("[task-rules/refresh]", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
