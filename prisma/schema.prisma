@@ -66,7 +66,9 @@ model User {
   taskInstanceAuditLogs         TaskInstanceAudit[] @relation("TaskInstanceAuditUser")
   notifications                 Notification[]
   preOp624Inspections           PreOp624Inspection[] @relation("PreOp624Submissions")
-  dailyClean624Records          DailyClean624Record[] @relation("DailyClean624Submissions")
+  dailyClean624Records             DailyClean624Record[]          @relation("DailyClean624Submissions")
+  monthlyClean624SubmittedRecords  MonthlyClean624Record[]        @relation("MonthlyClean624Submitted")
+  monthlyClean624CreatedRecords    MonthlyClean624Record[]        @relation("MonthlyClean624Created")
 
   @@map("users")
 }
@@ -1348,9 +1350,10 @@ model TaskRule {
   facilityId      String
   ownerId         String
   triggerType     TaskRuleTriggerType @default(RECURRING)
-  recurrenceUnit  String?
-  recurrenceEvery Int?                @default(1)
-  recurrenceStart DateTime            @db.Date
+  recurrenceUnit       String?
+  recurrenceEvery      Int?                @default(1)
+  recurrenceStart      DateTime            @db.Date
+  recurrenceEndOfMonth Boolean?            @default(false)
   formKey         String?
   productName     String?
   escalateAfterDays Int?
@@ -1415,6 +1418,36 @@ model TaskInstanceAudit {
   user     User?        @relation("TaskInstanceAuditUser", fields: [userId], references: [id])
 
   @@map("task_instance_audits")
+}
+
+model MonthlyClean624Record {
+  id               String    @id @default(cuid())
+  facility         String    @default("624")
+  month            String
+  status           String    @default("draft")
+  conductedBy      String    @default("")
+  initials         String    @default("")
+  lines            Json      @default("[]")
+  doneCount        Int       @default(0)
+  naCount          Int       @default(0)
+  notDoneCount     Int       @default(0)
+  notes            String?
+  instructionsVer  String    @default("v1.0")
+  autoSubmitted    Boolean   @default(false)
+  lastEditedBy     String?
+  lastEditedAt     DateTime?
+  createdById      String?
+  submittedAt      DateTime?
+  submittedById    String?
+  linkedInstanceId String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  submittedBy User? @relation("MonthlyClean624Submitted", fields: [submittedById], references: [id])
+  createdBy   User? @relation("MonthlyClean624Created", fields: [createdById], references: [id])
+
+  @@unique([facility, month])
+  @@map("monthly_clean_624_records")
 }
 
 model Notification {

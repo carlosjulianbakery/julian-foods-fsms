@@ -983,6 +983,7 @@ exports.Prisma.TaskRuleScalarFieldEnum = {
   recurrenceUnit: 'recurrenceUnit',
   recurrenceEvery: 'recurrenceEvery',
   recurrenceStart: 'recurrenceStart',
+  recurrenceEndOfMonth: 'recurrenceEndOfMonth',
   formKey: 'formKey',
   productName: 'productName',
   escalateAfterDays: 'escalateAfterDays',
@@ -1026,6 +1027,30 @@ exports.Prisma.TaskInstanceAuditScalarFieldEnum = {
   userId: 'userId',
   note: 'note',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.MonthlyClean624RecordScalarFieldEnum = {
+  id: 'id',
+  facility: 'facility',
+  month: 'month',
+  status: 'status',
+  conductedBy: 'conductedBy',
+  initials: 'initials',
+  lines: 'lines',
+  doneCount: 'doneCount',
+  naCount: 'naCount',
+  notDoneCount: 'notDoneCount',
+  notes: 'notes',
+  instructionsVer: 'instructionsVer',
+  autoSubmitted: 'autoSubmitted',
+  lastEditedBy: 'lastEditedBy',
+  lastEditedAt: 'lastEditedAt',
+  createdById: 'createdById',
+  submittedAt: 'submittedAt',
+  submittedById: 'submittedById',
+  linkedInstanceId: 'linkedInstanceId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
@@ -1216,6 +1241,7 @@ exports.Prisma.ModelName = {
   TaskRule: 'TaskRule',
   RuleInstance: 'RuleInstance',
   TaskInstanceAudit: 'TaskInstanceAudit',
+  MonthlyClean624Record: 'MonthlyClean624Record',
   Notification: 'Notification'
 };
 

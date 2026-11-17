@@ -1,4 +1,5 @@
-import type { DailyClean624Record, CleaningRowSnapshot } from "./types";
+import type { DailyClean624Record, CleaningRowSnapshot, MonthlyClean624Record, MonthlyClean624LineSnapshot } from "./types";
+import { INSTRUCTIONS_TEXT_MONTHLY } from "@/app/(dashboard)/dashboard/supervisor/monthly-cleaning-624/config";
 
 export function formatMDY(isoDate: string): string {
   const [y, m, d] = isoDate.split("-");
@@ -143,5 +144,77 @@ export function buildWeekPdfHtml(weekRecords: DailyClean624Record[], mon: string
     </tbody>
   </table>
   <p style="margin-top:24px;font-size:10px;color:#9ca3af">Generated ${new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" })} PT &nbsp;|&nbsp; Julian Foods — 624 Facility</p>
+  </body></html>`;
+}
+
+export function buildMonthlyPdfHtml624(r: MonthlyClean624Record): string {
+  const monthParts = r.month.split("-");
+  const monthLabel = new Date(Date.UTC(Number(monthParts[0]), Number(monthParts[1]) - 1, 1))
+    .toLocaleDateString("en-US", { timeZone: "UTC", month: "long", year: "numeric" });
+
+  const isDraft = r.status === "draft";
+  const isAuto  = r.autoSubmitted;
+
+  const rows = (r.lines as MonthlyClean624LineSnapshot[]).map((line) => {
+    const stateLabel =
+      line.state === "DONE"     ? "Done" :
+      line.state === "NA"       ? "N/A" :
+      line.state === "NOT_DONE" ? "Not done" : "—";
+    const stateColor =
+      line.state === "DONE"     ? "#059669" :
+      line.state === "NOT_DONE" ? "#dc2626" : "#6b7280";
+    const stamp = (line.lineDate && line.lineInitials)
+      ? `${formatMDY(line.lineDate)} / ${line.lineInitials}`
+      : "—";
+    const autoTag = line.autoFilled
+      ? " <span style='font-size:9px;color:#ea580c;font-weight:600'>[Auto-filled]</span>"
+      : "";
+    return `
+    <tr style="border-bottom:1px solid #e5e7eb">
+      <td style="padding:5px 8px;font-size:12px">${line.labelEn}</td>
+      <td style="padding:5px 8px;font-size:11px;color:#6b7280">${line.labelEs}</td>
+      <td style="padding:5px 8px;font-size:11px;color:#6b7280">${line.chemical || "—"}</td>
+      <td style="padding:5px 8px;text-align:center;font-size:12px;font-weight:600;color:${stateColor}">${stateLabel}${autoTag}</td>
+      <td style="padding:5px 8px;font-size:11px;color:#374151;font-family:monospace">${stamp}</td>
+      <td style="padding:5px 8px;font-size:11px;color:#374151">${line.reason || "—"}</td>
+    </tr>`;
+  }).join("");
+
+  const submitterLine = isAuto
+    ? "Auto-submitted"
+    : r.conductedBy
+    ? `${r.conductedBy}${r.initials ? ` (${r.initials})` : ""}`
+    : "—";
+
+  const submittedPT = r.submittedAt
+    ? new Date(r.submittedAt).toLocaleString("en-US", { timeZone: "America/Los_Angeles" })
+    : "—";
+
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"/>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 32px; color: #111; }
+    h1 { font-size: 18px; margin: 0 0 4px; }
+    p.sub { font-size: 12px; color: #6b7280; margin: 0 0 12px; }
+    p.instr { font-size: 11px; color: #374151; background: #fffbeb; border: 1px solid #fde68a; border-radius: 4px; padding: 8px 12px; margin: 0 0 16px; line-height: 1.5; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 6px 8px; font-size: 11px; color: #6b7280; text-transform: uppercase; border-bottom: 2px solid #e5e7eb; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; }
+    .draft { background: #fef3c7; color: #92400e; }
+    .footer { margin-top: 24px; font-size: 10px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 8px; }
+  </style></head><body>
+  <h1>Monthly Cleaning and Sanitation &#8212; 624${isDraft ? ' <span class="badge draft">DRAFT</span>' : ""}</h1>
+  <p class="sub">Month: ${monthLabel} &nbsp;|&nbsp; Facility: 624 &nbsp;|&nbsp; ${r.doneCount} done &middot; ${r.naCount} N/A &middot; ${r.notDoneCount} not done</p>
+  <p class="instr">${INSTRUCTIONS_TEXT_MONTHLY}</p>
+  <table>
+    <thead><tr>
+      <th>Activity</th><th>Actividad</th><th>Chemical</th><th>Status</th><th>Date / Initials</th><th>Reason</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <p class="footer">
+    ${isDraft ? "DRAFT — not yet submitted" : `Submitted: ${submittedPT} PT &nbsp;|&nbsp; By: ${submitterLine}`}
+    ${r.notes ? ` &nbsp;|&nbsp; Notes: ${r.notes}` : ""}
+    &nbsp;|&nbsp; Julian Foods &#8212; 624 Facility
+  </p>
   </body></html>`;
 }

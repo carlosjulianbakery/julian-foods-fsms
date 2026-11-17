@@ -80,3 +80,49 @@ export function addWeeksToDateStr(dateStr: string, weeks: number): string {
 export function compareDateStrs(a: string, b: string): number {
   return a < b ? -1 : a > b ? 1 : 0;
 }
+
+/** Returns "YYYY-MM" for the current month in America/Los_Angeles. */
+export function getPacificMonthKey(): string {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Los_Angeles",
+    year: "numeric",
+    month: "2-digit",
+  }).formatToParts(new Date());
+  const y = parts.find((p) => p.type === "year")!.value;
+  const m = parts.find((p) => p.type === "month")!.value;
+  return `${y}-${m}`;
+}
+
+/** Returns "YYYY-MM" for the given Date in America/Los_Angeles. */
+export function toPacificMonthKey(date: Date): string {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Los_Angeles",
+    year: "numeric",
+    month: "2-digit",
+  }).formatToParts(date);
+  const y = parts.find((p) => p.type === "year")!.value;
+  const m = parts.find((p) => p.type === "month")!.value;
+  return `${y}-${m}`;
+}
+
+/** Returns the last calendar day of a month as "YYYY-MM-DD". */
+export function lastDayOfMonth(yearMonth: string): string {
+  const [y, m] = yearMonth.split("-").map(Number);
+  const d = new Date(Date.UTC(y, m, 0)); // day 0 of next month = last day of current
+  return d.toISOString().slice(0, 10);
+}
+
+/** Returns the last calendar day of a month derived from a date string "YYYY-MM-DD". */
+export function lastDayOfMonthFromDate(dateStr: string): string {
+  return lastDayOfMonth(dateStr.slice(0, 7));
+}
+
+/** Formats "YYYY-MM" to a human label like "November 2026". */
+export function formatMonthKeyLabel(monthKey: string): string {
+  const [y, m] = monthKey.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString("en-US", {
+    timeZone: "UTC",
+    month: "long",
+    year: "numeric",
+  });
+}

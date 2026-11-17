@@ -97,6 +97,13 @@ const formsNav = [
     roles: ["SUPERVISOR", "ADMIN"],
   },
   {
+    label: "Monthly Cleaning — 624",
+    href: "/dashboard/supervisor/monthly-cleaning-624",
+    icon: CalendarCheck,
+    roles: ["SUPERVISOR", "ADMIN"],
+    exact: false,
+  },
+  {
     label: "Batch Sheet",
     href: "/dashboard/supervisor/batch-sheet",
     icon: ScrollText,

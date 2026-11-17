@@ -31,42 +31,44 @@ model User {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  createdForms              Form[]                         @relation("FormCreator")
-  submissions               FormSubmission[]               @relation("Submitter")
-  approvedSubmissions       FormSubmission[]               @relation("Approver")
-  records                   Record[]
-  preOpInspections          PreOpInspection[]
-  batchSheetSubmissions     BatchSheetSubmission[]
-  createdBatchTemplates     BatchSheetTemplate[]
-  createdProducts           Product[]
-  dailyCleaningChecklists   DailyCleaningChecklist[]
-  monthlyCleaningChecklists MonthlyCleaningChecklist[]
-  receivingRecords          ReceivingRecord[]
-  resolvedQuarantineRecords QuarantineRecord[]
-  inventoryMovements        InventoryMovement[]
-  cycleCounts               CycleCount[]
-  formTemplates             FormTemplate[]
-  initialStockEntries       InitialStockEntry[]
-  forecastExclusions        ForecastExclusion[]            @relation("ForecastExclusionCreator")
-  auditExclusions           InventoryAuditExclusion[]      @relation("AuditExclusionCreator")
-  stockAlertAcknowledgments StockAlertAcknowledgment[]
-  purchaseOrders            PurchaseOrder[]
-  rdIngredients             RdIngredient[]                 @relation("RdIngredientCreator")
-  rdProjects                RdProject[]                    @relation("RdProjectCreator")
-  rdAttachments             RdAttachment[]                 @relation("RdAttachmentUploader")
-  rdNutritionProfiles       RdNutritionProfile[]           @relation("RdNutritionProfileCreator")
-  auditAcknowledgments      InventoryAuditAcknowledgment[]
-  sopDocuments              SopDocument[]                  @relation("SopOwner")
-  sopReviewLogs             SopReviewLog[]
-  ownedTaskRules            TaskRule[]                     @relation("TaskRuleOwner")
-  doneRuleInstances         RuleInstance[]                 @relation("RuleInstanceDoneBy")
-  skippedRuleInstances      RuleInstance[]                 @relation("RuleInstanceSkippedBy")
-  assignedRuleInstances     RuleInstance[]                 @relation("RuleInstanceAssignedTo")
-  markedMissedRuleInstances RuleInstance[]                 @relation("RuleInstanceMarkedMissedBy")
-  taskInstanceAuditLogs     TaskInstanceAudit[]            @relation("TaskInstanceAuditUser")
-  notifications             Notification[]
-  preOp624Inspections       PreOp624Inspection[]           @relation("PreOp624Submissions")
-  dailyClean624Records      DailyClean624Record[]          @relation("DailyClean624Submissions")
+  createdForms                    Form[]                         @relation("FormCreator")
+  submissions                     FormSubmission[]               @relation("Submitter")
+  approvedSubmissions             FormSubmission[]               @relation("Approver")
+  records                         Record[]
+  preOpInspections                PreOpInspection[]
+  batchSheetSubmissions           BatchSheetSubmission[]
+  createdBatchTemplates           BatchSheetTemplate[]
+  createdProducts                 Product[]
+  dailyCleaningChecklists         DailyCleaningChecklist[]
+  monthlyCleaningChecklists       MonthlyCleaningChecklist[]
+  receivingRecords                ReceivingRecord[]
+  resolvedQuarantineRecords       QuarantineRecord[]
+  inventoryMovements              InventoryMovement[]
+  cycleCounts                     CycleCount[]
+  formTemplates                   FormTemplate[]
+  initialStockEntries             InitialStockEntry[]
+  forecastExclusions              ForecastExclusion[]            @relation("ForecastExclusionCreator")
+  auditExclusions                 InventoryAuditExclusion[]      @relation("AuditExclusionCreator")
+  stockAlertAcknowledgments       StockAlertAcknowledgment[]
+  purchaseOrders                  PurchaseOrder[]
+  rdIngredients                   RdIngredient[]                 @relation("RdIngredientCreator")
+  rdProjects                      RdProject[]                    @relation("RdProjectCreator")
+  rdAttachments                   RdAttachment[]                 @relation("RdAttachmentUploader")
+  rdNutritionProfiles             RdNutritionProfile[]           @relation("RdNutritionProfileCreator")
+  auditAcknowledgments            InventoryAuditAcknowledgment[]
+  sopDocuments                    SopDocument[]                  @relation("SopOwner")
+  sopReviewLogs                   SopReviewLog[]
+  ownedTaskRules                  TaskRule[]                     @relation("TaskRuleOwner")
+  doneRuleInstances               RuleInstance[]                 @relation("RuleInstanceDoneBy")
+  skippedRuleInstances            RuleInstance[]                 @relation("RuleInstanceSkippedBy")
+  assignedRuleInstances           RuleInstance[]                 @relation("RuleInstanceAssignedTo")
+  markedMissedRuleInstances       RuleInstance[]                 @relation("RuleInstanceMarkedMissedBy")
+  taskInstanceAuditLogs           TaskInstanceAudit[]            @relation("TaskInstanceAuditUser")
+  notifications                   Notification[]
+  preOp624Inspections             PreOp624Inspection[]           @relation("PreOp624Submissions")
+  dailyClean624Records            DailyClean624Record[]          @relation("DailyClean624Submissions")
+  monthlyClean624SubmittedRecords MonthlyClean624Record[]        @relation("MonthlyClean624Submitted")
+  monthlyClean624CreatedRecords   MonthlyClean624Record[]        @relation("MonthlyClean624Created")
 
   @@map("users")
 }
@@ -186,7 +188,7 @@ model DailyClean624Record {
   doneCount       Int      @default(0)
   naCount         Int      @default(0)
   notDoneCount    Int      @default(0)
-  allergenChange  Boolean  @default(false)
+  allergenChange  Boolean  @default(false) // kept for historic records; new submissions always false
   notes           String?
   instructionsVer String   @default("v1.0")
   submittedAt     DateTime @default(now())
@@ -1342,23 +1344,24 @@ model Facility {
 }
 
 model TaskRule {
-  id                String              @id @default(cuid())
-  title             String
-  description       String?
-  facilityId        String
-  ownerId           String
-  triggerType       TaskRuleTriggerType @default(RECURRING)
-  recurrenceUnit    String?
-  recurrenceEvery   Int?                @default(1)
-  recurrenceStart   DateTime            @db.Date
-  formKey           String?
-  productName       String?
-  escalateAfterDays Int?
-  isActive          Boolean             @default(true)
-  isArchived        Boolean             @default(false)
-  archivedAt        DateTime?
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
+  id                   String              @id @default(cuid())
+  title                String
+  description          String?
+  facilityId           String
+  ownerId              String
+  triggerType          TaskRuleTriggerType @default(RECURRING)
+  recurrenceUnit       String?
+  recurrenceEvery      Int?                @default(1)
+  recurrenceStart      DateTime            @db.Date
+  recurrenceEndOfMonth Boolean?            @default(false)
+  formKey              String?
+  productName          String?
+  escalateAfterDays    Int?
+  isActive             Boolean             @default(true)
+  isArchived           Boolean             @default(false)
+  archivedAt           DateTime?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
 
   facility  Facility       @relation(fields: [facilityId], references: [id])
   owner     User           @relation("TaskRuleOwner", fields: [ownerId], references: [id])
@@ -1415,6 +1418,36 @@ model TaskInstanceAudit {
   user     User?        @relation("TaskInstanceAuditUser", fields: [userId], references: [id])
 
   @@map("task_instance_audits")
+}
+
+model MonthlyClean624Record {
+  id               String    @id @default(cuid())
+  facility         String    @default("624")
+  month            String
+  status           String    @default("draft")
+  conductedBy      String    @default("")
+  initials         String    @default("")
+  lines            Json      @default("[]")
+  doneCount        Int       @default(0)
+  naCount          Int       @default(0)
+  notDoneCount     Int       @default(0)
+  notes            String?
+  instructionsVer  String    @default("v1.0")
+  autoSubmitted    Boolean   @default(false)
+  lastEditedBy     String?
+  lastEditedAt     DateTime?
+  createdById      String?
+  submittedAt      DateTime?
+  submittedById    String?
+  linkedInstanceId String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  submittedBy User? @relation("MonthlyClean624Submitted", fields: [submittedById], references: [id])
+  createdBy   User? @relation("MonthlyClean624Created", fields: [createdById], references: [id])
+
+  @@unique([facility, month])
+  @@map("monthly_clean_624_records")
 }
 
 model Notification {

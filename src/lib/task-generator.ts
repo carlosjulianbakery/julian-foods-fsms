@@ -47,6 +47,7 @@ export async function generateInstances(): Promise<{ created: number }> {
 
 export function computeDueDates(rule: TaskRule, today: string, horizon: string): string[] {
   const startStr = rule.recurrenceStart.toISOString().slice(0, 10);
+  const endOfMonth = (rule as TaskRule & { recurrenceEndOfMonth?: boolean | null }).recurrenceEndOfMonth ?? false;
 
   if (rule.triggerType === "ONE_OFF") {
     if (startStr >= today && startStr <= horizon) return [startStr];
@@ -58,29 +59,50 @@ export function computeDueDates(rule: TaskRule, today: string, horizon: string):
   const every = rule.recurrenceEvery ?? 1;
   const dates: string[] = [];
 
-  let cursor = startStr < today ? alignCursor(startStr, unit, every, today) : startStr;
+  // For endOfMonth rules, normalise cursor to the last day of the aligned month
+  let cursor = startStr < today ? alignCursor(startStr, unit, every, today, endOfMonth) : startStr;
+  if (endOfMonth && unit === "month") cursor = lastDayOfMonthFromDateStr(cursor);
 
   let safety = 0;
   while (cursor <= horizon && safety++ < 500) {
     dates.push(cursor);
-    cursor = advance(cursor, unit, every);
+    cursor = advance(cursor, unit, every, endOfMonth);
   }
 
   return dates;
 }
 
-function alignCursor(start: string, unit: string, every: number, today: string): string {
+function lastDayOfMonthFromDateStr(dateStr: string): string {
+  const [y, m] = dateStr.split("-").map(Number);
+  return new Date(Date.UTC(y, m, 0)).toISOString().slice(0, 10);
+}
+
+function alignCursor(start: string, unit: string, every: number, today: string, endOfMonth = false): string {
   let cursor = start;
+  // Normalise to end-of-month before comparing so a mid-month start date doesn't
+  // advance past the current month's instance (e.g. Nov 1 start, Nov 17 today → Nov 30, not Dec 31)
+  if (endOfMonth && unit === "month") cursor = lastDayOfMonthFromDateStr(cursor);
   while (compareDateStrs(cursor, today) < 0) {
-    cursor = advance(cursor, unit, every);
+    cursor = advance(cursor, unit, every, endOfMonth);
   }
   return cursor;
 }
 
-function advance(dateStr: string, unit: string, every: number): string {
+function advance(dateStr: string, unit: string, every: number, endOfMonth = false): string {
   if (unit === "day") return addDaysToDateStr(dateStr, every);
   if (unit === "week") return addWeeksToDateStr(dateStr, every);
-  if (unit === "month") return addMonthsToDateStr(dateStr, every);
+  if (unit === "month") {
+    if (endOfMonth) {
+      // Use year/month arithmetic to avoid day-overflow (e.g. Jan 31 + 1 month must be Feb 28, not Mar 3)
+      const [y, m] = dateStr.split("-").map(Number);
+      const totalMonths = y * 12 + (m - 1) + every;
+      const newY = Math.floor(totalMonths / 12);
+      const newM = (totalMonths % 12) + 1;
+      const firstOfNewMonth = `${String(newY).padStart(4, "0")}-${String(newM).padStart(2, "0")}-01`;
+      return lastDayOfMonthFromDateStr(firstOfNewMonth);
+    }
+    return addMonthsToDateStr(dateStr, every);
+  }
   return addDaysToDateStr(dateStr, every);
 }
 

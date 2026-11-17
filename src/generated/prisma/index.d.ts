@@ -304,6 +304,11 @@ export type RuleInstance = $Result.DefaultSelection<Prisma.$RuleInstancePayload>
  */
 export type TaskInstanceAudit = $Result.DefaultSelection<Prisma.$TaskInstanceAuditPayload>
 /**
+ * Model MonthlyClean624Record
+ * 
+ */
+export type MonthlyClean624Record = $Result.DefaultSelection<Prisma.$MonthlyClean624RecordPayload>
+/**
  * Model Notification
  * 
  */
@@ -1197,6 +1202,16 @@ export class PrismaClient<
   get taskInstanceAudit(): Prisma.TaskInstanceAuditDelegate<ExtArgs>;
 
   /**
+   * `prisma.monthlyClean624Record`: Exposes CRUD operations for the **MonthlyClean624Record** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MonthlyClean624Records
+    * const monthlyClean624Records = await prisma.monthlyClean624Record.findMany()
+    * ```
+    */
+  get monthlyClean624Record(): Prisma.MonthlyClean624RecordDelegate<ExtArgs>;
+
+  /**
    * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
     * Example usage:
     * ```ts
@@ -1704,6 +1719,7 @@ export namespace Prisma {
     TaskRule: 'TaskRule',
     RuleInstance: 'RuleInstance',
     TaskInstanceAudit: 'TaskInstanceAudit',
+    MonthlyClean624Record: 'MonthlyClean624Record',
     Notification: 'Notification'
   };
 
@@ -1720,7 +1736,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "record" | "preOpInspection" | "preOp624Inspection" | "dailyClean624Record" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "notification"
+      modelProps: "user" | "form" | "formSubmission" | "record" | "preOpInspection" | "preOp624Inspection" | "dailyClean624Record" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "monthlyClean624Record" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5784,6 +5800,76 @@ export namespace Prisma {
           }
         }
       }
+      MonthlyClean624Record: {
+        payload: Prisma.$MonthlyClean624RecordPayload<ExtArgs>
+        fields: Prisma.MonthlyClean624RecordFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MonthlyClean624RecordFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyClean624RecordPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MonthlyClean624RecordFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyClean624RecordPayload>
+          }
+          findFirst: {
+            args: Prisma.MonthlyClean624RecordFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyClean624RecordPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MonthlyClean624RecordFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyClean624RecordPayload>
+          }
+          findMany: {
+            args: Prisma.MonthlyClean624RecordFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyClean624RecordPayload>[]
+          }
+          create: {
+            args: Prisma.MonthlyClean624RecordCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyClean624RecordPayload>
+          }
+          createMany: {
+            args: Prisma.MonthlyClean624RecordCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MonthlyClean624RecordCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyClean624RecordPayload>[]
+          }
+          delete: {
+            args: Prisma.MonthlyClean624RecordDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyClean624RecordPayload>
+          }
+          update: {
+            args: Prisma.MonthlyClean624RecordUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyClean624RecordPayload>
+          }
+          deleteMany: {
+            args: Prisma.MonthlyClean624RecordDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MonthlyClean624RecordUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.MonthlyClean624RecordUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyClean624RecordPayload>
+          }
+          aggregate: {
+            args: Prisma.MonthlyClean624RecordAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMonthlyClean624Record>
+          }
+          groupBy: {
+            args: Prisma.MonthlyClean624RecordGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyClean624RecordGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MonthlyClean624RecordCountArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyClean624RecordCountAggregateOutputType> | number
+          }
+        }
+      }
       Notification: {
         payload: Prisma.$NotificationPayload<ExtArgs>
         fields: Prisma.NotificationFieldRefs
@@ -6051,6 +6137,8 @@ export namespace Prisma {
     notifications: number
     preOp624Inspections: number
     dailyClean624Records: number
+    monthlyClean624SubmittedRecords: number
+    monthlyClean624CreatedRecords: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6090,6 +6178,8 @@ export namespace Prisma {
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     preOp624Inspections?: boolean | UserCountOutputTypeCountPreOp624InspectionsArgs
     dailyClean624Records?: boolean | UserCountOutputTypeCountDailyClean624RecordsArgs
+    monthlyClean624SubmittedRecords?: boolean | UserCountOutputTypeCountMonthlyClean624SubmittedRecordsArgs
+    monthlyClean624CreatedRecords?: boolean | UserCountOutputTypeCountMonthlyClean624CreatedRecordsArgs
   }
 
   // Custom InputTypes
@@ -6353,6 +6443,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountDailyClean624RecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DailyClean624RecordWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountMonthlyClean624SubmittedRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonthlyClean624RecordWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountMonthlyClean624CreatedRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonthlyClean624RecordWhereInput
   }
 
 
@@ -7509,6 +7613,8 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     preOp624Inspections?: boolean | User$preOp624InspectionsArgs<ExtArgs>
     dailyClean624Records?: boolean | User$dailyClean624RecordsArgs<ExtArgs>
+    monthlyClean624SubmittedRecords?: boolean | User$monthlyClean624SubmittedRecordsArgs<ExtArgs>
+    monthlyClean624CreatedRecords?: boolean | User$monthlyClean624CreatedRecordsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -7573,6 +7679,8 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     preOp624Inspections?: boolean | User$preOp624InspectionsArgs<ExtArgs>
     dailyClean624Records?: boolean | User$dailyClean624RecordsArgs<ExtArgs>
+    monthlyClean624SubmittedRecords?: boolean | User$monthlyClean624SubmittedRecordsArgs<ExtArgs>
+    monthlyClean624CreatedRecords?: boolean | User$monthlyClean624CreatedRecordsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -7616,6 +7724,8 @@ export namespace Prisma {
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       preOp624Inspections: Prisma.$PreOp624InspectionPayload<ExtArgs>[]
       dailyClean624Records: Prisma.$DailyClean624RecordPayload<ExtArgs>[]
+      monthlyClean624SubmittedRecords: Prisma.$MonthlyClean624RecordPayload<ExtArgs>[]
+      monthlyClean624CreatedRecords: Prisma.$MonthlyClean624RecordPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8027,6 +8137,8 @@ export namespace Prisma {
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany"> | Null>
     preOp624Inspections<T extends User$preOp624InspectionsArgs<ExtArgs> = {}>(args?: Subset<T, User$preOp624InspectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreOp624InspectionPayload<ExtArgs>, T, "findMany"> | Null>
     dailyClean624Records<T extends User$dailyClean624RecordsArgs<ExtArgs> = {}>(args?: Subset<T, User$dailyClean624RecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyClean624RecordPayload<ExtArgs>, T, "findMany"> | Null>
+    monthlyClean624SubmittedRecords<T extends User$monthlyClean624SubmittedRecordsArgs<ExtArgs> = {}>(args?: Subset<T, User$monthlyClean624SubmittedRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyClean624RecordPayload<ExtArgs>, T, "findMany"> | Null>
+    monthlyClean624CreatedRecords<T extends User$monthlyClean624CreatedRecordsArgs<ExtArgs> = {}>(args?: Subset<T, User$monthlyClean624CreatedRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyClean624RecordPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9096,6 +9208,46 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DailyClean624RecordScalarFieldEnum | DailyClean624RecordScalarFieldEnum[]
+  }
+
+  /**
+   * User.monthlyClean624SubmittedRecords
+   */
+  export type User$monthlyClean624SubmittedRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyClean624Record
+     */
+    select?: MonthlyClean624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyClean624RecordInclude<ExtArgs> | null
+    where?: MonthlyClean624RecordWhereInput
+    orderBy?: MonthlyClean624RecordOrderByWithRelationInput | MonthlyClean624RecordOrderByWithRelationInput[]
+    cursor?: MonthlyClean624RecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MonthlyClean624RecordScalarFieldEnum | MonthlyClean624RecordScalarFieldEnum[]
+  }
+
+  /**
+   * User.monthlyClean624CreatedRecords
+   */
+  export type User$monthlyClean624CreatedRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyClean624Record
+     */
+    select?: MonthlyClean624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyClean624RecordInclude<ExtArgs> | null
+    where?: MonthlyClean624RecordWhereInput
+    orderBy?: MonthlyClean624RecordOrderByWithRelationInput | MonthlyClean624RecordOrderByWithRelationInput[]
+    cursor?: MonthlyClean624RecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MonthlyClean624RecordScalarFieldEnum | MonthlyClean624RecordScalarFieldEnum[]
   }
 
   /**
@@ -67021,6 +67173,7 @@ export namespace Prisma {
     recurrenceUnit: string | null
     recurrenceEvery: number | null
     recurrenceStart: Date | null
+    recurrenceEndOfMonth: boolean | null
     formKey: string | null
     productName: string | null
     escalateAfterDays: number | null
@@ -67041,6 +67194,7 @@ export namespace Prisma {
     recurrenceUnit: string | null
     recurrenceEvery: number | null
     recurrenceStart: Date | null
+    recurrenceEndOfMonth: boolean | null
     formKey: string | null
     productName: string | null
     escalateAfterDays: number | null
@@ -67061,6 +67215,7 @@ export namespace Prisma {
     recurrenceUnit: number
     recurrenceEvery: number
     recurrenceStart: number
+    recurrenceEndOfMonth: number
     formKey: number
     productName: number
     escalateAfterDays: number
@@ -67093,6 +67248,7 @@ export namespace Prisma {
     recurrenceUnit?: true
     recurrenceEvery?: true
     recurrenceStart?: true
+    recurrenceEndOfMonth?: true
     formKey?: true
     productName?: true
     escalateAfterDays?: true
@@ -67113,6 +67269,7 @@ export namespace Prisma {
     recurrenceUnit?: true
     recurrenceEvery?: true
     recurrenceStart?: true
+    recurrenceEndOfMonth?: true
     formKey?: true
     productName?: true
     escalateAfterDays?: true
@@ -67133,6 +67290,7 @@ export namespace Prisma {
     recurrenceUnit?: true
     recurrenceEvery?: true
     recurrenceStart?: true
+    recurrenceEndOfMonth?: true
     formKey?: true
     productName?: true
     escalateAfterDays?: true
@@ -67240,6 +67398,7 @@ export namespace Prisma {
     recurrenceUnit: string | null
     recurrenceEvery: number | null
     recurrenceStart: Date
+    recurrenceEndOfMonth: boolean | null
     formKey: string | null
     productName: string | null
     escalateAfterDays: number | null
@@ -67279,6 +67438,7 @@ export namespace Prisma {
     recurrenceUnit?: boolean
     recurrenceEvery?: boolean
     recurrenceStart?: boolean
+    recurrenceEndOfMonth?: boolean
     formKey?: boolean
     productName?: boolean
     escalateAfterDays?: boolean
@@ -67303,6 +67463,7 @@ export namespace Prisma {
     recurrenceUnit?: boolean
     recurrenceEvery?: boolean
     recurrenceStart?: boolean
+    recurrenceEndOfMonth?: boolean
     formKey?: boolean
     productName?: boolean
     escalateAfterDays?: boolean
@@ -67325,6 +67486,7 @@ export namespace Prisma {
     recurrenceUnit?: boolean
     recurrenceEvery?: boolean
     recurrenceStart?: boolean
+    recurrenceEndOfMonth?: boolean
     formKey?: boolean
     productName?: boolean
     escalateAfterDays?: boolean
@@ -67363,6 +67525,7 @@ export namespace Prisma {
       recurrenceUnit: string | null
       recurrenceEvery: number | null
       recurrenceStart: Date
+      recurrenceEndOfMonth: boolean | null
       formKey: string | null
       productName: string | null
       escalateAfterDays: number | null
@@ -67776,6 +67939,7 @@ export namespace Prisma {
     readonly recurrenceUnit: FieldRef<"TaskRule", 'String'>
     readonly recurrenceEvery: FieldRef<"TaskRule", 'Int'>
     readonly recurrenceStart: FieldRef<"TaskRule", 'DateTime'>
+    readonly recurrenceEndOfMonth: FieldRef<"TaskRule", 'Boolean'>
     readonly formKey: FieldRef<"TaskRule", 'String'>
     readonly productName: FieldRef<"TaskRule", 'String'>
     readonly escalateAfterDays: FieldRef<"TaskRule", 'Int'>
@@ -70396,6 +70560,1205 @@ export namespace Prisma {
 
 
   /**
+   * Model MonthlyClean624Record
+   */
+
+  export type AggregateMonthlyClean624Record = {
+    _count: MonthlyClean624RecordCountAggregateOutputType | null
+    _avg: MonthlyClean624RecordAvgAggregateOutputType | null
+    _sum: MonthlyClean624RecordSumAggregateOutputType | null
+    _min: MonthlyClean624RecordMinAggregateOutputType | null
+    _max: MonthlyClean624RecordMaxAggregateOutputType | null
+  }
+
+  export type MonthlyClean624RecordAvgAggregateOutputType = {
+    doneCount: number | null
+    naCount: number | null
+    notDoneCount: number | null
+  }
+
+  export type MonthlyClean624RecordSumAggregateOutputType = {
+    doneCount: number | null
+    naCount: number | null
+    notDoneCount: number | null
+  }
+
+  export type MonthlyClean624RecordMinAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    month: string | null
+    status: string | null
+    conductedBy: string | null
+    initials: string | null
+    doneCount: number | null
+    naCount: number | null
+    notDoneCount: number | null
+    notes: string | null
+    instructionsVer: string | null
+    autoSubmitted: boolean | null
+    lastEditedBy: string | null
+    lastEditedAt: Date | null
+    createdById: string | null
+    submittedAt: Date | null
+    submittedById: string | null
+    linkedInstanceId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MonthlyClean624RecordMaxAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    month: string | null
+    status: string | null
+    conductedBy: string | null
+    initials: string | null
+    doneCount: number | null
+    naCount: number | null
+    notDoneCount: number | null
+    notes: string | null
+    instructionsVer: string | null
+    autoSubmitted: boolean | null
+    lastEditedBy: string | null
+    lastEditedAt: Date | null
+    createdById: string | null
+    submittedAt: Date | null
+    submittedById: string | null
+    linkedInstanceId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MonthlyClean624RecordCountAggregateOutputType = {
+    id: number
+    facility: number
+    month: number
+    status: number
+    conductedBy: number
+    initials: number
+    lines: number
+    doneCount: number
+    naCount: number
+    notDoneCount: number
+    notes: number
+    instructionsVer: number
+    autoSubmitted: number
+    lastEditedBy: number
+    lastEditedAt: number
+    createdById: number
+    submittedAt: number
+    submittedById: number
+    linkedInstanceId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MonthlyClean624RecordAvgAggregateInputType = {
+    doneCount?: true
+    naCount?: true
+    notDoneCount?: true
+  }
+
+  export type MonthlyClean624RecordSumAggregateInputType = {
+    doneCount?: true
+    naCount?: true
+    notDoneCount?: true
+  }
+
+  export type MonthlyClean624RecordMinAggregateInputType = {
+    id?: true
+    facility?: true
+    month?: true
+    status?: true
+    conductedBy?: true
+    initials?: true
+    doneCount?: true
+    naCount?: true
+    notDoneCount?: true
+    notes?: true
+    instructionsVer?: true
+    autoSubmitted?: true
+    lastEditedBy?: true
+    lastEditedAt?: true
+    createdById?: true
+    submittedAt?: true
+    submittedById?: true
+    linkedInstanceId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MonthlyClean624RecordMaxAggregateInputType = {
+    id?: true
+    facility?: true
+    month?: true
+    status?: true
+    conductedBy?: true
+    initials?: true
+    doneCount?: true
+    naCount?: true
+    notDoneCount?: true
+    notes?: true
+    instructionsVer?: true
+    autoSubmitted?: true
+    lastEditedBy?: true
+    lastEditedAt?: true
+    createdById?: true
+    submittedAt?: true
+    submittedById?: true
+    linkedInstanceId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MonthlyClean624RecordCountAggregateInputType = {
+    id?: true
+    facility?: true
+    month?: true
+    status?: true
+    conductedBy?: true
+    initials?: true
+    lines?: true
+    doneCount?: true
+    naCount?: true
+    notDoneCount?: true
+    notes?: true
+    instructionsVer?: true
+    autoSubmitted?: true
+    lastEditedBy?: true
+    lastEditedAt?: true
+    createdById?: true
+    submittedAt?: true
+    submittedById?: true
+    linkedInstanceId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MonthlyClean624RecordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyClean624Record to aggregate.
+     */
+    where?: MonthlyClean624RecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyClean624Records to fetch.
+     */
+    orderBy?: MonthlyClean624RecordOrderByWithRelationInput | MonthlyClean624RecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MonthlyClean624RecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyClean624Records from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyClean624Records.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MonthlyClean624Records
+    **/
+    _count?: true | MonthlyClean624RecordCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MonthlyClean624RecordAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MonthlyClean624RecordSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MonthlyClean624RecordMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MonthlyClean624RecordMaxAggregateInputType
+  }
+
+  export type GetMonthlyClean624RecordAggregateType<T extends MonthlyClean624RecordAggregateArgs> = {
+        [P in keyof T & keyof AggregateMonthlyClean624Record]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMonthlyClean624Record[P]>
+      : GetScalarType<T[P], AggregateMonthlyClean624Record[P]>
+  }
+
+
+
+
+  export type MonthlyClean624RecordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonthlyClean624RecordWhereInput
+    orderBy?: MonthlyClean624RecordOrderByWithAggregationInput | MonthlyClean624RecordOrderByWithAggregationInput[]
+    by: MonthlyClean624RecordScalarFieldEnum[] | MonthlyClean624RecordScalarFieldEnum
+    having?: MonthlyClean624RecordScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MonthlyClean624RecordCountAggregateInputType | true
+    _avg?: MonthlyClean624RecordAvgAggregateInputType
+    _sum?: MonthlyClean624RecordSumAggregateInputType
+    _min?: MonthlyClean624RecordMinAggregateInputType
+    _max?: MonthlyClean624RecordMaxAggregateInputType
+  }
+
+  export type MonthlyClean624RecordGroupByOutputType = {
+    id: string
+    facility: string
+    month: string
+    status: string
+    conductedBy: string
+    initials: string
+    lines: JsonValue
+    doneCount: number
+    naCount: number
+    notDoneCount: number
+    notes: string | null
+    instructionsVer: string
+    autoSubmitted: boolean
+    lastEditedBy: string | null
+    lastEditedAt: Date | null
+    createdById: string | null
+    submittedAt: Date | null
+    submittedById: string | null
+    linkedInstanceId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: MonthlyClean624RecordCountAggregateOutputType | null
+    _avg: MonthlyClean624RecordAvgAggregateOutputType | null
+    _sum: MonthlyClean624RecordSumAggregateOutputType | null
+    _min: MonthlyClean624RecordMinAggregateOutputType | null
+    _max: MonthlyClean624RecordMaxAggregateOutputType | null
+  }
+
+  type GetMonthlyClean624RecordGroupByPayload<T extends MonthlyClean624RecordGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MonthlyClean624RecordGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MonthlyClean624RecordGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MonthlyClean624RecordGroupByOutputType[P]>
+            : GetScalarType<T[P], MonthlyClean624RecordGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MonthlyClean624RecordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    month?: boolean
+    status?: boolean
+    conductedBy?: boolean
+    initials?: boolean
+    lines?: boolean
+    doneCount?: boolean
+    naCount?: boolean
+    notDoneCount?: boolean
+    notes?: boolean
+    instructionsVer?: boolean
+    autoSubmitted?: boolean
+    lastEditedBy?: boolean
+    lastEditedAt?: boolean
+    createdById?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    linkedInstanceId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    submittedBy?: boolean | MonthlyClean624Record$submittedByArgs<ExtArgs>
+    createdBy?: boolean | MonthlyClean624Record$createdByArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyClean624Record"]>
+
+  export type MonthlyClean624RecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    month?: boolean
+    status?: boolean
+    conductedBy?: boolean
+    initials?: boolean
+    lines?: boolean
+    doneCount?: boolean
+    naCount?: boolean
+    notDoneCount?: boolean
+    notes?: boolean
+    instructionsVer?: boolean
+    autoSubmitted?: boolean
+    lastEditedBy?: boolean
+    lastEditedAt?: boolean
+    createdById?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    linkedInstanceId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    submittedBy?: boolean | MonthlyClean624Record$submittedByArgs<ExtArgs>
+    createdBy?: boolean | MonthlyClean624Record$createdByArgs<ExtArgs>
+  }, ExtArgs["result"]["monthlyClean624Record"]>
+
+  export type MonthlyClean624RecordSelectScalar = {
+    id?: boolean
+    facility?: boolean
+    month?: boolean
+    status?: boolean
+    conductedBy?: boolean
+    initials?: boolean
+    lines?: boolean
+    doneCount?: boolean
+    naCount?: boolean
+    notDoneCount?: boolean
+    notes?: boolean
+    instructionsVer?: boolean
+    autoSubmitted?: boolean
+    lastEditedBy?: boolean
+    lastEditedAt?: boolean
+    createdById?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    linkedInstanceId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MonthlyClean624RecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    submittedBy?: boolean | MonthlyClean624Record$submittedByArgs<ExtArgs>
+    createdBy?: boolean | MonthlyClean624Record$createdByArgs<ExtArgs>
+  }
+  export type MonthlyClean624RecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    submittedBy?: boolean | MonthlyClean624Record$submittedByArgs<ExtArgs>
+    createdBy?: boolean | MonthlyClean624Record$createdByArgs<ExtArgs>
+  }
+
+  export type $MonthlyClean624RecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MonthlyClean624Record"
+    objects: {
+      submittedBy: Prisma.$UserPayload<ExtArgs> | null
+      createdBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      facility: string
+      month: string
+      status: string
+      conductedBy: string
+      initials: string
+      lines: Prisma.JsonValue
+      doneCount: number
+      naCount: number
+      notDoneCount: number
+      notes: string | null
+      instructionsVer: string
+      autoSubmitted: boolean
+      lastEditedBy: string | null
+      lastEditedAt: Date | null
+      createdById: string | null
+      submittedAt: Date | null
+      submittedById: string | null
+      linkedInstanceId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["monthlyClean624Record"]>
+    composites: {}
+  }
+
+  type MonthlyClean624RecordGetPayload<S extends boolean | null | undefined | MonthlyClean624RecordDefaultArgs> = $Result.GetResult<Prisma.$MonthlyClean624RecordPayload, S>
+
+  type MonthlyClean624RecordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<MonthlyClean624RecordFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: MonthlyClean624RecordCountAggregateInputType | true
+    }
+
+  export interface MonthlyClean624RecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MonthlyClean624Record'], meta: { name: 'MonthlyClean624Record' } }
+    /**
+     * Find zero or one MonthlyClean624Record that matches the filter.
+     * @param {MonthlyClean624RecordFindUniqueArgs} args - Arguments to find a MonthlyClean624Record
+     * @example
+     * // Get one MonthlyClean624Record
+     * const monthlyClean624Record = await prisma.monthlyClean624Record.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MonthlyClean624RecordFindUniqueArgs>(args: SelectSubset<T, MonthlyClean624RecordFindUniqueArgs<ExtArgs>>): Prisma__MonthlyClean624RecordClient<$Result.GetResult<Prisma.$MonthlyClean624RecordPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one MonthlyClean624Record that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {MonthlyClean624RecordFindUniqueOrThrowArgs} args - Arguments to find a MonthlyClean624Record
+     * @example
+     * // Get one MonthlyClean624Record
+     * const monthlyClean624Record = await prisma.monthlyClean624Record.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MonthlyClean624RecordFindUniqueOrThrowArgs>(args: SelectSubset<T, MonthlyClean624RecordFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MonthlyClean624RecordClient<$Result.GetResult<Prisma.$MonthlyClean624RecordPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first MonthlyClean624Record that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyClean624RecordFindFirstArgs} args - Arguments to find a MonthlyClean624Record
+     * @example
+     * // Get one MonthlyClean624Record
+     * const monthlyClean624Record = await prisma.monthlyClean624Record.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MonthlyClean624RecordFindFirstArgs>(args?: SelectSubset<T, MonthlyClean624RecordFindFirstArgs<ExtArgs>>): Prisma__MonthlyClean624RecordClient<$Result.GetResult<Prisma.$MonthlyClean624RecordPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first MonthlyClean624Record that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyClean624RecordFindFirstOrThrowArgs} args - Arguments to find a MonthlyClean624Record
+     * @example
+     * // Get one MonthlyClean624Record
+     * const monthlyClean624Record = await prisma.monthlyClean624Record.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MonthlyClean624RecordFindFirstOrThrowArgs>(args?: SelectSubset<T, MonthlyClean624RecordFindFirstOrThrowArgs<ExtArgs>>): Prisma__MonthlyClean624RecordClient<$Result.GetResult<Prisma.$MonthlyClean624RecordPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more MonthlyClean624Records that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyClean624RecordFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MonthlyClean624Records
+     * const monthlyClean624Records = await prisma.monthlyClean624Record.findMany()
+     * 
+     * // Get first 10 MonthlyClean624Records
+     * const monthlyClean624Records = await prisma.monthlyClean624Record.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const monthlyClean624RecordWithIdOnly = await prisma.monthlyClean624Record.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MonthlyClean624RecordFindManyArgs>(args?: SelectSubset<T, MonthlyClean624RecordFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyClean624RecordPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a MonthlyClean624Record.
+     * @param {MonthlyClean624RecordCreateArgs} args - Arguments to create a MonthlyClean624Record.
+     * @example
+     * // Create one MonthlyClean624Record
+     * const MonthlyClean624Record = await prisma.monthlyClean624Record.create({
+     *   data: {
+     *     // ... data to create a MonthlyClean624Record
+     *   }
+     * })
+     * 
+     */
+    create<T extends MonthlyClean624RecordCreateArgs>(args: SelectSubset<T, MonthlyClean624RecordCreateArgs<ExtArgs>>): Prisma__MonthlyClean624RecordClient<$Result.GetResult<Prisma.$MonthlyClean624RecordPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many MonthlyClean624Records.
+     * @param {MonthlyClean624RecordCreateManyArgs} args - Arguments to create many MonthlyClean624Records.
+     * @example
+     * // Create many MonthlyClean624Records
+     * const monthlyClean624Record = await prisma.monthlyClean624Record.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MonthlyClean624RecordCreateManyArgs>(args?: SelectSubset<T, MonthlyClean624RecordCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MonthlyClean624Records and returns the data saved in the database.
+     * @param {MonthlyClean624RecordCreateManyAndReturnArgs} args - Arguments to create many MonthlyClean624Records.
+     * @example
+     * // Create many MonthlyClean624Records
+     * const monthlyClean624Record = await prisma.monthlyClean624Record.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MonthlyClean624Records and only return the `id`
+     * const monthlyClean624RecordWithIdOnly = await prisma.monthlyClean624Record.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MonthlyClean624RecordCreateManyAndReturnArgs>(args?: SelectSubset<T, MonthlyClean624RecordCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyClean624RecordPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a MonthlyClean624Record.
+     * @param {MonthlyClean624RecordDeleteArgs} args - Arguments to delete one MonthlyClean624Record.
+     * @example
+     * // Delete one MonthlyClean624Record
+     * const MonthlyClean624Record = await prisma.monthlyClean624Record.delete({
+     *   where: {
+     *     // ... filter to delete one MonthlyClean624Record
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MonthlyClean624RecordDeleteArgs>(args: SelectSubset<T, MonthlyClean624RecordDeleteArgs<ExtArgs>>): Prisma__MonthlyClean624RecordClient<$Result.GetResult<Prisma.$MonthlyClean624RecordPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one MonthlyClean624Record.
+     * @param {MonthlyClean624RecordUpdateArgs} args - Arguments to update one MonthlyClean624Record.
+     * @example
+     * // Update one MonthlyClean624Record
+     * const monthlyClean624Record = await prisma.monthlyClean624Record.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MonthlyClean624RecordUpdateArgs>(args: SelectSubset<T, MonthlyClean624RecordUpdateArgs<ExtArgs>>): Prisma__MonthlyClean624RecordClient<$Result.GetResult<Prisma.$MonthlyClean624RecordPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more MonthlyClean624Records.
+     * @param {MonthlyClean624RecordDeleteManyArgs} args - Arguments to filter MonthlyClean624Records to delete.
+     * @example
+     * // Delete a few MonthlyClean624Records
+     * const { count } = await prisma.monthlyClean624Record.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MonthlyClean624RecordDeleteManyArgs>(args?: SelectSubset<T, MonthlyClean624RecordDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MonthlyClean624Records.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyClean624RecordUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MonthlyClean624Records
+     * const monthlyClean624Record = await prisma.monthlyClean624Record.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MonthlyClean624RecordUpdateManyArgs>(args: SelectSubset<T, MonthlyClean624RecordUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one MonthlyClean624Record.
+     * @param {MonthlyClean624RecordUpsertArgs} args - Arguments to update or create a MonthlyClean624Record.
+     * @example
+     * // Update or create a MonthlyClean624Record
+     * const monthlyClean624Record = await prisma.monthlyClean624Record.upsert({
+     *   create: {
+     *     // ... data to create a MonthlyClean624Record
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MonthlyClean624Record we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MonthlyClean624RecordUpsertArgs>(args: SelectSubset<T, MonthlyClean624RecordUpsertArgs<ExtArgs>>): Prisma__MonthlyClean624RecordClient<$Result.GetResult<Prisma.$MonthlyClean624RecordPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of MonthlyClean624Records.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyClean624RecordCountArgs} args - Arguments to filter MonthlyClean624Records to count.
+     * @example
+     * // Count the number of MonthlyClean624Records
+     * const count = await prisma.monthlyClean624Record.count({
+     *   where: {
+     *     // ... the filter for the MonthlyClean624Records we want to count
+     *   }
+     * })
+    **/
+    count<T extends MonthlyClean624RecordCountArgs>(
+      args?: Subset<T, MonthlyClean624RecordCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MonthlyClean624RecordCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MonthlyClean624Record.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyClean624RecordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MonthlyClean624RecordAggregateArgs>(args: Subset<T, MonthlyClean624RecordAggregateArgs>): Prisma.PrismaPromise<GetMonthlyClean624RecordAggregateType<T>>
+
+    /**
+     * Group by MonthlyClean624Record.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyClean624RecordGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MonthlyClean624RecordGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MonthlyClean624RecordGroupByArgs['orderBy'] }
+        : { orderBy?: MonthlyClean624RecordGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MonthlyClean624RecordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMonthlyClean624RecordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MonthlyClean624Record model
+   */
+  readonly fields: MonthlyClean624RecordFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MonthlyClean624Record.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MonthlyClean624RecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    submittedBy<T extends MonthlyClean624Record$submittedByArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyClean624Record$submittedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    createdBy<T extends MonthlyClean624Record$createdByArgs<ExtArgs> = {}>(args?: Subset<T, MonthlyClean624Record$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MonthlyClean624Record model
+   */ 
+  interface MonthlyClean624RecordFieldRefs {
+    readonly id: FieldRef<"MonthlyClean624Record", 'String'>
+    readonly facility: FieldRef<"MonthlyClean624Record", 'String'>
+    readonly month: FieldRef<"MonthlyClean624Record", 'String'>
+    readonly status: FieldRef<"MonthlyClean624Record", 'String'>
+    readonly conductedBy: FieldRef<"MonthlyClean624Record", 'String'>
+    readonly initials: FieldRef<"MonthlyClean624Record", 'String'>
+    readonly lines: FieldRef<"MonthlyClean624Record", 'Json'>
+    readonly doneCount: FieldRef<"MonthlyClean624Record", 'Int'>
+    readonly naCount: FieldRef<"MonthlyClean624Record", 'Int'>
+    readonly notDoneCount: FieldRef<"MonthlyClean624Record", 'Int'>
+    readonly notes: FieldRef<"MonthlyClean624Record", 'String'>
+    readonly instructionsVer: FieldRef<"MonthlyClean624Record", 'String'>
+    readonly autoSubmitted: FieldRef<"MonthlyClean624Record", 'Boolean'>
+    readonly lastEditedBy: FieldRef<"MonthlyClean624Record", 'String'>
+    readonly lastEditedAt: FieldRef<"MonthlyClean624Record", 'DateTime'>
+    readonly createdById: FieldRef<"MonthlyClean624Record", 'String'>
+    readonly submittedAt: FieldRef<"MonthlyClean624Record", 'DateTime'>
+    readonly submittedById: FieldRef<"MonthlyClean624Record", 'String'>
+    readonly linkedInstanceId: FieldRef<"MonthlyClean624Record", 'String'>
+    readonly createdAt: FieldRef<"MonthlyClean624Record", 'DateTime'>
+    readonly updatedAt: FieldRef<"MonthlyClean624Record", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MonthlyClean624Record findUnique
+   */
+  export type MonthlyClean624RecordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyClean624Record
+     */
+    select?: MonthlyClean624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyClean624RecordInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyClean624Record to fetch.
+     */
+    where: MonthlyClean624RecordWhereUniqueInput
+  }
+
+  /**
+   * MonthlyClean624Record findUniqueOrThrow
+   */
+  export type MonthlyClean624RecordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyClean624Record
+     */
+    select?: MonthlyClean624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyClean624RecordInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyClean624Record to fetch.
+     */
+    where: MonthlyClean624RecordWhereUniqueInput
+  }
+
+  /**
+   * MonthlyClean624Record findFirst
+   */
+  export type MonthlyClean624RecordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyClean624Record
+     */
+    select?: MonthlyClean624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyClean624RecordInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyClean624Record to fetch.
+     */
+    where?: MonthlyClean624RecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyClean624Records to fetch.
+     */
+    orderBy?: MonthlyClean624RecordOrderByWithRelationInput | MonthlyClean624RecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyClean624Records.
+     */
+    cursor?: MonthlyClean624RecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyClean624Records from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyClean624Records.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyClean624Records.
+     */
+    distinct?: MonthlyClean624RecordScalarFieldEnum | MonthlyClean624RecordScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyClean624Record findFirstOrThrow
+   */
+  export type MonthlyClean624RecordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyClean624Record
+     */
+    select?: MonthlyClean624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyClean624RecordInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyClean624Record to fetch.
+     */
+    where?: MonthlyClean624RecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyClean624Records to fetch.
+     */
+    orderBy?: MonthlyClean624RecordOrderByWithRelationInput | MonthlyClean624RecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyClean624Records.
+     */
+    cursor?: MonthlyClean624RecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyClean624Records from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyClean624Records.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyClean624Records.
+     */
+    distinct?: MonthlyClean624RecordScalarFieldEnum | MonthlyClean624RecordScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyClean624Record findMany
+   */
+  export type MonthlyClean624RecordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyClean624Record
+     */
+    select?: MonthlyClean624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyClean624RecordInclude<ExtArgs> | null
+    /**
+     * Filter, which MonthlyClean624Records to fetch.
+     */
+    where?: MonthlyClean624RecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyClean624Records to fetch.
+     */
+    orderBy?: MonthlyClean624RecordOrderByWithRelationInput | MonthlyClean624RecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MonthlyClean624Records.
+     */
+    cursor?: MonthlyClean624RecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyClean624Records from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyClean624Records.
+     */
+    skip?: number
+    distinct?: MonthlyClean624RecordScalarFieldEnum | MonthlyClean624RecordScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyClean624Record create
+   */
+  export type MonthlyClean624RecordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyClean624Record
+     */
+    select?: MonthlyClean624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyClean624RecordInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MonthlyClean624Record.
+     */
+    data: XOR<MonthlyClean624RecordCreateInput, MonthlyClean624RecordUncheckedCreateInput>
+  }
+
+  /**
+   * MonthlyClean624Record createMany
+   */
+  export type MonthlyClean624RecordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MonthlyClean624Records.
+     */
+    data: MonthlyClean624RecordCreateManyInput | MonthlyClean624RecordCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MonthlyClean624Record createManyAndReturn
+   */
+  export type MonthlyClean624RecordCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyClean624Record
+     */
+    select?: MonthlyClean624RecordSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many MonthlyClean624Records.
+     */
+    data: MonthlyClean624RecordCreateManyInput | MonthlyClean624RecordCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyClean624RecordIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MonthlyClean624Record update
+   */
+  export type MonthlyClean624RecordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyClean624Record
+     */
+    select?: MonthlyClean624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyClean624RecordInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MonthlyClean624Record.
+     */
+    data: XOR<MonthlyClean624RecordUpdateInput, MonthlyClean624RecordUncheckedUpdateInput>
+    /**
+     * Choose, which MonthlyClean624Record to update.
+     */
+    where: MonthlyClean624RecordWhereUniqueInput
+  }
+
+  /**
+   * MonthlyClean624Record updateMany
+   */
+  export type MonthlyClean624RecordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MonthlyClean624Records.
+     */
+    data: XOR<MonthlyClean624RecordUpdateManyMutationInput, MonthlyClean624RecordUncheckedUpdateManyInput>
+    /**
+     * Filter which MonthlyClean624Records to update
+     */
+    where?: MonthlyClean624RecordWhereInput
+  }
+
+  /**
+   * MonthlyClean624Record upsert
+   */
+  export type MonthlyClean624RecordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyClean624Record
+     */
+    select?: MonthlyClean624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyClean624RecordInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MonthlyClean624Record to update in case it exists.
+     */
+    where: MonthlyClean624RecordWhereUniqueInput
+    /**
+     * In case the MonthlyClean624Record found by the `where` argument doesn't exist, create a new MonthlyClean624Record with this data.
+     */
+    create: XOR<MonthlyClean624RecordCreateInput, MonthlyClean624RecordUncheckedCreateInput>
+    /**
+     * In case the MonthlyClean624Record was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MonthlyClean624RecordUpdateInput, MonthlyClean624RecordUncheckedUpdateInput>
+  }
+
+  /**
+   * MonthlyClean624Record delete
+   */
+  export type MonthlyClean624RecordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyClean624Record
+     */
+    select?: MonthlyClean624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyClean624RecordInclude<ExtArgs> | null
+    /**
+     * Filter which MonthlyClean624Record to delete.
+     */
+    where: MonthlyClean624RecordWhereUniqueInput
+  }
+
+  /**
+   * MonthlyClean624Record deleteMany
+   */
+  export type MonthlyClean624RecordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyClean624Records to delete
+     */
+    where?: MonthlyClean624RecordWhereInput
+  }
+
+  /**
+   * MonthlyClean624Record.submittedBy
+   */
+  export type MonthlyClean624Record$submittedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * MonthlyClean624Record.createdBy
+   */
+  export type MonthlyClean624Record$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * MonthlyClean624Record without action
+   */
+  export type MonthlyClean624RecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyClean624Record
+     */
+    select?: MonthlyClean624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MonthlyClean624RecordInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Notification
    */
 
@@ -72416,6 +73779,7 @@ export namespace Prisma {
     recurrenceUnit: 'recurrenceUnit',
     recurrenceEvery: 'recurrenceEvery',
     recurrenceStart: 'recurrenceStart',
+    recurrenceEndOfMonth: 'recurrenceEndOfMonth',
     formKey: 'formKey',
     productName: 'productName',
     escalateAfterDays: 'escalateAfterDays',
@@ -72468,6 +73832,33 @@ export namespace Prisma {
   };
 
   export type TaskInstanceAuditScalarFieldEnum = (typeof TaskInstanceAuditScalarFieldEnum)[keyof typeof TaskInstanceAuditScalarFieldEnum]
+
+
+  export const MonthlyClean624RecordScalarFieldEnum: {
+    id: 'id',
+    facility: 'facility',
+    month: 'month',
+    status: 'status',
+    conductedBy: 'conductedBy',
+    initials: 'initials',
+    lines: 'lines',
+    doneCount: 'doneCount',
+    naCount: 'naCount',
+    notDoneCount: 'notDoneCount',
+    notes: 'notes',
+    instructionsVer: 'instructionsVer',
+    autoSubmitted: 'autoSubmitted',
+    lastEditedBy: 'lastEditedBy',
+    lastEditedAt: 'lastEditedAt',
+    createdById: 'createdById',
+    submittedAt: 'submittedAt',
+    submittedById: 'submittedById',
+    linkedInstanceId: 'linkedInstanceId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MonthlyClean624RecordScalarFieldEnum = (typeof MonthlyClean624RecordScalarFieldEnum)[keyof typeof MonthlyClean624RecordScalarFieldEnum]
 
 
   export const NotificationScalarFieldEnum: {
@@ -72856,6 +74247,8 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     preOp624Inspections?: PreOp624InspectionListRelationFilter
     dailyClean624Records?: DailyClean624RecordListRelationFilter
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordListRelationFilter
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -72904,6 +74297,8 @@ export namespace Prisma {
     notifications?: NotificationOrderByRelationAggregateInput
     preOp624Inspections?: PreOp624InspectionOrderByRelationAggregateInput
     dailyClean624Records?: DailyClean624RecordOrderByRelationAggregateInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordOrderByRelationAggregateInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -72955,6 +74350,8 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     preOp624Inspections?: PreOp624InspectionListRelationFilter
     dailyClean624Records?: DailyClean624RecordListRelationFilter
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordListRelationFilter
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -78320,6 +79717,7 @@ export namespace Prisma {
     recurrenceUnit?: StringNullableFilter<"TaskRule"> | string | null
     recurrenceEvery?: IntNullableFilter<"TaskRule"> | number | null
     recurrenceStart?: DateTimeFilter<"TaskRule"> | Date | string
+    recurrenceEndOfMonth?: BoolNullableFilter<"TaskRule"> | boolean | null
     formKey?: StringNullableFilter<"TaskRule"> | string | null
     productName?: StringNullableFilter<"TaskRule"> | string | null
     escalateAfterDays?: IntNullableFilter<"TaskRule"> | number | null
@@ -78343,6 +79741,7 @@ export namespace Prisma {
     recurrenceUnit?: SortOrderInput | SortOrder
     recurrenceEvery?: SortOrderInput | SortOrder
     recurrenceStart?: SortOrder
+    recurrenceEndOfMonth?: SortOrderInput | SortOrder
     formKey?: SortOrderInput | SortOrder
     productName?: SortOrderInput | SortOrder
     escalateAfterDays?: SortOrderInput | SortOrder
@@ -78369,6 +79768,7 @@ export namespace Prisma {
     recurrenceUnit?: StringNullableFilter<"TaskRule"> | string | null
     recurrenceEvery?: IntNullableFilter<"TaskRule"> | number | null
     recurrenceStart?: DateTimeFilter<"TaskRule"> | Date | string
+    recurrenceEndOfMonth?: BoolNullableFilter<"TaskRule"> | boolean | null
     formKey?: StringNullableFilter<"TaskRule"> | string | null
     productName?: StringNullableFilter<"TaskRule"> | string | null
     escalateAfterDays?: IntNullableFilter<"TaskRule"> | number | null
@@ -78392,6 +79792,7 @@ export namespace Prisma {
     recurrenceUnit?: SortOrderInput | SortOrder
     recurrenceEvery?: SortOrderInput | SortOrder
     recurrenceStart?: SortOrder
+    recurrenceEndOfMonth?: SortOrderInput | SortOrder
     formKey?: SortOrderInput | SortOrder
     productName?: SortOrderInput | SortOrder
     escalateAfterDays?: SortOrderInput | SortOrder
@@ -78420,6 +79821,7 @@ export namespace Prisma {
     recurrenceUnit?: StringNullableWithAggregatesFilter<"TaskRule"> | string | null
     recurrenceEvery?: IntNullableWithAggregatesFilter<"TaskRule"> | number | null
     recurrenceStart?: DateTimeWithAggregatesFilter<"TaskRule"> | Date | string
+    recurrenceEndOfMonth?: BoolNullableWithAggregatesFilter<"TaskRule"> | boolean | null
     formKey?: StringNullableWithAggregatesFilter<"TaskRule"> | string | null
     productName?: StringNullableWithAggregatesFilter<"TaskRule"> | string | null
     escalateAfterDays?: IntNullableWithAggregatesFilter<"TaskRule"> | number | null
@@ -78656,6 +80058,147 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"TaskInstanceAudit"> | Date | string
   }
 
+  export type MonthlyClean624RecordWhereInput = {
+    AND?: MonthlyClean624RecordWhereInput | MonthlyClean624RecordWhereInput[]
+    OR?: MonthlyClean624RecordWhereInput[]
+    NOT?: MonthlyClean624RecordWhereInput | MonthlyClean624RecordWhereInput[]
+    id?: StringFilter<"MonthlyClean624Record"> | string
+    facility?: StringFilter<"MonthlyClean624Record"> | string
+    month?: StringFilter<"MonthlyClean624Record"> | string
+    status?: StringFilter<"MonthlyClean624Record"> | string
+    conductedBy?: StringFilter<"MonthlyClean624Record"> | string
+    initials?: StringFilter<"MonthlyClean624Record"> | string
+    lines?: JsonFilter<"MonthlyClean624Record">
+    doneCount?: IntFilter<"MonthlyClean624Record"> | number
+    naCount?: IntFilter<"MonthlyClean624Record"> | number
+    notDoneCount?: IntFilter<"MonthlyClean624Record"> | number
+    notes?: StringNullableFilter<"MonthlyClean624Record"> | string | null
+    instructionsVer?: StringFilter<"MonthlyClean624Record"> | string
+    autoSubmitted?: BoolFilter<"MonthlyClean624Record"> | boolean
+    lastEditedBy?: StringNullableFilter<"MonthlyClean624Record"> | string | null
+    lastEditedAt?: DateTimeNullableFilter<"MonthlyClean624Record"> | Date | string | null
+    createdById?: StringNullableFilter<"MonthlyClean624Record"> | string | null
+    submittedAt?: DateTimeNullableFilter<"MonthlyClean624Record"> | Date | string | null
+    submittedById?: StringNullableFilter<"MonthlyClean624Record"> | string | null
+    linkedInstanceId?: StringNullableFilter<"MonthlyClean624Record"> | string | null
+    createdAt?: DateTimeFilter<"MonthlyClean624Record"> | Date | string
+    updatedAt?: DateTimeFilter<"MonthlyClean624Record"> | Date | string
+    submittedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    createdBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }
+
+  export type MonthlyClean624RecordOrderByWithRelationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    month?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    lines?: SortOrder
+    doneCount?: SortOrder
+    naCount?: SortOrder
+    notDoneCount?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    instructionsVer?: SortOrder
+    autoSubmitted?: SortOrder
+    lastEditedBy?: SortOrderInput | SortOrder
+    lastEditedAt?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    submittedById?: SortOrderInput | SortOrder
+    linkedInstanceId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    submittedBy?: UserOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+  }
+
+  export type MonthlyClean624RecordWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    facility_month?: MonthlyClean624RecordFacilityMonthCompoundUniqueInput
+    AND?: MonthlyClean624RecordWhereInput | MonthlyClean624RecordWhereInput[]
+    OR?: MonthlyClean624RecordWhereInput[]
+    NOT?: MonthlyClean624RecordWhereInput | MonthlyClean624RecordWhereInput[]
+    facility?: StringFilter<"MonthlyClean624Record"> | string
+    month?: StringFilter<"MonthlyClean624Record"> | string
+    status?: StringFilter<"MonthlyClean624Record"> | string
+    conductedBy?: StringFilter<"MonthlyClean624Record"> | string
+    initials?: StringFilter<"MonthlyClean624Record"> | string
+    lines?: JsonFilter<"MonthlyClean624Record">
+    doneCount?: IntFilter<"MonthlyClean624Record"> | number
+    naCount?: IntFilter<"MonthlyClean624Record"> | number
+    notDoneCount?: IntFilter<"MonthlyClean624Record"> | number
+    notes?: StringNullableFilter<"MonthlyClean624Record"> | string | null
+    instructionsVer?: StringFilter<"MonthlyClean624Record"> | string
+    autoSubmitted?: BoolFilter<"MonthlyClean624Record"> | boolean
+    lastEditedBy?: StringNullableFilter<"MonthlyClean624Record"> | string | null
+    lastEditedAt?: DateTimeNullableFilter<"MonthlyClean624Record"> | Date | string | null
+    createdById?: StringNullableFilter<"MonthlyClean624Record"> | string | null
+    submittedAt?: DateTimeNullableFilter<"MonthlyClean624Record"> | Date | string | null
+    submittedById?: StringNullableFilter<"MonthlyClean624Record"> | string | null
+    linkedInstanceId?: StringNullableFilter<"MonthlyClean624Record"> | string | null
+    createdAt?: DateTimeFilter<"MonthlyClean624Record"> | Date | string
+    updatedAt?: DateTimeFilter<"MonthlyClean624Record"> | Date | string
+    submittedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    createdBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }, "id" | "facility_month">
+
+  export type MonthlyClean624RecordOrderByWithAggregationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    month?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    lines?: SortOrder
+    doneCount?: SortOrder
+    naCount?: SortOrder
+    notDoneCount?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    instructionsVer?: SortOrder
+    autoSubmitted?: SortOrder
+    lastEditedBy?: SortOrderInput | SortOrder
+    lastEditedAt?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    submittedById?: SortOrderInput | SortOrder
+    linkedInstanceId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MonthlyClean624RecordCountOrderByAggregateInput
+    _avg?: MonthlyClean624RecordAvgOrderByAggregateInput
+    _max?: MonthlyClean624RecordMaxOrderByAggregateInput
+    _min?: MonthlyClean624RecordMinOrderByAggregateInput
+    _sum?: MonthlyClean624RecordSumOrderByAggregateInput
+  }
+
+  export type MonthlyClean624RecordScalarWhereWithAggregatesInput = {
+    AND?: MonthlyClean624RecordScalarWhereWithAggregatesInput | MonthlyClean624RecordScalarWhereWithAggregatesInput[]
+    OR?: MonthlyClean624RecordScalarWhereWithAggregatesInput[]
+    NOT?: MonthlyClean624RecordScalarWhereWithAggregatesInput | MonthlyClean624RecordScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MonthlyClean624Record"> | string
+    facility?: StringWithAggregatesFilter<"MonthlyClean624Record"> | string
+    month?: StringWithAggregatesFilter<"MonthlyClean624Record"> | string
+    status?: StringWithAggregatesFilter<"MonthlyClean624Record"> | string
+    conductedBy?: StringWithAggregatesFilter<"MonthlyClean624Record"> | string
+    initials?: StringWithAggregatesFilter<"MonthlyClean624Record"> | string
+    lines?: JsonWithAggregatesFilter<"MonthlyClean624Record">
+    doneCount?: IntWithAggregatesFilter<"MonthlyClean624Record"> | number
+    naCount?: IntWithAggregatesFilter<"MonthlyClean624Record"> | number
+    notDoneCount?: IntWithAggregatesFilter<"MonthlyClean624Record"> | number
+    notes?: StringNullableWithAggregatesFilter<"MonthlyClean624Record"> | string | null
+    instructionsVer?: StringWithAggregatesFilter<"MonthlyClean624Record"> | string
+    autoSubmitted?: BoolWithAggregatesFilter<"MonthlyClean624Record"> | boolean
+    lastEditedBy?: StringNullableWithAggregatesFilter<"MonthlyClean624Record"> | string | null
+    lastEditedAt?: DateTimeNullableWithAggregatesFilter<"MonthlyClean624Record"> | Date | string | null
+    createdById?: StringNullableWithAggregatesFilter<"MonthlyClean624Record"> | string | null
+    submittedAt?: DateTimeNullableWithAggregatesFilter<"MonthlyClean624Record"> | Date | string | null
+    submittedById?: StringNullableWithAggregatesFilter<"MonthlyClean624Record"> | string | null
+    linkedInstanceId?: StringNullableWithAggregatesFilter<"MonthlyClean624Record"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"MonthlyClean624Record"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MonthlyClean624Record"> | Date | string
+  }
+
   export type NotificationWhereInput = {
     AND?: NotificationWhereInput | NotificationWhereInput[]
     OR?: NotificationWhereInput[]
@@ -78777,6 +80320,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -78825,6 +80370,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUpdateInput = {
@@ -78873,6 +80420,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -78921,6 +80470,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -84979,6 +86530,7 @@ export namespace Prisma {
     recurrenceUnit?: string | null
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
+    recurrenceEndOfMonth?: boolean | null
     formKey?: string | null
     productName?: string | null
     escalateAfterDays?: number | null
@@ -85002,6 +86554,7 @@ export namespace Prisma {
     recurrenceUnit?: string | null
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
+    recurrenceEndOfMonth?: boolean | null
     formKey?: string | null
     productName?: string | null
     escalateAfterDays?: number | null
@@ -85021,6 +86574,7 @@ export namespace Prisma {
     recurrenceUnit?: NullableStringFieldUpdateOperationsInput | string | null
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrenceEndOfMonth?: NullableBoolFieldUpdateOperationsInput | boolean | null
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
     productName?: NullableStringFieldUpdateOperationsInput | string | null
     escalateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
@@ -85044,6 +86598,7 @@ export namespace Prisma {
     recurrenceUnit?: NullableStringFieldUpdateOperationsInput | string | null
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrenceEndOfMonth?: NullableBoolFieldUpdateOperationsInput | boolean | null
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
     productName?: NullableStringFieldUpdateOperationsInput | string | null
     escalateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
@@ -85065,6 +86620,7 @@ export namespace Prisma {
     recurrenceUnit?: string | null
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
+    recurrenceEndOfMonth?: boolean | null
     formKey?: string | null
     productName?: string | null
     escalateAfterDays?: number | null
@@ -85083,6 +86639,7 @@ export namespace Prisma {
     recurrenceUnit?: NullableStringFieldUpdateOperationsInput | string | null
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrenceEndOfMonth?: NullableBoolFieldUpdateOperationsInput | boolean | null
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
     productName?: NullableStringFieldUpdateOperationsInput | string | null
     escalateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
@@ -85103,6 +86660,7 @@ export namespace Prisma {
     recurrenceUnit?: NullableStringFieldUpdateOperationsInput | string | null
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrenceEndOfMonth?: NullableBoolFieldUpdateOperationsInput | boolean | null
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
     productName?: NullableStringFieldUpdateOperationsInput | string | null
     escalateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
@@ -85353,6 +86911,172 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyClean624RecordCreateInput = {
+    id?: string
+    facility?: string
+    month: string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: number
+    naCount?: number
+    notDoneCount?: number
+    notes?: string | null
+    instructionsVer?: string
+    autoSubmitted?: boolean
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    submittedBy?: UserCreateNestedOneWithoutMonthlyClean624SubmittedRecordsInput
+    createdBy?: UserCreateNestedOneWithoutMonthlyClean624CreatedRecordsInput
+  }
+
+  export type MonthlyClean624RecordUncheckedCreateInput = {
+    id?: string
+    facility?: string
+    month: string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: number
+    naCount?: number
+    notDoneCount?: number
+    notes?: string | null
+    instructionsVer?: string
+    autoSubmitted?: boolean
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MonthlyClean624RecordUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    month?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: IntFieldUpdateOperationsInput | number
+    naCount?: IntFieldUpdateOperationsInput | number
+    notDoneCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsVer?: StringFieldUpdateOperationsInput | string
+    autoSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedBy?: UserUpdateOneWithoutMonthlyClean624SubmittedRecordsNestedInput
+    createdBy?: UserUpdateOneWithoutMonthlyClean624CreatedRecordsNestedInput
+  }
+
+  export type MonthlyClean624RecordUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    month?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: IntFieldUpdateOperationsInput | number
+    naCount?: IntFieldUpdateOperationsInput | number
+    notDoneCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsVer?: StringFieldUpdateOperationsInput | string
+    autoSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyClean624RecordCreateManyInput = {
+    id?: string
+    facility?: string
+    month: string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: number
+    naCount?: number
+    notDoneCount?: number
+    notes?: string | null
+    instructionsVer?: string
+    autoSubmitted?: boolean
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MonthlyClean624RecordUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    month?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: IntFieldUpdateOperationsInput | number
+    naCount?: IntFieldUpdateOperationsInput | number
+    notDoneCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsVer?: StringFieldUpdateOperationsInput | string
+    autoSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyClean624RecordUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    month?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: IntFieldUpdateOperationsInput | number
+    naCount?: IntFieldUpdateOperationsInput | number
+    notDoneCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsVer?: StringFieldUpdateOperationsInput | string
+    autoSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationCreateInput = {
@@ -85683,6 +87407,12 @@ export namespace Prisma {
     none?: DailyClean624RecordWhereInput
   }
 
+  export type MonthlyClean624RecordListRelationFilter = {
+    every?: MonthlyClean624RecordWhereInput
+    some?: MonthlyClean624RecordWhereInput
+    none?: MonthlyClean624RecordWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -85813,6 +87543,10 @@ export namespace Prisma {
   }
 
   export type DailyClean624RecordOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MonthlyClean624RecordOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -89509,6 +91243,7 @@ export namespace Prisma {
     recurrenceUnit?: SortOrder
     recurrenceEvery?: SortOrder
     recurrenceStart?: SortOrder
+    recurrenceEndOfMonth?: SortOrder
     formKey?: SortOrder
     productName?: SortOrder
     escalateAfterDays?: SortOrder
@@ -89534,6 +91269,7 @@ export namespace Prisma {
     recurrenceUnit?: SortOrder
     recurrenceEvery?: SortOrder
     recurrenceStart?: SortOrder
+    recurrenceEndOfMonth?: SortOrder
     formKey?: SortOrder
     productName?: SortOrder
     escalateAfterDays?: SortOrder
@@ -89554,6 +91290,7 @@ export namespace Prisma {
     recurrenceUnit?: SortOrder
     recurrenceEvery?: SortOrder
     recurrenceStart?: SortOrder
+    recurrenceEndOfMonth?: SortOrder
     formKey?: SortOrder
     productName?: SortOrder
     escalateAfterDays?: SortOrder
@@ -89723,6 +91460,93 @@ export namespace Prisma {
     userId?: SortOrder
     note?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type MonthlyClean624RecordFacilityMonthCompoundUniqueInput = {
+    facility: string
+    month: string
+  }
+
+  export type MonthlyClean624RecordCountOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    month?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    lines?: SortOrder
+    doneCount?: SortOrder
+    naCount?: SortOrder
+    notDoneCount?: SortOrder
+    notes?: SortOrder
+    instructionsVer?: SortOrder
+    autoSubmitted?: SortOrder
+    lastEditedBy?: SortOrder
+    lastEditedAt?: SortOrder
+    createdById?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MonthlyClean624RecordAvgOrderByAggregateInput = {
+    doneCount?: SortOrder
+    naCount?: SortOrder
+    notDoneCount?: SortOrder
+  }
+
+  export type MonthlyClean624RecordMaxOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    month?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    doneCount?: SortOrder
+    naCount?: SortOrder
+    notDoneCount?: SortOrder
+    notes?: SortOrder
+    instructionsVer?: SortOrder
+    autoSubmitted?: SortOrder
+    lastEditedBy?: SortOrder
+    lastEditedAt?: SortOrder
+    createdById?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MonthlyClean624RecordMinOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    month?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    doneCount?: SortOrder
+    naCount?: SortOrder
+    notDoneCount?: SortOrder
+    notes?: SortOrder
+    instructionsVer?: SortOrder
+    autoSubmitted?: SortOrder
+    lastEditedBy?: SortOrder
+    lastEditedAt?: SortOrder
+    createdById?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MonthlyClean624RecordSumOrderByAggregateInput = {
+    doneCount?: SortOrder
+    naCount?: SortOrder
+    notDoneCount?: SortOrder
   }
 
   export type EnumNotificationTypeFilter<$PrismaModel = never> = {
@@ -90030,6 +91854,20 @@ export namespace Prisma {
     connect?: DailyClean624RecordWhereUniqueInput | DailyClean624RecordWhereUniqueInput[]
   }
 
+  export type MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput = {
+    create?: XOR<MonthlyClean624RecordCreateWithoutSubmittedByInput, MonthlyClean624RecordUncheckedCreateWithoutSubmittedByInput> | MonthlyClean624RecordCreateWithoutSubmittedByInput[] | MonthlyClean624RecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: MonthlyClean624RecordCreateOrConnectWithoutSubmittedByInput | MonthlyClean624RecordCreateOrConnectWithoutSubmittedByInput[]
+    createMany?: MonthlyClean624RecordCreateManySubmittedByInputEnvelope
+    connect?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+  }
+
+  export type MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<MonthlyClean624RecordCreateWithoutCreatedByInput, MonthlyClean624RecordUncheckedCreateWithoutCreatedByInput> | MonthlyClean624RecordCreateWithoutCreatedByInput[] | MonthlyClean624RecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: MonthlyClean624RecordCreateOrConnectWithoutCreatedByInput | MonthlyClean624RecordCreateOrConnectWithoutCreatedByInput[]
+    createMany?: MonthlyClean624RecordCreateManyCreatedByInputEnvelope
+    connect?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+  }
+
   export type FormUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -90280,6 +92118,20 @@ export namespace Prisma {
     connectOrCreate?: DailyClean624RecordCreateOrConnectWithoutSubmittedByInput | DailyClean624RecordCreateOrConnectWithoutSubmittedByInput[]
     createMany?: DailyClean624RecordCreateManySubmittedByInputEnvelope
     connect?: DailyClean624RecordWhereUniqueInput | DailyClean624RecordWhereUniqueInput[]
+  }
+
+  export type MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput = {
+    create?: XOR<MonthlyClean624RecordCreateWithoutSubmittedByInput, MonthlyClean624RecordUncheckedCreateWithoutSubmittedByInput> | MonthlyClean624RecordCreateWithoutSubmittedByInput[] | MonthlyClean624RecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: MonthlyClean624RecordCreateOrConnectWithoutSubmittedByInput | MonthlyClean624RecordCreateOrConnectWithoutSubmittedByInput[]
+    createMany?: MonthlyClean624RecordCreateManySubmittedByInputEnvelope
+    connect?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+  }
+
+  export type MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<MonthlyClean624RecordCreateWithoutCreatedByInput, MonthlyClean624RecordUncheckedCreateWithoutCreatedByInput> | MonthlyClean624RecordCreateWithoutCreatedByInput[] | MonthlyClean624RecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: MonthlyClean624RecordCreateOrConnectWithoutCreatedByInput | MonthlyClean624RecordCreateOrConnectWithoutCreatedByInput[]
+    createMany?: MonthlyClean624RecordCreateManyCreatedByInputEnvelope
+    connect?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -90806,6 +92658,34 @@ export namespace Prisma {
     deleteMany?: DailyClean624RecordScalarWhereInput | DailyClean624RecordScalarWhereInput[]
   }
 
+  export type MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput = {
+    create?: XOR<MonthlyClean624RecordCreateWithoutSubmittedByInput, MonthlyClean624RecordUncheckedCreateWithoutSubmittedByInput> | MonthlyClean624RecordCreateWithoutSubmittedByInput[] | MonthlyClean624RecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: MonthlyClean624RecordCreateOrConnectWithoutSubmittedByInput | MonthlyClean624RecordCreateOrConnectWithoutSubmittedByInput[]
+    upsert?: MonthlyClean624RecordUpsertWithWhereUniqueWithoutSubmittedByInput | MonthlyClean624RecordUpsertWithWhereUniqueWithoutSubmittedByInput[]
+    createMany?: MonthlyClean624RecordCreateManySubmittedByInputEnvelope
+    set?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    disconnect?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    delete?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    connect?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    update?: MonthlyClean624RecordUpdateWithWhereUniqueWithoutSubmittedByInput | MonthlyClean624RecordUpdateWithWhereUniqueWithoutSubmittedByInput[]
+    updateMany?: MonthlyClean624RecordUpdateManyWithWhereWithoutSubmittedByInput | MonthlyClean624RecordUpdateManyWithWhereWithoutSubmittedByInput[]
+    deleteMany?: MonthlyClean624RecordScalarWhereInput | MonthlyClean624RecordScalarWhereInput[]
+  }
+
+  export type MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<MonthlyClean624RecordCreateWithoutCreatedByInput, MonthlyClean624RecordUncheckedCreateWithoutCreatedByInput> | MonthlyClean624RecordCreateWithoutCreatedByInput[] | MonthlyClean624RecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: MonthlyClean624RecordCreateOrConnectWithoutCreatedByInput | MonthlyClean624RecordCreateOrConnectWithoutCreatedByInput[]
+    upsert?: MonthlyClean624RecordUpsertWithWhereUniqueWithoutCreatedByInput | MonthlyClean624RecordUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: MonthlyClean624RecordCreateManyCreatedByInputEnvelope
+    set?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    disconnect?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    delete?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    connect?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    update?: MonthlyClean624RecordUpdateWithWhereUniqueWithoutCreatedByInput | MonthlyClean624RecordUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: MonthlyClean624RecordUpdateManyWithWhereWithoutCreatedByInput | MonthlyClean624RecordUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: MonthlyClean624RecordScalarWhereInput | MonthlyClean624RecordScalarWhereInput[]
+  }
+
   export type FormUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -91308,6 +93188,34 @@ export namespace Prisma {
     update?: DailyClean624RecordUpdateWithWhereUniqueWithoutSubmittedByInput | DailyClean624RecordUpdateWithWhereUniqueWithoutSubmittedByInput[]
     updateMany?: DailyClean624RecordUpdateManyWithWhereWithoutSubmittedByInput | DailyClean624RecordUpdateManyWithWhereWithoutSubmittedByInput[]
     deleteMany?: DailyClean624RecordScalarWhereInput | DailyClean624RecordScalarWhereInput[]
+  }
+
+  export type MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput = {
+    create?: XOR<MonthlyClean624RecordCreateWithoutSubmittedByInput, MonthlyClean624RecordUncheckedCreateWithoutSubmittedByInput> | MonthlyClean624RecordCreateWithoutSubmittedByInput[] | MonthlyClean624RecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: MonthlyClean624RecordCreateOrConnectWithoutSubmittedByInput | MonthlyClean624RecordCreateOrConnectWithoutSubmittedByInput[]
+    upsert?: MonthlyClean624RecordUpsertWithWhereUniqueWithoutSubmittedByInput | MonthlyClean624RecordUpsertWithWhereUniqueWithoutSubmittedByInput[]
+    createMany?: MonthlyClean624RecordCreateManySubmittedByInputEnvelope
+    set?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    disconnect?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    delete?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    connect?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    update?: MonthlyClean624RecordUpdateWithWhereUniqueWithoutSubmittedByInput | MonthlyClean624RecordUpdateWithWhereUniqueWithoutSubmittedByInput[]
+    updateMany?: MonthlyClean624RecordUpdateManyWithWhereWithoutSubmittedByInput | MonthlyClean624RecordUpdateManyWithWhereWithoutSubmittedByInput[]
+    deleteMany?: MonthlyClean624RecordScalarWhereInput | MonthlyClean624RecordScalarWhereInput[]
+  }
+
+  export type MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<MonthlyClean624RecordCreateWithoutCreatedByInput, MonthlyClean624RecordUncheckedCreateWithoutCreatedByInput> | MonthlyClean624RecordCreateWithoutCreatedByInput[] | MonthlyClean624RecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: MonthlyClean624RecordCreateOrConnectWithoutCreatedByInput | MonthlyClean624RecordCreateOrConnectWithoutCreatedByInput[]
+    upsert?: MonthlyClean624RecordUpsertWithWhereUniqueWithoutCreatedByInput | MonthlyClean624RecordUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: MonthlyClean624RecordCreateManyCreatedByInputEnvelope
+    set?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    disconnect?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    delete?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    connect?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+    update?: MonthlyClean624RecordUpdateWithWhereUniqueWithoutCreatedByInput | MonthlyClean624RecordUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: MonthlyClean624RecordUpdateManyWithWhereWithoutCreatedByInput | MonthlyClean624RecordUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: MonthlyClean624RecordScalarWhereInput | MonthlyClean624RecordScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedFormsInput = {
@@ -95107,6 +97015,38 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTaskInstanceAuditLogsInput, UserUpdateWithoutTaskInstanceAuditLogsInput>, UserUncheckedUpdateWithoutTaskInstanceAuditLogsInput>
   }
 
+  export type UserCreateNestedOneWithoutMonthlyClean624SubmittedRecordsInput = {
+    create?: XOR<UserCreateWithoutMonthlyClean624SubmittedRecordsInput, UserUncheckedCreateWithoutMonthlyClean624SubmittedRecordsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMonthlyClean624SubmittedRecordsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutMonthlyClean624CreatedRecordsInput = {
+    create?: XOR<UserCreateWithoutMonthlyClean624CreatedRecordsInput, UserUncheckedCreateWithoutMonthlyClean624CreatedRecordsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMonthlyClean624CreatedRecordsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutMonthlyClean624SubmittedRecordsNestedInput = {
+    create?: XOR<UserCreateWithoutMonthlyClean624SubmittedRecordsInput, UserUncheckedCreateWithoutMonthlyClean624SubmittedRecordsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMonthlyClean624SubmittedRecordsInput
+    upsert?: UserUpsertWithoutMonthlyClean624SubmittedRecordsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMonthlyClean624SubmittedRecordsInput, UserUpdateWithoutMonthlyClean624SubmittedRecordsInput>, UserUncheckedUpdateWithoutMonthlyClean624SubmittedRecordsInput>
+  }
+
+  export type UserUpdateOneWithoutMonthlyClean624CreatedRecordsNestedInput = {
+    create?: XOR<UserCreateWithoutMonthlyClean624CreatedRecordsInput, UserUncheckedCreateWithoutMonthlyClean624CreatedRecordsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMonthlyClean624CreatedRecordsInput
+    upsert?: UserUpsertWithoutMonthlyClean624CreatedRecordsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMonthlyClean624CreatedRecordsInput, UserUpdateWithoutMonthlyClean624CreatedRecordsInput>, UserUncheckedUpdateWithoutMonthlyClean624CreatedRecordsInput>
+  }
+
   export type UserCreateNestedOneWithoutNotificationsInput = {
     create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
@@ -96896,6 +98836,7 @@ export namespace Prisma {
     recurrenceUnit?: string | null
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
+    recurrenceEndOfMonth?: boolean | null
     formKey?: string | null
     productName?: string | null
     escalateAfterDays?: number | null
@@ -96917,6 +98858,7 @@ export namespace Prisma {
     recurrenceUnit?: string | null
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
+    recurrenceEndOfMonth?: boolean | null
     formKey?: string | null
     productName?: string | null
     escalateAfterDays?: number | null
@@ -97319,6 +99261,118 @@ export namespace Prisma {
 
   export type DailyClean624RecordCreateManySubmittedByInputEnvelope = {
     data: DailyClean624RecordCreateManySubmittedByInput | DailyClean624RecordCreateManySubmittedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MonthlyClean624RecordCreateWithoutSubmittedByInput = {
+    id?: string
+    facility?: string
+    month: string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: number
+    naCount?: number
+    notDoneCount?: number
+    notes?: string | null
+    instructionsVer?: string
+    autoSubmitted?: boolean
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: UserCreateNestedOneWithoutMonthlyClean624CreatedRecordsInput
+  }
+
+  export type MonthlyClean624RecordUncheckedCreateWithoutSubmittedByInput = {
+    id?: string
+    facility?: string
+    month: string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: number
+    naCount?: number
+    notDoneCount?: number
+    notes?: string | null
+    instructionsVer?: string
+    autoSubmitted?: boolean
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MonthlyClean624RecordCreateOrConnectWithoutSubmittedByInput = {
+    where: MonthlyClean624RecordWhereUniqueInput
+    create: XOR<MonthlyClean624RecordCreateWithoutSubmittedByInput, MonthlyClean624RecordUncheckedCreateWithoutSubmittedByInput>
+  }
+
+  export type MonthlyClean624RecordCreateManySubmittedByInputEnvelope = {
+    data: MonthlyClean624RecordCreateManySubmittedByInput | MonthlyClean624RecordCreateManySubmittedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MonthlyClean624RecordCreateWithoutCreatedByInput = {
+    id?: string
+    facility?: string
+    month: string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: number
+    naCount?: number
+    notDoneCount?: number
+    notes?: string | null
+    instructionsVer?: string
+    autoSubmitted?: boolean
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    submittedBy?: UserCreateNestedOneWithoutMonthlyClean624SubmittedRecordsInput
+  }
+
+  export type MonthlyClean624RecordUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    facility?: string
+    month: string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: number
+    naCount?: number
+    notDoneCount?: number
+    notes?: string | null
+    instructionsVer?: string
+    autoSubmitted?: boolean
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MonthlyClean624RecordCreateOrConnectWithoutCreatedByInput = {
+    where: MonthlyClean624RecordWhereUniqueInput
+    create: XOR<MonthlyClean624RecordCreateWithoutCreatedByInput, MonthlyClean624RecordUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type MonthlyClean624RecordCreateManyCreatedByInputEnvelope = {
+    data: MonthlyClean624RecordCreateManyCreatedByInput | MonthlyClean624RecordCreateManyCreatedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -98322,6 +100376,7 @@ export namespace Prisma {
     recurrenceUnit?: StringNullableFilter<"TaskRule"> | string | null
     recurrenceEvery?: IntNullableFilter<"TaskRule"> | number | null
     recurrenceStart?: DateTimeFilter<"TaskRule"> | Date | string
+    recurrenceEndOfMonth?: BoolNullableFilter<"TaskRule"> | boolean | null
     formKey?: StringNullableFilter<"TaskRule"> | string | null
     productName?: StringNullableFilter<"TaskRule"> | string | null
     escalateAfterDays?: IntNullableFilter<"TaskRule"> | number | null
@@ -98553,6 +100608,65 @@ export namespace Prisma {
     linkedInstanceId?: StringNullableFilter<"DailyClean624Record"> | string | null
   }
 
+  export type MonthlyClean624RecordUpsertWithWhereUniqueWithoutSubmittedByInput = {
+    where: MonthlyClean624RecordWhereUniqueInput
+    update: XOR<MonthlyClean624RecordUpdateWithoutSubmittedByInput, MonthlyClean624RecordUncheckedUpdateWithoutSubmittedByInput>
+    create: XOR<MonthlyClean624RecordCreateWithoutSubmittedByInput, MonthlyClean624RecordUncheckedCreateWithoutSubmittedByInput>
+  }
+
+  export type MonthlyClean624RecordUpdateWithWhereUniqueWithoutSubmittedByInput = {
+    where: MonthlyClean624RecordWhereUniqueInput
+    data: XOR<MonthlyClean624RecordUpdateWithoutSubmittedByInput, MonthlyClean624RecordUncheckedUpdateWithoutSubmittedByInput>
+  }
+
+  export type MonthlyClean624RecordUpdateManyWithWhereWithoutSubmittedByInput = {
+    where: MonthlyClean624RecordScalarWhereInput
+    data: XOR<MonthlyClean624RecordUpdateManyMutationInput, MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByInput>
+  }
+
+  export type MonthlyClean624RecordScalarWhereInput = {
+    AND?: MonthlyClean624RecordScalarWhereInput | MonthlyClean624RecordScalarWhereInput[]
+    OR?: MonthlyClean624RecordScalarWhereInput[]
+    NOT?: MonthlyClean624RecordScalarWhereInput | MonthlyClean624RecordScalarWhereInput[]
+    id?: StringFilter<"MonthlyClean624Record"> | string
+    facility?: StringFilter<"MonthlyClean624Record"> | string
+    month?: StringFilter<"MonthlyClean624Record"> | string
+    status?: StringFilter<"MonthlyClean624Record"> | string
+    conductedBy?: StringFilter<"MonthlyClean624Record"> | string
+    initials?: StringFilter<"MonthlyClean624Record"> | string
+    lines?: JsonFilter<"MonthlyClean624Record">
+    doneCount?: IntFilter<"MonthlyClean624Record"> | number
+    naCount?: IntFilter<"MonthlyClean624Record"> | number
+    notDoneCount?: IntFilter<"MonthlyClean624Record"> | number
+    notes?: StringNullableFilter<"MonthlyClean624Record"> | string | null
+    instructionsVer?: StringFilter<"MonthlyClean624Record"> | string
+    autoSubmitted?: BoolFilter<"MonthlyClean624Record"> | boolean
+    lastEditedBy?: StringNullableFilter<"MonthlyClean624Record"> | string | null
+    lastEditedAt?: DateTimeNullableFilter<"MonthlyClean624Record"> | Date | string | null
+    createdById?: StringNullableFilter<"MonthlyClean624Record"> | string | null
+    submittedAt?: DateTimeNullableFilter<"MonthlyClean624Record"> | Date | string | null
+    submittedById?: StringNullableFilter<"MonthlyClean624Record"> | string | null
+    linkedInstanceId?: StringNullableFilter<"MonthlyClean624Record"> | string | null
+    createdAt?: DateTimeFilter<"MonthlyClean624Record"> | Date | string
+    updatedAt?: DateTimeFilter<"MonthlyClean624Record"> | Date | string
+  }
+
+  export type MonthlyClean624RecordUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: MonthlyClean624RecordWhereUniqueInput
+    update: XOR<MonthlyClean624RecordUpdateWithoutCreatedByInput, MonthlyClean624RecordUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<MonthlyClean624RecordCreateWithoutCreatedByInput, MonthlyClean624RecordUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type MonthlyClean624RecordUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: MonthlyClean624RecordWhereUniqueInput
+    data: XOR<MonthlyClean624RecordUpdateWithoutCreatedByInput, MonthlyClean624RecordUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type MonthlyClean624RecordUpdateManyWithWhereWithoutCreatedByInput = {
+    where: MonthlyClean624RecordScalarWhereInput
+    data: XOR<MonthlyClean624RecordUpdateManyMutationInput, MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
   export type UserCreateWithoutCreatedFormsInput = {
     id?: string
     name: string
@@ -98598,6 +100712,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFormsInput = {
@@ -98645,6 +100761,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFormsInput = {
@@ -98740,6 +100858,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFormsInput = {
@@ -98787,6 +100907,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutFormInput = {
@@ -98881,6 +101003,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -98928,6 +101052,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -98980,6 +101106,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSubmissionsInput = {
@@ -99027,6 +101155,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSubmissionsInput = {
@@ -99127,6 +101257,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -99174,6 +101306,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutApprovedSubmissionsInput = {
@@ -99232,6 +101366,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSubmissionsInput = {
@@ -99279,6 +101415,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutRecordsInput = {
@@ -99326,6 +101464,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutRecordsInput = {
@@ -99373,6 +101513,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutRecordsInput = {
@@ -99436,6 +101578,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecordsInput = {
@@ -99483,6 +101627,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutPreOpInspectionsInput = {
@@ -99530,6 +101676,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOpInspectionsInput = {
@@ -99577,6 +101725,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOpInspectionsInput = {
@@ -99640,6 +101790,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOpInspectionsInput = {
@@ -99687,6 +101839,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutPreOp624InspectionsInput = {
@@ -99734,6 +101888,8 @@ export namespace Prisma {
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOp624InspectionsInput = {
@@ -99781,6 +101937,8 @@ export namespace Prisma {
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOp624InspectionsInput = {
@@ -99844,6 +102002,8 @@ export namespace Prisma {
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOp624InspectionsInput = {
@@ -99891,6 +102051,8 @@ export namespace Prisma {
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutDailyClean624RecordsInput = {
@@ -99938,6 +102100,8 @@ export namespace Prisma {
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyClean624RecordsInput = {
@@ -99985,6 +102149,8 @@ export namespace Prisma {
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyClean624RecordsInput = {
@@ -100048,6 +102214,8 @@ export namespace Prisma {
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyClean624RecordsInput = {
@@ -100095,6 +102263,8 @@ export namespace Prisma {
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutCreatedBatchTemplatesInput = {
@@ -100142,6 +102312,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBatchTemplatesInput = {
@@ -100189,6 +102361,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
@@ -100375,6 +102549,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBatchTemplatesInput = {
@@ -100422,6 +102598,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type ProductUpsertWithoutTemplatesInput = {
@@ -100609,6 +102787,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchSheetSubmissionsInput = {
@@ -100656,6 +102836,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
@@ -100869,6 +103051,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchSheetSubmissionsInput = {
@@ -100916,6 +103100,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type ProductUpsertWithoutSubmissionsInput = {
@@ -101036,6 +103222,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyCleaningChecklistsInput = {
@@ -101083,6 +103271,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyCleaningChecklistsInput = {
@@ -101146,6 +103336,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyCleaningChecklistsInput = {
@@ -101193,6 +103385,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -101240,6 +103434,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -101287,6 +103483,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput = {
@@ -101350,6 +103548,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput = {
@@ -101397,6 +103597,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type ProductCreateWithoutWipMaterialsInput = {
@@ -103401,6 +105603,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutFormTemplatesInput = {
@@ -103448,6 +105652,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutFormTemplatesInput = {
@@ -103556,6 +105762,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFormTemplatesInput = {
@@ -103603,6 +105811,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type SupplierCreateWithoutDocumentsInput = {
@@ -104750,6 +106960,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductsInput = {
@@ -104797,6 +107009,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductsInput = {
@@ -105114,6 +107328,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductsInput = {
@@ -105161,6 +107377,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput = {
@@ -105353,6 +107571,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutPurchaseOrdersInput = {
@@ -105400,6 +107620,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutPurchaseOrdersInput = {
@@ -105638,6 +107860,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPurchaseOrdersInput = {
@@ -105685,6 +107909,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type PurchaseOrderItemUpsertWithWhereUniqueWithoutPoInput = {
@@ -106012,6 +108238,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutReceivingRecordsInput = {
@@ -106059,6 +108287,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutReceivingRecordsInput = {
@@ -106465,6 +108695,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -106512,6 +108744,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type MaterialUpsertWithoutReceivingRecordsInput = {
@@ -106961,6 +109195,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutResolvedQuarantineRecordsInput = {
@@ -107008,6 +109244,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutResolvedQuarantineRecordsInput = {
@@ -107148,6 +109386,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput = {
@@ -107195,6 +109435,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type MaterialCreateWithoutInventoryLotsInput = {
@@ -107992,6 +110234,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutInventoryMovementsInput = {
@@ -108039,6 +110283,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutInventoryMovementsInput = {
@@ -108238,6 +110484,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -108285,6 +110533,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type MaterialCreateWithoutCycleCountsInput = {
@@ -108456,6 +110706,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCycleCountsInput = {
@@ -108503,6 +110755,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCycleCountsInput = {
@@ -108702,6 +110956,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCycleCountsInput = {
@@ -108749,6 +111005,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type MaterialCreateWithoutInitialStockEntriesInput = {
@@ -108975,6 +111233,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutInitialStockEntriesInput = {
@@ -109022,6 +111282,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutInitialStockEntriesInput = {
@@ -109282,6 +111544,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInitialStockEntriesInput = {
@@ -109329,6 +111593,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type MaterialCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -109447,6 +111713,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -109494,6 +111762,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutStockAlertAcknowledgmentsInput = {
@@ -109634,6 +111904,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStockAlertAcknowledgmentsInput = {
@@ -109681,6 +111953,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutForecastExclusionsInput = {
@@ -109728,6 +112002,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutForecastExclusionsInput = {
@@ -109775,6 +112051,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutForecastExclusionsInput = {
@@ -109889,6 +112167,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForecastExclusionsInput = {
@@ -109936,6 +112216,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type ProductUpsertWithoutForecastExclusionsInput = {
@@ -110178,6 +112460,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAuditExclusionsInput = {
@@ -110225,6 +112509,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAuditExclusionsInput = {
@@ -110438,6 +112724,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditExclusionsInput = {
@@ -110485,6 +112773,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type ShipstationBundleComponentCreateWithoutBundleProductInput = {
@@ -111289,6 +113579,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutRdIngredientsInput = {
@@ -111336,6 +113628,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutRdIngredientsInput = {
@@ -111399,6 +113693,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdIngredientsInput = {
@@ -111446,6 +113742,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutRdProjectsInput = {
@@ -111493,6 +113791,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutRdProjectsInput = {
@@ -111540,6 +113840,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutRdProjectsInput = {
@@ -111675,6 +113977,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdProjectsInput = {
@@ -111722,6 +114026,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type RdIterationUpsertWithWhereUniqueWithoutProjectInput = {
@@ -112299,6 +114605,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutRdAttachmentsInput = {
@@ -112346,6 +114654,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutRdAttachmentsInput = {
@@ -112482,6 +114792,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdAttachmentsInput = {
@@ -112529,6 +114841,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutRdNutritionProfilesInput = {
@@ -112576,6 +114890,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutRdNutritionProfilesInput = {
@@ -112623,6 +114939,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutRdNutritionProfilesInput = {
@@ -112686,6 +115004,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdNutritionProfilesInput = {
@@ -112733,6 +115053,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type MaterialCreateWithoutAuditAcknowledgmentsInput = {
@@ -112851,6 +115173,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAuditAcknowledgmentsInput = {
@@ -112898,6 +115222,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAuditAcknowledgmentsInput = {
@@ -113038,6 +115364,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditAcknowledgmentsInput = {
@@ -113085,6 +115413,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type SopCertificationScopeCreateWithoutCertificationInput = {
@@ -113174,6 +115504,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutSopDocumentsInput = {
@@ -113221,6 +115553,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutSopDocumentsInput = {
@@ -113378,6 +115712,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSopDocumentsInput = {
@@ -113425,6 +115761,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type SopCertificationScopeUpsertWithWhereUniqueWithoutSopInput = {
@@ -113901,6 +116239,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutSopReviewLogsInput = {
@@ -113948,6 +116288,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutSopReviewLogsInput = {
@@ -114060,6 +116402,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSopReviewLogsInput = {
@@ -114107,6 +116451,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type SopDocumentCreateWithoutRemindersInput = {
@@ -114209,6 +116555,7 @@ export namespace Prisma {
     recurrenceUnit?: string | null
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
+    recurrenceEndOfMonth?: boolean | null
     formKey?: string | null
     productName?: string | null
     escalateAfterDays?: number | null
@@ -114230,6 +116577,7 @@ export namespace Prisma {
     recurrenceUnit?: string | null
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
+    recurrenceEndOfMonth?: boolean | null
     formKey?: string | null
     productName?: string | null
     escalateAfterDays?: number | null
@@ -114335,6 +116683,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutOwnedTaskRulesInput = {
@@ -114382,6 +116732,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutOwnedTaskRulesInput = {
@@ -114536,6 +116888,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedTaskRulesInput = {
@@ -114583,6 +116937,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type RuleInstanceUpsertWithWhereUniqueWithoutRuleInput = {
@@ -114609,6 +116965,7 @@ export namespace Prisma {
     recurrenceUnit?: string | null
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
+    recurrenceEndOfMonth?: boolean | null
     formKey?: string | null
     productName?: string | null
     escalateAfterDays?: number | null
@@ -114631,6 +116988,7 @@ export namespace Prisma {
     recurrenceUnit?: string | null
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
+    recurrenceEndOfMonth?: boolean | null
     formKey?: string | null
     productName?: string | null
     escalateAfterDays?: number | null
@@ -114691,6 +117049,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDoneRuleInstancesInput = {
@@ -114738,6 +117098,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDoneRuleInstancesInput = {
@@ -114790,6 +117152,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutSkippedRuleInstancesInput = {
@@ -114837,6 +117201,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutSkippedRuleInstancesInput = {
@@ -114889,6 +117255,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedRuleInstancesInput = {
@@ -114936,6 +117304,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedRuleInstancesInput = {
@@ -114988,6 +117358,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutMarkedMissedRuleInstancesInput = {
@@ -115035,6 +117407,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutMarkedMissedRuleInstancesInput = {
@@ -115087,6 +117461,7 @@ export namespace Prisma {
     recurrenceUnit?: NullableStringFieldUpdateOperationsInput | string | null
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrenceEndOfMonth?: NullableBoolFieldUpdateOperationsInput | boolean | null
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
     productName?: NullableStringFieldUpdateOperationsInput | string | null
     escalateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
@@ -115109,6 +117484,7 @@ export namespace Prisma {
     recurrenceUnit?: NullableStringFieldUpdateOperationsInput | string | null
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrenceEndOfMonth?: NullableBoolFieldUpdateOperationsInput | boolean | null
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
     productName?: NullableStringFieldUpdateOperationsInput | string | null
     escalateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
@@ -115175,6 +117551,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDoneRuleInstancesInput = {
@@ -115222,6 +117600,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutSkippedRuleInstancesInput = {
@@ -115280,6 +117660,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSkippedRuleInstancesInput = {
@@ -115327,6 +117709,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutAssignedRuleInstancesInput = {
@@ -115385,6 +117769,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedRuleInstancesInput = {
@@ -115432,6 +117818,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutMarkedMissedRuleInstancesInput = {
@@ -115490,6 +117878,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMarkedMissedRuleInstancesInput = {
@@ -115537,6 +117927,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type TaskInstanceAuditUpsertWithWhereUniqueWithoutInstanceInput = {
@@ -115657,6 +118049,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutTaskInstanceAuditLogsInput = {
@@ -115704,6 +118098,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutTaskInstanceAuditLogsInput = {
@@ -115830,6 +118226,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskInstanceAuditLogsInput = {
@@ -115877,6 +118275,432 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserCreateWithoutMonthlyClean624SubmittedRecordsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutMonthlyClean624SubmittedRecordsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutMonthlyClean624SubmittedRecordsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutMonthlyClean624SubmittedRecordsInput, UserUncheckedCreateWithoutMonthlyClean624SubmittedRecordsInput>
+  }
+
+  export type UserCreateWithoutMonthlyClean624CreatedRecordsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutMonthlyClean624CreatedRecordsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutMonthlyClean624CreatedRecordsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutMonthlyClean624CreatedRecordsInput, UserUncheckedCreateWithoutMonthlyClean624CreatedRecordsInput>
+  }
+
+  export type UserUpsertWithoutMonthlyClean624SubmittedRecordsInput = {
+    update: XOR<UserUpdateWithoutMonthlyClean624SubmittedRecordsInput, UserUncheckedUpdateWithoutMonthlyClean624SubmittedRecordsInput>
+    create: XOR<UserCreateWithoutMonthlyClean624SubmittedRecordsInput, UserUncheckedCreateWithoutMonthlyClean624SubmittedRecordsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutMonthlyClean624SubmittedRecordsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutMonthlyClean624SubmittedRecordsInput, UserUncheckedUpdateWithoutMonthlyClean624SubmittedRecordsInput>
+  }
+
+  export type UserUpdateWithoutMonthlyClean624SubmittedRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutMonthlyClean624SubmittedRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUpsertWithoutMonthlyClean624CreatedRecordsInput = {
+    update: XOR<UserUpdateWithoutMonthlyClean624CreatedRecordsInput, UserUncheckedUpdateWithoutMonthlyClean624CreatedRecordsInput>
+    create: XOR<UserCreateWithoutMonthlyClean624CreatedRecordsInput, UserUncheckedCreateWithoutMonthlyClean624CreatedRecordsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutMonthlyClean624CreatedRecordsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutMonthlyClean624CreatedRecordsInput, UserUncheckedUpdateWithoutMonthlyClean624CreatedRecordsInput>
+  }
+
+  export type UserUpdateWithoutMonthlyClean624CreatedRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutMonthlyClean624CreatedRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -115924,6 +118748,8 @@ export namespace Prisma {
     taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -115971,6 +118797,8 @@ export namespace Prisma {
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -116034,6 +118862,8 @@ export namespace Prisma {
     taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -116081,6 +118911,8 @@ export namespace Prisma {
     taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type FormCreateManyCreatedByInput = {
@@ -116538,6 +119370,7 @@ export namespace Prisma {
     recurrenceUnit?: string | null
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
+    recurrenceEndOfMonth?: boolean | null
     formKey?: string | null
     productName?: string | null
     escalateAfterDays?: number | null
@@ -116694,6 +119527,52 @@ export namespace Prisma {
     instructionsVer?: string
     submittedAt?: Date | string
     linkedInstanceId?: string | null
+  }
+
+  export type MonthlyClean624RecordCreateManySubmittedByInput = {
+    id?: string
+    facility?: string
+    month: string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: number
+    naCount?: number
+    notDoneCount?: number
+    notes?: string | null
+    instructionsVer?: string
+    autoSubmitted?: boolean
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MonthlyClean624RecordCreateManyCreatedByInput = {
+    id?: string
+    facility?: string
+    month: string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: number
+    naCount?: number
+    notDoneCount?: number
+    notes?: string | null
+    instructionsVer?: string
+    autoSubmitted?: boolean
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type FormUpdateWithoutCreatedByInput = {
@@ -118078,6 +120957,7 @@ export namespace Prisma {
     recurrenceUnit?: NullableStringFieldUpdateOperationsInput | string | null
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrenceEndOfMonth?: NullableBoolFieldUpdateOperationsInput | boolean | null
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
     productName?: NullableStringFieldUpdateOperationsInput | string | null
     escalateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
@@ -118099,6 +120979,7 @@ export namespace Prisma {
     recurrenceUnit?: NullableStringFieldUpdateOperationsInput | string | null
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrenceEndOfMonth?: NullableBoolFieldUpdateOperationsInput | boolean | null
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
     productName?: NullableStringFieldUpdateOperationsInput | string | null
     escalateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
@@ -118119,6 +121000,7 @@ export namespace Prisma {
     recurrenceUnit?: NullableStringFieldUpdateOperationsInput | string | null
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrenceEndOfMonth?: NullableBoolFieldUpdateOperationsInput | boolean | null
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
     productName?: NullableStringFieldUpdateOperationsInput | string | null
     escalateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
@@ -118579,6 +121461,144 @@ export namespace Prisma {
     instructionsVer?: StringFieldUpdateOperationsInput | string
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type MonthlyClean624RecordUpdateWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    month?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: IntFieldUpdateOperationsInput | number
+    naCount?: IntFieldUpdateOperationsInput | number
+    notDoneCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsVer?: StringFieldUpdateOperationsInput | string
+    autoSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneWithoutMonthlyClean624CreatedRecordsNestedInput
+  }
+
+  export type MonthlyClean624RecordUncheckedUpdateWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    month?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: IntFieldUpdateOperationsInput | number
+    naCount?: IntFieldUpdateOperationsInput | number
+    notDoneCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsVer?: StringFieldUpdateOperationsInput | string
+    autoSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    month?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: IntFieldUpdateOperationsInput | number
+    naCount?: IntFieldUpdateOperationsInput | number
+    notDoneCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsVer?: StringFieldUpdateOperationsInput | string
+    autoSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyClean624RecordUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    month?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: IntFieldUpdateOperationsInput | number
+    naCount?: IntFieldUpdateOperationsInput | number
+    notDoneCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsVer?: StringFieldUpdateOperationsInput | string
+    autoSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedBy?: UserUpdateOneWithoutMonthlyClean624SubmittedRecordsNestedInput
+  }
+
+  export type MonthlyClean624RecordUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    month?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: IntFieldUpdateOperationsInput | number
+    naCount?: IntFieldUpdateOperationsInput | number
+    notDoneCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsVer?: StringFieldUpdateOperationsInput | string
+    autoSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    month?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    lines?: JsonNullValueInput | InputJsonValue
+    doneCount?: IntFieldUpdateOperationsInput | number
+    naCount?: IntFieldUpdateOperationsInput | number
+    notDoneCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    instructionsVer?: StringFieldUpdateOperationsInput | string
+    autoSubmitted?: BoolFieldUpdateOperationsInput | boolean
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FormSubmissionCreateManyFormInput = {
@@ -121616,6 +124636,7 @@ export namespace Prisma {
     recurrenceUnit?: string | null
     recurrenceEvery?: number | null
     recurrenceStart: Date | string
+    recurrenceEndOfMonth?: boolean | null
     formKey?: string | null
     productName?: string | null
     escalateAfterDays?: number | null
@@ -121634,6 +124655,7 @@ export namespace Prisma {
     recurrenceUnit?: NullableStringFieldUpdateOperationsInput | string | null
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrenceEndOfMonth?: NullableBoolFieldUpdateOperationsInput | boolean | null
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
     productName?: NullableStringFieldUpdateOperationsInput | string | null
     escalateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
@@ -121655,6 +124677,7 @@ export namespace Prisma {
     recurrenceUnit?: NullableStringFieldUpdateOperationsInput | string | null
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrenceEndOfMonth?: NullableBoolFieldUpdateOperationsInput | boolean | null
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
     productName?: NullableStringFieldUpdateOperationsInput | string | null
     escalateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
@@ -121675,6 +124698,7 @@ export namespace Prisma {
     recurrenceUnit?: NullableStringFieldUpdateOperationsInput | string | null
     recurrenceEvery?: NullableIntFieldUpdateOperationsInput | number | null
     recurrenceStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    recurrenceEndOfMonth?: NullableBoolFieldUpdateOperationsInput | boolean | null
     formKey?: NullableStringFieldUpdateOperationsInput | string | null
     productName?: NullableStringFieldUpdateOperationsInput | string | null
     escalateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
@@ -122140,6 +125164,10 @@ export namespace Prisma {
      * @deprecated Use TaskInstanceAuditDefaultArgs instead
      */
     export type TaskInstanceAuditArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TaskInstanceAuditDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MonthlyClean624RecordDefaultArgs instead
+     */
+    export type MonthlyClean624RecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MonthlyClean624RecordDefaultArgs<ExtArgs>
     /**
      * @deprecated Use NotificationDefaultArgs instead
      */
