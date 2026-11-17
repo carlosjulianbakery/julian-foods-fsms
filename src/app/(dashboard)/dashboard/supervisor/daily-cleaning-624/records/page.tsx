@@ -51,6 +51,11 @@ function buildPdfHtml(r: DailyClean624Record): string {
   </body></html>`;
 }
 
+function formatMDY(isoDateStr: string): string {
+  const [y, m, d] = isoDateStr.split("-");
+  return `${m}/${d}/${y}`;
+}
+
 // Get Monday of the week containing anyDateInWeek (ISO date string)
 function getWeekMon(anyDateInWeek: string): Date {
   const d = new Date(anyDateInWeek + "T12:00:00Z");
@@ -83,7 +88,7 @@ function buildWeekPdfHtml(weekRecords: DailyClean624Record[], mon: string): stri
 
   if (!hasAnyRecord) {
     return `<!DOCTYPE html><html><head><meta charset="utf-8"/></head><body style="font-family:Arial,sans-serif;padding:32px">
-      <h1 style="font-size:18px">Daily Cleaning \u2014 624 | Week of ${mon} to ${fri}</h1>
+      <h1 style="font-size:18px">Daily Cleaning &#8212; 624 | Week of ${formatMDY(mon)} &#8211; ${formatMDY(fri)}</h1>
       <p style="font-size:13px;color:#6b7280">No records found for this week.</p>
     </body></html>`;
   }
@@ -135,7 +140,7 @@ function buildWeekPdfHtml(weekRecords: DailyClean624Record[], mon: string): stri
     th { text-align: left; padding: 6px 8px; font-size: 11px; color: #6b7280; text-transform: uppercase; border-bottom: 2px solid #e5e7eb; }
   </style></head><body>
   <h1>Daily Cleaning and Sanitation \u2014 624 Facility</h1>
-  <p class="sub">Week: ${mon} to ${fri} &nbsp;|&nbsp; ${weekRecords.length} record(s)</p>
+  <p class="sub">Week of ${formatMDY(mon)} &#8211; ${formatMDY(fri)} &nbsp;|&nbsp; ${weekRecords.length} record(s)</p>
   <table>
     <thead>
       <tr>
@@ -254,7 +259,7 @@ export default function DailyCleaning624RecordsPage() {
           >
             <ChevronLeft className="w-3 h-3" /> New record
           </button>
-          <h1 className="page-title">Daily Cleaning Records \u2014 624</h1>
+          <h1 className="page-title">Daily Cleaning Records &#8212; 624</h1>
           <p className="page-subtitle">Last 30 days by default. ADMIN only can delete.</p>
         </div>
       </div>
@@ -284,7 +289,7 @@ export default function DailyCleaning624RecordsPage() {
       {/* Week PDF download */}
       <div className="card p-4 flex flex-wrap gap-4 items-end bg-indigo-50 dark:bg-indigo-900/10 border-indigo-100 dark:border-indigo-800">
         <div>
-          <label className="block text-xs font-medium text-gray-500 mb-1">Download week PDF (Mon\u2013Fri)</label>
+          <label className="block text-xs font-medium text-gray-500 mb-1">Download week PDF</label>
           <input type="date" value={weekDate} onChange={(e) => setWeekDate(e.target.value)} className="input text-sm" />
         </div>
         <button
@@ -298,7 +303,7 @@ export default function DailyCleaning624RecordsPage() {
       </div>
 
       {loading ? (
-        <div className="card p-8 text-center text-gray-400 text-sm">Loading\u2026</div>
+        <div className="card p-8 text-center text-gray-400 text-sm">Loading&#8230;</div>
       ) : (
         <CleaningRecordsList624
           records={records}
@@ -315,7 +320,7 @@ export default function DailyCleaning624RecordsPage() {
         <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 overflow-y-auto">
           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-2xl my-8 space-y-4 p-6">
             <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-lg">Daily Cleaning \u2014 {viewTarget.date}</h2>
+              <h2 className="font-semibold text-lg">Daily Cleaning &#8212; {viewTarget.date}</h2>
               <button onClick={() => setViewTarget(null)} className="text-gray-400 hover:text-gray-700">
                 <X className="w-5 h-5" />
               </button>
