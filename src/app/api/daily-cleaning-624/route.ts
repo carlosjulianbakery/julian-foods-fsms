@@ -34,6 +34,7 @@ export async function GET(req: NextRequest) {
         id: true,
         date: true,
         time: true,
+        facility: true,
         conductedBy: true,
         rows: true,
         doneCount: true,
@@ -108,6 +109,7 @@ export async function POST(req: NextRequest) {
       data: {
         date:            new Date(body.date),
         time:            body.time,
+        facility:        "624",
         conductedBy:     body.conductedBy.toUpperCase(),
         rows:            body.rows as never,
         doneCount,

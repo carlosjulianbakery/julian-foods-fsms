@@ -178,6 +178,7 @@ model DailyClean624Record {
   id              String   @id @default(cuid())
   date            DateTime @db.Date
   time            String   // "HH:MM" 24h
+  facility        String   @default("624") // always "624" for this table
   conductedBy     String   // initials
   rows            Json     // CleaningRowSnapshot[]
   doneCount       Int      @default(0)

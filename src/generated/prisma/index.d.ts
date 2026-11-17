@@ -14133,6 +14133,7 @@ export namespace Prisma {
     id: string | null
     date: Date | null
     time: string | null
+    facility: string | null
     conductedBy: string | null
     doneCount: number | null
     naCount: number | null
@@ -14149,6 +14150,7 @@ export namespace Prisma {
     id: string | null
     date: Date | null
     time: string | null
+    facility: string | null
     conductedBy: string | null
     doneCount: number | null
     naCount: number | null
@@ -14165,6 +14167,7 @@ export namespace Prisma {
     id: number
     date: number
     time: number
+    facility: number
     conductedBy: number
     rows: number
     doneCount: number
@@ -14196,6 +14199,7 @@ export namespace Prisma {
     id?: true
     date?: true
     time?: true
+    facility?: true
     conductedBy?: true
     doneCount?: true
     naCount?: true
@@ -14212,6 +14216,7 @@ export namespace Prisma {
     id?: true
     date?: true
     time?: true
+    facility?: true
     conductedBy?: true
     doneCount?: true
     naCount?: true
@@ -14228,6 +14233,7 @@ export namespace Prisma {
     id?: true
     date?: true
     time?: true
+    facility?: true
     conductedBy?: true
     rows?: true
     doneCount?: true
@@ -14332,6 +14338,7 @@ export namespace Prisma {
     id: string
     date: Date
     time: string
+    facility: string
     conductedBy: string
     rows: JsonValue
     doneCount: number
@@ -14368,6 +14375,7 @@ export namespace Prisma {
     id?: boolean
     date?: boolean
     time?: boolean
+    facility?: boolean
     conductedBy?: boolean
     rows?: boolean
     doneCount?: boolean
@@ -14386,6 +14394,7 @@ export namespace Prisma {
     id?: boolean
     date?: boolean
     time?: boolean
+    facility?: boolean
     conductedBy?: boolean
     rows?: boolean
     doneCount?: boolean
@@ -14404,6 +14413,7 @@ export namespace Prisma {
     id?: boolean
     date?: boolean
     time?: boolean
+    facility?: boolean
     conductedBy?: boolean
     rows?: boolean
     doneCount?: boolean
@@ -14433,6 +14443,7 @@ export namespace Prisma {
       id: string
       date: Date
       time: string
+      facility: string
       conductedBy: string
       rows: Prisma.JsonValue
       doneCount: number
@@ -14841,6 +14852,7 @@ export namespace Prisma {
     readonly id: FieldRef<"DailyClean624Record", 'String'>
     readonly date: FieldRef<"DailyClean624Record", 'DateTime'>
     readonly time: FieldRef<"DailyClean624Record", 'String'>
+    readonly facility: FieldRef<"DailyClean624Record", 'String'>
     readonly conductedBy: FieldRef<"DailyClean624Record", 'String'>
     readonly rows: FieldRef<"DailyClean624Record", 'Json'>
     readonly doneCount: FieldRef<"DailyClean624Record", 'Int'>
@@ -71462,6 +71474,7 @@ export namespace Prisma {
     id: 'id',
     date: 'date',
     time: 'time',
+    facility: 'facility',
     conductedBy: 'conductedBy',
     rows: 'rows',
     doneCount: 'doneCount',
@@ -73364,6 +73377,7 @@ export namespace Prisma {
     id?: StringFilter<"DailyClean624Record"> | string
     date?: DateTimeFilter<"DailyClean624Record"> | Date | string
     time?: StringFilter<"DailyClean624Record"> | string
+    facility?: StringFilter<"DailyClean624Record"> | string
     conductedBy?: StringFilter<"DailyClean624Record"> | string
     rows?: JsonFilter<"DailyClean624Record">
     doneCount?: IntFilter<"DailyClean624Record"> | number
@@ -73382,6 +73396,7 @@ export namespace Prisma {
     id?: SortOrder
     date?: SortOrder
     time?: SortOrder
+    facility?: SortOrder
     conductedBy?: SortOrder
     rows?: SortOrder
     doneCount?: SortOrder
@@ -73403,6 +73418,7 @@ export namespace Prisma {
     NOT?: DailyClean624RecordWhereInput | DailyClean624RecordWhereInput[]
     date?: DateTimeFilter<"DailyClean624Record"> | Date | string
     time?: StringFilter<"DailyClean624Record"> | string
+    facility?: StringFilter<"DailyClean624Record"> | string
     conductedBy?: StringFilter<"DailyClean624Record"> | string
     rows?: JsonFilter<"DailyClean624Record">
     doneCount?: IntFilter<"DailyClean624Record"> | number
@@ -73421,6 +73437,7 @@ export namespace Prisma {
     id?: SortOrder
     date?: SortOrder
     time?: SortOrder
+    facility?: SortOrder
     conductedBy?: SortOrder
     rows?: SortOrder
     doneCount?: SortOrder
@@ -73446,6 +73463,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"DailyClean624Record"> | string
     date?: DateTimeWithAggregatesFilter<"DailyClean624Record"> | Date | string
     time?: StringWithAggregatesFilter<"DailyClean624Record"> | string
+    facility?: StringWithAggregatesFilter<"DailyClean624Record"> | string
     conductedBy?: StringWithAggregatesFilter<"DailyClean624Record"> | string
     rows?: JsonWithAggregatesFilter<"DailyClean624Record">
     doneCount?: IntWithAggregatesFilter<"DailyClean624Record"> | number
@@ -79358,6 +79376,7 @@ export namespace Prisma {
     id?: string
     date: Date | string
     time: string
+    facility?: string
     conductedBy: string
     rows: JsonNullValueInput | InputJsonValue
     doneCount?: number
@@ -79375,6 +79394,7 @@ export namespace Prisma {
     id?: string
     date: Date | string
     time: string
+    facility?: string
     conductedBy: string
     rows: JsonNullValueInput | InputJsonValue
     doneCount?: number
@@ -79392,6 +79412,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     time?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
     conductedBy?: StringFieldUpdateOperationsInput | string
     rows?: JsonNullValueInput | InputJsonValue
     doneCount?: IntFieldUpdateOperationsInput | number
@@ -79409,6 +79430,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     time?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
     conductedBy?: StringFieldUpdateOperationsInput | string
     rows?: JsonNullValueInput | InputJsonValue
     doneCount?: IntFieldUpdateOperationsInput | number
@@ -79426,6 +79448,7 @@ export namespace Prisma {
     id?: string
     date: Date | string
     time: string
+    facility?: string
     conductedBy: string
     rows: JsonNullValueInput | InputJsonValue
     doneCount?: number
@@ -79443,6 +79466,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     time?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
     conductedBy?: StringFieldUpdateOperationsInput | string
     rows?: JsonNullValueInput | InputJsonValue
     doneCount?: IntFieldUpdateOperationsInput | number
@@ -79459,6 +79483,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     time?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
     conductedBy?: StringFieldUpdateOperationsInput | string
     rows?: JsonNullValueInput | InputJsonValue
     doneCount?: IntFieldUpdateOperationsInput | number
@@ -86204,6 +86229,7 @@ export namespace Prisma {
     id?: SortOrder
     date?: SortOrder
     time?: SortOrder
+    facility?: SortOrder
     conductedBy?: SortOrder
     rows?: SortOrder
     doneCount?: SortOrder
@@ -86227,6 +86253,7 @@ export namespace Prisma {
     id?: SortOrder
     date?: SortOrder
     time?: SortOrder
+    facility?: SortOrder
     conductedBy?: SortOrder
     doneCount?: SortOrder
     naCount?: SortOrder
@@ -86243,6 +86270,7 @@ export namespace Prisma {
     id?: SortOrder
     date?: SortOrder
     time?: SortOrder
+    facility?: SortOrder
     conductedBy?: SortOrder
     doneCount?: SortOrder
     naCount?: SortOrder
@@ -97224,6 +97252,7 @@ export namespace Prisma {
     id?: string
     date: Date | string
     time: string
+    facility?: string
     conductedBy: string
     rows: JsonNullValueInput | InputJsonValue
     doneCount?: number
@@ -97240,6 +97269,7 @@ export namespace Prisma {
     id?: string
     date: Date | string
     time: string
+    facility?: string
     conductedBy: string
     rows: JsonNullValueInput | InputJsonValue
     doneCount?: number
@@ -98478,6 +98508,7 @@ export namespace Prisma {
     id?: StringFilter<"DailyClean624Record"> | string
     date?: DateTimeFilter<"DailyClean624Record"> | Date | string
     time?: StringFilter<"DailyClean624Record"> | string
+    facility?: StringFilter<"DailyClean624Record"> | string
     conductedBy?: StringFilter<"DailyClean624Record"> | string
     rows?: JsonFilter<"DailyClean624Record">
     doneCount?: IntFilter<"DailyClean624Record"> | number
@@ -116620,6 +116651,7 @@ export namespace Prisma {
     id?: string
     date: Date | string
     time: string
+    facility?: string
     conductedBy: string
     rows: JsonNullValueInput | InputJsonValue
     doneCount?: number
@@ -118467,6 +118499,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     time?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
     conductedBy?: StringFieldUpdateOperationsInput | string
     rows?: JsonNullValueInput | InputJsonValue
     doneCount?: IntFieldUpdateOperationsInput | number
@@ -118483,6 +118516,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     time?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
     conductedBy?: StringFieldUpdateOperationsInput | string
     rows?: JsonNullValueInput | InputJsonValue
     doneCount?: IntFieldUpdateOperationsInput | number
@@ -118499,6 +118533,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     time?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
     conductedBy?: StringFieldUpdateOperationsInput | string
     rows?: JsonNullValueInput | InputJsonValue
     doneCount?: IntFieldUpdateOperationsInput | number

@@ -200,6 +200,7 @@ exports.Prisma.DailyClean624RecordScalarFieldEnum = {
   id: 'id',
   date: 'date',
   time: 'time',
+  facility: 'facility',
   conductedBy: 'conductedBy',
   rows: 'rows',
   doneCount: 'doneCount',

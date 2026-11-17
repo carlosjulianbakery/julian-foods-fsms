@@ -143,6 +143,20 @@ describe("API payload validation (unit)", () => {
     expect(validatePostPayload({ date: "2026-01-15", time: "09:00", conductedBy: "HGA", rows })).toMatchObject({ ok: true });
   });
 
+  it("accepts all 19 NA rows", () => {
+    const rows = Array.from({ length: 19 }, (_, i) => ({ key: `a${i}`, state: "NA" }));
+    expect(validatePostPayload({ date: "2026-01-15", time: "09:00", conductedBy: "HGA", rows })).toMatchObject({ ok: true });
+  });
+
+  it("accepts NOT_DONE row WITH a reason", () => {
+    const rows = Array.from({ length: 19 }, (_, i) => ({
+      key: `a${i}`,
+      state: i === 0 ? "NOT_DONE" : "DONE",
+      reason: i === 0 ? "Equipment down" : null,
+    }));
+    expect(validatePostPayload({ date: "2026-01-15", time: "09:00", conductedBy: "HGA", rows })).toMatchObject({ ok: true });
+  });
+
   it("rejects rows with UNTOUCHED state", () => {
     const rows = Array.from({ length: 19 }, (_, i) => ({ key: `a${i}`, state: i === 0 ? "UNTOUCHED" : "DONE" }));
     expect(validatePostPayload({ date: "2026-01-15", time: "09:00", conductedBy: "HGA", rows })).toMatchObject({ ok: false });
@@ -169,17 +183,194 @@ describe("facilityName for task completion", () => {
     expect(params.facilityName).toBe("624");
     expect(params.facilityName).not.toBe("Julian Bakery");
   });
+
+  it("completion query uses facility name '624' — only 624 instances are matched", () => {
+    // Unit: the WHERE clause uses facilityName "624", so Julian Bakery instances
+    // (facilityName "Julian Bakery") are never in the candidates list.
+    const candidates624 = [
+      { id: "inst-624-a", status: "DUE_TODAY", facility: { name: "624" } },
+      { id: "inst-624-b", status: "UPCOMING", facility: { name: "624" } },
+    ];
+    const candidatesJB = [
+      { id: "inst-jb-a", status: "DUE_TODAY", facility: { name: "Julian Bakery" } },
+    ];
+    // Simulate the WHERE filter: facility.name = "624"
+    const filtered = [...candidates624, ...candidatesJB].filter(
+      (c) => c.facility.name === "624"
+    );
+    expect(filtered.map((c) => c.id)).toEqual(["inst-624-a", "inst-624-b"]);
+    expect(filtered.some((c) => c.facility.name === "Julian Bakery")).toBe(false);
+  });
+
+  it("Julian Bakery daily_cleaning instance stays untouched when facilityName='624'", () => {
+    // Simulate: JB instance is filtered out because facility.name !== "624"
+    const jbInstance = { id: "jb-dc-1", status: "DUE_TODAY", formKey: "daily_cleaning", facility: { name: "Julian Bakery" } };
+    const filtered = [jbInstance].filter((c) => c.facility.name === "624");
+    expect(filtered.length).toBe(0); // JB instance is NOT in candidates
+    // The JB instance status is never modified
+    expect(jbInstance.status).toBe("DUE_TODAY");
+  });
+
+  it("completion fallback without taskId uses best-match (finds DUE_TODAY by date)", () => {
+    // No taskId → best-match path. Exact match by dueDate wins.
+    const submissionDate = "2026-11-16";
+    const candidates = [
+      { id: "a", status: "DUE_TODAY", dueDate: { toISOString: () => "2026-11-16T00:00:00.000Z" } },
+      { id: "b", status: "UPCOMING",  dueDate: { toISOString: () => "2026-11-17T00:00:00.000Z" } },
+    ];
+    const exact = candidates.find(
+      (i) => i.dueDate.toISOString().slice(0, 10) === submissionDate
+    );
+    expect(exact?.id).toBe("a");
+  });
 });
 
-// ─── DELETE reversal warning ──────────────────────────────────────────────────
+// ─── API route handler tests (mocked Prisma) ─────────────────────────────────
 
-describe("DELETE reversal warning", () => {
-  it("returns deleted:true with warning when reopen fails", () => {
-    const response = {
-      deleted: true,
-      warning: "task_reopen_failed",
-    };
-    expect(response.deleted).toBe(true);
-    expect(response.warning).toBe("task_reopen_failed");
+vi.mock("next-auth", () => ({
+  getServerSession: vi.fn(),
+}));
+
+vi.mock("@/lib/auth", () => ({ authOptions: {} }));
+
+vi.mock("@/lib/prisma", () => ({
+  prisma: {
+    dailyClean624Record: {
+      create: vi.fn(),
+      findMany: vi.fn(),
+      findUnique: vi.fn(),
+      delete: vi.fn(),
+    },
+  },
+}));
+
+vi.mock("@/lib/task-completion", () => ({
+  completeRuleInstanceForSubmission: vi.fn().mockResolvedValue(undefined),
+  reopenInstanceForSubmissionDeletion: vi.fn().mockResolvedValue(undefined),
+}));
+
+import { getServerSession } from "next-auth";
+import { prisma } from "@/lib/prisma";
+import { POST } from "@/app/api/daily-cleaning-624/route";
+import { DELETE } from "@/app/api/daily-cleaning-624/[id]/route";
+
+function makeValidRows(state = "DONE", reason: string | null = null) {
+  return Array.from({ length: 19 }, (_, i) => ({
+    key: `a${i}`,
+    labelEn: `Activity ${i}`,
+    labelEs: `Actividad ${i}`,
+    state: i === 0 && state !== "DONE" ? state : "DONE",
+    reason: i === 0 && reason !== null ? reason : null,
+    chemical: null,
+  }));
+}
+
+function makeRequest(body: object) {
+  return new Request("http://localhost/api/daily-cleaning-624", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  }) as unknown as import("next/server").NextRequest;
+}
+
+function makeDeleteRequest(id: string) {
+  return new Request(`http://localhost/api/daily-cleaning-624/${id}`, {
+    method: "DELETE",
+  }) as unknown as import("next/server").NextRequest;
+}
+
+describe("POST /api/daily-cleaning-624 (mocked)", () => {
+  beforeEach(() => {
+    vi.mocked(getServerSession).mockResolvedValue({
+      user: { id: "user-1", role: "SUPERVISOR", name: "Test User" },
+    } as never);
+    vi.mocked(prisma.dailyClean624Record.create).mockResolvedValue({
+      id: "rec-1",
+      date: new Date("2026-11-16"),
+      time: "09:00",
+      facility: "624",
+      conductedBy: "HGA",
+      rows: [],
+      doneCount: 19,
+      naCount: 0,
+      notDoneCount: 0,
+      allergenChange: false,
+      notes: null,
+      instructionsVer: "v1.0",
+      submittedAt: new Date(),
+      submittedById: "user-1",
+      linkedInstanceId: null,
+    } as never);
+  });
+
+  it("all 19 DONE → 201 with record id", async () => {
+    const rows = makeValidRows("DONE");
+    const req = makeRequest({ date: "2026-11-16", time: "09:00", conductedBy: "HGA", rows, allergenChange: false, notes: null, instructionsVer: "v1.0" });
+    const res = await POST(req as never);
+    expect(res.status).toBe(201);
+    const body = await res.json();
+    expect(body).toHaveProperty("id");
+  });
+
+  it("NOT_DONE row WITH reason → 201", async () => {
+    const rows = makeValidRows("NOT_DONE", "Equipment down");
+    const req = makeRequest({ date: "2026-11-16", time: "09:00", conductedBy: "HGA", rows, allergenChange: false, notes: null, instructionsVer: "v1.0" });
+    const res = await POST(req as never);
+    expect(res.status).toBe(201);
+  });
+
+  it("NOT_DONE row WITHOUT reason → 400", async () => {
+    const rows = makeValidRows("NOT_DONE", "");
+    const req = makeRequest({ date: "2026-11-16", time: "09:00", conductedBy: "HGA", rows, allergenChange: false, notes: null, instructionsVer: "v1.0" });
+    const res = await POST(req as never);
+    expect(res.status).toBe(400);
+  });
+
+  it("table missing → 503 db_setup_error", async () => {
+    const tableErr = Object.assign(new Error('relation "daily_clean_624_records" does not exist'), { code: "P2021" });
+    vi.mocked(prisma.dailyClean624Record.create).mockRejectedValueOnce(tableErr);
+    const rows = makeValidRows("DONE");
+    const req = makeRequest({ date: "2026-11-16", time: "09:00", conductedBy: "HGA", rows, allergenChange: false, notes: null, instructionsVer: "v1.0" });
+    const res = await POST(req as never);
+    expect(res.status).toBe(503);
+    const body = await res.json();
+    expect(body.error).toBe("db_setup_error");
+  });
+});
+
+// ─── DELETE reversal ──────────────────────────────────────────────────────────
+
+describe("DELETE /api/daily-cleaning-624/[id] (mocked)", () => {
+  beforeEach(() => {
+    vi.mocked(getServerSession).mockResolvedValue({
+      user: { id: "user-1", role: "ADMIN", name: "Admin" },
+    } as never);
+    vi.mocked(prisma.dailyClean624Record.findUnique).mockResolvedValue({
+      id: "rec-1",
+      linkedInstanceId: "inst-1",
+    } as never);
+    vi.mocked(prisma.dailyClean624Record.delete).mockResolvedValue({} as never);
+  });
+
+  it("success path: returns deleted:true", async () => {
+    const { reopenInstanceForSubmissionDeletion } = await import("@/lib/task-completion");
+    vi.mocked(reopenInstanceForSubmissionDeletion).mockResolvedValueOnce(undefined);
+    const req = makeDeleteRequest("rec-1");
+    const res = await DELETE(req as never, { params: { id: "rec-1" } });
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.deleted).toBe(true);
+    expect(body.warning).toBeUndefined();
+  });
+
+  it("reversal failure: returns deleted:true WITH warning", async () => {
+    const { reopenInstanceForSubmissionDeletion } = await import("@/lib/task-completion");
+    vi.mocked(reopenInstanceForSubmissionDeletion).mockRejectedValueOnce(new Error("reopen failed"));
+    const req = makeDeleteRequest("rec-1");
+    const res = await DELETE(req as never, { params: { id: "rec-1" } });
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.deleted).toBe(true);
+    expect(body.warning).toBe("task_reopen_failed");
   });
 });

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, X, Download } from "lucide-react";
+import { ChevronLeft, X, Download, CalendarDays } from "lucide-react";
 import { getPacificToday } from "@/lib/pacific-time";
 import { CleaningRecordsList624 } from "@/components/forms624/CleaningRecordsList624";
 import { DoneNaRow624 } from "@/components/forms624/DoneNaRow624";
@@ -49,6 +49,87 @@ function buildPdfHtml(r: DailyClean624Record): string {
   </body></html>`;
 }
 
+// Get Mon-Sun bounds for a given ISO week date (any date in the week)
+function getWeekBounds(anyDateInWeek: string): { mon: string; sun: string } {
+  const d = new Date(anyDateInWeek + "T12:00:00Z");
+  const day = d.getUTCDay(); // 0=Sun, 1=Mon ...
+  const diffToMon = day === 0 ? -6 : 1 - day;
+  const mon = new Date(d);
+  mon.setUTCDate(d.getUTCDate() + diffToMon);
+  const sun = new Date(mon);
+  sun.setUTCDate(mon.getUTCDate() + 6);
+  return {
+    mon: mon.toISOString().slice(0, 10),
+    sun: sun.toISOString().slice(0, 10),
+  };
+}
+
+function buildWeekPdfHtml(weekRecords: DailyClean624Record[], mon: string, sun: string): string {
+  if (weekRecords.length === 0) {
+    return `<!DOCTYPE html><html><head><meta charset="utf-8"/></head><body style="font-family:Arial,sans-serif;padding:32px">
+      <h1 style="font-size:18px">Daily Cleaning — 624 | Week of ${mon} to ${sun}</h1>
+      <p style="font-size:13px;color:#6b7280">No records found for this week.</p>
+    </body></html>`;
+  }
+
+  const dayColumns = weekRecords
+    .map((r) => `<th style="text-align:center;padding:6px 8px;font-size:11px;color:#6b7280;border-bottom:2px solid #e5e7eb;min-width:70px">${r.date}<br/><span style="font-weight:400;font-size:10px">${r.conductedBy}</span></th>`)
+    .join("");
+
+  // Collect all activity keys from first record (all records should have same 19 activities)
+  const firstRecord = weekRecords[0];
+  const activities = (firstRecord.rows as CleaningRowSnapshot[]).map((row) => ({ key: row.key, labelEn: row.labelEn, labelEs: row.labelEs }));
+
+  const activityRows = activities.map((act) => {
+    const cells = weekRecords.map((r) => {
+      const row = (r.rows as CleaningRowSnapshot[]).find((rr) => rr.key === act.key);
+      const state = row?.state ?? "—";
+      const color = state === "DONE" ? "#059669" : state === "NOT_DONE" ? "#dc2626" : "#6b7280";
+      const label = state === "DONE" ? "✓" : state === "NA" ? "N/A" : state === "NOT_DONE" ? "✗" : "—";
+      return `<td style="text-align:center;padding:5px 8px;font-size:12px;font-weight:600;color:${color}">${label}</td>`;
+    }).join("");
+    return `<tr style="border-bottom:1px solid #f3f4f6">
+      <td style="padding:5px 8px;font-size:12px">${act.labelEn}</td>
+      <td style="padding:5px 8px;font-size:11px;color:#9ca3af">${act.labelEs}</td>
+      ${cells}
+    </tr>`;
+  }).join("");
+
+  const summaryRow = weekRecords.map((r) =>
+    `<td style="text-align:center;padding:5px 8px;font-size:11px;color:#374151">${r.doneCount}✓ ${r.naCount}N/A ${r.notDoneCount > 0 ? `<span style="color:#dc2626">${r.notDoneCount}✗</span>` : ""}</td>`
+  ).join("");
+
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"/>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 32px; color: #111; }
+    h1 { font-size: 18px; margin: 0 0 4px; }
+    p.sub { font-size: 12px; color: #6b7280; margin: 0 0 16px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 6px 8px; font-size: 11px; color: #6b7280; text-transform: uppercase; border-bottom: 2px solid #e5e7eb; }
+  </style></head><body>
+  <h1>Daily Cleaning and Sanitation — 624 Facility</h1>
+  <p class="sub">Week: ${mon} to ${sun} &nbsp;|&nbsp; ${weekRecords.length} record(s)</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Activity (EN)</th>
+        <th style="color:#9ca3af">ES</th>
+        ${dayColumns}
+      </tr>
+    </thead>
+    <tbody>
+      ${activityRows}
+      <tr style="border-top:2px solid #e5e7eb;font-weight:600">
+        <td colspan="2" style="padding:5px 8px;font-size:11px">Summary</td>
+        ${summaryRow}
+      </tr>
+    </tbody>
+  </table>
+  <p style="margin-top:24px;font-size:10px;color:#9ca3af">Generated ${new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" })} PT &nbsp;|&nbsp; Julian Foods — 624 Facility</p>
+  </body></html>`;
+}
+
+
 export default function DailyCleaning624RecordsPage() {
   const { data: session, status: authStatus } = useSession();
   const router = useRouter();
@@ -66,6 +147,8 @@ export default function DailyCleaning624RecordsPage() {
   const [viewTarget, setViewTarget] = useState<DailyClean624Record | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [weekDate, setWeekDate] = useState(today);
+  const [weekDownloading, setWeekDownloading] = useState(false);
 
   const role = (session?.user as { role?: string })?.role ?? "";
   const isAdmin = role === "ADMIN";
@@ -113,6 +196,24 @@ export default function DailyCleaning624RecordsPage() {
     }
   }
 
+
+  async function handleWeekDownload() {
+    setWeekDownloading(true);
+    try {
+      const { mon, sun } = getWeekBounds(weekDate);
+      const params = new URLSearchParams({ from: mon, to: sun });
+      const res = await fetch(`/api/daily-cleaning-624?${params}`);
+      const weekRecords: DailyClean624Record[] = await res.json();
+      const html = buildWeekPdfHtml(weekRecords, mon, sun);
+      await exportFormPdf(html, `daily-cleaning-624-week-${mon}.pdf`);
+    } catch (err) {
+      console.error("Week PDF failed:", err);
+      alert("Week PDF generation failed.");
+    } finally {
+      setWeekDownloading(false);
+    }
+  }
+
   return (
     <div className="max-w-5xl space-y-5">
       <div className="page-header">
@@ -148,6 +249,22 @@ export default function DailyCleaning624RecordsPage() {
             <option value="true">Has not done</option>
           </select>
         </div>
+      </div>
+
+      {/* Week PDF download */}
+      <div className="card p-4 flex flex-wrap gap-4 items-end bg-indigo-50 dark:bg-indigo-900/10 border-indigo-100 dark:border-indigo-800">
+        <div>
+          <label className="block text-xs font-medium text-gray-500 mb-1">Download week PDF</label>
+          <input type="date" value={weekDate} onChange={(e) => setWeekDate(e.target.value)} className="input text-sm" />
+        </div>
+        <button
+          onClick={handleWeekDownload}
+          disabled={weekDownloading}
+          className="btn-secondary flex items-center gap-2 disabled:opacity-60"
+        >
+          <CalendarDays className="w-4 h-4" />
+          {weekDownloading ? "Generating…" : "Download week PDF"}
+        </button>
       </div>
 
       {loading ? (
