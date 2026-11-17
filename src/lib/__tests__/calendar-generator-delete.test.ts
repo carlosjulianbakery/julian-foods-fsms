@@ -247,6 +247,114 @@ describe("mixed batch", () => {
   });
 });
 
+// ── PRODUCTION_ANY — batch-sheet rule types ───────────────────────────────────
+
+describe("PRODUCTION_ANY rule type", () => {
+  const ANY_RULE = { id: "rule-any", triggerType: "PRODUCTION_ANY", productName: null, ownerId: "owner1", facilityId: "fac1" };
+
+  beforeEach(() => {
+    mp.taskRule.findMany.mockResolvedValue([ANY_RULE]);
+    // Sheet has one production item on today — bread at index 0
+    mockParseDaysInRange.mockReturnValue([
+      { iso_date: "2026-11-17", items: [{ item_type: "production", product_name: "Bread" }] },
+    ]);
+  });
+
+  it("deletes UPCOMING instance when production day is removed from sheet", async () => {
+    // Sheet now has NO days in range — bread day was deleted
+    mockParseDaysInRange.mockReturnValue([]);
+    mp.ruleInstance.findMany.mockResolvedValue([
+      makeInst({ ruleId: "rule-any", calendarKey: "prod:2026-11-18:bread:0", status: "UPCOMING" }),
+    ]);
+    const result = await generateCalendarInstances();
+    expect(result.totalDeleted).toBe(1);
+    expect(mp.ruleInstance.deleteMany).toHaveBeenCalled();
+  });
+
+  it("deletes UPCOMING instance when production day is moved to a different date (624 facility)", async () => {
+    // Instance was for 2026-11-18; sheet now shows 2026-11-20 instead
+    mockParseDaysInRange.mockReturnValue([
+      { iso_date: "2026-11-20", items: [{ item_type: "production", product_name: "Bread" }] },
+    ]);
+    mp.ruleInstance.findMany.mockResolvedValue([
+      makeInst({ ruleId: "rule-any", calendarKey: "prod:2026-11-18:bread:0", status: "UPCOMING" }),
+    ]);
+    const result = await generateCalendarInstances();
+    expect(result.totalDeleted).toBe(1);
+    expect(mp.ruleInstance.deleteMany).toHaveBeenCalled();
+  });
+
+  it("deletes UPCOMING instance when production day is moved (Julian Bakery facility)", async () => {
+    const JB_FAC = { id: "fac2", name: "Julian Bakery", calendarTabName: "JB Calendar" };
+    mp.facility.findMany.mockResolvedValue([JB_FAC]);
+    mp.taskRule.findMany.mockResolvedValue([{ ...ANY_RULE, facilityId: "fac2" }]);
+    mockParseDaysInRange.mockReturnValue([
+      { iso_date: "2026-11-21", items: [{ item_type: "production", product_name: "Croissant" }] },
+    ]);
+    mp.ruleInstance.findMany.mockResolvedValue([
+      makeInst({ ruleId: "rule-any", calendarKey: "prod:2026-11-19:croissant:0", status: "UPCOMING" }),
+    ]);
+    const result = await generateCalendarInstances();
+    expect(result.totalDeleted).toBe(1);
+    expect(mp.ruleInstance.deleteMany).toHaveBeenCalled();
+  });
+
+  it("does NOT delete instance whose key still matches expected", async () => {
+    // Sheet has bread on 2026-11-17 → key prod:2026-11-17:bread:0 is still expected
+    mp.ruleInstance.findMany.mockResolvedValue([
+      makeInst({ ruleId: "rule-any", calendarKey: "prod:2026-11-17:bread:0", status: "UPCOMING" }),
+    ]);
+    const result = await generateCalendarInstances();
+    expect(result.totalDeleted).toBe(0);
+    expect(mp.ruleInstance.deleteMany).not.toHaveBeenCalled();
+  });
+});
+
+// ── PRODUCTION_PRODUCT — specific product rule type ───────────────────────────
+
+describe("PRODUCTION_PRODUCT rule type", () => {
+  const PROD_RULE = { id: "rule-prod", triggerType: "PRODUCTION_PRODUCT", productName: "Bread", ownerId: "owner1", facilityId: "fac1" };
+
+  beforeEach(() => {
+    mp.taskRule.findMany.mockResolvedValue([PROD_RULE]);
+  });
+
+  it("deletes UPCOMING instance when matching product is removed from a day", async () => {
+    // Sheet now has the day but no bread — only croissant
+    mockParseDaysInRange.mockReturnValue([
+      { iso_date: "2026-11-17", items: [{ item_type: "production", product_name: "Croissant" }] },
+    ]);
+    mp.ruleInstance.findMany.mockResolvedValue([
+      makeInst({ ruleId: "rule-prod", calendarKey: "prod:2026-11-17:bread:0", status: "UPCOMING" }),
+    ]);
+    const result = await generateCalendarInstances();
+    expect(result.totalDeleted).toBe(1);
+    expect(mp.ruleInstance.deleteMany).toHaveBeenCalled();
+  });
+
+  it("deletes UPCOMING instance when entire production day containing the product is removed", async () => {
+    mockParseDaysInRange.mockReturnValue([]);
+    mp.ruleInstance.findMany.mockResolvedValue([
+      makeInst({ ruleId: "rule-prod", calendarKey: "prod:2026-11-18:bread:0", status: "UPCOMING" }),
+    ]);
+    const result = await generateCalendarInstances();
+    expect(result.totalDeleted).toBe(1);
+    expect(mp.ruleInstance.deleteMany).toHaveBeenCalled();
+  });
+
+  it("does NOT delete instance when product is still on that day", async () => {
+    mockParseDaysInRange.mockReturnValue([
+      { iso_date: "2026-11-17", items: [{ item_type: "production", product_name: "Bread" }] },
+    ]);
+    mp.ruleInstance.findMany.mockResolvedValue([
+      makeInst({ ruleId: "rule-prod", calendarKey: "prod:2026-11-17:bread:0", status: "UPCOMING" }),
+    ]);
+    const result = await generateCalendarInstances();
+    expect(result.totalDeleted).toBe(0);
+    expect(mp.ruleInstance.deleteMany).not.toHaveBeenCalled();
+  });
+});
+
 // ── Zero-days safety guard still fires ────────────────────────────────────────
 
 describe("zero-days safety guard", () => {
