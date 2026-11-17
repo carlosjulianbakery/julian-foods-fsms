@@ -178,7 +178,8 @@ export default function DailyCleaning624Page() {
         body: JSON.stringify(payload),
       });
       if (!res.ok) {
-        const data = await res.json().catch(() => ({})) as { error?: string; refId?: string };
+        const data = await res.json().catch(() => ({})) as { error?: string; detail?: string; refId?: string };
+        if (data.detail) throw new Error(data.detail);
         if (data.error === "save_failed" && data.refId) {
           throw new Error(`Could not save — reference ${data.refId}, tell your admin.`);
         }

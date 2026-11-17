@@ -129,15 +129,18 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (err) {
-    const prismaCode = (err as { code?: string }).code;
+    const prismaCode = (err as { code?: string; meta?: { table?: string; column?: string } }).code;
+    const prismaMeta = (err as { meta?: { table?: string; column?: string } }).meta;
     const msg = err instanceof Error ? err.message : String(err);
-    if (prismaCode === "P2021" || prismaCode === "P2022" || msg.includes("does not exist")) {
-      return NextResponse.json(
-        { error: "db_setup_error", detail: "Schema mismatch — contact your admin." },
-        { status: 503 }
-      );
-    }
     const refId = Math.random().toString(36).slice(2, 8).toUpperCase();
+    if (prismaCode === "P2021" || prismaCode === "P2022" || msg.includes("does not exist")) {
+      const subject = prismaCode === "P2022" && prismaMeta?.column
+        ? `column ${prismaMeta.column}`
+        : `table ${prismaMeta?.table ?? "daily_clean_624_records"}`;
+      const detail = `db_setup_error · ${prismaCode ?? "unknown"} · ${subject} · ref ${refId}`;
+      console.error(`[daily-cleaning-624 POST] ${detail}`, { prismaCode, prismaMeta, msg });
+      return NextResponse.json({ error: "db_setup_error", detail }, { status: 503 });
+    }
     console.error(`[daily-cleaning-624 POST] save_failed ref=${refId} code=${prismaCode ?? "n/a"} msg=${msg}`, {
       prismaCode,
       payloadShape: {

@@ -347,8 +347,11 @@ describe("POST /api/daily-cleaning-624 (mocked)", () => {
     expect(body.error).toBe("initials required");
   });
 
-  it("table missing (P2021) → 503 db_setup_error", async () => {
-    const tableErr = Object.assign(new Error('relation "daily_clean_624_records" does not exist'), { code: "P2021" });
+  it("table missing (P2021) → 503 db_setup_error with detail", async () => {
+    const tableErr = Object.assign(new Error('relation "daily_clean_624_records" does not exist'), {
+      code: "P2021",
+      meta: { table: "daily_clean_624_records" },
+    });
     vi.mocked(prisma.dailyClean624Record.create).mockRejectedValueOnce(tableErr);
     const rows = makeValidRows("DONE");
     const req = makeRequest({ ...BASE_PAYLOAD, rows });
@@ -356,12 +359,15 @@ describe("POST /api/daily-cleaning-624 (mocked)", () => {
     expect(res.status).toBe(503);
     const body = await res.json();
     expect(body.error).toBe("db_setup_error");
+    expect(body.detail).toMatch(/P2021/);
+    expect(body.detail).toMatch(/table daily_clean_624_records/);
+    expect(body.detail).toMatch(/ref [A-Z0-9]{6}/);
   });
 
-  it("column missing (P2022) → 503 db_setup_error", async () => {
+  it("column missing (P2022) → 503 db_setup_error with detail", async () => {
     const colErr = Object.assign(
       new Error('column "initials" of relation "daily_clean_624_records" does not exist'),
-      { code: "P2022" }
+      { code: "P2022", meta: { column: "initials" } }
     );
     vi.mocked(prisma.dailyClean624Record.create).mockRejectedValueOnce(colErr);
     const rows = makeValidRows("DONE");
@@ -370,6 +376,9 @@ describe("POST /api/daily-cleaning-624 (mocked)", () => {
     expect(res.status).toBe(503);
     const body = await res.json();
     expect(body.error).toBe("db_setup_error");
+    expect(body.detail).toMatch(/P2022/);
+    expect(body.detail).toMatch(/column initials/);
+    expect(body.detail).toMatch(/ref [A-Z0-9]{6}/);
   });
 
   it("FK violation (P2003) → 500 save_failed with refId", async () => {
