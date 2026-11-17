@@ -178,8 +178,11 @@ export default function DailyCleaning624Page() {
         body: JSON.stringify(payload),
       });
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error((data as { error?: string }).error ?? `HTTP ${res.status}`);
+        const data = await res.json().catch(() => ({})) as { error?: string; refId?: string };
+        if (data.error === "save_failed" && data.refId) {
+          throw new Error(`Could not save — reference ${data.refId}, tell your admin.`);
+        }
+        throw new Error(data.error ?? `HTTP ${res.status}`);
       }
       if (session?.user?.id) clearDraft624(FORM_PREFIX, session.user.id, date);
       window.dispatchEvent(new CustomEvent("task-action"));

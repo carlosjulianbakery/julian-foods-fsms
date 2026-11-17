@@ -347,7 +347,7 @@ describe("POST /api/daily-cleaning-624 (mocked)", () => {
     expect(body.error).toBe("initials required");
   });
 
-  it("table missing → 503 db_setup_error", async () => {
+  it("table missing (P2021) → 503 db_setup_error", async () => {
     const tableErr = Object.assign(new Error('relation "daily_clean_624_records" does not exist'), { code: "P2021" });
     vi.mocked(prisma.dailyClean624Record.create).mockRejectedValueOnce(tableErr);
     const rows = makeValidRows("DONE");
@@ -356,6 +356,106 @@ describe("POST /api/daily-cleaning-624 (mocked)", () => {
     expect(res.status).toBe(503);
     const body = await res.json();
     expect(body.error).toBe("db_setup_error");
+  });
+
+  it("column missing (P2022) → 503 db_setup_error", async () => {
+    const colErr = Object.assign(
+      new Error('column "initials" of relation "daily_clean_624_records" does not exist'),
+      { code: "P2022" }
+    );
+    vi.mocked(prisma.dailyClean624Record.create).mockRejectedValueOnce(colErr);
+    const rows = makeValidRows("DONE");
+    const req = makeRequest({ ...BASE_PAYLOAD, rows });
+    const res = await POST(req as never);
+    expect(res.status).toBe(503);
+    const body = await res.json();
+    expect(body.error).toBe("db_setup_error");
+  });
+
+  it("FK violation (P2003) → 500 save_failed with refId", async () => {
+    const fkErr = Object.assign(
+      new Error("Foreign key constraint failed on the field: `submittedById`"),
+      { code: "P2003" }
+    );
+    vi.mocked(prisma.dailyClean624Record.create).mockRejectedValueOnce(fkErr);
+    const rows = makeValidRows("DONE");
+    const req = makeRequest({ ...BASE_PAYLOAD, rows });
+    const res = await POST(req as never);
+    expect(res.status).toBe(500);
+    const body = await res.json();
+    expect(body.error).toBe("save_failed");
+    expect(typeof body.refId).toBe("string");
+    expect(body.refId.length).toBeGreaterThan(0);
+  });
+
+  it("Prisma validation error → 500 save_failed with refId", async () => {
+    const validationErr = Object.assign(
+      new Error("Argument `rows` is missing"),
+      { code: "P2012" }
+    );
+    vi.mocked(prisma.dailyClean624Record.create).mockRejectedValueOnce(validationErr);
+    const rows = makeValidRows("DONE");
+    const req = makeRequest({ ...BASE_PAYLOAD, rows });
+    const res = await POST(req as never);
+    expect(res.status).toBe(500);
+    const body = await res.json();
+    expect(body.error).toBe("save_failed");
+    expect(typeof body.refId).toBe("string");
+  });
+
+  it("exact page payload shape (initials only, no client conductedBy, 19 rows) → prisma.create receives all required columns", async () => {
+    // This replicates the exact payload the form page sends
+    const pageRows = Array.from({ length: 19 }, (_, i) => ({
+      key: `activity_${i}`,
+      labelEn: `Activity ${i}`,
+      labelEs: `Actividad ${i}`,
+      state: "DONE",
+      reason: null,
+      chemical: null,
+    }));
+    const pagePayload = {
+      date: "2026-11-17",
+      time: "08:45",
+      initials: "HA",
+      // NOTE: no conductedBy field — page never sends it
+      rows: pageRows,
+      notes: null,
+      instructionsVer: "v1.1",
+    };
+    vi.mocked(getServerSession).mockResolvedValueOnce({
+      user: { id: "hugo-id", role: "SUPERVISOR", name: "Hugo Garcia Ayala", email: "hugo@julianbakery.com" },
+    } as never);
+    vi.mocked(prisma.dailyClean624Record.create).mockResolvedValueOnce({
+      id: "rec-hugo", date: new Date("2026-11-17"), time: "08:45", facility: "624",
+      conductedBy: "Hugo Garcia Ayala", initials: "HA", rows: pageRows, doneCount: 19,
+      naCount: 0, notDoneCount: 0, notes: null, instructionsVer: "v1.1",
+      submittedAt: new Date(), submittedById: "hugo-id", linkedInstanceId: null,
+    } as never);
+    const req = makeRequest(pagePayload);
+    const res = await POST(req as never);
+    expect(res.status).toBe(201);
+    const createCall = vi.mocked(prisma.dailyClean624Record.create).mock.calls.at(-1)![0];
+    const data = createCall.data;
+    // All required columns must be present
+    const requiredColumns = [
+      "date", "time", "facility", "conductedBy", "initials",
+      "rows", "doneCount", "naCount", "notDoneCount",
+      "allergenChange", "instructionsVer", "submittedById",
+    ];
+    for (const col of requiredColumns) {
+      expect(data, `missing required column: ${col}`).toHaveProperty(col);
+    }
+    // Server sets conductedBy from session, not from client
+    expect(data.conductedBy).toBe("Hugo Garcia Ayala");
+    // Initials uppercased from client value
+    expect(data.initials).toBe("HA");
+    // facility is always "624"
+    expect(data.facility).toBe("624");
+    // allergenChange always false
+    expect(data.allergenChange).toBe(false);
+    // rows is the array from client
+    expect(Array.isArray(data.rows)).toBe(true);
+    expect((data.rows as unknown[]).length).toBe(19);
   });
 
 

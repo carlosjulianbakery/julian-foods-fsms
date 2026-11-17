@@ -92,12 +92,17 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (err) {
-    console.error("[pre-op-624 POST] create failed:", err);
+    const prismaCode = (err as { code?: string }).code;
     const msg = err instanceof Error ? err.message : String(err);
-    if (msg.includes("does not exist") || (err as { code?: string }).code === "P2021") {
-      return NextResponse.json({ error: "db_setup_error" }, { status: 500 });
+    if (prismaCode === "P2021" || prismaCode === "P2022" || msg.includes("does not exist")) {
+      return NextResponse.json({ error: "db_setup_error" }, { status: 503 });
     }
-    return NextResponse.json({ error: "db_error" }, { status: 500 });
+    const refId = Math.random().toString(36).slice(2, 8).toUpperCase();
+    console.error(`[pre-op-624 POST] save_failed ref=${refId} code=${prismaCode ?? "n/a"} msg=${msg}`, {
+      prismaCode,
+      payloadShape: { date: typeof body.date, conductedBy: typeof body.conductedBy, rowCount: body.rows?.length },
+    });
+    return NextResponse.json({ error: "save_failed", refId }, { status: 500 });
   }
 
   // Complete linked task instance (facility "624")
