@@ -101,13 +101,13 @@ describe("draftStorage624", () => {
   });
 
   it("round-trips data", () => {
-    const data = { conductedBy: "HGA", rows: [{ key: "mixing_bowls", state: "DONE" }] };
+    const data = { conductedBy: "Hugo Garcia Ayala", initials: "HGA", rows: [{ key: "mixing_bowls", state: "DONE" }] };
     saveDraft624(PREFIX, USER_ID, DATE, data);
     expect(loadDraft624(PREFIX, USER_ID, DATE)).toMatchObject(data);
   });
 
   it("returns null for expired draft", () => {
-    const data = { conductedBy: "HGA" };
+    const data = { conductedBy: "Hugo Garcia Ayala", initials: "HGA" };
     saveDraft624(PREFIX, USER_ID, DATE, data);
     // Advance time past TTL
     const realNow = Date.now;
@@ -124,11 +124,13 @@ describe("API payload validation (unit)", () => {
     date: string;
     time: string;
     conductedBy: string;
+    initials?: string;
     rows: Array<{ state: string; reason?: string | null }>;
   }): { ok: boolean; error?: string } {
     if (!payload.date) return { ok: false, error: "date required" };
     if (!payload.time) return { ok: false, error: "time required" };
     if (!payload.conductedBy) return { ok: false, error: "conductedBy required" };
+    if (!payload.initials) return { ok: false, error: "initials required" };
     if (!Array.isArray(payload.rows) || payload.rows.length !== 19)
       return { ok: false, error: "rows must be 19 items" };
     const badState = payload.rows.filter((r) => !["DONE","NA","NOT_DONE"].includes(r.state));
@@ -140,12 +142,12 @@ describe("API payload validation (unit)", () => {
 
   it("accepts all 19 DONE rows", () => {
     const rows = Array.from({ length: 19 }, (_, i) => ({ key: `a${i}`, state: "DONE" }));
-    expect(validatePostPayload({ date: "2026-01-15", time: "09:00", conductedBy: "HGA", rows })).toMatchObject({ ok: true });
+    expect(validatePostPayload({ date: "2026-01-15", time: "09:00", conductedBy: "Hugo Garcia Ayala", initials: "HGA", rows })).toMatchObject({ ok: true });
   });
 
   it("accepts all 19 NA rows", () => {
     const rows = Array.from({ length: 19 }, (_, i) => ({ key: `a${i}`, state: "NA" }));
-    expect(validatePostPayload({ date: "2026-01-15", time: "09:00", conductedBy: "HGA", rows })).toMatchObject({ ok: true });
+    expect(validatePostPayload({ date: "2026-01-15", time: "09:00", conductedBy: "Hugo Garcia Ayala", initials: "HGA", rows })).toMatchObject({ ok: true });
   });
 
   it("accepts NOT_DONE row WITH a reason", () => {
@@ -154,12 +156,12 @@ describe("API payload validation (unit)", () => {
       state: i === 0 ? "NOT_DONE" : "DONE",
       reason: i === 0 ? "Equipment down" : null,
     }));
-    expect(validatePostPayload({ date: "2026-01-15", time: "09:00", conductedBy: "HGA", rows })).toMatchObject({ ok: true });
+    expect(validatePostPayload({ date: "2026-01-15", time: "09:00", conductedBy: "Hugo Garcia Ayala", initials: "HGA", rows })).toMatchObject({ ok: true });
   });
 
   it("rejects rows with UNTOUCHED state", () => {
     const rows = Array.from({ length: 19 }, (_, i) => ({ key: `a${i}`, state: i === 0 ? "UNTOUCHED" : "DONE" }));
-    expect(validatePostPayload({ date: "2026-01-15", time: "09:00", conductedBy: "HGA", rows })).toMatchObject({ ok: false });
+    expect(validatePostPayload({ date: "2026-01-15", time: "09:00", conductedBy: "Hugo Garcia Ayala", initials: "HGA", rows })).toMatchObject({ ok: false });
   });
 
   it("rejects NOT_DONE without reason", () => {
@@ -168,7 +170,12 @@ describe("API payload validation (unit)", () => {
       state: i === 0 ? "NOT_DONE" : "DONE",
       reason: i === 0 ? "" : null,
     }));
-    expect(validatePostPayload({ date: "2026-01-15", time: "09:00", conductedBy: "HGA", rows })).toMatchObject({ ok: false });
+    expect(validatePostPayload({ date: "2026-01-15", time: "09:00", conductedBy: "Hugo Garcia Ayala", initials: "HGA", rows })).toMatchObject({ ok: false });
+  });
+
+  it("rejects missing initials", () => {
+    const rows = Array.from({ length: 19 }, (_, i) => ({ key: `a${i}`, state: "DONE" }));
+    expect(validatePostPayload({ date: "2026-01-15", time: "09:00", conductedBy: "Hugo Garcia Ayala", rows })).toMatchObject({ ok: false, error: "initials required" });
   });
 });
 
@@ -185,8 +192,6 @@ describe("facilityName for task completion", () => {
   });
 
   it("completion query uses facility name '624' — only 624 instances are matched", () => {
-    // Unit: the WHERE clause uses facilityName "624", so Julian Bakery instances
-    // (facilityName "Julian Bakery") are never in the candidates list.
     const candidates624 = [
       { id: "inst-624-a", status: "DUE_TODAY", facility: { name: "624" } },
       { id: "inst-624-b", status: "UPCOMING", facility: { name: "624" } },
@@ -194,7 +199,6 @@ describe("facilityName for task completion", () => {
     const candidatesJB = [
       { id: "inst-jb-a", status: "DUE_TODAY", facility: { name: "Julian Bakery" } },
     ];
-    // Simulate the WHERE filter: facility.name = "624"
     const filtered = [...candidates624, ...candidatesJB].filter(
       (c) => c.facility.name === "624"
     );
@@ -203,16 +207,13 @@ describe("facilityName for task completion", () => {
   });
 
   it("Julian Bakery daily_cleaning instance stays untouched when facilityName='624'", () => {
-    // Simulate: JB instance is filtered out because facility.name !== "624"
     const jbInstance = { id: "jb-dc-1", status: "DUE_TODAY", formKey: "daily_cleaning", facility: { name: "Julian Bakery" } };
     const filtered = [jbInstance].filter((c) => c.facility.name === "624");
-    expect(filtered.length).toBe(0); // JB instance is NOT in candidates
-    // The JB instance status is never modified
+    expect(filtered.length).toBe(0);
     expect(jbInstance.status).toBe("DUE_TODAY");
   });
 
   it("completion fallback without taskId uses best-match (finds DUE_TODAY by date)", () => {
-    // No taskId → best-match path. Exact match by dueDate wins.
     const submissionDate = "2026-11-16";
     const candidates = [
       { id: "a", status: "DUE_TODAY", dueDate: { toISOString: () => "2026-11-16T00:00:00.000Z" } },
@@ -279,6 +280,16 @@ function makeDeleteRequest(id: string) {
   }) as unknown as import("next/server").NextRequest;
 }
 
+const BASE_PAYLOAD = {
+  date: "2026-11-16",
+  time: "09:00",
+  conductedBy: "Hugo Garcia Ayala",
+  initials: "HGA",
+  allergenChange: false,
+  notes: null,
+  instructionsVer: "v1.0",
+};
+
 describe("POST /api/daily-cleaning-624 (mocked)", () => {
   beforeEach(() => {
     vi.mocked(getServerSession).mockResolvedValue({
@@ -289,7 +300,8 @@ describe("POST /api/daily-cleaning-624 (mocked)", () => {
       date: new Date("2026-11-16"),
       time: "09:00",
       facility: "624",
-      conductedBy: "HGA",
+      conductedBy: "Hugo Garcia Ayala",
+      initials: "HGA",
       rows: [],
       doneCount: 19,
       naCount: 0,
@@ -305,7 +317,7 @@ describe("POST /api/daily-cleaning-624 (mocked)", () => {
 
   it("all 19 DONE → 201 with record id", async () => {
     const rows = makeValidRows("DONE");
-    const req = makeRequest({ date: "2026-11-16", time: "09:00", conductedBy: "HGA", rows, allergenChange: false, notes: null, instructionsVer: "v1.0" });
+    const req = makeRequest({ ...BASE_PAYLOAD, rows });
     const res = await POST(req as never);
     expect(res.status).toBe(201);
     const body = await res.json();
@@ -314,23 +326,33 @@ describe("POST /api/daily-cleaning-624 (mocked)", () => {
 
   it("NOT_DONE row WITH reason → 201", async () => {
     const rows = makeValidRows("NOT_DONE", "Equipment down");
-    const req = makeRequest({ date: "2026-11-16", time: "09:00", conductedBy: "HGA", rows, allergenChange: false, notes: null, instructionsVer: "v1.0" });
+    const req = makeRequest({ ...BASE_PAYLOAD, rows });
     const res = await POST(req as never);
     expect(res.status).toBe(201);
   });
 
   it("NOT_DONE row WITHOUT reason → 400", async () => {
     const rows = makeValidRows("NOT_DONE", "");
-    const req = makeRequest({ date: "2026-11-16", time: "09:00", conductedBy: "HGA", rows, allergenChange: false, notes: null, instructionsVer: "v1.0" });
+    const req = makeRequest({ ...BASE_PAYLOAD, rows });
     const res = await POST(req as never);
     expect(res.status).toBe(400);
+  });
+
+  it("missing initials → 400", async () => {
+    const rows = makeValidRows("DONE");
+    const { initials: _removed, ...payloadWithoutInitials } = BASE_PAYLOAD;
+    const req = makeRequest({ ...payloadWithoutInitials, rows });
+    const res = await POST(req as never);
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toBe("initials required");
   });
 
   it("table missing → 503 db_setup_error", async () => {
     const tableErr = Object.assign(new Error('relation "daily_clean_624_records" does not exist'), { code: "P2021" });
     vi.mocked(prisma.dailyClean624Record.create).mockRejectedValueOnce(tableErr);
     const rows = makeValidRows("DONE");
-    const req = makeRequest({ date: "2026-11-16", time: "09:00", conductedBy: "HGA", rows, allergenChange: false, notes: null, instructionsVer: "v1.0" });
+    const req = makeRequest({ ...BASE_PAYLOAD, rows });
     const res = await POST(req as never);
     expect(res.status).toBe(503);
     const body = await res.json();

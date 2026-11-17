@@ -55,7 +55,8 @@ export interface DailyClean624Record {
   id: string;
   date: string;          // YYYY-MM-DD
   time: string;          // "HH:MM" 24h
-  conductedBy: string;   // initials
+  conductedBy: string;   // full name
+  initials: string;      // e.g. "HGA"
   rows: CleaningRowSnapshot[];
   doneCount: number;
   naCount: number;

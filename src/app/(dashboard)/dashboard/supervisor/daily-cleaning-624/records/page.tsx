@@ -19,9 +19,11 @@ function buildPdfHtml(r: DailyClean624Record): string {
       <td style="padding:6px 8px;text-align:center;font-size:12px;font-weight:600;color:${row.state === "DONE" ? "#059669" : row.state === "NOT_DONE" ? "#dc2626" : "#6b7280"}">
         ${row.state === "DONE" ? "Done" : row.state === "NA" ? "N/A" : "Not done"}
       </td>
-      <td style="padding:6px 8px;font-size:11px;color:#374151">${row.reason || "—"}</td>
-      <td style="padding:6px 8px;font-size:11px;color:#6b7280">${row.chemical || "—"}</td>
+      <td style="padding:6px 8px;font-size:11px;color:#374151">${row.reason || "\u2014"}</td>
+      <td style="padding:6px 8px;font-size:11px;color:#6b7280">${row.chemical || "\u2014"}</td>
     </tr>`).join("");
+
+  const submittedPT = new Date(r.submittedAt).toLocaleString("en-US", { timeZone: "America/Los_Angeles" });
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"/>
   <style>
@@ -33,10 +35,10 @@ function buildPdfHtml(r: DailyClean624Record): string {
     .badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; }
     .ok { background: #d1fae5; color: #065f46; }
     .issues { background: #fef3c7; color: #92400e; }
+    .footer { margin-top: 24px; font-size: 10px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 8px; }
   </style></head><body>
-  <h1>Daily Cleaning and Sanitation — 624 Facility</h1>
-  <p class="sub">Date: ${r.date} &nbsp;|&nbsp; Time: ${r.time} &nbsp;|&nbsp; Conducted by: ${r.conductedBy}</p>
-  <p class="sub">Submitted: ${new Date(r.submittedAt).toLocaleString("en-US", { timeZone: "America/Los_Angeles" })} by ${r.submittedBy.name}</p>
+  <h1>Daily Cleaning and Sanitation \u2014 624 Facility</h1>
+  <p class="sub">Date: ${r.date} &nbsp;|&nbsp; Time: ${r.time} &nbsp;|&nbsp; Conducted by: ${r.conductedBy} (${r.initials})</p>
   <p class="sub">Summary: ${r.doneCount} done &middot; ${r.naCount} N/A &middot; ${r.notDoneCount} not done
     &nbsp;|&nbsp; Allergen change: ${r.allergenChange ? "Yes" : "No"}
     ${r.notes ? `&nbsp;|&nbsp; Notes: ${r.notes}` : ""}
@@ -46,46 +48,70 @@ function buildPdfHtml(r: DailyClean624Record): string {
     <thead><tr><th>Activity (EN)</th><th>Actividad (ES)</th><th>State</th><th>Reason</th><th>Chemical</th></tr></thead>
     <tbody>${rows}</tbody>
   </table>
+  <p class="footer">Submitted by: ${r.conductedBy} (${r.initials}) &nbsp;&middot;&nbsp; ${submittedPT} PT &nbsp;&middot;&nbsp; Julian Foods \u2014 624 Facility</p>
   </body></html>`;
 }
 
-// Get Mon-Sun bounds for a given ISO week date (any date in the week)
-function getWeekBounds(anyDateInWeek: string): { mon: string; sun: string } {
+// Get Monday of the week containing anyDateInWeek (ISO date string)
+function getWeekMon(anyDateInWeek: string): Date {
   const d = new Date(anyDateInWeek + "T12:00:00Z");
   const day = d.getUTCDay(); // 0=Sun, 1=Mon ...
   const diffToMon = day === 0 ? -6 : 1 - day;
   const mon = new Date(d);
   mon.setUTCDate(d.getUTCDate() + diffToMon);
-  const sun = new Date(mon);
-  sun.setUTCDate(mon.getUTCDate() + 6);
-  return {
-    mon: mon.toISOString().slice(0, 10),
-    sun: sun.toISOString().slice(0, 10),
-  };
+  return mon;
 }
 
-function buildWeekPdfHtml(weekRecords: DailyClean624Record[], mon: string, sun: string): string {
-  if (weekRecords.length === 0) {
+function isoDate(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+
+function buildWeekPdfHtml(weekRecords: DailyClean624Record[], mon: string): string {
+  // Build Mon–Fri columns
+  const monDate = getWeekMon(mon);
+  const weekDays: string[] = [];
+  for (let i = 0; i < 5; i++) {
+    const d = new Date(monDate);
+    d.setUTCDate(monDate.getUTCDate() + i);
+    weekDays.push(isoDate(d));
+  }
+
+  const fri = weekDays[4];
+  const recordByDate = new Map<string, DailyClean624Record>();
+  weekRecords.forEach((r) => recordByDate.set(r.date, r));
+
+  const hasAnyRecord = weekDays.some((day) => recordByDate.has(day));
+
+  if (!hasAnyRecord) {
     return `<!DOCTYPE html><html><head><meta charset="utf-8"/></head><body style="font-family:Arial,sans-serif;padding:32px">
-      <h1 style="font-size:18px">Daily Cleaning — 624 | Week of ${mon} to ${sun}</h1>
+      <h1 style="font-size:18px">Daily Cleaning \u2014 624 | Week of ${mon} to ${fri}</h1>
       <p style="font-size:13px;color:#6b7280">No records found for this week.</p>
     </body></html>`;
   }
 
-  const dayColumns = weekRecords
-    .map((r) => `<th style="text-align:center;padding:6px 8px;font-size:11px;color:#6b7280;border-bottom:2px solid #e5e7eb;min-width:70px">${r.date}<br/><span style="font-weight:400;font-size:10px">${r.conductedBy}</span></th>`)
-    .join("");
+  // Day column headers: date + initials (or "No record")
+  const dayHeaders = weekDays.map((day) => {
+    const r = recordByDate.get(day);
+    if (r) {
+      return `<th style="text-align:center;padding:6px 8px;font-size:11px;color:#374151;border-bottom:2px solid #e5e7eb;min-width:80px">${day}<br/><span style="font-weight:400;font-size:10px;color:#6b7280">${r.initials}</span></th>`;
+    }
+    return `<th style="text-align:center;padding:6px 8px;font-size:11px;color:#9ca3af;border-bottom:2px solid #e5e7eb;min-width:80px;background:#f9fafb">${day}<br/><span style="font-weight:400;font-size:10px">No record</span></th>`;
+  }).join("");
 
-  // Collect all activity keys from first record (all records should have same 19 activities)
+  // Activity rows — use the first available record to get activity labels
   const firstRecord = weekRecords[0];
   const activities = (firstRecord.rows as CleaningRowSnapshot[]).map((row) => ({ key: row.key, labelEn: row.labelEn, labelEs: row.labelEs }));
 
   const activityRows = activities.map((act) => {
-    const cells = weekRecords.map((r) => {
+    const cells = weekDays.map((day) => {
+      const r = recordByDate.get(day);
+      if (!r) {
+        return `<td style="text-align:center;padding:5px 8px;font-size:12px;color:#9ca3af;background:#f9fafb">\u2014</td>`;
+      }
       const row = (r.rows as CleaningRowSnapshot[]).find((rr) => rr.key === act.key);
-      const state = row?.state ?? "—";
+      const state = row?.state ?? "\u2014";
       const color = state === "DONE" ? "#059669" : state === "NOT_DONE" ? "#dc2626" : "#6b7280";
-      const label = state === "DONE" ? "✓" : state === "NA" ? "N/A" : state === "NOT_DONE" ? "✗" : "—";
+      const label = state === "DONE" ? "\u2713" : state === "NA" ? "N/A" : state === "NOT_DONE" ? "\u2717" : "\u2014";
       return `<td style="text-align:center;padding:5px 8px;font-size:12px;font-weight:600;color:${color}">${label}</td>`;
     }).join("");
     return `<tr style="border-bottom:1px solid #f3f4f6">
@@ -95,9 +121,11 @@ function buildWeekPdfHtml(weekRecords: DailyClean624Record[], mon: string, sun: 
     </tr>`;
   }).join("");
 
-  const summaryRow = weekRecords.map((r) =>
-    `<td style="text-align:center;padding:5px 8px;font-size:11px;color:#374151">${r.doneCount}✓ ${r.naCount}N/A ${r.notDoneCount > 0 ? `<span style="color:#dc2626">${r.notDoneCount}✗</span>` : ""}</td>`
-  ).join("");
+  const summaryRow = weekDays.map((day) => {
+    const r = recordByDate.get(day);
+    if (!r) return `<td style="text-align:center;padding:5px 8px;font-size:11px;color:#9ca3af;background:#f9fafb">\u2014</td>`;
+    return `<td style="text-align:center;padding:5px 8px;font-size:11px;color:#374151">${r.doneCount}\u2713 ${r.naCount}N/A ${r.notDoneCount > 0 ? `<span style="color:#dc2626">${r.notDoneCount}\u2717</span>` : ""}</td>`;
+  }).join("");
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8"/>
   <style>
@@ -107,14 +135,14 @@ function buildWeekPdfHtml(weekRecords: DailyClean624Record[], mon: string, sun: 
     table { width: 100%; border-collapse: collapse; }
     th { text-align: left; padding: 6px 8px; font-size: 11px; color: #6b7280; text-transform: uppercase; border-bottom: 2px solid #e5e7eb; }
   </style></head><body>
-  <h1>Daily Cleaning and Sanitation — 624 Facility</h1>
-  <p class="sub">Week: ${mon} to ${sun} &nbsp;|&nbsp; ${weekRecords.length} record(s)</p>
+  <h1>Daily Cleaning and Sanitation \u2014 624 Facility</h1>
+  <p class="sub">Week: ${mon} to ${fri} &nbsp;|&nbsp; ${weekRecords.length} record(s)</p>
   <table>
     <thead>
       <tr>
         <th>Activity (EN)</th>
         <th style="color:#9ca3af">ES</th>
-        ${dayColumns}
+        ${dayHeaders}
       </tr>
     </thead>
     <tbody>
@@ -125,7 +153,7 @@ function buildWeekPdfHtml(weekRecords: DailyClean624Record[], mon: string, sun: 
       </tr>
     </tbody>
   </table>
-  <p style="margin-top:24px;font-size:10px;color:#9ca3af">Generated ${new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" })} PT &nbsp;|&nbsp; Julian Foods — 624 Facility</p>
+  <p style="margin-top:24px;font-size:10px;color:#9ca3af">Generated ${new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" })} PT &nbsp;|&nbsp; Julian Foods \u2014 624 Facility</p>
   </body></html>`;
 }
 
@@ -190,21 +218,24 @@ export default function DailyCleaning624RecordsPage() {
       setRecords((prev) => prev.filter((rec) => rec.id !== r.id));
       if (viewTarget?.id === r.id) setViewTarget(null);
     } catch {
-      alert("Network error — could not delete.");
+      alert("Network error \u2014 could not delete.");
     } finally {
       setDeletingId(null);
     }
   }
 
-
   async function handleWeekDownload() {
     setWeekDownloading(true);
     try {
-      const { mon, sun } = getWeekBounds(weekDate);
-      const params = new URLSearchParams({ from: mon, to: sun });
+      const mon = isoDate(getWeekMon(weekDate));
+      const monDate = getWeekMon(weekDate);
+      const friDate = new Date(monDate);
+      friDate.setUTCDate(monDate.getUTCDate() + 4);
+      const fri = isoDate(friDate);
+      const params = new URLSearchParams({ from: mon, to: fri });
       const res = await fetch(`/api/daily-cleaning-624?${params}`);
       const weekRecords: DailyClean624Record[] = await res.json();
-      const html = buildWeekPdfHtml(weekRecords, mon, sun);
+      const html = buildWeekPdfHtml(weekRecords, mon);
       await exportFormPdf(html, `daily-cleaning-624-week-${mon}.pdf`);
     } catch (err) {
       console.error("Week PDF failed:", err);
@@ -224,7 +255,7 @@ export default function DailyCleaning624RecordsPage() {
           >
             <ChevronLeft className="w-3 h-3" /> New record
           </button>
-          <h1 className="page-title">Daily Cleaning Records — 624</h1>
+          <h1 className="page-title">Daily Cleaning Records \u2014 624</h1>
           <p className="page-subtitle">Last 30 days by default. ADMIN only can delete.</p>
         </div>
       </div>
@@ -254,7 +285,7 @@ export default function DailyCleaning624RecordsPage() {
       {/* Week PDF download */}
       <div className="card p-4 flex flex-wrap gap-4 items-end bg-indigo-50 dark:bg-indigo-900/10 border-indigo-100 dark:border-indigo-800">
         <div>
-          <label className="block text-xs font-medium text-gray-500 mb-1">Download week PDF</label>
+          <label className="block text-xs font-medium text-gray-500 mb-1">Download week PDF (Mon\u2013Fri)</label>
           <input type="date" value={weekDate} onChange={(e) => setWeekDate(e.target.value)} className="input text-sm" />
         </div>
         <button
@@ -263,12 +294,12 @@ export default function DailyCleaning624RecordsPage() {
           className="btn-secondary flex items-center gap-2 disabled:opacity-60"
         >
           <CalendarDays className="w-4 h-4" />
-          {weekDownloading ? "Generating…" : "Download week PDF"}
+          {weekDownloading ? "Generating\u2026" : "Download week PDF"}
         </button>
       </div>
 
       {loading ? (
-        <div className="card p-8 text-center text-gray-400 text-sm">Loading…</div>
+        <div className="card p-8 text-center text-gray-400 text-sm">Loading\u2026</div>
       ) : (
         <CleaningRecordsList624
           records={records}
@@ -285,7 +316,7 @@ export default function DailyCleaning624RecordsPage() {
         <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 overflow-y-auto">
           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-2xl my-8 space-y-4 p-6">
             <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-lg">Daily Cleaning — {viewTarget.date}</h2>
+              <h2 className="font-semibold text-lg">Daily Cleaning \u2014 {viewTarget.date}</h2>
               <button onClick={() => setViewTarget(null)} className="text-gray-400 hover:text-gray-700">
                 <X className="w-5 h-5" />
               </button>
@@ -297,6 +328,11 @@ export default function DailyCleaning624RecordsPage() {
               conductedBy={viewTarget.conductedBy}
               readOnly
             />
+
+            {/* Initials display in modal */}
+            <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300 px-1">
+              <span><span className="font-medium text-gray-500">Initials:</span> <span className="font-mono uppercase">{viewTarget.initials}</span></span>
+            </div>
 
             <div className="space-y-2">
               {(viewTarget.rows as CleaningRowSnapshot[]).map((row) => (
@@ -332,7 +368,7 @@ export default function DailyCleaning624RecordsPage() {
                 className="btn btn-secondary flex items-center gap-2"
               >
                 <Download className="w-4 h-4" />
-                {downloadingId === viewTarget.id ? "Generating…" : "Download PDF"}
+                {downloadingId === viewTarget.id ? "Generating\u2026" : "Download PDF"}
               </button>
               <button onClick={() => setViewTarget(null)} className="btn btn-primary">Close</button>
             </div>

@@ -47,6 +47,7 @@ export function CleaningRecordsList624({
             <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Date</th>
             <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300 hidden sm:table-cell">Time</th>
             <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Conducted By</th>
+            <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300 hidden lg:table-cell">Initials</th>
             <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300 hidden md:table-cell">Summary</th>
             <th className="text-left px-4 py-3 font-medium text-gray-600 dark:text-gray-300">Status</th>
             <th className="px-4 py-3" />
@@ -63,7 +64,8 @@ export function CleaningRecordsList624({
               <td className="px-4 py-3 font-mono text-xs text-gray-500 hidden sm:table-cell">
                 {formatTime12h(r.time)}
               </td>
-              <td className="px-4 py-3 font-mono text-sm uppercase">{r.conductedBy}</td>
+              <td className="px-4 py-3 text-sm">{r.conductedBy}</td>
+              <td className="px-4 py-3 font-mono text-xs text-gray-500 hidden lg:table-cell uppercase">{r.initials}</td>
               <td className="px-4 py-3 text-xs text-gray-500 hidden md:table-cell">
                 {r.doneCount} done &middot; {r.naCount} N/A &middot; {r.notDoneCount} not done
               </td>

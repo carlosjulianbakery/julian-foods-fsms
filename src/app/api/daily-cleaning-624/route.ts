@@ -36,6 +36,7 @@ export async function GET(req: NextRequest) {
         time: true,
         facility: true,
         conductedBy: true,
+        initials: true,
         rows: true,
         doneCount: true,
         naCount: true,
@@ -78,6 +79,7 @@ export async function POST(req: NextRequest) {
     date: string;
     time: string;
     conductedBy: string;
+    initials: string;
     rows: CleaningRowSnapshot[];
     allergenChange: boolean;
     notes: string | null;
@@ -88,6 +90,7 @@ export async function POST(req: NextRequest) {
   if (!body.date)        return NextResponse.json({ error: "date required" }, { status: 400 });
   if (!body.time)        return NextResponse.json({ error: "time required" }, { status: 400 });
   if (!body.conductedBy) return NextResponse.json({ error: "conductedBy required" }, { status: 400 });
+  if (!body.initials)    return NextResponse.json({ error: "initials required" }, { status: 400 });
   if (!Array.isArray(body.rows) || body.rows.length !== 19)
     return NextResponse.json({ error: "rows must be 19 items" }, { status: 400 });
 
@@ -110,7 +113,8 @@ export async function POST(req: NextRequest) {
         date:            new Date(body.date),
         time:            body.time,
         facility:        "624",
-        conductedBy:     body.conductedBy.toUpperCase(),
+        conductedBy:     body.conductedBy.trim(),
+        initials:        body.initials.toUpperCase().trim(),
         rows:            body.rows as never,
         doneCount,
         naCount,

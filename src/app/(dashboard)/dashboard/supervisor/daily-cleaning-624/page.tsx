@@ -15,6 +15,7 @@ import type { RowState, CleaningRowSnapshot } from "@/components/forms624/types"
 
 const FORM_PREFIX = "daily_cleaning_624";
 
+// Derive initials from full name ("Hugo Garcia Ayala" → "HGA")
 function nameToInitials(name: string): string {
   return name
     .split(/\s+/)
@@ -59,6 +60,7 @@ interface DraftData {
   date: string;
   time: string;
   conductedBy: string;
+  initials: string;
   rows: RowEntry[];
   allergenChange: boolean | null;
   notes: string;
@@ -75,6 +77,7 @@ export default function DailyCleaning624Page() {
   const [date, setDate] = useState(todayYMD);
   const [time, setTime] = useState(nowTime);
   const [conductedBy, setConductedBy] = useState("");
+  const [initials, setInitials] = useState("");
   const [rows, setRows] = useState<RowEntry[]>(buildRows);
   const [allergenChange, setAllergenChange] = useState<boolean | null>(null);
   const [notes, setNotes] = useState("");
@@ -87,11 +90,14 @@ export default function DailyCleaning624Page() {
   const draftLoadedRef = useRef(false);
   const draftTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Prefill name and initials from session
   useEffect(() => {
-    if (!session?.user?.name || conductedBy) return;
-    setConductedBy(nameToInitials(session.user.name));
-  }, [session?.user?.name, conductedBy]);
+    if (!session?.user?.name) return;
+    if (!conductedBy) setConductedBy(session.user.name);
+    if (!initials)    setInitials(nameToInitials(session.user.name));
+  }, [session?.user?.name]);
 
+  // Load draft once session is available
   useEffect(() => {
     if (!session?.user?.id || draftLoadedRef.current) return;
     draftLoadedRef.current = true;
@@ -100,6 +106,7 @@ export default function DailyCleaning624Page() {
       setDate(draft.date);
       setTime(draft.time);
       setConductedBy(draft.conductedBy);
+      setInitials(draft.initials ?? "");
       setRows(draft.rows);
       setAllergenChange(draft.allergenChange ?? null);
       setNotes(draft.notes ?? "");
@@ -107,17 +114,18 @@ export default function DailyCleaning624Page() {
     }
   }, [session?.user?.id, todayYMD]);
 
+  // Auto-save draft 1s after last change
   useEffect(() => {
     if (!session?.user?.id) return;
     if (draftTimer.current) clearTimeout(draftTimer.current);
     draftTimer.current = setTimeout(() => {
       saveDraft624(FORM_PREFIX, session.user.id!, todayYMD, {
-        date, time, conductedBy, rows, allergenChange, notes,
+        date, time, conductedBy, initials, rows, allergenChange, notes,
       });
       setDraftSaved(true);
     }, 1000);
     return () => { if (draftTimer.current) clearTimeout(draftTimer.current); };
-  }, [date, time, conductedBy, rows, allergenChange, notes, session?.user?.id, todayYMD]);
+  }, [date, time, conductedBy, initials, rows, allergenChange, notes, session?.user?.id, todayYMD]);
 
   useEffect(() => {
     fetch(`/api/daily-cleaning-624?date=${todayYMD}`)
@@ -165,6 +173,7 @@ export default function DailyCleaning624Page() {
       date,
       time,
       conductedBy: conductedBy.trim(),
+      initials: initials.trim().toUpperCase(),
       rows: rows.map((r): CleaningRowSnapshot => ({
         key: r.key,
         labelEn: r.labelEn,
@@ -251,7 +260,10 @@ export default function DailyCleaning624Page() {
                 setRows(buildRows());
                 setAllergenChange(null);
                 setNotes("");
-                setConductedBy(session?.user?.name ? nameToInitials(session.user.name) : "");
+                if (session?.user?.name) {
+                  setConductedBy(session.user.name);
+                  setInitials(nameToInitials(session.user.name));
+                }
                 setDraftResumed(false);
               }}
             >
@@ -270,6 +282,20 @@ export default function DailyCleaning624Page() {
           onTimeChange={setTime}
           onConductedByChange={setConductedBy}
         />
+
+        {/* Initials field */}
+        <div className="card p-4">
+          <label className="label">Initials</label>
+          <input
+            type="text"
+            className="input mt-1 uppercase"
+            placeholder="e.g. HGA"
+            value={initials}
+            onChange={(e) => setInitials(e.target.value.toUpperCase().slice(0, 6))}
+            maxLength={6}
+          />
+          <p className="text-xs text-gray-400 mt-1">Auto-derived from your name. Edit if needed.</p>
+        </div>
 
         <div className="border border-amber-200 rounded-lg overflow-hidden">
           <button
@@ -395,7 +421,7 @@ export default function DailyCleaning624Page() {
           <label className="label">Notes / issues found</label>
           <textarea
             className="input resize-none h-20"
-            placeholder="Optional observations…"
+            placeholder="Optional observations\u2026"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
           />
@@ -424,7 +450,7 @@ export default function DailyCleaning624Page() {
           {submitting ? (
             <>
               <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-              Submitting…
+              Submitting\u2026
             </>
           ) : (
             <>

@@ -180,7 +180,8 @@ model DailyClean624Record {
   date            DateTime @db.Date
   time            String // "HH:MM" 24h
   facility        String   @default("624") // always "624" for this table
-  conductedBy     String // initials
+  conductedBy     String // full name
+  initials        String // e.g. "HGA"
   rows            Json // CleaningRowSnapshot[]
   doneCount       Int      @default(0)
   naCount         Int      @default(0)
