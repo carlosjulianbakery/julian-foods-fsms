@@ -28,6 +28,13 @@ export async function generateCalendarInstances(opts: CalendarGeneratorOpts = {}
   totalSkipped: number;
   totalFlagged: number;
 }> {
+  // Fail fast when the API key is absent — prevents silent gviz fallback with stale data.
+  if (!process.env.GOOGLE_SHEETS_API_KEY) {
+    throw new Error(
+      "GOOGLE_SHEETS_API_KEY is not set — aborting calendar generation to prevent gviz fallback with potentially stale data"
+    );
+  }
+
   // Always iterate every facility so lastCalendarSyncAt is recorded even when
   // a facility has no calendar-based rules yet.
   const [facilities, rules] = await Promise.all([
