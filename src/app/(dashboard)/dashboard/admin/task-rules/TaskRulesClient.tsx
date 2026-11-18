@@ -18,6 +18,8 @@ interface Rule {
   formKey: string | null;
   productName: string | null;
   isActive: boolean;
+  windowMode: string;
+  windowDaysBefore: number | null;
   isArchived: boolean;
   archivedAt: string | null;
   instanceCount: number;
@@ -124,6 +126,8 @@ const emptyForm = {
   recurrenceStart: new Date().toISOString().slice(0, 10),
   formKey: "",
   productName: "",
+  windowMode: "NONE",
+  windowDaysBefore: 7,
 };
 
 export function TaskRulesClient({ rules: initialRules, facilities, users, syncStatuses }: Props) {
@@ -177,6 +181,8 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
       recurrenceStart: normDateStr(rule.recurrenceStart),
       formKey: rule.formKey ?? "",
       productName: rule.productName ?? "",
+      windowMode: rule.windowMode ?? "NONE",
+      windowDaysBefore: rule.windowDaysBefore ?? 7,
     });
     setError("");
     setShowModal(true);
@@ -202,6 +208,8 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
         recurrenceStart: form.recurrenceStart,
         formKey: form.formKey || null,
         productName: form.triggerType === "PRODUCTION_PRODUCT" ? form.productName || null : null,
+        windowMode: form.windowMode || "NONE",
+        windowDaysBefore: form.windowMode === "DAYS_BEFORE" ? (Number(form.windowDaysBefore) || 7) : null,
       };
 
       setSaveMsg(null);
@@ -633,6 +641,31 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
                   value={form.recurrenceStart}
                   onChange={(e) => setForm((f) => ({ ...f, recurrenceStart: e.target.value }))}
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Available from</label>
+                <select
+                  className="input w-full"
+                  value={form.windowMode}
+                  onChange={(e) => setForm((f) => ({ ...f, windowMode: e.target.value }))}
+                >
+                  <option value="NONE">Due date only</option>
+                  <option value="PERIOD_START">Start of period (1st of month / Monday)</option>
+                  <option value="DAYS_BEFORE">N days before due date</option>
+                </select>
+                {form.windowMode === "DAYS_BEFORE" && (
+                  <div className="mt-2 flex items-center gap-2">
+                    <input
+                      type="number"
+                      min={1}
+                      max={90}
+                      className="input w-24"
+                      value={form.windowDaysBefore}
+                      onChange={(e) => setForm((f) => ({ ...f, windowDaysBefore: parseInt(e.target.value) || 1 }))}
+                    />
+                    <span className="text-sm text-gray-600">days before</span>
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Linked Form</label>

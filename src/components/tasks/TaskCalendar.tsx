@@ -160,7 +160,7 @@ function TaskChip({ inst, today }: { inst: TaskInstance; today: string }) {
 const DOW_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 function DayCell({
-  date, instances, today, isToday, isPast, isCurrentMonth = true, onClick,
+  date, instances, today, isToday, isPast, isCurrentMonth = true, windowBands = [], onClick,
 }: {
   date: string;
   instances: TaskInstance[];
@@ -168,6 +168,7 @@ function DayCell({
   isToday: boolean;
   isPast: boolean;
   isCurrentMonth?: boolean;
+  windowBands?: TaskInstance[];
   onClick: () => void;
 }) {
   const [, m, d] = date.split("-");
@@ -209,6 +210,24 @@ function DayCell({
           <span className="text-[9px] text-gray-400 italic block">No batch sheets</span>
         )}
       </div>
+      {/* Window bands */}
+      {windowBands.length > 0 && (
+        <div className="mt-1.5 space-y-0.5">
+          {windowBands.slice(0, 3).map((inst) => (
+            <div
+              key={inst.id}
+              title={inst.ruleTitle}
+              className={[
+                "h-1 rounded-full opacity-50",
+                inst.status === "IN_PROGRESS" ? "bg-blue-400" : "bg-gray-300",
+              ].join(" ")}
+            />
+          ))}
+          {windowBands.length > 3 && (
+            <span className="text-[9px] text-gray-400">+{windowBands.length - 3}</span>
+          )}
+        </div>
+      )}
     </button>
   );
 }
@@ -894,17 +913,26 @@ export function TaskCalendar({
             </div>
             {/* Day cells */}
             <div className="gap-1" style={{ display: "grid", gridTemplateColumns: `repeat(${visibleWeekDays.length}, minmax(0, 1fr))` }}>
-              {visibleWeekDays.map((day) => (
-                <DayCell
-                  key={day}
-                  date={day}
-                  instances={dayInstances(day)}
-                  today={today}
-                  isToday={day === today}
-                  isPast={day < today}
-                  onClick={() => setSelectedDay(selectedDay === day ? null : day)}
-                />
-              ))}
+              {visibleWeekDays.map((day) => {
+                const windowBandsForDay = instances.filter((inst) =>
+                  inst.windowStart != null &&
+                  inst.windowStart <= day &&
+                  day < inst.dueDate &&
+                  !["DONE", "SKIPPED", "MISSED"].includes(inst.status)
+                );
+                return (
+                  <DayCell
+                    key={day}
+                    date={day}
+                    instances={dayInstances(day)}
+                    today={today}
+                    isToday={day === today}
+                    isPast={day < today}
+                    windowBands={windowBandsForDay}
+                    onClick={() => setSelectedDay(selectedDay === day ? null : day)}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>

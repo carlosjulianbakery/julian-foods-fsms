@@ -1360,6 +1360,8 @@ model TaskRule {
   isActive             Boolean             @default(true)
   isArchived           Boolean             @default(false)
   archivedAt           DateTime?
+  windowMode           String              @default("NONE")
+  windowDaysBefore     Int?
   createdAt            DateTime            @default(now())
   updatedAt            DateTime            @updatedAt
 

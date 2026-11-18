@@ -40,6 +40,8 @@ export interface TaskInstance {
   skipReason: string | null;
   skippedByName: string | null;
   skippedAt: string | null;
+  windowStart?: string | null;
+  progress?: { done: number; total: number } | null;
 }
 
 interface Props {
@@ -47,6 +49,7 @@ interface Props {
   skippedInstances: TaskInstance[];
   calendarInstances: TaskInstance[];
   calendarWeekStart: string;
+  windowInstances: TaskInstance[];
   role: string;
   userId: string;
   firstName: string;
@@ -673,6 +676,78 @@ function SkippedTaskRow({
   );
 }
 
+// ─── Window task card ────────────────────────────────────────────────────────
+
+function WindowTaskCard({
+  inst,
+  today,
+  startingId,
+  isPending,
+  onStart,
+}: {
+  inst: TaskInstance;
+  today: string;
+  startingId: string | null;
+  isPending: boolean;
+  onStart: (inst: TaskInstance) => void;
+}) {
+  const dueDate = inst.dueDate;
+  const dl = (() => {
+    const due = new Date(dueDate + "T12:00:00Z");
+    const tod = new Date(today + "T12:00:00Z");
+    return Math.max(0, Math.round((due.getTime() - tod.getTime()) / (1000 * 60 * 60 * 24)));
+  })();
+  const isStarting = startingId === inst.id;
+  const isBusy = isStarting || isPending;
+  const isInProgress = inst.status === "IN_PROGRESS";
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm flex items-center gap-3">
+      <div className="flex-1 min-w-0">
+        <div className="flex flex-wrap items-center gap-2 mb-0.5">
+          <span className="font-semibold text-sm text-gray-900">{inst.ruleTitle}</span>
+          <FacilityTag name={inst.facilityName} />
+          {isInProgress && (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-blue-100 text-blue-700">
+              In Progress
+            </span>
+          )}
+        </div>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-gray-500 mt-1">
+          <span>
+            Due {formatDueDate(dueDate)}
+            {" · "}
+            <span className={dl <= 3 ? "text-amber-600 font-medium" : ""}>
+              {dl === 0 ? "today" : dl === 1 ? "1 day left" : `${dl} days left`}
+            </span>
+          </span>
+          {inst.progress && (
+            <span className="text-gray-500">
+              {inst.progress.done}/{inst.progress.total} items done
+            </span>
+          )}
+        </div>
+        {inst.progress && inst.progress.total > 0 && (
+          <div className="mt-2 w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+            <div
+              className="bg-green-500 h-full rounded-full transition-all"
+              style={{ width: `${Math.round((inst.progress.done / inst.progress.total) * 100)}%` }}
+            />
+          </div>
+        )}
+      </div>
+      <button
+        onClick={() => onStart(inst)}
+        disabled={isBusy}
+        className="inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg bg-[#C41E3A] text-white text-sm font-medium hover:bg-[#a8172e] transition-colors disabled:opacity-50 shrink-0"
+      >
+        <Play className="w-3.5 h-3.5" />
+        {isInProgress ? "Continue" : "Start"}
+      </button>
+    </div>
+  );
+}
+
 // ─── Main export ──────────────────────────────────────────────────────────────
 
 export function MyTasksClient({
@@ -680,6 +755,7 @@ export function MyTasksClient({
   skippedInstances,
   calendarInstances,
   calendarWeekStart,
+  windowInstances,
   role,
   userId,
   firstName,
@@ -745,6 +821,13 @@ export function MyTasksClient({
 
   const filteredSkipped = skippedInstances.filter((i) => {
     if (role !== "ADMIN") return true;
+    if (viewMode === "byOwner" && selectedOwnerId) return (i.ownerUserId ?? i.ownerId) === selectedOwnerId;
+    return true;
+  });
+
+  const filteredWindowInstances = windowInstances.filter((i) => {
+    if (role !== "ADMIN") return true;
+    if (viewMode === "my") return (i.ownerUserId ?? i.ownerId) === userId;
     if (viewMode === "byOwner" && selectedOwnerId) return (i.ownerUserId ?? i.ownerId) === selectedOwnerId;
     return true;
   });
@@ -1041,6 +1124,28 @@ export function MyTasksClient({
                 onReopen={handleReopen}
               />
             ))}
+          </div>
+        )}
+
+        {/* Open this period — window tasks whose window has opened but due date is future */}
+        {filteredWindowInstances.length > 0 && (
+          <div className="mt-4">
+            <div className="mb-2 px-1 flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Open this period</span>
+              <span className="text-[11px] text-gray-400">({filteredWindowInstances.length})</span>
+            </div>
+            <div className="space-y-3">
+              {filteredWindowInstances.map((inst) => (
+                <WindowTaskCard
+                  key={inst.id}
+                  inst={inst}
+                  today={today}
+                  startingId={startingId}
+                  isPending={isPending}
+                  onStart={handleStart}
+                />
+              ))}
+            </div>
           </div>
         )}
 

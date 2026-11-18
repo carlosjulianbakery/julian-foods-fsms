@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
+import { computeWindowStart } from "@/lib/window-tasks";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -76,6 +77,9 @@ export async function GET(req: NextRequest) {
           formKey: true,
           facility: { select: { id: true, name: true } },
           owner: { select: { id: true, name: true } },
+          windowMode: true,
+          windowDaysBefore: true,
+          recurrenceUnit: true,
         },
       },
       doneBy: { select: { id: true, name: true } },
@@ -108,6 +112,15 @@ export async function GET(req: NextRequest) {
       skipReason: inst.skipReason ?? null,
       skippedByName: inst.skippedBy?.name ?? null,
       skippedAt: inst.skippedAt?.toISOString() ?? null,
+      windowStart: computeWindowStart(
+        {
+          windowMode: inst.rule.windowMode,
+          windowDaysBefore: inst.rule.windowDaysBefore,
+          recurrenceUnit: inst.rule.recurrenceUnit,
+        },
+        inst.dueDate.toISOString().slice(0, 10),
+      ),
+      progress: null,
     }))
   );
 }

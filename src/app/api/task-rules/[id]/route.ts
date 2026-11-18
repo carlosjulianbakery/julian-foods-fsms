@@ -28,6 +28,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       formKey,
       productName,
       isActive,
+      windowMode,
+      windowDaysBefore,
     } = body;
 
     // Block facility change if rule has any instances (would rewrite all history)
@@ -61,6 +63,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     if (formKey !== undefined) data.formKey = formKey || null;
     if (productName !== undefined) data.productName = productName || null;
     if (isActive !== undefined) data.isActive = isActive;
+    if (windowMode !== undefined) data.windowMode = windowMode;
+    if (windowDaysBefore !== undefined) data.windowDaysBefore = windowDaysBefore != null ? parseInt(String(windowDaysBefore)) : null;
 
     const rule = await prisma.taskRule.update({
       where: { id: params.id },

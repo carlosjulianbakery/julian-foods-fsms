@@ -62,6 +62,8 @@ export async function POST(req: NextRequest) {
       recurrenceStart,
       formKey,
       productName,
+      windowMode,
+      windowDaysBefore,
     } = body;
 
     if (!title?.trim()) return NextResponse.json({ error: "Title is required" }, { status: 400 });
@@ -84,6 +86,8 @@ export async function POST(req: NextRequest) {
         recurrenceStart: new Date(recurrenceStart),
         formKey: formKey || null,
         productName: productName || null,
+        windowMode: windowMode ?? "NONE",
+        windowDaysBefore: windowDaysBefore != null ? parseInt(String(windowDaysBefore)) : null,
       },
       include: {
         facility: { select: { id: true, name: true } },

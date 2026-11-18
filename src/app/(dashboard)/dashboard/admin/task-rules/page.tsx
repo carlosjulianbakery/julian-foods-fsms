@@ -62,6 +62,8 @@ export default async function TaskRulesPage() {
     recurrenceStart: r.recurrenceStart.toISOString().slice(0, 10),
     formKey: r.formKey,
     productName: r.productName ?? null,
+    windowMode: r.windowMode ?? "NONE",
+    windowDaysBefore: r.windowDaysBefore ?? null,
     isActive: r.isActive,
     isArchived: r.isArchived,
     archivedAt: r.archivedAt?.toISOString() ?? null,

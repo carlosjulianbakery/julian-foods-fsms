@@ -67156,11 +67156,13 @@ export namespace Prisma {
   export type TaskRuleAvgAggregateOutputType = {
     recurrenceEvery: number | null
     escalateAfterDays: number | null
+    windowDaysBefore: number | null
   }
 
   export type TaskRuleSumAggregateOutputType = {
     recurrenceEvery: number | null
     escalateAfterDays: number | null
+    windowDaysBefore: number | null
   }
 
   export type TaskRuleMinAggregateOutputType = {
@@ -67180,6 +67182,8 @@ export namespace Prisma {
     isActive: boolean | null
     isArchived: boolean | null
     archivedAt: Date | null
+    windowMode: string | null
+    windowDaysBefore: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -67201,6 +67205,8 @@ export namespace Prisma {
     isActive: boolean | null
     isArchived: boolean | null
     archivedAt: Date | null
+    windowMode: string | null
+    windowDaysBefore: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -67222,6 +67228,8 @@ export namespace Prisma {
     isActive: number
     isArchived: number
     archivedAt: number
+    windowMode: number
+    windowDaysBefore: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -67231,11 +67239,13 @@ export namespace Prisma {
   export type TaskRuleAvgAggregateInputType = {
     recurrenceEvery?: true
     escalateAfterDays?: true
+    windowDaysBefore?: true
   }
 
   export type TaskRuleSumAggregateInputType = {
     recurrenceEvery?: true
     escalateAfterDays?: true
+    windowDaysBefore?: true
   }
 
   export type TaskRuleMinAggregateInputType = {
@@ -67255,6 +67265,8 @@ export namespace Prisma {
     isActive?: true
     isArchived?: true
     archivedAt?: true
+    windowMode?: true
+    windowDaysBefore?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -67276,6 +67288,8 @@ export namespace Prisma {
     isActive?: true
     isArchived?: true
     archivedAt?: true
+    windowMode?: true
+    windowDaysBefore?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -67297,6 +67311,8 @@ export namespace Prisma {
     isActive?: true
     isArchived?: true
     archivedAt?: true
+    windowMode?: true
+    windowDaysBefore?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -67405,6 +67421,8 @@ export namespace Prisma {
     isActive: boolean
     isArchived: boolean
     archivedAt: Date | null
+    windowMode: string
+    windowDaysBefore: number | null
     createdAt: Date
     updatedAt: Date
     _count: TaskRuleCountAggregateOutputType | null
@@ -67445,6 +67463,8 @@ export namespace Prisma {
     isActive?: boolean
     isArchived?: boolean
     archivedAt?: boolean
+    windowMode?: boolean
+    windowDaysBefore?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     facility?: boolean | FacilityDefaultArgs<ExtArgs>
@@ -67470,6 +67490,8 @@ export namespace Prisma {
     isActive?: boolean
     isArchived?: boolean
     archivedAt?: boolean
+    windowMode?: boolean
+    windowDaysBefore?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     facility?: boolean | FacilityDefaultArgs<ExtArgs>
@@ -67493,6 +67515,8 @@ export namespace Prisma {
     isActive?: boolean
     isArchived?: boolean
     archivedAt?: boolean
+    windowMode?: boolean
+    windowDaysBefore?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -67532,6 +67556,8 @@ export namespace Prisma {
       isActive: boolean
       isArchived: boolean
       archivedAt: Date | null
+      windowMode: string
+      windowDaysBefore: number | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["taskRule"]>
@@ -67946,6 +67972,8 @@ export namespace Prisma {
     readonly isActive: FieldRef<"TaskRule", 'Boolean'>
     readonly isArchived: FieldRef<"TaskRule", 'Boolean'>
     readonly archivedAt: FieldRef<"TaskRule", 'DateTime'>
+    readonly windowMode: FieldRef<"TaskRule", 'String'>
+    readonly windowDaysBefore: FieldRef<"TaskRule", 'Int'>
     readonly createdAt: FieldRef<"TaskRule", 'DateTime'>
     readonly updatedAt: FieldRef<"TaskRule", 'DateTime'>
   }
@@ -73786,6 +73814,8 @@ export namespace Prisma {
     isActive: 'isActive',
     isArchived: 'isArchived',
     archivedAt: 'archivedAt',
+    windowMode: 'windowMode',
+    windowDaysBefore: 'windowDaysBefore',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -79724,6 +79754,8 @@ export namespace Prisma {
     isActive?: BoolFilter<"TaskRule"> | boolean
     isArchived?: BoolFilter<"TaskRule"> | boolean
     archivedAt?: DateTimeNullableFilter<"TaskRule"> | Date | string | null
+    windowMode?: StringFilter<"TaskRule"> | string
+    windowDaysBefore?: IntNullableFilter<"TaskRule"> | number | null
     createdAt?: DateTimeFilter<"TaskRule"> | Date | string
     updatedAt?: DateTimeFilter<"TaskRule"> | Date | string
     facility?: XOR<FacilityRelationFilter, FacilityWhereInput>
@@ -79748,6 +79780,8 @@ export namespace Prisma {
     isActive?: SortOrder
     isArchived?: SortOrder
     archivedAt?: SortOrderInput | SortOrder
+    windowMode?: SortOrder
+    windowDaysBefore?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     facility?: FacilityOrderByWithRelationInput
@@ -79775,6 +79809,8 @@ export namespace Prisma {
     isActive?: BoolFilter<"TaskRule"> | boolean
     isArchived?: BoolFilter<"TaskRule"> | boolean
     archivedAt?: DateTimeNullableFilter<"TaskRule"> | Date | string | null
+    windowMode?: StringFilter<"TaskRule"> | string
+    windowDaysBefore?: IntNullableFilter<"TaskRule"> | number | null
     createdAt?: DateTimeFilter<"TaskRule"> | Date | string
     updatedAt?: DateTimeFilter<"TaskRule"> | Date | string
     facility?: XOR<FacilityRelationFilter, FacilityWhereInput>
@@ -79799,6 +79835,8 @@ export namespace Prisma {
     isActive?: SortOrder
     isArchived?: SortOrder
     archivedAt?: SortOrderInput | SortOrder
+    windowMode?: SortOrder
+    windowDaysBefore?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: TaskRuleCountOrderByAggregateInput
@@ -79828,6 +79866,8 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"TaskRule"> | boolean
     isArchived?: BoolWithAggregatesFilter<"TaskRule"> | boolean
     archivedAt?: DateTimeNullableWithAggregatesFilter<"TaskRule"> | Date | string | null
+    windowMode?: StringWithAggregatesFilter<"TaskRule"> | string
+    windowDaysBefore?: IntNullableWithAggregatesFilter<"TaskRule"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"TaskRule"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TaskRule"> | Date | string
   }
@@ -86537,6 +86577,8 @@ export namespace Prisma {
     isActive?: boolean
     isArchived?: boolean
     archivedAt?: Date | string | null
+    windowMode?: string
+    windowDaysBefore?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     facility: FacilityCreateNestedOneWithoutTaskRulesInput
@@ -86561,6 +86603,8 @@ export namespace Prisma {
     isActive?: boolean
     isArchived?: boolean
     archivedAt?: Date | string | null
+    windowMode?: string
+    windowDaysBefore?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instances?: RuleInstanceUncheckedCreateNestedManyWithoutRuleInput
@@ -86581,6 +86625,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    windowMode?: StringFieldUpdateOperationsInput | string
+    windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     facility?: FacilityUpdateOneRequiredWithoutTaskRulesNestedInput
@@ -86605,6 +86651,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    windowMode?: StringFieldUpdateOperationsInput | string
+    windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instances?: RuleInstanceUncheckedUpdateManyWithoutRuleNestedInput
@@ -86627,6 +86675,8 @@ export namespace Prisma {
     isActive?: boolean
     isArchived?: boolean
     archivedAt?: Date | string | null
+    windowMode?: string
+    windowDaysBefore?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -86646,6 +86696,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    windowMode?: StringFieldUpdateOperationsInput | string
+    windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -86667,6 +86719,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    windowMode?: StringFieldUpdateOperationsInput | string
+    windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -91250,6 +91304,8 @@ export namespace Prisma {
     isActive?: SortOrder
     isArchived?: SortOrder
     archivedAt?: SortOrder
+    windowMode?: SortOrder
+    windowDaysBefore?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -91257,6 +91313,7 @@ export namespace Prisma {
   export type TaskRuleAvgOrderByAggregateInput = {
     recurrenceEvery?: SortOrder
     escalateAfterDays?: SortOrder
+    windowDaysBefore?: SortOrder
   }
 
   export type TaskRuleMaxOrderByAggregateInput = {
@@ -91276,6 +91333,8 @@ export namespace Prisma {
     isActive?: SortOrder
     isArchived?: SortOrder
     archivedAt?: SortOrder
+    windowMode?: SortOrder
+    windowDaysBefore?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -91297,6 +91356,8 @@ export namespace Prisma {
     isActive?: SortOrder
     isArchived?: SortOrder
     archivedAt?: SortOrder
+    windowMode?: SortOrder
+    windowDaysBefore?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -91304,6 +91365,7 @@ export namespace Prisma {
   export type TaskRuleSumOrderByAggregateInput = {
     recurrenceEvery?: SortOrder
     escalateAfterDays?: SortOrder
+    windowDaysBefore?: SortOrder
   }
 
   export type EnumTaskRuleTriggerTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -98843,6 +98905,8 @@ export namespace Prisma {
     isActive?: boolean
     isArchived?: boolean
     archivedAt?: Date | string | null
+    windowMode?: string
+    windowDaysBefore?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     facility: FacilityCreateNestedOneWithoutTaskRulesInput
@@ -98865,6 +98929,8 @@ export namespace Prisma {
     isActive?: boolean
     isArchived?: boolean
     archivedAt?: Date | string | null
+    windowMode?: string
+    windowDaysBefore?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instances?: RuleInstanceUncheckedCreateNestedManyWithoutRuleInput
@@ -100383,6 +100449,8 @@ export namespace Prisma {
     isActive?: BoolFilter<"TaskRule"> | boolean
     isArchived?: BoolFilter<"TaskRule"> | boolean
     archivedAt?: DateTimeNullableFilter<"TaskRule"> | Date | string | null
+    windowMode?: StringFilter<"TaskRule"> | string
+    windowDaysBefore?: IntNullableFilter<"TaskRule"> | number | null
     createdAt?: DateTimeFilter<"TaskRule"> | Date | string
     updatedAt?: DateTimeFilter<"TaskRule"> | Date | string
   }
@@ -116562,6 +116630,8 @@ export namespace Prisma {
     isActive?: boolean
     isArchived?: boolean
     archivedAt?: Date | string | null
+    windowMode?: string
+    windowDaysBefore?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     owner: UserCreateNestedOneWithoutOwnedTaskRulesInput
@@ -116584,6 +116654,8 @@ export namespace Prisma {
     isActive?: boolean
     isArchived?: boolean
     archivedAt?: Date | string | null
+    windowMode?: string
+    windowDaysBefore?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instances?: RuleInstanceUncheckedCreateNestedManyWithoutRuleInput
@@ -116972,6 +117044,8 @@ export namespace Prisma {
     isActive?: boolean
     isArchived?: boolean
     archivedAt?: Date | string | null
+    windowMode?: string
+    windowDaysBefore?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     facility: FacilityCreateNestedOneWithoutTaskRulesInput
@@ -116995,6 +117069,8 @@ export namespace Prisma {
     isActive?: boolean
     isArchived?: boolean
     archivedAt?: Date | string | null
+    windowMode?: string
+    windowDaysBefore?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -117468,6 +117544,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    windowMode?: StringFieldUpdateOperationsInput | string
+    windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     facility?: FacilityUpdateOneRequiredWithoutTaskRulesNestedInput
@@ -117491,6 +117569,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    windowMode?: StringFieldUpdateOperationsInput | string
+    windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -119377,6 +119457,8 @@ export namespace Prisma {
     isActive?: boolean
     isArchived?: boolean
     archivedAt?: Date | string | null
+    windowMode?: string
+    windowDaysBefore?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -120964,6 +121046,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    windowMode?: StringFieldUpdateOperationsInput | string
+    windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     facility?: FacilityUpdateOneRequiredWithoutTaskRulesNestedInput
@@ -120986,6 +121070,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    windowMode?: StringFieldUpdateOperationsInput | string
+    windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instances?: RuleInstanceUncheckedUpdateManyWithoutRuleNestedInput
@@ -121007,6 +121093,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    windowMode?: StringFieldUpdateOperationsInput | string
+    windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -124643,6 +124731,8 @@ export namespace Prisma {
     isActive?: boolean
     isArchived?: boolean
     archivedAt?: Date | string | null
+    windowMode?: string
+    windowDaysBefore?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -124662,6 +124752,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    windowMode?: StringFieldUpdateOperationsInput | string
+    windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     owner?: UserUpdateOneRequiredWithoutOwnedTaskRulesNestedInput
@@ -124684,6 +124776,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    windowMode?: StringFieldUpdateOperationsInput | string
+    windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instances?: RuleInstanceUncheckedUpdateManyWithoutRuleNestedInput
@@ -124705,6 +124799,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     isArchived?: BoolFieldUpdateOperationsInput | boolean
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    windowMode?: StringFieldUpdateOperationsInput | string
+    windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

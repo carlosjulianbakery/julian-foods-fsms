@@ -990,6 +990,8 @@ exports.Prisma.TaskRuleScalarFieldEnum = {
   isActive: 'isActive',
   isArchived: 'isArchived',
   archivedAt: 'archivedAt',
+  windowMode: 'windowMode',
+  windowDaysBefore: 'windowDaysBefore',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
