@@ -160,7 +160,7 @@ function TaskChip({ inst, today }: { inst: TaskInstance; today: string }) {
 const DOW_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 function DayCell({
-  date, instances, today, isToday, isPast, isCurrentMonth = true, windowBands = [], onClick,
+  date, instances, today, isToday, isPast, isCurrentMonth = true, windowBands = [], windowBandIsStart = [], onClick,
 }: {
   date: string;
   instances: TaskInstance[];
@@ -169,6 +169,7 @@ function DayCell({
   isPast: boolean;
   isCurrentMonth?: boolean;
   windowBands?: TaskInstance[];
+  windowBandIsStart?: boolean[];
   onClick: () => void;
 }) {
   const [, m, d] = date.split("-");
@@ -213,16 +214,19 @@ function DayCell({
       {/* Window bands */}
       {windowBands.length > 0 && (
         <div className="mt-1.5 space-y-0.5">
-          {windowBands.slice(0, 3).map((inst) => (
-            <div
-              key={inst.id}
-              title={inst.ruleTitle}
-              className={[
-                "h-1 rounded-full opacity-50",
-                inst.status === "IN_PROGRESS" ? "bg-blue-400" : "bg-gray-300",
-              ].join(" ")}
-            />
-          ))}
+          {windowBands.slice(0, 3).map((inst, idx) => {
+            const isStart = windowBandIsStart[idx] ?? false;
+            const short = inst.ruleTitle.length > 18 ? inst.ruleTitle.slice(0, 16) + "…" : inst.ruleTitle;
+            const barCls = `h-1 rounded-full opacity-50 ${inst.status === "IN_PROGRESS" ? "bg-blue-400" : "bg-gray-300"}`;
+            return isStart ? (
+              <div key={inst.id} title={inst.ruleTitle} className="flex items-center gap-0.5 overflow-hidden">
+                <span className="text-[8px] text-gray-400 truncate max-w-[70%] leading-none">{short}</span>
+                <div className={`${barCls} flex-1`} />
+              </div>
+            ) : (
+              <div key={inst.id} title={inst.ruleTitle} className={`${barCls} w-full`} />
+            );
+          })}
           {windowBands.length > 3 && (
             <span className="text-[9px] text-gray-400">+{windowBands.length - 3}</span>
           )}
@@ -455,7 +459,7 @@ function PanelTaskCard({
 
 function DayPanel({
   date, instances, today, role, userId,
-  productionItems, onClose, onRefresh,
+  productionItems, windowTasks = [], onClose, onRefresh,
 }: {
   date: string;
   instances: TaskInstance[];
@@ -463,6 +467,7 @@ function DayPanel({
   role: string;
   userId: string;
   productionItems?: ProductionItem[];
+  windowTasks?: TaskInstance[];
   onClose: () => void;
   onRefresh: () => void;
 }) {
@@ -604,6 +609,38 @@ function DayPanel({
                   onReopen={handleReopen}
                 />
               ))
+            )}
+            {/* Open this period — window tasks open on this date but due later */}
+            {windowTasks.length > 0 && (
+              <div className="mt-2 pt-2 border-t border-gray-100">
+                <p className="text-[10px] font-bold uppercase tracking-wide text-gray-400 mb-2">
+                  Open this period
+                </p>
+                <div className="space-y-2">
+                  {windowTasks.map((inst) => {
+                    const dl = (() => {
+                      const due = new Date(inst.dueDate + "T12:00:00Z");
+                      const tod = new Date(date + "T12:00:00Z");
+                      return Math.max(0, Math.round((due.getTime() - tod.getTime()) / (1000 * 60 * 60 * 24)));
+                    })();
+                    return (
+                      <div key={inst.id} className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-2">
+                        <div className="flex items-start gap-2">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-medium text-gray-800 truncate">{inst.ruleTitle}</p>
+                            <p className={`text-[11px] mt-0.5 ${dl <= 3 ? "text-amber-600 font-medium" : "text-gray-500"}`}>
+                              Due {inst.dueDate.slice(5).replace("-", "/")} · {dl === 0 ? "today" : dl === 1 ? "1 day left" : `${dl} days left`}
+                            </p>
+                          </div>
+                          {inst.status === "IN_PROGRESS" && (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 shrink-0">In Progress</span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -920,6 +957,11 @@ export function TaskCalendar({
                   day < inst.dueDate &&
                   !["DONE", "SKIPPED", "MISSED"].includes(inst.status)
                 );
+                const windowBandIsStart = windowBandsForDay.map((inst) =>
+                  inst.windowStart! >= weekStart
+                    ? inst.windowStart! === day
+                    : day === weekStart
+                );
                 return (
                   <DayCell
                     key={day}
@@ -929,6 +971,7 @@ export function TaskCalendar({
                     isToday={day === today}
                     isPast={day < today}
                     windowBands={windowBandsForDay}
+                    windowBandIsStart={windowBandIsStart}
                     onClick={() => setSelectedDay(selectedDay === day ? null : day)}
                   />
                 );
@@ -994,6 +1037,30 @@ export function TaskCalendar({
                         )}
                       </div>
                     )}
+                    {/* Window bands (month view, no labels) */}
+                    {(() => {
+                      const bands = instances.filter((inst) =>
+                        inst.windowStart != null &&
+                        inst.windowStart <= day &&
+                        day < inst.dueDate &&
+                        !["DONE", "SKIPPED", "MISSED"].includes(inst.status)
+                      );
+                      if (bands.length === 0) return null;
+                      return (
+                        <div className="mt-1 space-y-0.5">
+                          {bands.slice(0, 3).map((inst) => (
+                            <div
+                              key={inst.id}
+                              title={inst.ruleTitle}
+                              className={`h-0.5 w-full rounded-full opacity-40 ${inst.status === "IN_PROGRESS" ? "bg-blue-400" : "bg-gray-400"}`}
+                            />
+                          ))}
+                          {bands.length > 3 && (
+                            <span className="text-[8px] text-gray-400">+{bands.length - 3}</span>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </button>
                 );
               })}
@@ -1011,6 +1078,12 @@ export function TaskCalendar({
           role={role}
           userId={userId}
           productionItems={productionDataRef.current.get(selectedDay)}
+          windowTasks={instances.filter((inst) =>
+            inst.windowStart != null &&
+            inst.windowStart <= selectedDay &&
+            selectedDay < inst.dueDate &&
+            !["DONE", "SKIPPED", "MISSED"].includes(inst.status)
+          )}
           onClose={() => setSelectedDay(null)}
           onRefresh={handleRefresh}
         />
