@@ -465,6 +465,17 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
                         {getFormLabel(rule.formKey) ?? `Unknown form (${rule.formKey})`}
                       </div>
                     )}
+                    {rule.windowMode && rule.windowMode !== "NONE" && (
+                      <div className="mt-0.5">
+                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                          {rule.windowMode === "PERIOD_START"
+                            ? "Open: start of period"
+                            : rule.windowMode === "DAYS_BEFORE"
+                            ? `Open: ${rule.windowDaysBefore}d before`
+                            : rule.windowMode}
+                        </span>
+                      </div>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{rule.facilityName}</td>
                   <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{triggerLabel(rule)}</td>
