@@ -466,11 +466,17 @@ function DayPanel({
   async function handleStart(inst: TaskInstance) {
     setStartingId(inst.id); setErr(null);
     try {
-      const res = await fetch(`/api/task-instances/${inst.id}/start`, { method: "POST" });
-      if (!res.ok) { setErr("Failed to start task."); return; }
-      dispatch(); startTransition(() => router.refresh()); onRefresh();
+      const isManual = !inst.formKey || inst.formKey === "manual";
+      if (isManual) {
+        const res = await fetch(`/api/task-instances/${inst.id}/start`, { method: "POST" });
+        if (!res.ok) { setErr("Failed to start task."); return; }
+        dispatch(); startTransition(() => router.refresh()); onRefresh();
+        return;
+      }
+      // Form-based: navigate directly — IN_PROGRESS set on first real edit
       const entry = inst.formKey ? TASK_FORM_REGISTRY[inst.formKey] : null;
       if (entry?.href) router.push(`${entry.href(inst.id)}?taskId=${inst.id}`);
+      else setErr("No form page found for this task type.");
     } catch { setErr("Unexpected error."); }
     finally { setStartingId(null); }
   }

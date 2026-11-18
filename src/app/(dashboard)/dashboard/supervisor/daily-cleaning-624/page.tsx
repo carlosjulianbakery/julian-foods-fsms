@@ -14,6 +14,7 @@ import { deriveInitials } from "@/components/forms624/initialsHelper";
 import { ACTIVITIES, CHEMICAL_MAP, INSTRUCTIONS_TEXT, INSTRUCTIONS_VER } from "./config";
 import type { RowState, CleaningRowSnapshot } from "@/components/forms624/types";
 import { navigateAfterSubmit } from "@/lib/afterSubmit";
+import { useMarkInProgress } from "@/hooks/useMarkInProgress";
 
 const FORM_PREFIX = "daily_cleaning_624";
 
@@ -61,6 +62,7 @@ export default function DailyCleaning624Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const taskId = searchParams?.get("taskId") ?? null;
+  const markInProgress = useMarkInProgress({ taskId, formKey: "daily_cleaning_624", facilityName: "624" });
 
   const { dateYMD: todayYMD, time24: nowTime } = getPTNow();
 
@@ -121,14 +123,16 @@ export default function DailyCleaning624Page() {
   }, [todayYMD]);
 
   const updateRow = useCallback((key: string, state: RowState, reason: string) => {
+    markInProgress();
     setRows((prev) =>
       prev.map((r) => (r.key === key ? { ...r, state, reason } : r))
     );
-  }, []);
+  }, [markInProgress]);
 
   const markAllDone = useCallback(() => {
+    markInProgress();
     setRows((prev) => prev.map((r) => ({ ...r, state: "DONE" as RowState, reason: "" })));
-  }, []);
+  }, [markInProgress]);
 
   const doneCount     = rows.filter((r) => r.state === "DONE").length;
   const naCount       = rows.filter((r) => r.state === "NA").length;

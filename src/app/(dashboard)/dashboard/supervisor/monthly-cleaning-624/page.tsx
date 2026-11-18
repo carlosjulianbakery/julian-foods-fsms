@@ -16,6 +16,7 @@ import {
 } from "./config";
 import type { RowState, MonthlyClean624Record, MonthlyClean624LineEntry } from "@/components/forms624/types";
 import { navigateAfterSubmit } from "@/lib/afterSubmit";
+import { useMarkInProgress } from "@/hooks/useMarkInProgress";
 import { formatMonthKeyLabel, lastDayOfMonth } from "@/lib/pacific-time";
 
 function getPTToday(): string {
@@ -60,6 +61,7 @@ export default function MonthlyCleaning624Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const taskId = searchParams?.get("taskId") ?? null;
+  const markInProgress = useMarkInProgress({ taskId, formKey: "monthly_cleaning_624", facilityName: "624" });
 
   const currentMonth = getPacificMonthKey();
   const today = getPTToday();
@@ -173,6 +175,7 @@ export default function MonthlyCleaning624Page() {
 
   const updateLine = useCallback((key: string, state: RowState, reason: string, lineDate: string | null, lineInitials: string | null) => {
     if (!record || isReadOnly) return;
+    if (state !== "UNTOUCHED") markInProgress();
     setLines((prev) => {
       const next = prev.map((l) => {
         if (l.key !== key) return l;
@@ -194,7 +197,7 @@ export default function MonthlyCleaning624Page() {
       });
       return next;
     });
-  }, [record, isReadOnly, initials, saveLine]);
+  }, [record, isReadOnly, initials, saveLine, markInProgress]);
 
   const updateLineDate = useCallback((key: string, lineDate: string) => {
     if (!record || isReadOnly) return;

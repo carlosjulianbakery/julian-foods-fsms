@@ -806,15 +806,21 @@ export function MyTasksClient({
     setStartingId(inst.id);
     setStartError(null);
     try {
-      const res = await fetch(`/api/task-instances/${inst.id}/start`, { method: "POST" });
-      if (!res.ok) { setStartError("Failed to start task. Please try again."); return; }
-      dispatchTaskAction();
-      startTransition(() => router.refresh());
+      const isManual = !inst.formKey || inst.formKey === "manual";
+      if (isManual) {
+        // Manual tasks: set IN_PROGRESS immediately (no form to edit)
+        const res = await fetch(`/api/task-instances/${inst.id}/start`, { method: "POST" });
+        if (!res.ok) { setStartError("Failed to start task. Please try again."); return; }
+        dispatchTaskAction();
+        startTransition(() => router.refresh());
+        return;
+      }
+      // Form-based tasks: navigate directly — IN_PROGRESS is set on the first real edit
       const entry = inst.formKey ? TASK_FORM_REGISTRY[inst.formKey] : null;
       const href = entry?.href(inst.id) ?? null;
       if (href) {
         router.push(`${href}?taskId=${inst.id}`);
-      } else if (inst.formKey && inst.formKey !== "manual") {
+      } else {
         setStartError("No form page found for this task type.");
       }
     } catch {

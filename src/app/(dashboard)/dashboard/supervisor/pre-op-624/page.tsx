@@ -12,6 +12,7 @@ import { deriveInitials } from "@/components/forms624/initialsHelper";
 import type { RowSnapshot, RowCondition } from "@/components/forms624/types";
 import { FRIDGE_MAX_F, FREEZER_MAX_F, ATP_MAX_RLU } from "@/components/forms624/types";
 import { markTaskCompleted } from "@/lib/completedTasks";
+import { useMarkInProgress } from "@/hooks/useMarkInProgress";
 
 // ─── Checklist definition ─────────────────────────────────────────────────────────────────────────────────
 
@@ -75,6 +76,7 @@ export default function PreOp624Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const taskInstanceId = searchParams.get("taskId") ?? undefined;
+  const markInProgress = useMarkInProgress({ taskId: taskInstanceId ?? null, formKey: "preop_624", facilityName: "624" });
 
   const today = getPacificToday();
   const nowTime = new Date().toLocaleTimeString("en-US", {
@@ -142,11 +144,13 @@ export default function PreOp624Page() {
 
   // Apply global initials to all rows when initials change
   function handleInitialsChange(val: string) {
+    markInProgress();
     setInitials(val);
     setRows((prev) => prev.map((r) => ({ ...r, initials: val })));
   }
 
   function patchRow(key: string, patch: Partial<Omit<RowSnapshot, "key" | "label">>) {
+    markInProgress();
     setRows((prev) => prev.map((r) => r.key === key ? { ...r, ...patch } : r));
   }
 

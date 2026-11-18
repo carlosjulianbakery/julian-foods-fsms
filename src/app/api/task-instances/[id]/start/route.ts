@@ -32,7 +32,7 @@ export async function POST(
   }
 
   // Idempotent: if already IN_PROGRESS or later, return current state
-  if (["IN_PROGRESS", "DONE", "SKIPPED"].includes(instance.status)) {
+  if (["IN_PROGRESS", "DONE", "SKIPPED", "MISSED"].includes(instance.status)) {
     return NextResponse.json({ id: instance.id, status: instance.status, formKey: instance.rule.formKey });
   }
 
