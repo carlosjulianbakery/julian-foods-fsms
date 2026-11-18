@@ -142,6 +142,24 @@ describe("Daily Cleaning 624 — no per-row initials", () => {
   });
 });
 
+// ─── Monthly Cleaning 624 — exactly one initials input (header only) ─────────
+
+describe("Monthly Cleaning 624 — no per-row initials", () => {
+  it("MC624 form page has no showRowInitials opt-in", () => {
+    const mc624Src = src(
+      "src/app/(dashboard)/dashboard/supervisor/monthly-cleaning-624/page.tsx"
+    );
+    expect(mc624Src).not.toContain("showRowInitials");
+  });
+
+  it("MC624 form page has no per-row initials input (placeholder=Init)", () => {
+    const mc624Src = src(
+      "src/app/(dashboard)/dashboard/supervisor/monthly-cleaning-624/page.tsx"
+    );
+    expect(mc624Src).not.toMatch(/placeholder=["']Init["']/);
+  });
+});
+
 // ─── OkNotOkRow — no other callers pass showRowInitials={true} ───────────────
 
 describe("no other form opts in to per-row initials", () => {
