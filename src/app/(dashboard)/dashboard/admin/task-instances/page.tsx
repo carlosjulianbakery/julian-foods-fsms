@@ -7,17 +7,10 @@ import { getPacificToday } from "@/lib/pacific-time";
 import { TaskInstanceFilters } from "./TaskInstanceFilters";
 import { ReopenButton } from "./ReopenButton";
 
-function statusBadge(status: string): string {
-  const map: Record<string, string> = {
-    UPCOMING: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
-    DUE_TODAY: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
-    IN_PROGRESS: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
-    DONE: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
-    OVERDUE: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
-    MISSED: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
-    SKIPPED: "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300",
-  };
-  return map[status] ?? "bg-gray-100 text-gray-600";
+import { getTaskPresentation } from "@/lib/task-presentation";
+
+function statusBadge(status: string, dueDate: string, today: string): string {
+  return getTaskPresentation(status, dueDate, today).badgeBg;
 }
 
 function formatPT(isoString: string | null | Date): string {
@@ -191,7 +184,7 @@ export default async function TaskInstancesPage({ searchParams }: PageProps) {
                   </td>
                   <td className="px-4 py-3">
                     <span
-                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${statusBadge(inst.status)}`}
+                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${statusBadge(inst.status, inst.dueDate.toISOString().slice(0, 10), today)}`}
                     >
                       {inst.status.replace(/_/g, " ")}
                     </span>

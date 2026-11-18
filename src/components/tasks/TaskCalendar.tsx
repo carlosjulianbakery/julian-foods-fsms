@@ -11,6 +11,7 @@ import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
 import { useAutoRefresh } from "@/hooks/useAutoRefresh";
 import { useCalendarSync } from "@/hooks/useCalendarSync";
 import { FacilityTag } from "@/components/tasks/FacilityTag";
+import { getTaskPresentation, getEffectiveStatus, TASK_SORT_PRIORITY } from "@/lib/task-presentation";
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
 
@@ -88,46 +89,28 @@ function isQuietTask(inst: TaskInstance): boolean {
   return inst.formKey === "pre_op" || /daily.?clean/i.test(inst.ruleTitle) || /pre-?op/i.test(inst.ruleTitle);
 }
 
-// Status priority for "most urgent" per day
-const STATUS_PRIORITY: Record<string, number> = {
-  OVERDUE: 0, MISSED: 1, DUE_TODAY: 2, IN_PROGRESS: 3, UPCOMING: 4, DONE: 5, SKIPPED: 6,
-};
-function mostUrgentStatus(insts: TaskInstance[]): string | null {
+function mostUrgentStatus(insts: TaskInstance[], today: string): string | null {
   if (!insts.length) return null;
-  return [...insts].sort((a, b) => (STATUS_PRIORITY[a.status] ?? 7) - (STATUS_PRIORITY[b.status] ?? 7))[0].status;
+  return [...insts].sort((a, b) => {
+    const pa = TASK_SORT_PRIORITY[getEffectiveStatus(a.status, a.dueDate, today)] ?? 7;
+    const pb = TASK_SORT_PRIORITY[getEffectiveStatus(b.status, b.dueDate, today)] ?? 7;
+    return pa - pb;
+  })[0].status;
 }
 
-function statusChipColors(status: string): { bg: string; text: string; border: string } {
-  switch (status) {
-    case "OVERDUE": case "MISSED":
-      return { bg: "bg-red-100", text: "text-red-700", border: "border-red-200" };
-    case "DUE_TODAY":
-      return { bg: "bg-amber-100", text: "text-amber-700", border: "border-amber-200" };
-    case "IN_PROGRESS":
-      return { bg: "bg-blue-100", text: "text-blue-700", border: "border-blue-200" };
-    case "DONE":
-      return { bg: "bg-green-100", text: "text-green-700", border: "border-green-200" };
-    case "SKIPPED":
-      return { bg: "bg-gray-100", text: "text-gray-400", border: "border-gray-200" };
-    default: // UPCOMING
-      return { bg: "bg-gray-50", text: "text-gray-500", border: "border-gray-200" };
-  }
+function statusChipColors(status: string, dueDate: string, today: string): { bg: string; text: string; border: string } {
+  const p = getTaskPresentation(status, dueDate, today);
+  return { bg: p.chipBg, text: p.chipText, border: p.chipBorder };
 }
 
-function dotColor(status: string): string {
-  switch (status) {
-    case "OVERDUE": case "MISSED": return "bg-red-500";
-    case "DUE_TODAY": return "bg-amber-500";
-    case "IN_PROGRESS": return "bg-blue-500";
-    case "DONE": return "bg-green-500";
-    default: return "bg-gray-400";
-  }
+function dotColor(status: string, dueDate: string, today: string): string {
+  return getTaskPresentation(status, dueDate, today).dotColor;
 }
 
 // ─── Chip ─────────────────────────────────────────────────────────────────────
 
-function TaskChip({ inst }: { inst: TaskInstance }) {
-  const c = statusChipColors(inst.status);
+function TaskChip({ inst, today }: { inst: TaskInstance; today: string }) {
+  const c = statusChipColors(inst.status, inst.dueDate, today);
   const quiet = isQuietTask(inst);
   const batch = inst.formKey === "batch_sheet";
   const isLate = inst.completedLate && (inst.daysLate ?? 0) > 0;
@@ -177,10 +160,11 @@ function TaskChip({ inst }: { inst: TaskInstance }) {
 const DOW_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 function DayCell({
-  date, instances, isToday, isPast, isCurrentMonth = true, onClick,
+  date, instances, today, isToday, isPast, isCurrentMonth = true, onClick,
 }: {
   date: string;
   instances: TaskInstance[];
+  today: string;
   isToday: boolean;
   isPast: boolean;
   isCurrentMonth?: boolean;
@@ -219,7 +203,7 @@ function DayCell({
           <span className="text-[9px] text-gray-300 italic">No tasks</span>
         )}
         {instances.map((inst) => (
-          <TaskChip key={inst.id} inst={inst} />
+          <TaskChip key={inst.id} inst={inst} today={today} />
         ))}
         {instances.length > 0 && instances.every(isQuietTask) && (
           <span className="text-[9px] text-gray-400 italic block">No batch sheets</span>
@@ -362,12 +346,9 @@ function PanelTaskCard({
   const batch = inst.formKey === "batch_sheet";
   const batchParsed = batch && inst.label ? parseBatchLabel(inst.label) : null;
 
-  const borderColor = isOverdue ? "border-red-400" : isDone ? "border-green-300" :
-    inst.status === "DUE_TODAY" ? "border-amber-400" :
-    inst.status === "IN_PROGRESS" ? "border-blue-400" : "border-gray-200";
-  const bgColor = isOverdue ? "bg-red-50/40" : isDone ? "bg-green-50/30" :
-    inst.status === "DUE_TODAY" ? "bg-amber-50/40" :
-    inst.status === "IN_PROGRESS" ? "bg-blue-50/30" : "bg-white";
+  const panelPres = getTaskPresentation(inst.status, inst.dueDate, today);
+  const borderColor = panelPres.borderColor;
+  const bgColor = panelPres.bgColor;
 
   const dots: { label: string; onClick: () => void; danger?: boolean }[] = [];
   if (isOverdue && (isAdmin || isOwner)) dots.push({ label: "Mark as missed", onClick: () => onMarkMissed(inst), danger: true });
@@ -912,6 +893,7 @@ export function TaskCalendar({
                   key={day}
                   date={day}
                   instances={dayInstances(day)}
+                  today={today}
                   isToday={day === today}
                   isPast={day < today}
                   onClick={() => setSelectedDay(selectedDay === day ? null : day)}
@@ -938,7 +920,7 @@ export function TaskCalendar({
             <div className="gap-1" style={{ display: "grid", gridTemplateColumns: `repeat(${showMonthWeekend ? 7 : 5}, minmax(0, 1fr))` }}>
               {visibleMonthDays.map((day) => {
                 const insts = dayInstances(day);
-                const urgent = mostUrgentStatus(insts);
+                const urgent = mostUrgentStatus(insts, today);
                 const isToday = day === today;
                 const isPast = day < today;
                 const inMonth = day.slice(0, 7) === monthStart.slice(0, 7);
@@ -971,7 +953,7 @@ export function TaskCalendar({
                     {insts.length > 0 && (
                       <div className="flex justify-center gap-0.5 flex-wrap">
                         {urgent && (
-                          <span className={`inline-block w-2 h-2 rounded-full ${dotColor(urgent)}`} />
+                          <span className={`inline-block w-2 h-2 rounded-full ${dotColor(urgent, day, today)}`} />
                         )}
                         {insts.length > 1 && (
                           <span className="text-[9px] text-gray-400 font-medium">{insts.length}</span>

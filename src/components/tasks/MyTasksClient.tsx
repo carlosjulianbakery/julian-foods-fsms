@@ -8,6 +8,7 @@ import {
 import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
 import { addDaysToDateStr } from "@/lib/pacific-time";
 import { computeBannerState, type BannerState } from "@/lib/banner-state";
+import { getTaskPresentation } from "@/lib/task-presentation";
 import { useAutoRefresh } from "@/hooks/useAutoRefresh";
 import { useCalendarSync } from "@/hooks/useCalendarSync";
 import { getCompletedTaskIds } from "@/lib/completedTasks";
@@ -456,9 +457,11 @@ function HeroTaskCard({
   onMarkMissed: (inst: TaskInstance) => void;
   onSkip: (inst: TaskInstance) => void;
 }) {
-  const isOverdue = inst.status === "OVERDUE" || inst.status === "MISSED";
-  const isDueToday = inst.status === "DUE_TODAY";
-  const isInProgress = inst.status === "IN_PROGRESS";
+  const pres = getTaskPresentation(inst.status, inst.dueDate, today);
+  const { effectiveStatus, label: presLabel, badgeBg, borderColor, bgColor } = pres;
+  const isOverdue = effectiveStatus === "OVERDUE" || effectiveStatus === "MISSED";
+  const isDueToday = effectiveStatus === "DUE_TODAY";
+  const isInProgress = effectiveStatus === "IN_PROGRESS";
   const isBusy = actionId === inst.id || isPending;
   const isAdmin = role === "ADMIN";
   const effectiveOwner = inst.ownerUserId ?? inst.ownerId;
@@ -468,22 +471,6 @@ function HeroTaskCard({
   const isQuiet = isQuietTask(inst);
   const days = isOverdue ? daysOverdue(inst.dueDate, today) : 0;
   const isStartable = ["OVERDUE", "DUE_TODAY", "UPCOMING", "IN_PROGRESS"].includes(inst.status);
-
-  const borderColor = isOverdue
-    ? "border-red-400"
-    : isDueToday
-    ? "border-amber-400"
-    : "border-blue-400";
-  const bgColor = isOverdue
-    ? "bg-red-50/40"
-    : isDueToday
-    ? "bg-amber-50/40"
-    : "bg-blue-50/30";
-  const badgeBg = isOverdue
-    ? "bg-red-100 text-red-700"
-    : isDueToday
-    ? "bg-amber-100 text-amber-700"
-    : "bg-blue-100 text-blue-700";
 
   // Dots menu options
   const dotsOptions: { label: string; onClick: () => void; danger?: boolean }[] = [];
@@ -527,10 +514,8 @@ function HeroTaskCard({
               {isOverdue
                 ? days > 0
                   ? `${days} day${days !== 1 ? "s" : ""} overdue`
-                  : "Overdue"
-                : isDueToday
-                ? "Due today"
-                : "In progress"}
+                  : presLabel
+                : presLabel}
             </span>
             {inst.needsAdminReview && (
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-red-100 text-red-700 shrink-0">
