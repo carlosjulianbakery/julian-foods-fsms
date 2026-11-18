@@ -31,13 +31,15 @@ interface Props {
   atpRlu?: number | null;
   atpLimit?: number | null;
   readOnly?: boolean;
+  // Per-row initials input/display — false by default; forms must opt in explicitly.
+  showRowInitials?: boolean;
   onChange?: (patch: Partial<Omit<RowSnapshot, "key" | "label">>) => void;
 }
 
 export function OkNotOkRow({
   rowKey, label, condition, initials, correctiveAction, reInspected, reInspectedAt,
   tempValue, tempLimit, reInspectTempValue, atpRlu, atpLimit,
-  readOnly, onChange,
+  readOnly, showRowInitials = false, onChange,
 }: Props) {
   const [expanded, setExpanded] = useState(condition === "NOT_OK");
   const isTemp = tempLimit != null;
@@ -145,8 +147,8 @@ export function OkNotOkRow({
           </span>
         )}
 
-        {/* Initials */}
-        {!readOnly ? (
+        {/* Per-row initials — hidden by default; opt in with showRowInitials={true} */}
+        {showRowInitials && !readOnly && (
           <input
             type="text"
             value={initials}
@@ -155,7 +157,8 @@ export function OkNotOkRow({
             placeholder="Init"
             className="w-14 input text-sm font-mono text-center uppercase"
           />
-        ) : (
+        )}
+        {showRowInitials && readOnly && (
           <span className="font-mono text-xs text-gray-500 w-10 text-center">{initials || "—"}</span>
         )}
 

@@ -22,7 +22,6 @@ function buildPdfHtml(insp: Inspection624): string {
       <td style="padding:6px 8px;text-align:center;font-size:12px;font-weight:600;color:${r.condition === "OK" ? "#059669" : r.condition === "NOT_OK" ? "#dc2626" : "#6b7280"}">
         ${r.condition === "NOT_OK" ? "Not OK" : r.condition}
       </td>
-      <td style="padding:6px 8px;text-align:center;font-size:12px;font-family:monospace">${r.initials || "—"}</td>
       ${r.tempValue != null ? `<td style="padding:6px 8px;text-align:center;font-size:12px;font-family:monospace">${r.tempValue}°F</td>` : r.atpRlu != null ? `<td style="padding:6px 8px;text-align:center;font-size:12px;font-family:monospace">${r.atpRlu} RLU</td>` : "<td/>"}
       <td style="padding:6px 8px;font-size:11px;color:#374151">${r.correctiveAction || "—"}</td>
       <td style="padding:6px 8px;text-align:center;font-size:11px">${r.reInspected ? "✓" : r.condition === "NOT_OK" ? "⚠" : "—"}</td>
@@ -46,7 +45,7 @@ function buildPdfHtml(insp: Inspection624): string {
     Overall: <span class="badge ${!insp.hasNotOk ? "ok" : insp.overallOk ? "issues" : "fail"}">${!insp.hasNotOk ? "All OK" : insp.overallOk ? "Issues — Corrected" : "Has Issues"}</span>
   </p>
   <table>
-    <thead><tr><th>Item</th><th>Result</th><th>Init</th><th>Reading</th><th>Corrective Action</th><th>Re-insp</th></tr></thead>
+    <thead><tr><th>Item</th><th>Result</th><th>Reading</th><th>Corrective Action</th><th>Re-insp</th></tr></thead>
     <tbody>${rows}</tbody>
   </table>
   </body></html>`;
