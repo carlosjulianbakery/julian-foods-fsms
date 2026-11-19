@@ -9,6 +9,7 @@ import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
 import { addDaysToDateStr } from "@/lib/pacific-time";
 import { computeBannerState, type BannerState } from "@/lib/banner-state";
 import { getTaskPresentation } from "@/lib/task-presentation";
+import { canSkipTask } from "@/lib/task-actions";
 import { useAutoRefresh } from "@/hooks/useAutoRefresh";
 import { useCalendarSync } from "@/hooks/useCalendarSync";
 import { getCompletedTaskIds } from "@/lib/completedTasks";
@@ -480,7 +481,7 @@ function HeroTaskCard({
   if (isOverdue && (isAdmin || isOwner)) {
     dotsOptions.push({ label: "Mark as missed", onClick: () => onMarkMissed(inst), danger: true });
   }
-  if (isAdmin && inst.status !== "DONE" && inst.status !== "SKIPPED") {
+  if (canSkipTask(role, inst.status)) {
     dotsOptions.push({ label: "Skip task", onClick: () => onSkip(inst) });
   }
 
@@ -681,15 +682,19 @@ function SkippedTaskRow({
 function WindowTaskCard({
   inst,
   today,
+  role,
   startingId,
   isPending,
   onStart,
+  onSkip,
 }: {
   inst: TaskInstance;
   today: string;
+  role: string;
   startingId: string | null;
   isPending: boolean;
   onStart: (inst: TaskInstance) => void;
+  onSkip: (inst: TaskInstance) => void;
 }) {
   const dueDate = inst.dueDate;
   const dl = (() => {
@@ -744,6 +749,9 @@ function WindowTaskCard({
         <Play className="w-3.5 h-3.5" />
         {isInProgress ? "Continue" : "Start"}
       </button>
+      {canSkipTask(role, inst.status) && (
+        <DotsMenu options={[{ label: "Skip task", onClick: () => onSkip(inst) }]} />
+      )}
     </div>
   );
 }
@@ -1140,9 +1148,11 @@ export function MyTasksClient({
                   key={inst.id}
                   inst={inst}
                   today={today}
+                  role={role}
                   startingId={startingId}
                   isPending={isPending}
                   onStart={handleStart}
+                  onSkip={(i) => setSkipModalInst(i)}
                 />
               ))}
             </div>

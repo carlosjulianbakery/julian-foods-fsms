@@ -12,6 +12,7 @@ import { useAutoRefresh } from "@/hooks/useAutoRefresh";
 import { useCalendarSync } from "@/hooks/useCalendarSync";
 import { FacilityTag } from "@/components/tasks/FacilityTag";
 import { getTaskPresentation, getEffectiveStatus, TASK_SORT_PRIORITY } from "@/lib/task-presentation";
+import { canSkipTask } from "@/lib/task-actions";
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
 
@@ -375,7 +376,7 @@ function PanelTaskCard({
 
   const dots: { label: string; onClick: () => void; danger?: boolean }[] = [];
   if (isOverdue && (isAdmin || isOwner)) dots.push({ label: "Mark as missed", onClick: () => onMarkMissed(inst), danger: true });
-  if (isAdmin && !["DONE", "SKIPPED"].includes(inst.status)) dots.push({ label: "Skip task", onClick: () => onSkip(inst) });
+  if (canSkipTask(role, inst.status)) dots.push({ label: "Skip task", onClick: () => onSkip(inst) });
   if (isAdmin && ["MISSED", "SKIPPED"].includes(inst.status)) dots.push({ label: "Reopen", onClick: () => onReopen(inst) });
 
   return (
@@ -634,6 +635,9 @@ function DayPanel({
                           </div>
                           {inst.status === "IN_PROGRESS" && (
                             <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 shrink-0">In Progress</span>
+                          )}
+                          {canSkipTask(role, inst.status) && (
+                            <DotsMenu options={[{ label: "Skip task", onClick: () => setSkipInst(inst) }]} />
                           )}
                         </div>
                       </div>
