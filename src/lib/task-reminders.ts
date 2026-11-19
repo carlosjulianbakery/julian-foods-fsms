@@ -6,6 +6,9 @@ import { notifyUser } from "@/lib/notify";
 // sop_review reminders are handled by the sop-review-reminders cron; skip here.
 const DUE_SOON_EXCLUDED_FORM_KEYS = new Set(["daily_cleaning", "preop", "sop_review"]);
 
+/** Tasks overdue by more than this many days are still promoted, but nobody is notified about them. */
+export const NOTIFY_MAX_OVERDUE_DAYS = 3;
+
 export async function sendReminders({ dryRun = false }: { dryRun?: boolean } = {}): Promise<{
   dueSoon: number;
   dueToday: number;
@@ -79,6 +82,7 @@ export async function sendReminders({ dryRun = false }: { dryRun?: boolean } = {
   const overdueInstances = await prisma.ruleInstance.findMany({
     where: {
       status: "OVERDUE",
+      dueDate: { gte: new Date(`${addDaysToDateStr(today, -NOTIFY_MAX_OVERDUE_DAYS)}T00:00:00Z`) },
     },
     include: {
       rule: { select: { title: true, ownerId: true } },

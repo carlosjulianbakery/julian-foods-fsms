@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { getPacificToday, addDaysToDateStr } from "@/lib/pacific-time";
 import { notifyUser } from "@/lib/notify";
+import { NOTIFY_MAX_OVERDUE_DAYS } from "@/lib/task-reminders";
 
 export async function sendEscalations({ dryRun = false }: { dryRun?: boolean } = {}): Promise<{
   escalated: number;
@@ -20,7 +21,10 @@ export async function sendEscalations({ dryRun = false }: { dryRun?: boolean } =
 
   // Find OVERDUE instances; we need to check per-instance escalateAfterDays
   const overdueInstances = await prisma.ruleInstance.findMany({
-    where: { status: "OVERDUE" },
+    where: {
+      status: "OVERDUE",
+      dueDate: { gte: new Date(`${addDaysToDateStr(today, -NOTIFY_MAX_OVERDUE_DAYS)}T00:00:00Z`) },
+    },
     include: {
       rule: { select: { title: true, escalateAfterDays: true } },
     },

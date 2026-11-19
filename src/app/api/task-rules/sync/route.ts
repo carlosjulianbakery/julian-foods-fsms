@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { generateCalendarInstances } from "@/lib/calendar-generator";
+import { updateStatuses } from "@/lib/task-generator";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +14,9 @@ const ADVISORY_LOCK_KEY = 1_234_567_890;
 export async function POST() {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ ran: false, error: "Unauthorized" }, { status: 401 });
+
+  // Keep stored statuses current even if the nightly cron misses a day (Pacific dates; two cheap updates)
+  await updateStatuses().catch((e) => console.error("[task-rules/sync] updateStatuses:", e));
 
   try {
     // Throttle: check most-recent lastCalendarSyncAt across all facilities

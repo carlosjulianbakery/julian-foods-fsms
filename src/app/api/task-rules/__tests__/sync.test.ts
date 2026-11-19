@@ -20,9 +20,14 @@ vi.mock("@/lib/calendar-generator", () => ({
   generateCalendarInstances: vi.fn(),
 }));
 
+vi.mock("@/lib/task-generator", () => ({
+  updateStatuses: vi.fn().mockResolvedValue({ updated: 0 }),
+}));
+
 import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/prisma";
 import { generateCalendarInstances } from "@/lib/calendar-generator";
+import { updateStatuses } from "@/lib/task-generator";
 import { POST } from "@/app/api/task-rules/sync/route";
 
 type MockFn = ReturnType<typeof vi.fn>;
@@ -205,5 +210,34 @@ describe("error handling", () => {
     mp.facility.aggregate.mockRejectedValue(new Error("DB timeout"));
     const res = await POST();
     expect(res.status).toBe(500);
+  });
+});
+
+describe("POST /api/task-rules/sync — status promotion", () => {
+  beforeEach(() => {
+    (updateStatuses as MockFn).mockReset().mockResolvedValue({ updated: 2 });
+  });
+
+  it("promotes statuses on every call, even when the calendar sync itself is throttled", async () => {
+    mp.facility.aggregate.mockReset().mockResolvedValue({ _max: { lastCalendarSyncAt: new Date(NOW.getTime() - 5_000) } });
+
+    const res = await POST();
+    const json = await res.json();
+
+    expect(json).toMatchObject({ ran: false, reason: "throttled" });
+    expect(updateStatuses).toHaveBeenCalledTimes(1);
+    expect(mockGenerate).not.toHaveBeenCalled();
+  });
+
+  it("a promotion error does not break the sync", async () => {
+    (updateStatuses as MockFn).mockRejectedValue(new Error("db hiccup"));
+    const res = await POST();
+    expect(res.status).toBe(200);
+  });
+
+  it("an unauthenticated call promotes nothing", async () => {
+    mockGetSession.mockResolvedValue(null);
+    expect((await POST()).status).toBe(401);
+    expect(updateStatuses).not.toHaveBeenCalled();
   });
 });

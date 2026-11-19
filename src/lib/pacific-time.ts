@@ -14,6 +14,16 @@ export function getPacificToday(): string {
   return `${y}-${m}-${d}`;
 }
 
+/** Hour of day (0–23) in America/Los_Angeles. */
+export function getPacificHour(date: Date = new Date()): number {
+  const hour = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Los_Angeles",
+    hour: "2-digit",
+    hourCycle: "h23",
+  }).format(date);
+  return parseInt(hour, 10);
+}
+
 /** Returns "YYYY-MM-DD" for the given UTC Date in Pacific time. */
 export function toPacificDateStr(date: Date): string {
   const parts = new Intl.DateTimeFormat("en-US", {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getPacificMonthKey, lastDayOfMonth } from "@/lib/pacific-time";
 import { completeRuleInstanceForSubmission } from "@/lib/task-completion";
+import { cronGate } from "@/lib/cron-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -27,11 +28,8 @@ type LineRecord = {
 };
 
 export async function POST(req: NextRequest) {
-  const auth = req.headers.get("authorization");
-  const cronSecret = process.env.CRON_SECRET ?? "julian-cron-secret";
-  if (auth !== `Bearer ${cronSecret}`) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = cronGate(req);
+  if (denied) return denied;
 
   const currentMonth = getPacificMonthKey();
   const now = new Date();
@@ -130,3 +128,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Auto-submit failed", detail: msg }, { status: 500 });
   }
 }
+
+// Vercel cron invokes routes with GET; the handler was POST-only and so was never reached.
+export const GET = POST;
