@@ -4,11 +4,19 @@
   "crons": [
     {
       "path": "/api/inventory/check-stock-levels",
-      "schedule": "0 6 * * *"
+      "schedule": "20 7 * * *"
+    },
+    {
+      "path": "/api/inventory/check-stock-levels",
+      "schedule": "20 8 * * *"
     },
     {
       "path": "/api/cron/shipstation-sync",
-      "schedule": "0 14 * * *"
+      "schedule": "40 7 * * *"
+    },
+    {
+      "path": "/api/cron/shipstation-sync",
+      "schedule": "40 8 * * *"
     },
     {
       "path": "/api/forms/monthly-cleaning/auto-submit",
@@ -16,7 +24,11 @@
     },
     {
       "path": "/api/cron/sop-review-reminders",
-      "schedule": "0 8 * * *"
+      "schedule": "5 7 * * *"
+    },
+    {
+      "path": "/api/cron/sop-review-reminders",
+      "schedule": "5 8 * * *"
     },
     {
       "path": "/api/cron/task-generator",

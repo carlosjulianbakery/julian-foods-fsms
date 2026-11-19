@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { checkMaterialStockLevel } from "@/lib/inventoryUtils";
+import { cronGate } from "@/lib/cron-auth";
 
 export const dynamic = "force-dynamic";
 
 // Daily cron: scan all materials with minimumStockQuantity set and update lot statuses
-export async function GET() {
+export async function GET(req: Request) {
+  const denied = cronGate(req, { pacificHour: 0 });
+  if (denied) return denied;
+
   try {
     // Mark newly-expired lots
     const today = new Date();

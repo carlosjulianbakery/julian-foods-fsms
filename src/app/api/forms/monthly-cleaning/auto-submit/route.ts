@@ -7,16 +7,14 @@ import {
   currentMonthKey,
   nextMonthKey,
 } from "@/lib/monthly-cleaning-items";
+import { cronGate } from "@/lib/cron-auth";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   // Verify cron secret
-  const auth = req.headers.get("authorization");
-  const cronSecret = process.env.CRON_SECRET ?? "julian-cron-secret";
-  if (auth !== `Bearer ${cronSecret}`) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = cronGate(req);
+  if (denied) return denied;
 
   // Check if today is actually the last day of the month
   const now = new Date();

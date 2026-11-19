@@ -2,21 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { notifyUser } from "@/lib/notify";
 import { getPacificToday, toPacificDateStr } from "@/lib/pacific-time";
+import { cronGate } from "@/lib/cron-auth";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
 
 export async function GET(req: NextRequest) {
-  const cronSecret = process.env.CRON_SECRET;
-  const authHeader = req.headers.get("authorization");
-  const isVercelCron = req.headers.get("x-vercel-cron") === "1";
+  const denied = cronGate(req, { pacificHour: 0 });
+  if (denied) return denied;
   const dryRun = req.nextUrl.searchParams.get("dryRun") === "1";
-
-  if (!isVercelCron) {
-    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-  }
 
   const isProduction = process.env.VERCEL_ENV === "production";
   if (!dryRun && !isProduction) {
