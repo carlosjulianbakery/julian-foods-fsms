@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
-import { computeWindowStart } from "@/lib/window-tasks";
+import { computeWindowStart, windowOverlapsRange } from "@/lib/window-tasks";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -54,39 +54,75 @@ export async function GET(req: NextRequest) {
       }
     : {};
 
-  const instances = await prisma.ruleInstance.findMany({
-    where: {
-      AND: [
-        visibilityFilter,
-        statusFilter,
-        ownerFilter,
-        {
-          dueDate: {
-            gte: new Date(from + "T00:00:00Z"),
-            lte: new Date(to + "T23:59:59Z"),
-          },
-        },
-      ],
-    },
-    include: {
-      rule: {
-        select: {
-          id: true,
-          title: true,
-          ownerId: true,
-          formKey: true,
-          facility: { select: { id: true, name: true } },
-          owner: { select: { id: true, name: true } },
-          windowMode: true,
-          windowDaysBefore: true,
-          recurrenceUnit: true,
-        },
+  const include = {
+    rule: {
+      select: {
+        id: true,
+        title: true,
+        ownerId: true,
+        formKey: true,
+        facility: { select: { id: true, name: true } },
+        owner: { select: { id: true, name: true } },
+        windowMode: true,
+        windowDaysBefore: true,
+        recurrenceUnit: true,
       },
-      doneBy: { select: { id: true, name: true } },
-      skippedBy: { select: { id: true, name: true } },
     },
-    orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
-  });
+    doneBy: { select: { id: true, name: true } },
+    skippedBy: { select: { id: true, name: true } },
+  };
+  const orderBy: Prisma.RuleInstanceOrderByWithRelationInput[] = [{ dueDate: "asc" }, { createdAt: "asc" }];
+
+  const [dueInRange, dueLater] = await Promise.all([
+    prisma.ruleInstance.findMany({
+      where: {
+        AND: [
+          visibilityFilter,
+          statusFilter,
+          ownerFilter,
+          {
+            dueDate: {
+              gte: new Date(from + "T00:00:00Z"),
+              lte: new Date(to + "T23:59:59Z"),
+            },
+          },
+        ],
+      },
+      include,
+      orderBy,
+    }),
+    // Open window tasks due after the range: kept only if their window reaches into it (band, no chip)
+    prisma.ruleInstance.findMany({
+      where: {
+        AND: [
+          visibilityFilter,
+          ownerFilter,
+          { rule: { windowMode: { not: "NONE" } } },
+          { dueDate: { gt: new Date(to + "T23:59:59Z") } },
+          { status: { notIn: ["DONE", "SKIPPED", "MISSED"] } },
+        ],
+      },
+      include,
+      orderBy,
+    }),
+  ]);
+
+  const windowStartOf = (inst: (typeof dueInRange)[number]) =>
+    computeWindowStart(
+      {
+        windowMode: inst.rule.windowMode,
+        windowDaysBefore: inst.rule.windowDaysBefore,
+        recurrenceUnit: inst.rule.recurrenceUnit,
+      },
+      inst.dueDate.toISOString().slice(0, 10),
+    );
+
+  const instances = [
+    ...dueInRange,
+    ...dueLater.filter((inst) =>
+      windowOverlapsRange(windowStartOf(inst), inst.dueDate.toISOString().slice(0, 10), from, to),
+    ),
+  ];
 
   return NextResponse.json(
     instances.map((inst) => ({
@@ -112,14 +148,7 @@ export async function GET(req: NextRequest) {
       skipReason: inst.skipReason ?? null,
       skippedByName: inst.skippedBy?.name ?? null,
       skippedAt: inst.skippedAt?.toISOString() ?? null,
-      windowStart: computeWindowStart(
-        {
-          windowMode: inst.rule.windowMode,
-          windowDaysBefore: inst.rule.windowDaysBefore,
-          recurrenceUnit: inst.rule.recurrenceUnit,
-        },
-        inst.dueDate.toISOString().slice(0, 10),
-      ),
+      windowStart: windowStartOf(inst),
       progress: null,
     }))
   );

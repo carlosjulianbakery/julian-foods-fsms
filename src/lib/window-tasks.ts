@@ -68,3 +68,17 @@ export function daysLeft(dueDate: string, today: string): number {
   const tod = new Date(today + "T12:00:00Z");
   return Math.max(0, Math.round((due.getTime() - tod.getTime()) / (1000 * 60 * 60 * 24)));
 }
+
+/**
+ * True when any day of the window [windowStart, dueDate) falls inside [from, to].
+ * The due date itself is not a window day — it is shown as the task chip.
+ */
+export function windowOverlapsRange(
+  windowStart: string | null,
+  dueDate: string,
+  from: string,
+  to: string,
+): boolean {
+  if (!windowStart) return false;
+  return windowStart <= to && dueDate > from && windowStart < dueDate;
+}

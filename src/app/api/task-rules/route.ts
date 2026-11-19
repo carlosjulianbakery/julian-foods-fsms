@@ -4,7 +4,8 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { generateCalendarInstances } from "@/lib/calendar-generator";
 import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
-import { updateStatuses } from "@/lib/task-generator";
+import { generateInstances, updateStatuses } from "@/lib/task-generator";
+import { resolveEndOfMonth } from "@/lib/task-rule-update";
 
 export const dynamic = "force-dynamic";
 
@@ -60,6 +61,7 @@ export async function POST(req: NextRequest) {
       recurrenceUnit,
       recurrenceEvery,
       recurrenceStart,
+      recurrenceEndOfMonth,
       formKey,
       productName,
       windowMode,
@@ -84,6 +86,7 @@ export async function POST(req: NextRequest) {
         recurrenceUnit: recurrenceUnit || null,
         recurrenceEvery: recurrenceEvery ? parseInt(recurrenceEvery) : 1,
         recurrenceStart: new Date(recurrenceStart),
+        recurrenceEndOfMonth: resolveEndOfMonth(recurrenceEndOfMonth, recurrenceUnit || null, triggerType ?? "RECURRING"),
         formKey: formKey || null,
         productName: productName || null,
         windowMode: windowMode ?? "NONE",
@@ -105,10 +108,18 @@ export async function POST(req: NextRequest) {
         console.error("[task-rules POST] calendar generator error:", genErr);
       }
     }
+    let recurringResult: { created: number } | null = null;
+    if (rule.triggerType === "RECURRING" || rule.triggerType === "ONE_OFF") {
+      try {
+        recurringResult = await generateInstances();
+      } catch (genErr) {
+        console.error("[task-rules POST] recurring generator error:", genErr);
+      }
+    }
     // Promote any UPCOMING-today instances created before the cron ran
     await updateStatuses().catch((e) => console.error("[task-rules POST] updateStatuses:", e));
 
-    return NextResponse.json({ ...rule, generatorResult }, { status: 201 });
+    return NextResponse.json({ ...rule, generatorResult, recurringResult }, { status: 201 });
   } catch (err) {
     console.error("POST /api/task-rules:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

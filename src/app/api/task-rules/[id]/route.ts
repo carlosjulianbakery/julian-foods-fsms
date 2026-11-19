@@ -6,6 +6,7 @@ import { computeDueDates, generateInstances, updateStatuses } from "@/lib/task-g
 import { getPacificToday, addDaysToDateStr } from "@/lib/pacific-time";
 import { generateCalendarInstances } from "@/lib/calendar-generator";
 import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
+import { buildTaskRulePatchData, planOrphanCleanup, scheduleChanged } from "@/lib/task-rule-update";
 
 export const dynamic = "force-dynamic";
 
@@ -16,21 +17,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
   try {
     const body = await req.json();
-    const {
-      title,
-      description,
-      facilityId,
-      ownerId,
-      triggerType,
-      recurrenceUnit,
-      recurrenceEvery,
-      recurrenceStart,
-      formKey,
-      productName,
-      isActive,
-      windowMode,
-      windowDaysBefore,
-    } = body;
+    const { facilityId, formKey, isActive } = body;
+
+    const before = await prisma.taskRule.findUnique({ where: { id: params.id } });
+    if (!before) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
     // Block facility change if rule has any instances (would rewrite all history)
     if (facilityId !== undefined) {
@@ -51,20 +41,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       );
     }
 
-    const data: Record<string, unknown> = {};
-    if (title !== undefined) data.title = title.trim();
-    if (description !== undefined) data.description = description?.trim() || null;
-    if (facilityId !== undefined) data.facilityId = facilityId;
-    if (ownerId !== undefined) data.ownerId = ownerId;
-    if (triggerType !== undefined) data.triggerType = triggerType;
-    if (recurrenceUnit !== undefined) data.recurrenceUnit = recurrenceUnit || null;
-    if (recurrenceEvery !== undefined) data.recurrenceEvery = parseInt(recurrenceEvery);
-    if (recurrenceStart !== undefined) data.recurrenceStart = new Date(recurrenceStart);
-    if (formKey !== undefined) data.formKey = formKey || null;
-    if (productName !== undefined) data.productName = productName || null;
-    if (isActive !== undefined) data.isActive = isActive;
-    if (windowMode !== undefined) data.windowMode = windowMode;
-    if (windowDaysBefore !== undefined) data.windowDaysBefore = windowDaysBefore != null ? parseInt(String(windowDaysBefore)) : null;
+    const data = buildTaskRulePatchData(body, before);
 
     const rule = await prisma.taskRule.update({
       where: { id: params.id },
@@ -124,50 +101,65 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       if (ops.length > 0) await prisma.$transaction(ops);
     }
 
-    // ── Recurrence change: skip orphaned open instances, generate new ones ─
-    if (
-      rule.triggerType === "RECURRING" &&
-      rule.isActive &&
-      (recurrenceStart !== undefined || recurrenceUnit !== undefined || recurrenceEvery !== undefined)
-    ) {
-      const today = getPacificToday();
-      const horizon = addDaysToDateStr(today, 30);
-      const expectedDates = new Set(computeDueDates(rule, today, horizon));
+    // ── Recurring / one-off rules: reconcile on a real schedule change, then generate now ─
+    let recurringResult: { created: number; deleted: number; skipped: number } | null = null;
+    if (rule.isActive && !rule.isArchived && (rule.triggerType === "RECURRING" || rule.triggerType === "ONE_OFF")) {
+      let deleted = 0;
+      let skipped = 0;
 
-      const openInstances = await prisma.ruleInstance.findMany({
-        where: {
-          ruleId: params.id,
-          status: { in: ["UPCOMING", "DUE_TODAY"] },
-        },
-        select: { id: true, dueDate: true },
-      });
+      if (scheduleChanged(before, rule)) {
+        const today = getPacificToday();
+        const horizon = addDaysToDateStr(today, 30);
+        const candidates = await prisma.ruleInstance.findMany({
+          where: { ruleId: params.id, status: { in: ["UPCOMING", "DUE_TODAY", "OVERDUE"] } },
+          select: { id: true, dueDate: true, status: true, _count: { select: { auditLogs: true } } },
+        });
+        const open = candidates.map((i) => ({
+          id: i.id,
+          dueDate: i.dueDate.toISOString().slice(0, 10),
+          status: i.status as string,
+          auditCount: i._count.auditLogs,
+        }));
+        // Start from the earliest open date so an overdue instance that still fits the new schedule is kept
+        const from = open.reduce((min, i) => (i.dueDate < min ? i.dueDate : min), today);
+        const { toDelete, toSkip } = planOrphanCleanup(open, computeDueDates(rule, from, horizon));
 
-      const toSkip = openInstances.filter(
-        (i) => !expectedDates.has(i.dueDate.toISOString().slice(0, 10))
-      );
+        if (toDelete.length > 0) {
+          const [, del] = await prisma.$transaction([
+            prisma.notification.deleteMany({ where: { instanceId: { in: toDelete } } }),
+            prisma.ruleInstance.deleteMany({
+              where: { id: { in: toDelete }, status: { in: ["UPCOMING", "DUE_TODAY", "OVERDUE"] } },
+            }),
+          ]);
+          deleted = del.count;
+          console.log(`[task-rules PATCH] rule ${params.id} schedule changed — deleted ${deleted} untouched instance(s)`);
+        }
 
-      if (toSkip.length > 0) {
-        const now = new Date();
-        const userId = (session.user as { id: string }).id;
-        await prisma.$transaction([
-          prisma.ruleInstance.updateMany({
-            where: { id: { in: toSkip.map((i) => i.id) } },
-            data: { status: "SKIPPED", skippedAt: now, skippedById: userId, skipReason: "Rule changed" },
-          }),
-          prisma.ruleInstance.updateMany({
-            where: { id: { in: toSkip.map((i) => i.id) }, ownerUserId: null },
-            data: { ownerUserId: rule.ownerId },
-          }),
-          ...toSkip.map((i) =>
-            prisma.taskInstanceAudit.create({
-              data: { instanceId: i.id, action: "auto_skipped", note: "Rule recurrence changed by admin" },
-            })
-          ),
-        ]);
+        if (toSkip.length > 0) {
+          const now = new Date();
+          const userId = (session.user as { id: string }).id;
+          await prisma.$transaction([
+            prisma.ruleInstance.updateMany({
+              where: { id: { in: toSkip } },
+              data: { status: "SKIPPED", skippedAt: now, skippedById: userId, skipReason: "Rule changed" },
+            }),
+            prisma.ruleInstance.updateMany({
+              where: { id: { in: toSkip }, ownerUserId: null },
+              data: { ownerUserId: rule.ownerId },
+            }),
+            ...toSkip.map((id) =>
+              prisma.taskInstanceAudit.create({
+                data: { instanceId: id, action: "auto_skipped", note: "Rule recurrence changed by admin" },
+              })
+            ),
+          ]);
+          skipped = toSkip.length;
+        }
       }
 
-      // Generate new instances for the updated schedule (idempotent — skipDuplicates)
-      await generateInstances();
+      // Idempotent (skipDuplicates) — nobody waits for the cron
+      const gen = await generateInstances();
+      recurringResult = { created: gen.created, deleted, skipped };
     }
 
     let generatorResult: { created: number; facilityName: string } | null = null;
@@ -186,7 +178,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     // Promote any UPCOMING-today instances created before the cron ran
     await updateStatuses().catch((e) => console.error("[task-rules PATCH] updateStatuses:", e));
 
-    return NextResponse.json({ ...rule, generatorResult });
+    return NextResponse.json({ ...rule, generatorResult, recurringResult });
   } catch (err) {
     console.error("PATCH /api/task-rules/[id]:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { TASK_FORM_REGISTRY, getFormKeyOptions, getFormLabel } from "@/lib/task-form-registry";
+import { buildRulePayload, ruleToFormState, showEndOfMonthOption, type TaskRuleFormState } from "@/lib/task-rule-form";
 
 interface Rule {
   id: string;
@@ -15,6 +16,7 @@ interface Rule {
   recurrenceUnit: string | null;
   recurrenceEvery: number | null;
   recurrenceStart: string;
+  recurrenceEndOfMonth?: boolean | null;
   formKey: string | null;
   productName: string | null;
   isActive: boolean;
@@ -74,8 +76,9 @@ function triggerLabel(rule: Rule): string {
     return rule.productName ? `Product: ${rule.productName}` : "Production product";
   const every = rule.recurrenceEvery ?? 1;
   const unit = rule.recurrenceUnit ?? "day";
-  if (every === 1) return unit.charAt(0).toUpperCase() + unit.slice(1) + "ly";
-  return `Every ${every} ${unit}s`;
+  const suffix = unit === "month" && rule.recurrenceEndOfMonth ? " (last day)" : "";
+  if (every === 1) return unit.charAt(0).toUpperCase() + unit.slice(1) + "ly" + suffix;
+  return `Every ${every} ${unit}s${suffix}`;
 }
 
 function formatPT(isoString: string | null): string {
@@ -115,7 +118,7 @@ function deleteMessage(rule: Rule): string {
   return `"${rule.title}" has ${rule.instanceCount} task record${rule.instanceCount !== 1 ? "s" : ""}, ${open} still open. It will be archived and its ${open} open task${open !== 1 ? "s" : ""} skipped. History is kept.`;
 }
 
-const emptyForm = {
+const emptyForm: TaskRuleFormState = {
   title: "",
   description: "",
   facilityId: "",
@@ -124,6 +127,7 @@ const emptyForm = {
   recurrenceUnit: "day",
   recurrenceEvery: 1,
   recurrenceStart: new Date().toISOString().slice(0, 10),
+  recurrenceEndOfMonth: false,
   formKey: "",
   productName: "",
   windowMode: "NONE",
@@ -170,20 +174,7 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
 
   function openEdit(rule: Rule) {
     setEditingRule(rule);
-    setForm({
-      title: rule.title,
-      description: rule.description ?? "",
-      facilityId: rule.facilityId,
-      ownerId: rule.ownerId,
-      triggerType: rule.triggerType,
-      recurrenceUnit: rule.recurrenceUnit ?? "day",
-      recurrenceEvery: rule.recurrenceEvery ?? 1,
-      recurrenceStart: normDateStr(rule.recurrenceStart),
-      formKey: rule.formKey ?? "",
-      productName: rule.productName ?? "",
-      windowMode: rule.windowMode ?? "NONE",
-      windowDaysBefore: rule.windowDaysBefore ?? 7,
-    });
+    setForm(ruleToFormState(rule));
     setError("");
     setShowModal(true);
   }
@@ -197,20 +188,7 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
     setSaving(true);
     setError("");
     try {
-      const payload: Record<string, unknown> = {
-        title: form.title,
-        description: form.description,
-        facilityId: form.facilityId,
-        ownerId: form.ownerId,
-        triggerType: form.triggerType,
-        recurrenceUnit: form.triggerType === "RECURRING" ? form.recurrenceUnit : null,
-        recurrenceEvery: form.triggerType === "RECURRING" ? form.recurrenceEvery : null,
-        recurrenceStart: form.recurrenceStart,
-        formKey: form.formKey || null,
-        productName: form.triggerType === "PRODUCTION_PRODUCT" ? form.productName || null : null,
-        windowMode: form.windowMode || "NONE",
-        windowDaysBefore: form.windowMode === "DAYS_BEFORE" ? (Number(form.windowDaysBefore) || 7) : null,
-      };
+      const payload = buildRulePayload(form);
 
       setSaveMsg(null);
       if (editingRule) {
@@ -228,6 +206,12 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
               : r
           )
         );
+        if (updated.recurringResult != null) {
+          const { created, deleted } = updated.recurringResult as { created: number; deleted: number };
+          if (created > 0 || deleted > 0) {
+            setSaveMsg(`Schedule updated: ${created} task${created !== 1 ? "s" : ""} created, ${deleted} untouched task${deleted !== 1 ? "s" : ""} removed.`);
+          }
+        }
         if (updated.generatorResult != null) {
           const { created } = updated.generatorResult;
           setSaveMsg(created > 0 ? `Created ${created} task${created !== 1 ? "s" : ""} from the calendar.` : "No matching productions in the next 7 days.");
@@ -244,6 +228,10 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
           { ...created, recurrenceStart: normDateStr(created.recurrenceStart), facilityName: created.facility.name, ownerName: created.owner.name, instanceCount: 0, openInstanceCount: 0 },
           ...prev,
         ]);
+        if (created.recurringResult != null && created.recurringResult.created > 0) {
+          const n = created.recurringResult.created as number;
+          setSaveMsg(`Created ${n} task${n !== 1 ? "s" : ""} for the next 30 days.`);
+        }
         if (created.generatorResult != null) {
           const { created: n } = created.generatorResult;
           setSaveMsg(n > 0 ? `Created ${n} task${n !== 1 ? "s" : ""} from the calendar.` : "No matching productions in the next 7 days.");
@@ -643,6 +631,16 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
                     </select>
                   </div>
                 </div>
+              )}
+              {showEndOfMonthOption(form) && (
+                <label className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={form.recurrenceEndOfMonth}
+                    onChange={(e) => setForm((f) => ({ ...f, recurrenceEndOfMonth: e.target.checked }))}
+                  />
+                  <span>Due on the last day of the month</span>
+                </label>
               )}
               <div>
                 <label className="block text-sm font-medium mb-1">Start Date *</label>

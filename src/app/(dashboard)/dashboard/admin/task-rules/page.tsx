@@ -60,6 +60,7 @@ export default async function TaskRulesPage() {
     recurrenceUnit: r.recurrenceUnit,
     recurrenceEvery: r.recurrenceEvery,
     recurrenceStart: r.recurrenceStart.toISOString().slice(0, 10),
+    recurrenceEndOfMonth: r.recurrenceEndOfMonth ?? false,
     formKey: r.formKey,
     productName: r.productName ?? null,
     windowMode: r.windowMode ?? "NONE",
