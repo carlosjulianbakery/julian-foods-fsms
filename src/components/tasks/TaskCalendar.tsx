@@ -13,6 +13,8 @@ import { useCalendarSync } from "@/hooks/useCalendarSync";
 import { FacilityTag } from "@/components/tasks/FacilityTag";
 import { getTaskPresentation, getEffectiveStatus, TASK_SORT_PRIORITY } from "@/lib/task-presentation";
 import { canSkipTask } from "@/lib/task-actions";
+import { sortTasks } from "@/lib/task-order";
+import { RuleOrderList, type RuleGroup } from "./RuleOrderList";
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
 
@@ -456,11 +458,23 @@ function PanelTaskCard({
   );
 }
 
+// Tasks arrive in work order, so one rule's tasks are already next to each other
+export function groupByRule(tasks: TaskInstance[]): { ruleId: string; title: string; tasks: TaskInstance[] }[] {
+  const groups: { ruleId: string; title: string; tasks: TaskInstance[] }[] = [];
+  for (const t of tasks) {
+    const ruleId = t.ruleId ?? `title:${t.ruleTitle}`;
+    const last = groups[groups.length - 1];
+    if (last && last.ruleId === ruleId) last.tasks.push(t);
+    else groups.push({ ruleId, title: t.ruleTitle, tasks: [t] });
+  }
+  return groups;
+}
+
 // ─── Day Panel ────────────────────────────────────────────────────────────────
 
 function DayPanel({
   date, instances, today, role, userId,
-  productionItems, windowTasks = [], onClose, onRefresh,
+  productionItems, windowTasks = [], onClose, onRefresh, onReorderRules,
 }: {
   date: string;
   instances: TaskInstance[];
@@ -471,6 +485,8 @@ function DayPanel({
   windowTasks?: TaskInstance[];
   onClose: () => void;
   onRefresh: () => void;
+  /** Admin only: persist a new rule order (applies to every day). Resolves false if it could not be saved. */
+  onReorderRules?: (ruleIds: string[]) => Promise<boolean>;
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -480,6 +496,16 @@ function DayPanel({
   const [doneInst, setDoneInst] = useState<TaskInstance | null>(null);
   const [skipInst, setSkipInst] = useState<TaskInstance | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const [reordering, setReordering] = useState(false);
+
+  async function handleReorder(ruleIds: string[]) {
+    if (!onReorderRules) return;
+    setReordering(true); setErr(null);
+    try {
+      const ok = await onReorderRules(ruleIds);
+      if (!ok) setErr("Could not save the new order. It has been reset.");
+    } finally { setReordering(false); }
+  }
 
   const tomorrow = addDaysToDateStr(today, 1);
   const isStartable = (inst: TaskInstance) =>
@@ -591,25 +617,35 @@ function DayPanel({
             {instances.length === 0 ? (
               <p className="text-sm text-gray-400 text-center py-8">No tasks on this day.</p>
             ) : (
-              instances.map((inst) => (
-                <PanelTaskCard
-                  key={inst.id}
-                  inst={inst}
-                  today={today}
-                  role={role}
-                  userId={userId}
-                  isStartable={isStartable(inst)}
-                  startingId={startingId}
-                  actionId={actionId}
-                  isPending={isPending}
-                  productionItems={productionItems}
-                  onStart={handleStart}
-                  onMarkDone={(i) => setDoneInst(i)}
-                  onMarkMissed={(i) => setMissedInst(i)}
-                  onSkip={(i) => setSkipInst(i)}
-                  onReopen={handleReopen}
-                />
-              ))
+              <RuleOrderList
+                canReorder={role === "ADMIN" && !!onReorderRules}
+                busy={reordering}
+                onReorder={handleReorder}
+                groups={groupByRule(instances).map((g): RuleGroup => ({
+                  ruleId: g.ruleId,
+                  title: g.title,
+                  count: g.tasks.length,
+                  content: g.tasks.map((inst) => (
+                    <PanelTaskCard
+                      key={inst.id}
+                      inst={inst}
+                      today={today}
+                      role={role}
+                      userId={userId}
+                      isStartable={isStartable(inst)}
+                      startingId={startingId}
+                      actionId={actionId}
+                      isPending={isPending}
+                      productionItems={productionItems}
+                      onStart={handleStart}
+                      onMarkDone={(i) => setDoneInst(i)}
+                      onMarkMissed={(i) => setMissedInst(i)}
+                      onSkip={(i) => setSkipInst(i)}
+                      onReopen={handleReopen}
+                    />
+                  )),
+                }))}
+              />
             )}
             {/* Open this period — window tasks open on this date but due later */}
             {windowTasks.length > 0 && (
@@ -789,7 +825,8 @@ export function TaskCalendar({
   }
 
   // Get instances for a specific day
-  const dayInstances = (date: string) => instances.filter((i) => i.dueDate === date);
+  // Every cell and the day panel list tasks in the saved work order, whatever their status
+  const dayInstances = (date: string) => sortTasks(instances.filter((i) => i.dueDate === date));
 
   // Panel refresh — refetch current range
   const handleRefresh = useCallback(() => {
@@ -799,6 +836,37 @@ export function TaskCalendar({
 
   useAutoRefresh(handleRefresh, 60_000, true);
   useCalendarSync(handleRefresh);
+
+  // Admin drag in the day panel: show the new order at once, save it, then let every list refresh
+  const router = useRouter();
+  const [, startTransition] = useTransition();
+  const reorderRules = useCallback(async (ruleIds: string[]): Promise<boolean> => {
+    const before = instances;
+    // The reordered rules trade the rank slots they already hold, so other rules keep their place
+    const slots = ruleIds
+      .map((id) => before.find((i) => i.ruleId === id)?.ruleSortOrder ?? null)
+      .map((rank, i) => rank ?? 1_000_000 + i)
+      .sort((a, b) => a - b);
+    const optimistic = new Map(ruleIds.map((id, i) => [id, slots[i]]));
+    setInstances((prev) => prev.map((i) => (i.ruleId && optimistic.has(i.ruleId) ? { ...i, ruleSortOrder: optimistic.get(i.ruleId)! } : i)));
+    try {
+      const res = await fetch("/api/task-rules/order", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ruleIds }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      const { ranks } = (await res.json()) as { ranks: { id: string; sortOrder: number }[] };
+      const saved = new Map(ranks.map((r) => [r.id, r.sortOrder]));
+      setInstances((prev) => prev.map((i) => (i.ruleId && saved.has(i.ruleId) ? { ...i, ruleSortOrder: saved.get(i.ruleId)! } : i)));
+      window.dispatchEvent(new CustomEvent("task-action"));
+      startTransition(() => router.refresh());
+      return true;
+    } catch {
+      setInstances(before);
+      return false;
+    }
+  }, [instances, router]);
 
   // Sync with ProductionScheduleCard via window custom events
   useEffect(() => {
@@ -1090,6 +1158,7 @@ export function TaskCalendar({
           )}
           onClose={() => setSelectedDay(null)}
           onRefresh={handleRefresh}
+          onReorderRules={role === "ADMIN" ? reorderRules : undefined}
         />
       )}
     </div>

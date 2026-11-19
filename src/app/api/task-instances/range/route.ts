@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 import { computeWindowStart, windowOverlapsRange } from "@/lib/window-tasks";
+import { sortTasks } from "@/lib/task-order";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -66,6 +67,8 @@ export async function GET(req: NextRequest) {
         windowMode: true,
         windowDaysBefore: true,
         recurrenceUnit: true,
+        sortOrder: true,
+        createdAt: true,
       },
     },
     doneBy: { select: { id: true, name: true } },
@@ -125,7 +128,7 @@ export async function GET(req: NextRequest) {
   ];
 
   return NextResponse.json(
-    instances.map((inst) => ({
+    sortTasks(instances.map((inst) => ({
       id: inst.id,
       ruleTitle: inst.rule.title,
       facilityId: inst.rule.facility.id,
@@ -150,6 +153,11 @@ export async function GET(req: NextRequest) {
       skippedAt: inst.skippedAt?.toISOString() ?? null,
       windowStart: windowStartOf(inst),
       progress: null,
-    }))
+      ruleId: inst.rule.id,
+      ruleSortOrder: inst.rule.sortOrder,
+      ruleCreatedAt: inst.rule.createdAt.toISOString(),
+      sortKey: inst.sortKey,
+      createdAt: inst.createdAt.toISOString(),
+    })))
   );
 }

@@ -10,6 +10,7 @@ import { addDaysToDateStr } from "@/lib/pacific-time";
 import { computeBannerState, type BannerState } from "@/lib/banner-state";
 import { getTaskPresentation } from "@/lib/task-presentation";
 import { canSkipTask } from "@/lib/task-actions";
+import { sortTasks } from "@/lib/task-order";
 import { useAutoRefresh } from "@/hooks/useAutoRefresh";
 import { useCalendarSync } from "@/hooks/useCalendarSync";
 import { getCompletedTaskIds } from "@/lib/completedTasks";
@@ -43,6 +44,12 @@ export interface TaskInstance {
   skippedAt: string | null;
   windowStart?: string | null;
   progress?: { done: number; total: number } | null;
+  // Work order (see src/lib/task-order.ts)
+  ruleId?: string | null;
+  ruleSortOrder?: number | null;
+  ruleCreatedAt?: string | null;
+  sortKey?: number | null;
+  createdAt?: string | null;
 }
 
 interface Props {
@@ -841,21 +848,23 @@ export function MyTasksClient({
   });
 
   // Open past-due: OVERDUE status, MISSED on past date, or any open instance with past date
-  const overdue = filtered.filter((i) =>
+  const isPastDue = (i: TaskInstance) =>
     i.status === "OVERDUE" ||
     (i.status === "MISSED" && i.dueDate < today) ||
-    (["UPCOMING", "DUE_TODAY", "IN_PROGRESS"].includes(i.status) && i.dueDate < today)
-  );
+    (["UPCOMING", "DUE_TODAY", "IN_PROGRESS"].includes(i.status) && i.dueDate < today);
+  const overdue = sortTasks(filtered.filter(isPastDue));
   // Open today: DUE_TODAY + UPCOMING-with-today-date (cron may not have promoted yet)
   const dueToday = filtered.filter((i) =>
     i.status === "DUE_TODAY" || (i.status === "UPCOMING" && i.dueDate === today)
   );
-  const inProgress = filtered.filter((i) => i.status === "IN_PROGRESS");
+  const inProgress = filtered.filter((i) => i.status === "IN_PROGRESS" && !isPastDue(i));
   // Upcoming: only future-dated UPCOMING (excludes today's)
-  const upcoming = filtered.filter((i) => i.status === "UPCOMING" && i.dueDate > today);
-  const doneToday = filtered.filter((i) => i.status === "DONE");
+  const upcoming = sortTasks(filtered.filter((i) => i.status === "UPCOMING" && i.dueDate > today));
+  const doneToday = sortTasks(filtered.filter((i) => i.status === "DONE"));
 
-  const activeTodayCards = [...overdue, ...dueToday, ...inProgress];
+  // Earlier days first (each in work order), then today's tasks in work order.
+  // A task that has been started keeps its place — it does not drop below the ones still due.
+  const activeTodayCards = [...overdue, ...sortTasks([...dueToday, ...inProgress])];
   const nextUpcoming = upcoming[0] ?? null;
 
   // Sync staleness: any facility in-scope with no sync in 24h or a sync error

@@ -6,7 +6,7 @@ vi.mock("@/lib/auth", () => ({ authOptions: {} }));
 vi.mock("@/lib/calendar-generator", () => ({ generateCalendarInstances: vi.fn() }));
 vi.mock("@/lib/prisma", () => ({
   prisma: {
-    taskRule: { findUnique: vi.fn(), update: vi.fn(), create: vi.fn() },
+    taskRule: { findUnique: vi.fn(), update: vi.fn(), create: vi.fn(), aggregate: vi.fn() },
     ruleInstance: { findMany: vi.fn(), count: vi.fn(), deleteMany: vi.fn(), updateMany: vi.fn() },
     notification: { deleteMany: vi.fn() },
     taskInstanceAudit: { create: vi.fn() },
@@ -28,7 +28,7 @@ import { POST } from "@/app/api/task-rules/route";
 
 type MockFn = ReturnType<typeof vi.fn>;
 const mp = prisma as unknown as {
-  taskRule: { findUnique: MockFn; update: MockFn; create: MockFn };
+  taskRule: { findUnique: MockFn; update: MockFn; create: MockFn; aggregate: MockFn };
   ruleInstance: { findMany: MockFn; count: MockFn; deleteMany: MockFn; updateMany: MockFn };
   notification: { deleteMany: MockFn };
   taskInstanceAudit: { create: MockFn };
@@ -183,6 +183,18 @@ describe("POST /api/task-rules — immediate generation", () => {
       owner: { id: "user-ivan", name: "Ivan Torres" },
     }));
     (generateCalendarInstances as unknown as MockFn).mockResolvedValue({ results: [] });
+    mp.taskRule.aggregate.mockResolvedValue({ _max: { sortOrder: 90 } });
+  });
+
+  it("a new rule goes to the end of the work order: last rank + 10", async () => {
+    await post({ ...base, triggerType: "RECURRING", recurrenceUnit: "month" });
+    expect(mp.taskRule.create.mock.calls[0][0].data.sortOrder).toBe(100);
+  });
+
+  it("the very first rule gets rank 10", async () => {
+    mp.taskRule.aggregate.mockResolvedValue({ _max: { sortOrder: null } });
+    await post({ ...base, triggerType: "RECURRING", recurrenceUnit: "month" });
+    expect(mp.taskRule.create.mock.calls[0][0].data.sortOrder).toBe(10);
   });
 
   it("a new recurring rule stores end-of-month and generates its instances in the same request", async () => {

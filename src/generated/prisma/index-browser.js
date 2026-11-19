@@ -993,6 +993,7 @@ exports.Prisma.TaskRuleScalarFieldEnum = {
   archivedAt: 'archivedAt',
   windowMode: 'windowMode',
   windowDaysBefore: 'windowDaysBefore',
+  sortOrder: 'sortOrder',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -1016,6 +1017,7 @@ exports.Prisma.RuleInstanceScalarFieldEnum = {
   completedLate: 'completedLate',
   daysLate: 'daysLate',
   completedBySubmissionId: 'completedBySubmissionId',
+  sortKey: 'sortKey',
   missedReason: 'missedReason',
   markedMissedById: 'markedMissedById',
   markedMissedAt: 'markedMissedAt',

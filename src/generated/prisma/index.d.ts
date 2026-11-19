@@ -67169,12 +67169,14 @@ export namespace Prisma {
     recurrenceEvery: number | null
     escalateAfterDays: number | null
     windowDaysBefore: number | null
+    sortOrder: number | null
   }
 
   export type TaskRuleSumAggregateOutputType = {
     recurrenceEvery: number | null
     escalateAfterDays: number | null
     windowDaysBefore: number | null
+    sortOrder: number | null
   }
 
   export type TaskRuleMinAggregateOutputType = {
@@ -67196,6 +67198,7 @@ export namespace Prisma {
     archivedAt: Date | null
     windowMode: string | null
     windowDaysBefore: number | null
+    sortOrder: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -67219,6 +67222,7 @@ export namespace Prisma {
     archivedAt: Date | null
     windowMode: string | null
     windowDaysBefore: number | null
+    sortOrder: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -67242,6 +67246,7 @@ export namespace Prisma {
     archivedAt: number
     windowMode: number
     windowDaysBefore: number
+    sortOrder: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -67252,12 +67257,14 @@ export namespace Prisma {
     recurrenceEvery?: true
     escalateAfterDays?: true
     windowDaysBefore?: true
+    sortOrder?: true
   }
 
   export type TaskRuleSumAggregateInputType = {
     recurrenceEvery?: true
     escalateAfterDays?: true
     windowDaysBefore?: true
+    sortOrder?: true
   }
 
   export type TaskRuleMinAggregateInputType = {
@@ -67279,6 +67286,7 @@ export namespace Prisma {
     archivedAt?: true
     windowMode?: true
     windowDaysBefore?: true
+    sortOrder?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -67302,6 +67310,7 @@ export namespace Prisma {
     archivedAt?: true
     windowMode?: true
     windowDaysBefore?: true
+    sortOrder?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -67325,6 +67334,7 @@ export namespace Prisma {
     archivedAt?: true
     windowMode?: true
     windowDaysBefore?: true
+    sortOrder?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -67435,6 +67445,7 @@ export namespace Prisma {
     archivedAt: Date | null
     windowMode: string
     windowDaysBefore: number | null
+    sortOrder: number | null
     createdAt: Date
     updatedAt: Date
     _count: TaskRuleCountAggregateOutputType | null
@@ -67477,6 +67488,7 @@ export namespace Prisma {
     archivedAt?: boolean
     windowMode?: boolean
     windowDaysBefore?: boolean
+    sortOrder?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     facility?: boolean | FacilityDefaultArgs<ExtArgs>
@@ -67504,6 +67516,7 @@ export namespace Prisma {
     archivedAt?: boolean
     windowMode?: boolean
     windowDaysBefore?: boolean
+    sortOrder?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     facility?: boolean | FacilityDefaultArgs<ExtArgs>
@@ -67529,6 +67542,7 @@ export namespace Prisma {
     archivedAt?: boolean
     windowMode?: boolean
     windowDaysBefore?: boolean
+    sortOrder?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -67570,6 +67584,7 @@ export namespace Prisma {
       archivedAt: Date | null
       windowMode: string
       windowDaysBefore: number | null
+      sortOrder: number | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["taskRule"]>
@@ -67986,6 +68001,7 @@ export namespace Prisma {
     readonly archivedAt: FieldRef<"TaskRule", 'DateTime'>
     readonly windowMode: FieldRef<"TaskRule", 'String'>
     readonly windowDaysBefore: FieldRef<"TaskRule", 'Int'>
+    readonly sortOrder: FieldRef<"TaskRule", 'Int'>
     readonly createdAt: FieldRef<"TaskRule", 'DateTime'>
     readonly updatedAt: FieldRef<"TaskRule", 'DateTime'>
   }
@@ -68354,10 +68370,12 @@ export namespace Prisma {
 
   export type RuleInstanceAvgAggregateOutputType = {
     daysLate: number | null
+    sortKey: number | null
   }
 
   export type RuleInstanceSumAggregateOutputType = {
     daysLate: number | null
+    sortKey: number | null
   }
 
   export type RuleInstanceMinAggregateOutputType = {
@@ -68379,6 +68397,7 @@ export namespace Prisma {
     completedLate: boolean | null
     daysLate: number | null
     completedBySubmissionId: string | null
+    sortKey: number | null
     missedReason: string | null
     markedMissedById: string | null
     markedMissedAt: Date | null
@@ -68405,6 +68424,7 @@ export namespace Prisma {
     completedLate: boolean | null
     daysLate: number | null
     completedBySubmissionId: string | null
+    sortKey: number | null
     missedReason: string | null
     markedMissedById: string | null
     markedMissedAt: Date | null
@@ -68431,6 +68451,7 @@ export namespace Prisma {
     completedLate: number
     daysLate: number
     completedBySubmissionId: number
+    sortKey: number
     missedReason: number
     markedMissedById: number
     markedMissedAt: number
@@ -68442,10 +68463,12 @@ export namespace Prisma {
 
   export type RuleInstanceAvgAggregateInputType = {
     daysLate?: true
+    sortKey?: true
   }
 
   export type RuleInstanceSumAggregateInputType = {
     daysLate?: true
+    sortKey?: true
   }
 
   export type RuleInstanceMinAggregateInputType = {
@@ -68467,6 +68490,7 @@ export namespace Prisma {
     completedLate?: true
     daysLate?: true
     completedBySubmissionId?: true
+    sortKey?: true
     missedReason?: true
     markedMissedById?: true
     markedMissedAt?: true
@@ -68493,6 +68517,7 @@ export namespace Prisma {
     completedLate?: true
     daysLate?: true
     completedBySubmissionId?: true
+    sortKey?: true
     missedReason?: true
     markedMissedById?: true
     markedMissedAt?: true
@@ -68519,6 +68544,7 @@ export namespace Prisma {
     completedLate?: true
     daysLate?: true
     completedBySubmissionId?: true
+    sortKey?: true
     missedReason?: true
     markedMissedById?: true
     markedMissedAt?: true
@@ -68632,6 +68658,7 @@ export namespace Prisma {
     completedLate: boolean
     daysLate: number | null
     completedBySubmissionId: string | null
+    sortKey: number | null
     missedReason: string | null
     markedMissedById: string | null
     markedMissedAt: Date | null
@@ -68677,6 +68704,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: boolean
     completedBySubmissionId?: boolean
+    sortKey?: boolean
     missedReason?: boolean
     markedMissedById?: boolean
     markedMissedAt?: boolean
@@ -68710,6 +68738,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: boolean
     completedBySubmissionId?: boolean
+    sortKey?: boolean
     missedReason?: boolean
     markedMissedById?: boolean
     markedMissedAt?: boolean
@@ -68741,6 +68770,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: boolean
     completedBySubmissionId?: boolean
+    sortKey?: boolean
     missedReason?: boolean
     markedMissedById?: boolean
     markedMissedAt?: boolean
@@ -68794,6 +68824,7 @@ export namespace Prisma {
       completedLate: boolean
       daysLate: number | null
       completedBySubmissionId: string | null
+      sortKey: number | null
       missedReason: string | null
       markedMissedById: string | null
       markedMissedAt: Date | null
@@ -69216,6 +69247,7 @@ export namespace Prisma {
     readonly completedLate: FieldRef<"RuleInstance", 'Boolean'>
     readonly daysLate: FieldRef<"RuleInstance", 'Int'>
     readonly completedBySubmissionId: FieldRef<"RuleInstance", 'String'>
+    readonly sortKey: FieldRef<"RuleInstance", 'Int'>
     readonly missedReason: FieldRef<"RuleInstance", 'String'>
     readonly markedMissedById: FieldRef<"RuleInstance", 'String'>
     readonly markedMissedAt: FieldRef<"RuleInstance", 'DateTime'>
@@ -73829,6 +73861,7 @@ export namespace Prisma {
     archivedAt: 'archivedAt',
     windowMode: 'windowMode',
     windowDaysBefore: 'windowDaysBefore',
+    sortOrder: 'sortOrder',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -73855,6 +73888,7 @@ export namespace Prisma {
     completedLate: 'completedLate',
     daysLate: 'daysLate',
     completedBySubmissionId: 'completedBySubmissionId',
+    sortKey: 'sortKey',
     missedReason: 'missedReason',
     markedMissedById: 'markedMissedById',
     markedMissedAt: 'markedMissedAt',
@@ -79774,6 +79808,7 @@ export namespace Prisma {
     archivedAt?: DateTimeNullableFilter<"TaskRule"> | Date | string | null
     windowMode?: StringFilter<"TaskRule"> | string
     windowDaysBefore?: IntNullableFilter<"TaskRule"> | number | null
+    sortOrder?: IntNullableFilter<"TaskRule"> | number | null
     createdAt?: DateTimeFilter<"TaskRule"> | Date | string
     updatedAt?: DateTimeFilter<"TaskRule"> | Date | string
     facility?: XOR<FacilityRelationFilter, FacilityWhereInput>
@@ -79800,6 +79835,7 @@ export namespace Prisma {
     archivedAt?: SortOrderInput | SortOrder
     windowMode?: SortOrder
     windowDaysBefore?: SortOrderInput | SortOrder
+    sortOrder?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     facility?: FacilityOrderByWithRelationInput
@@ -79829,6 +79865,7 @@ export namespace Prisma {
     archivedAt?: DateTimeNullableFilter<"TaskRule"> | Date | string | null
     windowMode?: StringFilter<"TaskRule"> | string
     windowDaysBefore?: IntNullableFilter<"TaskRule"> | number | null
+    sortOrder?: IntNullableFilter<"TaskRule"> | number | null
     createdAt?: DateTimeFilter<"TaskRule"> | Date | string
     updatedAt?: DateTimeFilter<"TaskRule"> | Date | string
     facility?: XOR<FacilityRelationFilter, FacilityWhereInput>
@@ -79855,6 +79892,7 @@ export namespace Prisma {
     archivedAt?: SortOrderInput | SortOrder
     windowMode?: SortOrder
     windowDaysBefore?: SortOrderInput | SortOrder
+    sortOrder?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: TaskRuleCountOrderByAggregateInput
@@ -79886,6 +79924,7 @@ export namespace Prisma {
     archivedAt?: DateTimeNullableWithAggregatesFilter<"TaskRule"> | Date | string | null
     windowMode?: StringWithAggregatesFilter<"TaskRule"> | string
     windowDaysBefore?: IntNullableWithAggregatesFilter<"TaskRule"> | number | null
+    sortOrder?: IntNullableWithAggregatesFilter<"TaskRule"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"TaskRule"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TaskRule"> | Date | string
   }
@@ -79912,6 +79951,7 @@ export namespace Prisma {
     completedLate?: BoolFilter<"RuleInstance"> | boolean
     daysLate?: IntNullableFilter<"RuleInstance"> | number | null
     completedBySubmissionId?: StringNullableFilter<"RuleInstance"> | string | null
+    sortKey?: IntNullableFilter<"RuleInstance"> | number | null
     missedReason?: StringNullableFilter<"RuleInstance"> | string | null
     markedMissedById?: StringNullableFilter<"RuleInstance"> | string | null
     markedMissedAt?: DateTimeNullableFilter<"RuleInstance"> | Date | string | null
@@ -79944,6 +79984,7 @@ export namespace Prisma {
     completedLate?: SortOrder
     daysLate?: SortOrderInput | SortOrder
     completedBySubmissionId?: SortOrderInput | SortOrder
+    sortKey?: SortOrderInput | SortOrder
     missedReason?: SortOrderInput | SortOrder
     markedMissedById?: SortOrderInput | SortOrder
     markedMissedAt?: SortOrderInput | SortOrder
@@ -79980,6 +80021,7 @@ export namespace Prisma {
     completedLate?: BoolFilter<"RuleInstance"> | boolean
     daysLate?: IntNullableFilter<"RuleInstance"> | number | null
     completedBySubmissionId?: StringNullableFilter<"RuleInstance"> | string | null
+    sortKey?: IntNullableFilter<"RuleInstance"> | number | null
     missedReason?: StringNullableFilter<"RuleInstance"> | string | null
     markedMissedById?: StringNullableFilter<"RuleInstance"> | string | null
     markedMissedAt?: DateTimeNullableFilter<"RuleInstance"> | Date | string | null
@@ -80012,6 +80054,7 @@ export namespace Prisma {
     completedLate?: SortOrder
     daysLate?: SortOrderInput | SortOrder
     completedBySubmissionId?: SortOrderInput | SortOrder
+    sortKey?: SortOrderInput | SortOrder
     missedReason?: SortOrderInput | SortOrder
     markedMissedById?: SortOrderInput | SortOrder
     markedMissedAt?: SortOrderInput | SortOrder
@@ -80046,6 +80089,7 @@ export namespace Prisma {
     completedLate?: BoolWithAggregatesFilter<"RuleInstance"> | boolean
     daysLate?: IntNullableWithAggregatesFilter<"RuleInstance"> | number | null
     completedBySubmissionId?: StringNullableWithAggregatesFilter<"RuleInstance"> | string | null
+    sortKey?: IntNullableWithAggregatesFilter<"RuleInstance"> | number | null
     missedReason?: StringNullableWithAggregatesFilter<"RuleInstance"> | string | null
     markedMissedById?: StringNullableWithAggregatesFilter<"RuleInstance"> | string | null
     markedMissedAt?: DateTimeNullableWithAggregatesFilter<"RuleInstance"> | Date | string | null
@@ -86604,6 +86648,7 @@ export namespace Prisma {
     archivedAt?: Date | string | null
     windowMode?: string
     windowDaysBefore?: number | null
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     facility: FacilityCreateNestedOneWithoutTaskRulesInput
@@ -86630,6 +86675,7 @@ export namespace Prisma {
     archivedAt?: Date | string | null
     windowMode?: string
     windowDaysBefore?: number | null
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instances?: RuleInstanceUncheckedCreateNestedManyWithoutRuleInput
@@ -86652,6 +86698,7 @@ export namespace Prisma {
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     windowMode?: StringFieldUpdateOperationsInput | string
     windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     facility?: FacilityUpdateOneRequiredWithoutTaskRulesNestedInput
@@ -86678,6 +86725,7 @@ export namespace Prisma {
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     windowMode?: StringFieldUpdateOperationsInput | string
     windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instances?: RuleInstanceUncheckedUpdateManyWithoutRuleNestedInput
@@ -86702,6 +86750,7 @@ export namespace Prisma {
     archivedAt?: Date | string | null
     windowMode?: string
     windowDaysBefore?: number | null
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -86723,6 +86772,7 @@ export namespace Prisma {
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     windowMode?: StringFieldUpdateOperationsInput | string
     windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -86746,6 +86796,7 @@ export namespace Prisma {
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     windowMode?: StringFieldUpdateOperationsInput | string
     windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -86765,6 +86816,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedAt?: Date | string | null
     createdAt?: Date | string
@@ -86796,6 +86848,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedById?: string | null
     markedMissedAt?: Date | string | null
@@ -86819,6 +86872,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -86850,6 +86904,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedById?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -86877,6 +86932,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedById?: string | null
     markedMissedAt?: Date | string | null
@@ -86899,6 +86955,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -86924,6 +86981,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedById?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -91334,6 +91392,7 @@ export namespace Prisma {
     archivedAt?: SortOrder
     windowMode?: SortOrder
     windowDaysBefore?: SortOrder
+    sortOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -91342,6 +91401,7 @@ export namespace Prisma {
     recurrenceEvery?: SortOrder
     escalateAfterDays?: SortOrder
     windowDaysBefore?: SortOrder
+    sortOrder?: SortOrder
   }
 
   export type TaskRuleMaxOrderByAggregateInput = {
@@ -91363,6 +91423,7 @@ export namespace Prisma {
     archivedAt?: SortOrder
     windowMode?: SortOrder
     windowDaysBefore?: SortOrder
+    sortOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -91386,6 +91447,7 @@ export namespace Prisma {
     archivedAt?: SortOrder
     windowMode?: SortOrder
     windowDaysBefore?: SortOrder
+    sortOrder?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -91394,6 +91456,7 @@ export namespace Prisma {
     recurrenceEvery?: SortOrder
     escalateAfterDays?: SortOrder
     windowDaysBefore?: SortOrder
+    sortOrder?: SortOrder
   }
 
   export type EnumTaskRuleTriggerTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -91443,6 +91506,7 @@ export namespace Prisma {
     completedLate?: SortOrder
     daysLate?: SortOrder
     completedBySubmissionId?: SortOrder
+    sortKey?: SortOrder
     missedReason?: SortOrder
     markedMissedById?: SortOrder
     markedMissedAt?: SortOrder
@@ -91452,6 +91516,7 @@ export namespace Prisma {
 
   export type RuleInstanceAvgOrderByAggregateInput = {
     daysLate?: SortOrder
+    sortKey?: SortOrder
   }
 
   export type RuleInstanceMaxOrderByAggregateInput = {
@@ -91473,6 +91538,7 @@ export namespace Prisma {
     completedLate?: SortOrder
     daysLate?: SortOrder
     completedBySubmissionId?: SortOrder
+    sortKey?: SortOrder
     missedReason?: SortOrder
     markedMissedById?: SortOrder
     markedMissedAt?: SortOrder
@@ -91499,6 +91565,7 @@ export namespace Prisma {
     completedLate?: SortOrder
     daysLate?: SortOrder
     completedBySubmissionId?: SortOrder
+    sortKey?: SortOrder
     missedReason?: SortOrder
     markedMissedById?: SortOrder
     markedMissedAt?: SortOrder
@@ -91508,6 +91575,7 @@ export namespace Prisma {
 
   export type RuleInstanceSumOrderByAggregateInput = {
     daysLate?: SortOrder
+    sortKey?: SortOrder
   }
 
   export type EnumRuleInstanceStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -98937,6 +99005,7 @@ export namespace Prisma {
     archivedAt?: Date | string | null
     windowMode?: string
     windowDaysBefore?: number | null
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     facility: FacilityCreateNestedOneWithoutTaskRulesInput
@@ -98961,6 +99030,7 @@ export namespace Prisma {
     archivedAt?: Date | string | null
     windowMode?: string
     windowDaysBefore?: number | null
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instances?: RuleInstanceUncheckedCreateNestedManyWithoutRuleInput
@@ -98991,6 +99061,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedAt?: Date | string | null
     createdAt?: Date | string
@@ -99020,6 +99091,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedById?: string | null
     markedMissedAt?: Date | string | null
@@ -99053,6 +99125,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedAt?: Date | string | null
     createdAt?: Date | string
@@ -99082,6 +99155,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedById?: string | null
     markedMissedAt?: Date | string | null
@@ -99115,6 +99189,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedAt?: Date | string | null
     createdAt?: Date | string
@@ -99144,6 +99219,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedById?: string | null
     markedMissedAt?: Date | string | null
@@ -99177,6 +99253,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedAt?: Date | string | null
     createdAt?: Date | string
@@ -99207,6 +99284,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedAt?: Date | string | null
     createdAt?: Date | string
@@ -100482,6 +100560,7 @@ export namespace Prisma {
     archivedAt?: DateTimeNullableFilter<"TaskRule"> | Date | string | null
     windowMode?: StringFilter<"TaskRule"> | string
     windowDaysBefore?: IntNullableFilter<"TaskRule"> | number | null
+    sortOrder?: IntNullableFilter<"TaskRule"> | number | null
     createdAt?: DateTimeFilter<"TaskRule"> | Date | string
     updatedAt?: DateTimeFilter<"TaskRule"> | Date | string
   }
@@ -100524,6 +100603,7 @@ export namespace Prisma {
     completedLate?: BoolFilter<"RuleInstance"> | boolean
     daysLate?: IntNullableFilter<"RuleInstance"> | number | null
     completedBySubmissionId?: StringNullableFilter<"RuleInstance"> | string | null
+    sortKey?: IntNullableFilter<"RuleInstance"> | number | null
     missedReason?: StringNullableFilter<"RuleInstance"> | string | null
     markedMissedById?: StringNullableFilter<"RuleInstance"> | string | null
     markedMissedAt?: DateTimeNullableFilter<"RuleInstance"> | Date | string | null
@@ -116671,6 +116751,7 @@ export namespace Prisma {
     archivedAt?: Date | string | null
     windowMode?: string
     windowDaysBefore?: number | null
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     owner: UserCreateNestedOneWithoutOwnedTaskRulesInput
@@ -116695,6 +116776,7 @@ export namespace Prisma {
     archivedAt?: Date | string | null
     windowMode?: string
     windowDaysBefore?: number | null
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     instances?: RuleInstanceUncheckedCreateNestedManyWithoutRuleInput
@@ -116867,6 +116949,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedAt?: Date | string | null
     createdAt?: Date | string
@@ -116896,6 +116979,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedById?: string | null
     markedMissedAt?: Date | string | null
@@ -117085,6 +117169,7 @@ export namespace Prisma {
     archivedAt?: Date | string | null
     windowMode?: string
     windowDaysBefore?: number | null
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     facility: FacilityCreateNestedOneWithoutTaskRulesInput
@@ -117110,6 +117195,7 @@ export namespace Prisma {
     archivedAt?: Date | string | null
     windowMode?: string
     windowDaysBefore?: number | null
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -117585,6 +117671,7 @@ export namespace Prisma {
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     windowMode?: StringFieldUpdateOperationsInput | string
     windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     facility?: FacilityUpdateOneRequiredWithoutTaskRulesNestedInput
@@ -117610,6 +117697,7 @@ export namespace Prisma {
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     windowMode?: StringFieldUpdateOperationsInput | string
     windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -118081,6 +118169,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedAt?: Date | string | null
     createdAt?: Date | string
@@ -118111,6 +118200,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedById?: string | null
     markedMissedAt?: Date | string | null
@@ -118252,6 +118342,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -118282,6 +118373,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedById?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -119499,6 +119591,7 @@ export namespace Prisma {
     archivedAt?: Date | string | null
     windowMode?: string
     windowDaysBefore?: number | null
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -119521,6 +119614,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedById?: string | null
     markedMissedAt?: Date | string | null
@@ -119546,6 +119640,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedById?: string | null
     markedMissedAt?: Date | string | null
@@ -119571,6 +119666,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedById?: string | null
     markedMissedAt?: Date | string | null
@@ -119597,6 +119693,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedAt?: Date | string | null
     createdAt?: Date | string
@@ -121091,6 +121188,7 @@ export namespace Prisma {
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     windowMode?: StringFieldUpdateOperationsInput | string
     windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     facility?: FacilityUpdateOneRequiredWithoutTaskRulesNestedInput
@@ -121115,6 +121213,7 @@ export namespace Prisma {
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     windowMode?: StringFieldUpdateOperationsInput | string
     windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instances?: RuleInstanceUncheckedUpdateManyWithoutRuleNestedInput
@@ -121138,6 +121237,7 @@ export namespace Prisma {
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     windowMode?: StringFieldUpdateOperationsInput | string
     windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -121157,6 +121257,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -121186,6 +121287,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedById?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -121212,6 +121314,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedById?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -121234,6 +121337,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -121263,6 +121367,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedById?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -121289,6 +121394,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedById?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -121311,6 +121417,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -121340,6 +121447,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedById?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -121366,6 +121474,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedById?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -121388,6 +121497,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -121418,6 +121528,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -121444,6 +121555,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -124784,6 +124896,7 @@ export namespace Prisma {
     archivedAt?: Date | string | null
     windowMode?: string
     windowDaysBefore?: number | null
+    sortOrder?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -124805,6 +124918,7 @@ export namespace Prisma {
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     windowMode?: StringFieldUpdateOperationsInput | string
     windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     owner?: UserUpdateOneRequiredWithoutOwnedTaskRulesNestedInput
@@ -124829,6 +124943,7 @@ export namespace Prisma {
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     windowMode?: StringFieldUpdateOperationsInput | string
     windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instances?: RuleInstanceUncheckedUpdateManyWithoutRuleNestedInput
@@ -124852,6 +124967,7 @@ export namespace Prisma {
     archivedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     windowMode?: StringFieldUpdateOperationsInput | string
     windowDaysBefore?: NullableIntFieldUpdateOperationsInput | number | null
+    sortOrder?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -124874,6 +124990,7 @@ export namespace Prisma {
     completedLate?: boolean
     daysLate?: number | null
     completedBySubmissionId?: string | null
+    sortKey?: number | null
     missedReason?: string | null
     markedMissedById?: string | null
     markedMissedAt?: Date | string | null
@@ -124896,6 +125013,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -124925,6 +125043,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedById?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -124951,6 +125070,7 @@ export namespace Prisma {
     completedLate?: BoolFieldUpdateOperationsInput | boolean
     daysLate?: NullableIntFieldUpdateOperationsInput | number | null
     completedBySubmissionId?: NullableStringFieldUpdateOperationsInput | string | null
+    sortKey?: NullableIntFieldUpdateOperationsInput | number | null
     missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedById?: NullableStringFieldUpdateOperationsInput | string | null
     markedMissedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

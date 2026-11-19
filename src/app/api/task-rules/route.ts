@@ -6,6 +6,7 @@ import { generateCalendarInstances } from "@/lib/calendar-generator";
 import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
 import { generateInstances, updateStatuses } from "@/lib/task-generator";
 import { resolveEndOfMonth } from "@/lib/task-rule-update";
+import { RANK_STEP } from "@/lib/task-order";
 
 export const dynamic = "force-dynamic";
 
@@ -76,8 +77,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: `Unknown formKey: "${formKey}". Add it to the registry first.` }, { status: 400 });
     }
 
+    // New rules go to the end of the work order until an admin drags them
+    const lastRank = (await prisma.taskRule.aggregate({ _max: { sortOrder: true } }))._max.sortOrder ?? 0;
+
     const rule = await prisma.taskRule.create({
       data: {
+        sortOrder: lastRank + RANK_STEP,
         title: title.trim(),
         description: description?.trim() || null,
         facilityId,

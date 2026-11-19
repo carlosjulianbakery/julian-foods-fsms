@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma";
 import { getPacificToday, addDaysToDateStr } from "@/lib/pacific-time";
 import { computeWindowStart, isInWindow, windowOverlapsRange } from "@/lib/window-tasks";
+import { sortTasks } from "@/lib/task-order";
 import { MyTasksClient, type TaskInstance } from "./MyTasksClient";
 
 function getMondayOf(dateStr: string): string {
@@ -50,6 +51,8 @@ export async function MyTasksBlock() {
         windowMode: true,
         windowDaysBefore: true,
         recurrenceUnit: true,
+        sortOrder: true,
+        createdAt: true,
       },
     },
     doneBy: { select: { id: true, name: true } },
@@ -202,15 +205,21 @@ export async function MyTasksBlock() {
       skippedByName: inst.skippedBy?.name ?? null,
       skippedAt: inst.skippedAt?.toISOString() ?? null,
       windowStart: windowStartOf(inst),
+      ruleId: inst.rule.id,
+      ruleSortOrder: inst.rule.sortOrder,
+      ruleCreatedAt: inst.rule.createdAt.toISOString(),
+      sortKey: inst.sortKey,
+      createdAt: inst.createdAt.toISOString(),
     };
   }
 
-  const serialized: TaskInstance[] = instances.map(serializeInst);
+  // Every work list uses the one saved work order (skipped history keeps newest-first)
+  const serialized: TaskInstance[] = sortTasks(instances.map(serializeInst));
   const serializedSkipped: TaskInstance[] = (skippedInstances as typeof instances).map(serializeInst);
-  const serializedCalendar: TaskInstance[] = [
+  const serializedCalendar: TaskInstance[] = sortTasks([
     ...(calendarInstances as typeof instances),
     ...calendarWindowExtras,
-  ].map(serializeInst);
+  ].map(serializeInst));
 
   function serializeWindowInst(inst: typeof openWindowInstances[number]): TaskInstance {
     const mc624 = mc624ByInstanceId.get(inst.id);
@@ -222,7 +231,7 @@ export async function MyTasksBlock() {
     };
   }
 
-  const serializedWindowInstances: TaskInstance[] = openWindowInstances.map(serializeWindowInst);
+  const serializedWindowInstances: TaskInstance[] = sortTasks(openWindowInstances.map(serializeWindowInst));
 
   let owners: { id: string; name: string }[] = [];
   if (role === "ADMIN") {

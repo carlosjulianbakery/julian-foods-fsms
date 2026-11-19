@@ -10,8 +10,11 @@ vi.mock("@/lib/prisma", () => ({
       createMany: vi.fn(),
       deleteMany: vi.fn(),
       updateMany: vi.fn(),
+      update: vi.fn(),
     },
     notification: { deleteMany: vi.fn() },
+    // sortKey upkeep on existing instances (covered in calendar-generator-sortkey.test.ts)
+    $transaction: vi.fn(async (ops: unknown[]) => ops),
   },
 }));
 

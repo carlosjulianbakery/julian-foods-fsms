@@ -31,7 +31,11 @@ function dbRow(id: string, title: string, due: string, rule: { windowMode: strin
     skipReason: null,
     skippedBy: null,
     skippedAt: null,
+    sortKey: null,
+    createdAt: new Date("2026-11-13T20:00:00Z"),
     rule: {
+      sortOrder: null,
+      createdAt: new Date("2026-11-11T20:00:00Z"),
       id: "r-" + id,
       title,
       ownerId: "user-ivan",

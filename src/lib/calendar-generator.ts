@@ -174,6 +174,8 @@ async function processOneFacility(
     dueDate: string;
     label: string;
     calendarKey: string;
+    /** Position of the production within its day on the calendar; null for once-a-day tasks. */
+    sortKey: number | null;
   }
 
   const allExpected: ExpectedInst[] = [];
@@ -188,10 +190,12 @@ async function processOneFacility(
           dueDate: day.iso_date,
           label: "",
           calendarKey: `day:${day.iso_date}`,
+          sortKey: null,
         });
       }
     } else if (rule.triggerType === "PRODUCTION_PRODUCT" && rule.productName) {
       for (const day of days) {
+        const dayProductions = day.items.filter((i) => i.item_type === "production");
         const matches = day.items.filter(
           (i) => i.item_type === "production" && matchesProduct(i.product_name, rule.productName!)
         );
@@ -203,6 +207,7 @@ async function processOneFacility(
             dueDate: day.iso_date,
             label,
             calendarKey: `prod:${day.iso_date}:${normalizeProductName(item.product_name)}:${idx}`,
+            sortKey: dayProductions.indexOf(item),
           });
         });
       }
@@ -218,6 +223,7 @@ async function processOneFacility(
             dueDate: day.iso_date,
             label: `${item.product_name}${qty}`,
             calendarKey: `prod:${day.iso_date}:${normalizeProductName(item.product_name)}:${idx}`,
+            sortKey: idx,
           });
         });
       }
@@ -242,6 +248,7 @@ async function processOneFacility(
       status: true,
       ownerUserId: true,
       completedBySubmissionId: true,
+      sortKey: true,
     },
   });
 
@@ -261,9 +268,21 @@ async function processOneFacility(
       dueDate: new Date(`${exp.dueDate}T12:00:00Z`),
       label: exp.label,
       calendarKey: exp.calendarKey,
+      sortKey: exp.sortKey,
       source: "SCHEDULE",
       status: exp.dueDate === today ? "DUE_TODAY" : "UPCOMING",
     }));
+
+  // Keep the stored calendar position current on tasks that already exist
+  const sortKeyUpdates = allExpected.flatMap((exp) => {
+    const existing = existingByKey.get(`${exp.ruleId}:${exp.calendarKey}`);
+    return existing && (existing.sortKey ?? null) !== exp.sortKey ? [{ id: existing.id, sortKey: exp.sortKey }] : [];
+  });
+  if (sortKeyUpdates.length > 0 && !dryRun) {
+    await prisma.$transaction(
+      sortKeyUpdates.map((u) => prisma.ruleInstance.update({ where: { id: u.id }, data: { sortKey: u.sortKey } })),
+    );
+  }
 
   if (toCreate.length > 0) {
     if (!dryRun) {

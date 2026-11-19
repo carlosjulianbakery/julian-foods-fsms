@@ -1365,6 +1365,8 @@ model TaskRule {
   archivedAt      DateTime?
   windowMode       String              @default("NONE")
   windowDaysBefore Int?
+  // Work-order rank shown in every task list (lower first). Null = not ranked yet, listed last.
+  sortOrder        Int?
   createdAt        DateTime            @default(now())
   updatedAt        DateTime            @updatedAt
 
@@ -1394,6 +1396,8 @@ model RuleInstance {
   completedLate           Boolean   @default(false)
   daysLate                Int?
   completedBySubmissionId String?
+  // Position of this production within its day on the production calendar (batch sheet tasks only).
+  sortKey                 Int?
   missedReason            String?
   markedMissedById        String?
   markedMissedAt          DateTime?
