@@ -3,19 +3,19 @@
   "framework": "nextjs",
   "crons": [
     {
-      "path": "/api/inventory/check-stock-levels",
+      "path": "/api/inventory/check-stock-levels?slot=utc7",
       "schedule": "20 7 * * *"
     },
     {
-      "path": "/api/inventory/check-stock-levels",
+      "path": "/api/inventory/check-stock-levels?slot=utc8",
       "schedule": "20 8 * * *"
     },
     {
-      "path": "/api/cron/shipstation-sync",
+      "path": "/api/cron/shipstation-sync?slot=utc7",
       "schedule": "40 7 * * *"
     },
     {
-      "path": "/api/cron/shipstation-sync",
+      "path": "/api/cron/shipstation-sync?slot=utc8",
       "schedule": "40 8 * * *"
     },
     {
@@ -23,19 +23,19 @@
       "schedule": "59 7 28-31 * *"
     },
     {
-      "path": "/api/cron/sop-review-reminders",
+      "path": "/api/cron/sop-review-reminders?slot=utc7",
       "schedule": "5 7 * * *"
     },
     {
-      "path": "/api/cron/sop-review-reminders",
+      "path": "/api/cron/sop-review-reminders?slot=utc8",
       "schedule": "5 8 * * *"
     },
     {
-      "path": "/api/cron/task-generator",
+      "path": "/api/cron/task-generator?slot=utc7",
       "schedule": "0 7 * * *"
     },
     {
-      "path": "/api/cron/task-generator",
+      "path": "/api/cron/task-generator?slot=utc8",
       "schedule": "0 8 * * *"
     },
     {
