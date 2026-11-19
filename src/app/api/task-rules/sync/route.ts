@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { generateCalendarInstances } from "@/lib/calendar-generator";
 import { updateStatuses } from "@/lib/task-generator";
+import { reconcileBatchSheetTasks } from "@/lib/batch-sheet-reconcile";
 
 export const dynamic = "force-dynamic";
 
@@ -50,6 +51,12 @@ export async function POST() {
     // Run generator OUTSIDE the transaction (lock already released)
     const result = await generateCalendarInstances({ invalidateCache: false });
 
+    // Link any batch sheet that has no task link yet (self-healing; changes nothing when all are linked)
+    const sweep = await reconcileBatchSheetTasks({ prismaClient: prisma, source: "calendar sync" }).catch((e) => {
+      console.error("[task-rules/sync] batch sheet sweep:", e);
+      return null;
+    });
+
     const lastSyncAt = (
       await prisma.facility.aggregate({ _max: { lastCalendarSyncAt: true } })
     )._max.lastCalendarSyncAt;
@@ -59,6 +66,7 @@ export async function POST() {
       created: result.totalCreated,
       deleted: result.totalDeleted,
       flagged: result.totalFlagged,
+      batchSheetsLinked: sweep?.completed.length ?? 0,
       lastSyncAt: lastSyncAt?.toISOString() ?? null,
     });
   } catch (err) {

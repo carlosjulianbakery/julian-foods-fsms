@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { completeBatchSheetInstance } from "@/lib/task-completion";
-import { toPacificDateStr } from "@/lib/pacific-time";
+import { reconcileBatchSheetTasks, resolveBatchSheetTaskLink } from "@/lib/batch-sheet-reconcile";
 import { checkMaterialStockLevel } from "@/lib/inventoryUtils";
 import { convertUnit } from "@/lib/unitConversion";
 
@@ -527,6 +526,9 @@ export async function POST(req: NextRequest) {
         }
       : null;
 
+    const taskLinkId = await resolveBatchSheetTaskLink((body as Record<string, unknown>).taskId, prisma)
+      .catch(() => null);
+
     const data = {
       templateId,
       templateName,
@@ -549,6 +551,8 @@ export async function POST(req: NextRequest) {
       recipeSnapshot:    recipeSnapshot ?? null,
       baseUnitName:           baseUnitName || "Bowl",
       baseUnitIsFinished:     baseUnitIsFinished ?? false,
+      // Opened from a task's Start button: remember which task. Never cleared by a later save without one.
+      ...(taskLinkId ? { taskInstanceId: taskLinkId } : {}),
     };
 
     let submission;
@@ -611,15 +615,13 @@ export async function POST(req: NextRequest) {
       }
 
       try {
-        completedInstanceId = await completeBatchSheetInstance({
-          submissionId: submission.id,
-          userId: user.id,
-          userRole: user.role,
-          submissionDate: toPacificDateStr(new Date((productionDate as string) + "T12:00:00Z")),
-          productName: (templateName as string) ?? null,
-          taskId: (body as Record<string, unknown>).taskId as string ?? null,
+        // One rule for linking sheets to tasks, shared with the calendar sync and the nightly cron
+        const sweep = await reconcileBatchSheetTasks({
           prismaClient: prisma,
+          source: "on submit",
+          includeSubmissionId: submission.id,
         });
+        completedInstanceId = sweep.completed.find((c) => c.submissionId === submission.id)?.instanceId ?? null;
       } catch (e) { console.error("[rule-instance-complete] batch_sheet:", e); }
 
       // Create inventory lot for WIP (internal) products when their batch sheet is submitted.

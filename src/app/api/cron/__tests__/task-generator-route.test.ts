@@ -8,10 +8,13 @@ vi.mock("@/lib/task-generator", () => ({
 }));
 vi.mock("@/lib/task-reminders", () => ({ sendReminders: vi.fn() }));
 vi.mock("@/lib/task-escalation", () => ({ sendEscalations: vi.fn() }));
+vi.mock("@/lib/prisma", () => ({ prisma: {} }));
+vi.mock("@/lib/batch-sheet-reconcile", () => ({ reconcileBatchSheetTasks: vi.fn() }));
 
 import { generateInstances, updateStatuses, generateCalendarInstances } from "@/lib/task-generator";
 import { sendReminders } from "@/lib/task-reminders";
 import { sendEscalations } from "@/lib/task-escalation";
+import { reconcileBatchSheetTasks } from "@/lib/batch-sheet-reconcile";
 import { GET } from "@/app/api/cron/task-generator/route";
 
 type MockFn = ReturnType<typeof vi.fn>;
@@ -38,6 +41,7 @@ beforeEach(() => {
   m.calendar.mockResolvedValue({ totalCreated: 2, totalDeleted: 0, totalFlagged: 0, results: [] });
   m.reminders.mockResolvedValue({ dueSoon: 0, dueToday: 3, overdue: 1 });
   m.escalations.mockResolvedValue({ escalated: 0 });
+  (reconcileBatchSheetTasks as unknown as MockFn).mockResolvedValue({ completed: [{}, {}] });
 });
 afterEach(() => vi.unstubAllEnvs());
 
@@ -89,5 +93,21 @@ describe("GET /api/cron/task-generator", () => {
     expect(m.recurring).not.toHaveBeenCalled();
     expect(m.calendar).toHaveBeenCalledWith({ dryRun: true });
     expect(m.reminders).toHaveBeenCalledWith({ dryRun: true });
+  });
+
+  it("runs the batch sheet sweep after generation and before reminders", async () => {
+    const res = await call();
+    const sweep = reconcileBatchSheetTasks as unknown as MockFn;
+    expect(sweep.mock.calls[0][0]).toMatchObject({ source: "nightly cron" });
+    expect(sweep.mock.invocationCallOrder[0]).toBeGreaterThan(m.calendar.mock.invocationCallOrder[0]);
+    expect(sweep.mock.invocationCallOrder[0]).toBeLessThan(m.reminders.mock.invocationCallOrder[0]);
+    expect(await res.json()).toMatchObject({ batchSheetsLinked: 2 });
+  });
+
+  it("a sweep failure is reported but reminders still go out", async () => {
+    (reconcileBatchSheetTasks as unknown as MockFn).mockRejectedValue(new Error("boom"));
+    const json = await (await call()).json();
+    expect(json.errors).toEqual(["batch sheet sweep failed"]);
+    expect(m.reminders).toHaveBeenCalledTimes(1);
   });
 });

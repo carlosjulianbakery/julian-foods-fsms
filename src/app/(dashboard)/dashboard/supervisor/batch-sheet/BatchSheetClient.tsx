@@ -2876,7 +2876,7 @@ export function BatchSheetClient({
       const res = await fetch("/api/batch-sheet/draft", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...payload, id: draftId ?? undefined }),
+        body: JSON.stringify({ ...payload, id: draftId ?? undefined, ...(taskId ? { taskId } : {}) }),
       });
       if (res.ok) {
         const data = await res.json();

@@ -16662,6 +16662,7 @@ export namespace Prisma {
     adminNotes: string | null
     adminNotesUpdatedByName: string | null
     adminNotesUpdatedAt: Date | null
+    taskInstanceId: string | null
   }
 
   export type BatchSheetSubmissionMaxAggregateOutputType = {
@@ -16686,6 +16687,7 @@ export namespace Prisma {
     adminNotes: string | null
     adminNotesUpdatedByName: string | null
     adminNotesUpdatedAt: Date | null
+    taskInstanceId: string | null
   }
 
   export type BatchSheetSubmissionCountAggregateOutputType = {
@@ -16717,6 +16719,7 @@ export namespace Prisma {
     adminNotes: number
     adminNotesUpdatedByName: number
     adminNotesUpdatedAt: number
+    taskInstanceId: number
     _all: number
   }
 
@@ -16753,6 +16756,7 @@ export namespace Prisma {
     adminNotes?: true
     adminNotesUpdatedByName?: true
     adminNotesUpdatedAt?: true
+    taskInstanceId?: true
   }
 
   export type BatchSheetSubmissionMaxAggregateInputType = {
@@ -16777,6 +16781,7 @@ export namespace Prisma {
     adminNotes?: true
     adminNotesUpdatedByName?: true
     adminNotesUpdatedAt?: true
+    taskInstanceId?: true
   }
 
   export type BatchSheetSubmissionCountAggregateInputType = {
@@ -16808,6 +16813,7 @@ export namespace Prisma {
     adminNotes?: true
     adminNotesUpdatedByName?: true
     adminNotesUpdatedAt?: true
+    taskInstanceId?: true
     _all?: true
   }
 
@@ -16926,6 +16932,7 @@ export namespace Prisma {
     adminNotes: string | null
     adminNotesUpdatedByName: string | null
     adminNotesUpdatedAt: Date | null
+    taskInstanceId: string | null
     _count: BatchSheetSubmissionCountAggregateOutputType | null
     _avg: BatchSheetSubmissionAvgAggregateOutputType | null
     _sum: BatchSheetSubmissionSumAggregateOutputType | null
@@ -16976,6 +16983,7 @@ export namespace Prisma {
     adminNotes?: boolean
     adminNotesUpdatedByName?: boolean
     adminNotesUpdatedAt?: boolean
+    taskInstanceId?: boolean
     template?: boolean | BatchSheetTemplateDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | BatchSheetSubmission$productArgs<ExtArgs>
@@ -17012,6 +17020,7 @@ export namespace Prisma {
     adminNotes?: boolean
     adminNotesUpdatedByName?: boolean
     adminNotesUpdatedAt?: boolean
+    taskInstanceId?: boolean
     template?: boolean | BatchSheetTemplateDefaultArgs<ExtArgs>
     submittedBy?: boolean | UserDefaultArgs<ExtArgs>
     product?: boolean | BatchSheetSubmission$productArgs<ExtArgs>
@@ -17046,6 +17055,7 @@ export namespace Prisma {
     adminNotes?: boolean
     adminNotesUpdatedByName?: boolean
     adminNotesUpdatedAt?: boolean
+    taskInstanceId?: boolean
   }
 
   export type BatchSheetSubmissionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -17098,6 +17108,7 @@ export namespace Prisma {
       adminNotes: string | null
       adminNotesUpdatedByName: string | null
       adminNotesUpdatedAt: Date | null
+      taskInstanceId: string | null
     }, ExtArgs["result"]["batchSheetSubmission"]>
     composites: {}
   }
@@ -17523,6 +17534,7 @@ export namespace Prisma {
     readonly adminNotes: FieldRef<"BatchSheetSubmission", 'String'>
     readonly adminNotesUpdatedByName: FieldRef<"BatchSheetSubmission", 'String'>
     readonly adminNotesUpdatedAt: FieldRef<"BatchSheetSubmission", 'DateTime'>
+    readonly taskInstanceId: FieldRef<"BatchSheetSubmission", 'String'>
   }
     
 
@@ -72957,7 +72969,8 @@ export namespace Prisma {
     baseUnitIsFinished: 'baseUnitIsFinished',
     adminNotes: 'adminNotes',
     adminNotesUpdatedByName: 'adminNotesUpdatedByName',
-    adminNotesUpdatedAt: 'adminNotesUpdatedAt'
+    adminNotesUpdatedAt: 'adminNotesUpdatedAt',
+    taskInstanceId: 'taskInstanceId'
   };
 
   export type BatchSheetSubmissionScalarFieldEnum = (typeof BatchSheetSubmissionScalarFieldEnum)[keyof typeof BatchSheetSubmissionScalarFieldEnum]
@@ -75132,6 +75145,7 @@ export namespace Prisma {
     adminNotes?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     adminNotesUpdatedByName?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     adminNotesUpdatedAt?: DateTimeNullableFilter<"BatchSheetSubmission"> | Date | string | null
+    taskInstanceId?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     template?: XOR<BatchSheetTemplateRelationFilter, BatchSheetTemplateWhereInput>
     submittedBy?: XOR<UserRelationFilter, UserWhereInput>
     product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
@@ -75167,6 +75181,7 @@ export namespace Prisma {
     adminNotes?: SortOrderInput | SortOrder
     adminNotesUpdatedByName?: SortOrderInput | SortOrder
     adminNotesUpdatedAt?: SortOrderInput | SortOrder
+    taskInstanceId?: SortOrderInput | SortOrder
     template?: BatchSheetTemplateOrderByWithRelationInput
     submittedBy?: UserOrderByWithRelationInput
     product?: ProductOrderByWithRelationInput
@@ -75205,6 +75220,7 @@ export namespace Prisma {
     adminNotes?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     adminNotesUpdatedByName?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     adminNotesUpdatedAt?: DateTimeNullableFilter<"BatchSheetSubmission"> | Date | string | null
+    taskInstanceId?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     template?: XOR<BatchSheetTemplateRelationFilter, BatchSheetTemplateWhereInput>
     submittedBy?: XOR<UserRelationFilter, UserWhereInput>
     product?: XOR<ProductNullableRelationFilter, ProductWhereInput> | null
@@ -75240,6 +75256,7 @@ export namespace Prisma {
     adminNotes?: SortOrderInput | SortOrder
     adminNotesUpdatedByName?: SortOrderInput | SortOrder
     adminNotesUpdatedAt?: SortOrderInput | SortOrder
+    taskInstanceId?: SortOrderInput | SortOrder
     _count?: BatchSheetSubmissionCountOrderByAggregateInput
     _avg?: BatchSheetSubmissionAvgOrderByAggregateInput
     _max?: BatchSheetSubmissionMaxOrderByAggregateInput
@@ -75279,6 +75296,7 @@ export namespace Prisma {
     adminNotes?: StringNullableWithAggregatesFilter<"BatchSheetSubmission"> | string | null
     adminNotesUpdatedByName?: StringNullableWithAggregatesFilter<"BatchSheetSubmission"> | string | null
     adminNotesUpdatedAt?: DateTimeNullableWithAggregatesFilter<"BatchSheetSubmission"> | Date | string | null
+    taskInstanceId?: StringNullableWithAggregatesFilter<"BatchSheetSubmission"> | string | null
   }
 
   export type DailyCleaningChecklistWhereInput = {
@@ -81358,6 +81376,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    taskInstanceId?: string | null
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
     product?: ProductCreateNestedOneWithoutSubmissionsInput
@@ -81393,6 +81412,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    taskInstanceId?: string | null
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutSubmissionInput
   }
 
@@ -81422,6 +81442,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
     product?: ProductUpdateOneWithoutSubmissionsNestedInput
@@ -81457,6 +81478,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutSubmissionNestedInput
   }
 
@@ -81489,6 +81511,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    taskInstanceId?: string | null
   }
 
   export type BatchSheetSubmissionUpdateManyMutationInput = {
@@ -81517,6 +81540,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BatchSheetSubmissionUncheckedUpdateManyInput = {
@@ -81548,6 +81572,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DailyCleaningChecklistCreateInput = {
@@ -88337,6 +88362,7 @@ export namespace Prisma {
     adminNotes?: SortOrder
     adminNotesUpdatedByName?: SortOrder
     adminNotesUpdatedAt?: SortOrder
+    taskInstanceId?: SortOrder
   }
 
   export type BatchSheetSubmissionAvgOrderByAggregateInput = {
@@ -88366,6 +88392,7 @@ export namespace Prisma {
     adminNotes?: SortOrder
     adminNotesUpdatedByName?: SortOrder
     adminNotesUpdatedAt?: SortOrder
+    taskInstanceId?: SortOrder
   }
 
   export type BatchSheetSubmissionMinOrderByAggregateInput = {
@@ -88390,6 +88417,7 @@ export namespace Prisma {
     adminNotes?: SortOrder
     adminNotesUpdatedByName?: SortOrder
     adminNotesUpdatedAt?: SortOrder
+    taskInstanceId?: SortOrder
   }
 
   export type BatchSheetSubmissionSumOrderByAggregateInput = {
@@ -97884,6 +97912,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    taskInstanceId?: string | null
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
     product?: ProductCreateNestedOneWithoutSubmissionsInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutSubmissionInput
@@ -97917,6 +97946,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    taskInstanceId?: string | null
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutSubmissionInput
   }
 
@@ -99632,6 +99662,7 @@ export namespace Prisma {
     adminNotes?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     adminNotesUpdatedByName?: StringNullableFilter<"BatchSheetSubmission"> | string | null
     adminNotesUpdatedAt?: DateTimeNullableFilter<"BatchSheetSubmission"> | Date | string | null
+    taskInstanceId?: StringNullableFilter<"BatchSheetSubmission"> | string | null
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -102515,6 +102546,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    taskInstanceId?: string | null
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
     product?: ProductCreateNestedOneWithoutSubmissionsInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutSubmissionInput
@@ -102548,6 +102580,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    taskInstanceId?: string | null
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutSubmissionInput
   }
 
@@ -107184,6 +107217,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    taskInstanceId?: string | null
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
     auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutSubmissionInput
@@ -107217,6 +107251,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    taskInstanceId?: string | null
     auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutSubmissionInput
   }
 
@@ -112371,6 +112406,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    taskInstanceId?: string | null
     template: BatchSheetTemplateCreateNestedOneWithoutSubmissionsInput
     submittedBy: UserCreateNestedOneWithoutBatchSheetSubmissionsInput
     product?: ProductCreateNestedOneWithoutSubmissionsInput
@@ -112405,6 +112441,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    taskInstanceId?: string | null
   }
 
   export type BatchSheetSubmissionCreateOrConnectWithoutAuditExclusionsInput = {
@@ -112623,6 +112660,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
     product?: ProductUpdateOneWithoutSubmissionsNestedInput
@@ -112657,6 +112695,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MaterialUpsertWithoutAuditExclusionsInput = {
@@ -119080,6 +119119,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    taskInstanceId?: string | null
   }
 
   export type BatchSheetTemplateCreateManyCreatedByInput = {
@@ -119856,6 +119896,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
     product?: ProductUpdateOneWithoutSubmissionsNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutSubmissionNestedInput
@@ -119889,6 +119930,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutSubmissionNestedInput
   }
 
@@ -119920,6 +119962,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BatchSheetTemplateUpdateWithoutCreatedByInput = {
@@ -121761,6 +121804,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    taskInstanceId?: string | null
   }
 
   export type BatchSheetSubmissionUpdateWithoutTemplateInput = {
@@ -121789,6 +121833,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
     product?: ProductUpdateOneWithoutSubmissionsNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutSubmissionNestedInput
@@ -121822,6 +121867,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutSubmissionNestedInput
   }
 
@@ -121853,6 +121899,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InventoryAuditExclusionCreateManySubmissionInput = {
@@ -123353,6 +123400,7 @@ export namespace Prisma {
     adminNotes?: string | null
     adminNotesUpdatedByName?: string | null
     adminNotesUpdatedAt?: Date | string | null
+    taskInstanceId?: string | null
   }
 
   export type MaterialCreateManySourceProductInput = {
@@ -123507,6 +123555,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
     template?: BatchSheetTemplateUpdateOneRequiredWithoutSubmissionsNestedInput
     submittedBy?: UserUpdateOneRequiredWithoutBatchSheetSubmissionsNestedInput
     auditExclusions?: InventoryAuditExclusionUpdateManyWithoutSubmissionNestedInput
@@ -123540,6 +123589,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
     auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutSubmissionNestedInput
   }
 
@@ -123571,6 +123621,7 @@ export namespace Prisma {
     adminNotes?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedByName?: NullableStringFieldUpdateOperationsInput | string | null
     adminNotesUpdatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MaterialUpdateWithoutSourceProductInput = {

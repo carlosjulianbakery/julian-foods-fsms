@@ -3,6 +3,8 @@ import { generateInstances, updateStatuses, generateCalendarInstances } from "@/
 import { sendReminders } from "@/lib/task-reminders";
 import { sendEscalations } from "@/lib/task-escalation";
 import { cronGate } from "@/lib/cron-auth";
+import { reconcileBatchSheetTasks } from "@/lib/batch-sheet-reconcile";
+import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 // The calendar generator fetches the production sheet; leave room for a slow fetch.
@@ -48,7 +50,18 @@ export async function GET(req: NextRequest) {
       errors.push("calendar generation failed");
     }
 
-    // 3. Reminders and escalations run on the refreshed statuses
+    // 3. Batch sheets that never got linked to their task — before reminders, so nobody is nagged about done work
+    let batchSheetsLinked = 0;
+    if (!dryRun) {
+      try {
+        batchSheetsLinked = (await reconcileBatchSheetTasks({ prismaClient: prisma, source: "nightly cron" })).completed.length;
+      } catch (e) {
+        console.error("[task-generator] batch sheet sweep error:", e);
+        errors.push("batch sheet sweep failed");
+      }
+    }
+
+    // 4. Reminders and escalations run on the refreshed statuses
     let reminderResult = { dueSoon: 0, dueToday: 0, overdue: 0 };
     let escalationResult = { escalated: 0 };
     try {
@@ -77,6 +90,7 @@ export async function GET(req: NextRequest) {
             facilities: calResult.results,
           }
         : null,
+      batchSheetsLinked,
       reminders: reminderResult,
       escalations: escalationResult,
       errors,

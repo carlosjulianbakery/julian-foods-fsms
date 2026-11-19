@@ -20,6 +20,10 @@ vi.mock("@/lib/calendar-generator", () => ({
   generateCalendarInstances: vi.fn(),
 }));
 
+vi.mock("@/lib/batch-sheet-reconcile", () => ({
+  reconcileBatchSheetTasks: vi.fn().mockResolvedValue({ completed: [] }),
+}));
+
 vi.mock("@/lib/task-generator", () => ({
   updateStatuses: vi.fn().mockResolvedValue({ updated: 0 }),
 }));
@@ -28,6 +32,7 @@ import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/prisma";
 import { generateCalendarInstances } from "@/lib/calendar-generator";
 import { updateStatuses } from "@/lib/task-generator";
+import { reconcileBatchSheetTasks } from "@/lib/batch-sheet-reconcile";
 import { POST } from "@/app/api/task-rules/sync/route";
 
 type MockFn = ReturnType<typeof vi.fn>;
@@ -239,5 +244,24 @@ describe("POST /api/task-rules/sync — status promotion", () => {
     mockGetSession.mockResolvedValue(null);
     expect((await POST()).status).toBe(401);
     expect(updateStatuses).not.toHaveBeenCalled();
+  });
+});
+
+describe("POST /api/task-rules/sync — batch sheet sweep", () => {
+  beforeEach(() => {
+    (updateStatuses as MockFn).mockReset().mockResolvedValue({ updated: 0 });
+    (reconcileBatchSheetTasks as MockFn).mockReset().mockResolvedValue({ completed: [{ instanceId: "t1", submissionId: "s1" }] });
+  });
+
+  it("runs the sweep when the sync runs and reports how many sheets it linked", async () => {
+    const json = await (await POST()).json();
+    expect(json).toMatchObject({ ran: true, batchSheetsLinked: 1 });
+    expect((reconcileBatchSheetTasks as MockFn).mock.calls[0][0]).toMatchObject({ source: "calendar sync" });
+  });
+
+  it("a sweep error does not break the sync", async () => {
+    (reconcileBatchSheetTasks as MockFn).mockRejectedValue(new Error("db hiccup"));
+    const json = await (await POST()).json();
+    expect(json).toMatchObject({ ran: true, batchSheetsLinked: 0 });
   });
 });

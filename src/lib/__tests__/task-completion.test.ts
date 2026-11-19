@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { PrismaClient } from "@/generated/prisma";
 import {
   completeRuleInstanceForSubmission,
-  completeBatchSheetInstance,
   isOpenForCompletion,
   pickFallbackInstance,
 } from "@/lib/task-completion";
@@ -63,18 +62,6 @@ beforeEach(() => {
   vi.spyOn(console, "warn").mockImplementation(() => {});
 });
 
-const batch = (client: PrismaClient, over: Partial<Parameters<typeof completeBatchSheetInstance>[0]> = {}) =>
-  completeBatchSheetInstance({
-    submissionId: "sub-1",
-    userId: IVAN,
-    userRole: "SUPERVISOR",
-    submissionDate: "2026-11-17",
-    productName: "ProGranola - Chocolate",
-    taskId: null,
-    prismaClient: client,
-    ...over,
-  });
-
 const generic = (client: PrismaClient, over: Partial<Parameters<typeof completeRuleInstanceForSubmission>[0]> = {}) =>
   completeRuleInstanceForSubmission({
     formKey: "preop",
@@ -85,96 +72,6 @@ const generic = (client: PrismaClient, over: Partial<Parameters<typeof completeR
     prismaClient: client,
     ...over,
   });
-
-const bs = { formKey: "batch_sheet" };
-
-describe("batch sheet — the ProGranola case", () => {
-  it("sheet dated 11/17, task due 11/18 still stored UPCOMING, submitted 11/19 → completes, late by 1", async () => {
-    const { db, client } = fakeDb({
-      candidates: [row("progranola-1118", "2026-11-18", "UPCOMING", { ...bs, label: "ProGranola - Chocolate (50 Bowls)" })],
-    });
-
-    expect(await batch(client)).toBe("progranola-1118");
-    expect(updated(db)).toEqual([
-      {
-        id: "progranola-1118",
-        status: "DONE",
-        doneAt: NOW,
-        doneById: IVAN,
-        completedLate: true,
-        daysLate: 1,
-        completedBySubmissionId: "sub-1",
-        ownerUserId: IVAN,
-      },
-    ]);
-    expect(db.taskInstanceAudit.create.mock.calls[0][0].data).toMatchObject({ instanceId: "progranola-1118", action: "completed" });
-    expect(updated(db)[0]).not.toHaveProperty("needsAdminReview"); // late completion is not flagged for review
-  });
-
-  it("exact date match wins over an older open instance", async () => {
-    const { db, client } = fakeDb({
-      candidates: [
-        row("older-open", "2026-11-18", "OVERDUE", { ...bs, label: "ProGranola - Chocolate (50 Bowls)" }),
-        row("exact", "2026-11-19", "UPCOMING", { ...bs, label: "ProGranola - Chocolate (20 Bowls)" }),
-      ],
-    });
-    expect(await batch(client, { submissionDate: "2026-11-19" })).toBe("exact");
-    expect(updated(db)[0]).toMatchObject({ id: "exact", completedLate: false, daysLate: null });
-  });
-
-  it("a different product is never matched", async () => {
-    const { db, client } = fakeDb({
-      candidates: [row("crackers", "2026-11-18", "OVERDUE", { ...bs, label: "Organic Seed Crackers - Parmesan (6 Bowls)" })],
-      crossFacility: [row("crackers", "2026-11-18", "OVERDUE", { ...bs, label: "Organic Seed Crackers - Parmesan (6 Bowls)" })],
-    });
-    expect(await batch(client)).toBeNull();
-    expect(db.ruleInstance.update).not.toHaveBeenCalled();
-  });
-
-  it("today's sheet never closes a future task", async () => {
-    const future = row("next-week", "2026-11-24", "UPCOMING", { ...bs, label: "ProGranola - Chocolate (50 Bowls)" });
-    const { db, client } = fakeDb({ candidates: [future], crossFacility: [future] });
-    expect(await batch(client, { submissionDate: "2026-11-19" })).toBeNull();
-    expect(db.ruleInstance.update).not.toHaveBeenCalled();
-  });
-
-  it("lookback is 6 days: due 11/13 is matched, due 11/12 is not", async () => {
-    const label = "ProGranola - Chocolate (50 Bowls)";
-    const six = fakeDb({ candidates: [row("six-days", "2026-11-13", "OVERDUE", { ...bs, label })] });
-    expect(await batch(six.client)).toBe("six-days");
-    expect(updated(six.db)[0]).toMatchObject({ completedLate: true, daysLate: 6 });
-
-    const seven = fakeDb({ candidates: [row("seven-days", "2026-11-12", "OVERDUE", { ...bs, label })], crossFacility: [] });
-    expect(await batch(seven.client)).toBeNull();
-  });
-
-  it("with two open tasks for the product, the oldest is closed — and only that one", async () => {
-    const label = "ProGranola - Chocolate (50 Bowls)";
-    const { db, client } = fakeDb({
-      candidates: [row("newer", "2026-11-18", "OVERDUE", { ...bs, label }), row("oldest", "2026-11-16", "OVERDUE", { ...bs, label })],
-    });
-    expect(await batch(client)).toBe("oldest");
-    expect(db.ruleInstance.update).toHaveBeenCalledTimes(1);
-  });
-
-  it("a re-submitted sheet that already closed an instance cannot close a second", async () => {
-    const { db, client } = fakeDb({
-      alreadyClosed: "closed-earlier",
-      candidates: [row("another", "2026-11-18", "OVERDUE", { ...bs, label: "ProGranola - Chocolate (50 Bowls)" })],
-    });
-    expect(await batch(client)).toBe("closed-earlier");
-    expect(db.ruleInstance.findFirst.mock.calls[0][0].where).toEqual({ completedBySubmissionId: "sub-1" });
-    expect(db.ruleInstance.findMany).not.toHaveBeenCalled();
-    expect(db.ruleInstance.update).not.toHaveBeenCalled();
-  });
-
-  it("a match in another owner's facility keeps the 'Completed by non-owner' review flag", async () => {
-    const other = row("other-facility", "2026-11-18", "UPCOMING", { ...bs, label: "ProGranola - Chocolate (50 Bowls)", ownerId: "user-hugo" });
-    const { db, client } = fakeDb({ candidates: [], crossFacility: [other] });
-    expect(await batch(client)).toBe("other-facility");
-    expect(updated(db)[0]).toMatchObject({ needsAdminReview: true, reviewReason: "Completed by non-owner", completedLate: true, daysLate: 1 });
-  });
-});
 
 describe("generic forms (Pre-Op, cleaning, receiving, 624 forms)", () => {
   it("taskId closes exactly that instance", async () => {

@@ -1,3 +1,4 @@
+import { resolveBatchSheetTaskLink } from "@/lib/batch-sheet-reconcile";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -110,6 +111,9 @@ export async function POST(req: NextRequest) {
       ? { ...(section3 as Record<string, unknown>), packaging_snapshot: packagingSnapshot ?? null }
       : section3;
 
+    const taskLinkId = await resolveBatchSheetTaskLink((body as Record<string, unknown>).taskId, prisma)
+      .catch(() => null);
+
     const data = {
       templateId,
       templateName,
@@ -132,6 +136,8 @@ export async function POST(req: NextRequest) {
       submittedById:     user.id,
       baseUnitName:           baseUnitName || "Bowl",
       baseUnitIsFinished:     baseUnitIsFinished ?? false,
+      // Opened from a task's Start button: remember which task. Never cleared by a later save without one.
+      ...(taskLinkId ? { taskInstanceId: taskLinkId } : {}),
     };
 
     let draft;

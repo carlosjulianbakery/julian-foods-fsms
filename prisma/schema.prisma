@@ -278,12 +278,15 @@ model BatchSheetSubmission {
   adminNotes              String?
   adminNotesUpdatedByName String?
   adminNotesUpdatedAt     DateTime?
+  // RuleInstance this sheet was opened from (the task's Start button). No FK: tasks can be removed by calendar sync.
+  taskInstanceId          String?
 
   template        BatchSheetTemplate       @relation(fields: [templateId], references: [id])
   submittedBy     User                     @relation(fields: [submittedById], references: [id])
   product         Product?                 @relation(fields: [productId], references: [id])
   auditExclusions InventoryAuditExclusion[]
 
+  @@index([taskInstanceId], map: "batch_sheet_submissions_task_instance_idx")
   @@map("batch_sheet_submissions")
 }
 

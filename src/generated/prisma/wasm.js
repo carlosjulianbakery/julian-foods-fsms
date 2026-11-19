@@ -274,7 +274,8 @@ exports.Prisma.BatchSheetSubmissionScalarFieldEnum = {
   baseUnitIsFinished: 'baseUnitIsFinished',
   adminNotes: 'adminNotes',
   adminNotesUpdatedByName: 'adminNotesUpdatedByName',
-  adminNotesUpdatedAt: 'adminNotesUpdatedAt'
+  adminNotesUpdatedAt: 'adminNotesUpdatedAt',
+  taskInstanceId: 'taskInstanceId'
 };
 
 exports.Prisma.DailyCleaningChecklistScalarFieldEnum = {
