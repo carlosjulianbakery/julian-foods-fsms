@@ -472,7 +472,7 @@ export function groupByRule(tasks: TaskInstance[]): { ruleId: string; title: str
 
 // ─── Day Panel ────────────────────────────────────────────────────────────────
 
-function DayPanel({
+export function DayPanel({
   date, instances, today, role, userId,
   productionItems, windowTasks = [], onClose, onRefresh, onReorderRules,
 }: {

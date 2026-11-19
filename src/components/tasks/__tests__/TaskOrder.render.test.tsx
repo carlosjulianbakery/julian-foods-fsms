@@ -84,12 +84,10 @@ describe("the dashboard list and the calendar show the same work order", () => {
       .toEqual(["yesterday-preop", "yesterday-cleaning", "PreMix Powder - Egg Chocolate"]);
   });
 
-  it("done strips stay below the open cards, in work order", () => {
+  it("completed tasks are not listed; the open ones keep their work order", () => {
     const withDone = AS_CREATED.map((i) => (i.id === "granola" || i.id === "preop" ? { ...i, status: "DONE", doneAt: "2026-11-18T17:00:00.000Z" } : i));
     const html = dashboard(withDone);
-    // open cards first (premix, cleaning), then done strips (Pre-Op before granola)
-    expect(appearance(html, ["PreMix Powder - Egg Chocolate", "Daily Cleaning", "Pre-Op Inspection", "ProGranola - Chocolate"]))
-      .toEqual(["PreMix Powder - Egg Chocolate", "Daily Cleaning", "Pre-Op Inspection", "ProGranola - Chocolate"]);
+    expect(appearance(html, WORK_ORDER)).toEqual(["PreMix Powder - Egg Chocolate", "Daily Cleaning"]);
   });
 });
 

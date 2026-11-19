@@ -596,44 +596,6 @@ function HeroTaskCard({
   );
 }
 
-// ─── Done strip (one-line green) ─────────────────────────────────────────────
-
-function DoneStrip({
-  inst,
-  actionId,
-  isPending,
-}: {
-  inst: TaskInstance;
-  role: string;
-  userId: string;
-  actionId: string | null;
-  isPending: boolean;
-  onReopen: (inst: TaskInstance) => void;
-}) {
-  return (
-    <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-green-50 border border-green-100">
-      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
-      <div className="flex-1 min-w-0">
-        <span className="text-sm font-medium text-green-800">{inst.ruleTitle}</span>
-        {inst.label && inst.label !== inst.ruleTitle && (
-          <span className="text-xs text-green-600 ml-1.5">{inst.label}</span>
-        )}
-        {inst.doneAt && (
-          <span className="text-xs text-green-500 ml-2">{formatCompletedAt(inst.doneAt)}</span>
-        )}
-        {inst.completedLate && inst.daysLate != null && inst.daysLate > 0 && (
-          <span className="ml-2 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-700">
-            Late {inst.daysLate}d
-          </span>
-        )}
-      </div>
-      <div className="flex items-center gap-2 shrink-0">
-        <span className="text-[11px] font-semibold text-green-600 px-2 py-0.5 rounded-full bg-green-100">Done</span>
-      </div>
-    </div>
-  );
-}
-
 // ─── Skipped task row ─────────────────────────────────────────────────────────
 
 function SkippedTaskRow({
@@ -860,7 +822,8 @@ export function MyTasksClient({
   const inProgress = filtered.filter((i) => i.status === "IN_PROGRESS" && !isPastDue(i));
   // Upcoming: only future-dated UPCOMING (excludes today's)
   const upcoming = sortTasks(filtered.filter((i) => i.status === "UPCOMING" && i.dueDate > today));
-  const doneToday = sortTasks(filtered.filter((i) => i.status === "DONE"));
+  // Completed today: counted by the banner and used for the empty-state message, but not listed
+  const doneToday = filtered.filter((i) => i.status === "DONE");
 
   // Earlier days first (each in work order), then today's tasks in work order.
   // A task that has been started keeps its place — it does not drop below the ones still due.
@@ -1127,20 +1090,15 @@ export function MyTasksClient({
           </div>
         )}
 
-        {/* Done strips */}
-        {doneToday.length > 0 && (
-          <div className="space-y-1.5 mb-4">
-            {doneToday.map((inst) => (
-              <DoneStrip
-                key={inst.id}
-                inst={inst}
-                role={role}
-                userId={userId}
-                actionId={actionId}
-                isPending={isPending}
-                onReopen={handleReopen}
-              />
-            ))}
+        {/* Nothing left to do. Completed tasks are not listed here — their details are in the Task Schedule day panel. */}
+        {activeTodayCards.length === 0 && (
+          <div
+            className={`mb-4 flex items-center gap-2 rounded-xl border px-4 py-3 text-sm ${
+              doneToday.length > 0 ? "border-green-100 bg-green-50 text-green-800" : "border-gray-100 bg-white text-gray-500"
+            }`}
+          >
+            {doneToday.length > 0 && <CheckCircle2 className="w-4 h-4 shrink-0 text-green-500" />}
+            <span>{doneToday.length > 0 ? "All tasks for today are done." : "No tasks to do today."}</span>
           </div>
         )}
 
