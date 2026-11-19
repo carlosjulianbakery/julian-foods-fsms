@@ -822,8 +822,6 @@ export function MyTasksClient({
   const inProgress = filtered.filter((i) => i.status === "IN_PROGRESS" && !isPastDue(i));
   // Upcoming: only future-dated UPCOMING (excludes today's)
   const upcoming = sortTasks(filtered.filter((i) => i.status === "UPCOMING" && i.dueDate > today));
-  // Completed today: counted by the banner and used for the empty-state message, but not listed
-  const doneToday = filtered.filter((i) => i.status === "DONE");
 
   // Earlier days first (each in work order), then today's tasks in work order.
   // A task that has been started keeps its place — it does not drop below the ones still due.
@@ -1090,17 +1088,7 @@ export function MyTasksClient({
           </div>
         )}
 
-        {/* Nothing left to do. Completed tasks are not listed here — their details are in the Task Schedule day panel. */}
-        {activeTodayCards.length === 0 && (
-          <div
-            className={`mb-4 flex items-center gap-2 rounded-xl border px-4 py-3 text-sm ${
-              doneToday.length > 0 ? "border-green-100 bg-green-50 text-green-800" : "border-gray-100 bg-white text-gray-500"
-            }`}
-          >
-            {doneToday.length > 0 && <CheckCircle2 className="w-4 h-4 shrink-0 text-green-500" />}
-            <span>{doneToday.length > 0 ? "All tasks for today are done." : "No tasks to do today."}</span>
-          </div>
-        )}
+        {/* Completed tasks are not listed here — the banner says when the day is done, and details are in the Task Schedule day panel. */}
 
         {/* Open this period — window tasks whose window has opened but due date is future */}
         {filteredWindowInstances.length > 0 && (

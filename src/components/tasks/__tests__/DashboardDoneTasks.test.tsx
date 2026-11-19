@@ -29,8 +29,9 @@ const PREMIX = inst("premix", "Batch Sheet - Julian Bakery", 20, { formKey: "bat
 const GRANOLA = inst("granola", "Batch Sheet - Julian Bakery", 20, { formKey: "batch_sheet", label: "ProGranola - Chocolate (50 Bowls)", sortKey: 1 });
 const CLEANING = inst("cleaning", "Daily Cleaning", 30);
 
-const ALL_DONE_MSG = "All tasks for today are done.";
-const NO_TASKS_MSG = "No tasks to do today.";
+// Messages that were briefly shown under the banner and must not come back
+const REMOVED_ALL_DONE_MSG = "All tasks for today are done.";
+const REMOVED_NO_TASKS_MSG = "No tasks to do today.";
 
 interface View { role?: string; userId?: string; windowInstances?: TaskInstance[] }
 /** Renders the dashboard and returns the banner + list area above the Task Schedule, and the banner alone. */
@@ -55,8 +56,6 @@ describe("dashboard list above the Task Schedule — completed tasks are not lis
     expect(above).not.toContain(">Done<");
     expect(order(above, ["Pre-Op Inspection", "PreMix Powder - Egg Chocolate", "ProGranola - Chocolate", "Daily Cleaning"]))
       .toEqual(["PreMix Powder - Egg Chocolate", "Daily Cleaning"]);
-    expect(above).not.toContain(ALL_DONE_MSG);
-    expect(above).not.toContain(NO_TASKS_MSG);
   });
 
   it("the banner still counts completed tasks: 2 of 4 done, 2 remaining", () => {
@@ -74,26 +73,21 @@ describe("dashboard list above the Task Schedule — completed tasks are not lis
   });
 });
 
-describe("empty state", () => {
-  it("tasks exist and all are done → 'All tasks for today are done.', not the no-tasks message; banner unchanged", () => {
+describe("nothing left to do — the banner is the only message", () => {
+  it("all done: the banner says so and no second message is added under it", () => {
     const { above } = dashboard([done(PREOP), done(PREMIX), done(GRANOLA), done(CLEANING)]);
-    expect(above).toContain(ALL_DONE_MSG);
-    expect(above).not.toContain(NO_TASKS_MSG);
-    expect(above).toContain("All tasks complete."); // banner wording as before
+    expect(above).toContain("All tasks complete.");
+    expect(above).toContain("All done for today.");
+    expect(above).not.toContain(REMOVED_ALL_DONE_MSG);
+    expect(above).not.toContain(REMOVED_NO_TASKS_MSG);
     expect(above).not.toContain("PreMix Powder - Egg Chocolate");
   });
 
-  it("no tasks at all today → 'No tasks to do today.'; banner keeps its own 'No tasks today.'", () => {
+  it("no tasks at all today: the banner's 'No tasks today.' and nothing else", () => {
     const { above } = dashboard([]);
-    expect(above).toContain(NO_TASKS_MSG);
-    expect(above).not.toContain(ALL_DONE_MSG);
     expect(above).toContain("No tasks today.");
-  });
-
-  it("no message while anything is still open", () => {
-    const { above } = dashboard([done(PREOP), CLEANING]);
-    expect(above).not.toContain(ALL_DONE_MSG);
-    expect(above).not.toContain(NO_TASKS_MSG);
+    expect(above).not.toContain(REMOVED_NO_TASKS_MSG);
+    expect(above).not.toContain(REMOVED_ALL_DONE_MSG);
   });
 });
 
@@ -109,11 +103,12 @@ describe("completing a task removes its card at once", () => {
     expect(after).toContain("1 of 2 done");
   });
 
-  it("completing the last open task shows the all-done message", () => {
+  it("completing the last open task leaves just the banner's all-done message", () => {
     justCompleted.mockReturnValue(new Set(["cleaning"]));
     const { above } = dashboard([done(PREOP), CLEANING]);
     expect(above).not.toContain("Daily Cleaning");
-    expect(above).toContain(ALL_DONE_MSG);
+    expect(above).toContain("All done for today.");
+    expect(above).not.toContain(REMOVED_ALL_DONE_MSG);
   });
 });
 
@@ -129,13 +124,12 @@ describe("everything else in the list stays", () => {
     expect(above).toContain("1 day overdue");
     expect(above).toContain("Continue");
     expect(above).toContain("12 days left");
-    expect(above).not.toContain(ALL_DONE_MSG);
   });
 
-  it("all of today done but a period task is open: the all-done message shows and the period card stays", () => {
+  it("all of today done but a period task is open: the period card stays", () => {
     const monthly = inst("monthly", "Monthly Cleaning", 90, { dueDate: "2026-11-30", status: "UPCOMING", windowStart: "2026-11-01" });
     const { above } = dashboard([done(PREOP)], { windowInstances: [monthly] });
-    expect(above).toContain(ALL_DONE_MSG);
+    expect(above).toContain("All done for today.");
     expect(above).toContain("Open this period");
     expect(above).toContain("Monthly Cleaning");
   });
