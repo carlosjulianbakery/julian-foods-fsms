@@ -1,11 +1,75 @@
 import { PrismaClient } from "@/generated/prisma";
-import { getPacificToday } from "@/lib/pacific-time";
+import { getPacificToday, addDaysToDateStr } from "@/lib/pacific-time";
+import { computeWindowStart, isInWindow } from "@/lib/window-tasks";
 
 // TODO: once forms carry a facilityId field, derive this from the submission instead of defaulting.
 export const DEFAULT_FACILITY_NAME = "Julian Bakery";
 
 /** Open statuses eligible for auto-completion. */
 const OPEN_STATUSES = ["DUE_TODAY", "IN_PROGRESS", "OVERDUE"] as const;
+
+/** How far back (from the day of submission) a late form may still close its task. */
+export const GENERIC_LOOKBACK_DAYS = 3;
+export const BATCH_SHEET_LOOKBACK_DAYS = 6;
+
+const RULE_MATCH_SELECT = {
+  formKey: true,
+  ownerId: true,
+  facility: { select: { name: true } },
+  windowMode: true,
+  windowDaysBefore: true,
+  recurrenceUnit: true,
+} as const;
+
+export interface CompletionCandidate {
+  dueDate: Date;
+  status: string;
+  rule: { windowMode: string; windowDaysBefore: number | null; recurrenceUnit: string | null };
+}
+
+/**
+ * Whether an instance can be closed by a submission that did not name it.
+ * Judged by due date, not only by stored status — the stored status can lag behind the calendar.
+ * An UPCOMING instance counts when it is due today or earlier, or when its rule's window is open.
+ */
+export function isOpenForCompletion(inst: CompletionCandidate, today: string): boolean {
+  if ((OPEN_STATUSES as readonly string[]).includes(inst.status)) return true;
+  if (inst.status !== "UPCOMING") return false;
+  const due = inst.dueDate.toISOString().slice(0, 10);
+  if (due <= today) return true;
+  return isInWindow(computeWindowStart(inst.rule, due), due, today);
+}
+
+/** Oldest open instance due no earlier than `lookbackDays` before the day of submission. */
+export function pickFallbackInstance<T extends CompletionCandidate>(
+  candidates: T[],
+  today: string,
+  lookbackDays: number,
+): T | undefined {
+  const earliest = addDaysToDateStr(today, -lookbackDays);
+  return candidates
+    .filter((i) => isOpenForCompletion(i, today) && i.dueDate.toISOString().slice(0, 10) >= earliest)
+    .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())[0];
+}
+
+/** A submission closes at most one instance, even if it is submitted again. */
+async function instanceAlreadyClosedBy(submissionId: string, prismaClient: PrismaClient): Promise<string | null> {
+  const existing = await prismaClient.ruleInstance.findFirst({
+    where: { completedBySubmissionId: submissionId },
+    select: { id: true },
+  });
+  if (existing) console.log(`[task-completion] submission ${submissionId} already closed instance ${existing.id} — not closing another`);
+  return existing?.id ?? null;
+}
+
+function lateness(dueDate: Date, today: string): { completedLate: boolean; daysLate: number | null } {
+  const dueDateStr = dueDate.toISOString().slice(0, 10);
+  const completedLate = today > dueDateStr;
+  const daysLate = completedLate
+    ? Math.round((new Date(today).getTime() - new Date(dueDateStr).getTime()) / (1000 * 60 * 60 * 24))
+    : null;
+  return { completedLate, daysLate };
+}
 
 export async function completeRuleInstanceForSubmission(params: {
   formKey: string;
@@ -30,11 +94,14 @@ export async function completeRuleInstanceForSubmission(params: {
 
   const today = getPacificToday();
 
+  const alreadyClosed = await instanceAlreadyClosedBy(submissionId, prismaClient);
+  if (alreadyClosed) return alreadyClosed;
+
   if (taskId) {
     // Direct path: a specific instance was targeted (user clicked Start from task widget)
     const instance = await prismaClient.ruleInstance.findUnique({
       where: { id: taskId },
-      include: { rule: { select: { formKey: true, ownerId: true, facility: { select: { name: true } } } } },
+      include: { rule: { select: RULE_MATCH_SELECT } },
     });
 
     if (!instance) {
@@ -61,9 +128,7 @@ export async function completeRuleInstanceForSubmission(params: {
         facility: { name: facilityName },
       },
     },
-    include: {
-      rule: { select: { formKey: true, ownerId: true, facility: { select: { name: true } } } },
-    },
+    include: { rule: { select: RULE_MATCH_SELECT } },
     orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
   });
 
@@ -83,20 +148,12 @@ export async function completeRuleInstanceForSubmission(params: {
     return await markDone({ instance: exact, ruleOwnerId: exact.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
   }
 
-  // No exact match: fall back to open (non-UPCOMING) candidates only
-  const openCandidates = allCandidates.filter(
-    (i) => (OPEN_STATUSES as readonly string[]).includes(i.status)
-  );
-  if (openCandidates.length === 0) {
+  // No exact match: oldest instance that is open by due date (or by an open window), recent enough
+  const target = pickFallbackInstance(allCandidates, today, GENERIC_LOOKBACK_DAYS);
+  if (!target) {
     console.log(`[task-completion] no open/matching instances for formKey=${formKey} facility=${facilityName} date=${submissionDate}`);
     return null;
   }
-
-  const target =
-    openCandidates.find((i) => i.status === "OVERDUE") ??
-    openCandidates[0];
-
-  if (!target) return null;
 
   return await markDone({ instance: target, ruleOwnerId: target.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
 }
@@ -110,16 +167,10 @@ async function markDone(opts: {
   today: string;
   prismaClient: PrismaClient;
 }): Promise<string> {
-  const { instance, ruleOwnerId, submissionId, userId, submissionDate, prismaClient } = opts;
+  const { instance, ruleOwnerId, submissionId, userId, today, prismaClient } = opts;
 
-  const dueDateStr = instance.dueDate.toISOString().slice(0, 10);
-  const completedLate = submissionDate > dueDateStr;
-  const daysLate = completedLate
-    ? Math.round(
-        (new Date(submissionDate).getTime() - new Date(dueDateStr).getTime()) /
-          (1000 * 60 * 60 * 24)
-      )
-    : null;
+  // Late = completed after the due date, whatever date the form itself carries
+  const { completedLate, daysLate } = lateness(instance.dueDate, today);
 
   const effectiveOwner = instance.ownerUserId ?? ruleOwnerId;
 
@@ -160,7 +211,7 @@ async function markDone(opts: {
  *
  * Order:
  *  (a) taskId direct — validate formKey=batch_sheet and user is owner/admin
- *  (b) product+exact date among submitter's own PRODUCTION_ANY instances, then nearest ≤6 days
+ *  (b) product+exact date among submitter's own PRODUCTION_ANY instances, then the oldest open one due in the last 6 days
  *  (c) any facility's open instances with same product/date → needsAdminReview
  *  (d) no match — log warning, save normally
  */
@@ -176,11 +227,14 @@ export async function completeBatchSheetInstance(params: {
   const { submissionId, userId, userRole, submissionDate, productName, taskId, prismaClient } = params;
   const today = getPacificToday();
 
+  const alreadyClosed = await instanceAlreadyClosedBy(submissionId, prismaClient);
+  if (alreadyClosed) return alreadyClosed;
+
   // ── (a) direct path via taskId ─────────────────────────────────────────────
   if (taskId) {
     const instance = await prismaClient.ruleInstance.findUnique({
       where: { id: taskId },
-      include: { rule: { select: { formKey: true, ownerId: true, facility: { select: { name: true } } } } },
+      include: { rule: { select: RULE_MATCH_SELECT } },
     });
     if (!instance) {
       console.warn(`[batch-sheet-completion] taskId ${taskId} not found — skipping`);
@@ -217,7 +271,7 @@ export async function completeBatchSheetInstance(params: {
         ownerId: userId,
       },
     },
-    include: { rule: { select: { formKey: true, ownerId: true } } },
+    include: { rule: { select: RULE_MATCH_SELECT } },
     orderBy: [{ dueDate: "asc" }],
   });
 
@@ -229,12 +283,10 @@ export async function completeBatchSheetInstance(params: {
     return await markDone({ instance: ownExact, ruleOwnerId: ownExact.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
   }
 
-  // Nearest ≤6 days
-  const ownNearest = findNearestWithinDays(ownProductMatches.filter(
-    (i) => (OPEN_STATUSES as readonly string[]).includes(i.status)
-  ), submissionDate, 6);
-  if (ownNearest) {
-    return await markDone({ instance: ownNearest, ruleOwnerId: ownNearest.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
+  // Oldest open instance of this product due in the last 6 days
+  const ownFallback = pickFallbackInstance(ownProductMatches, today, BATCH_SHEET_LOOKBACK_DAYS);
+  if (ownFallback) {
+    return await markDone({ instance: ownFallback, ruleOwnerId: ownFallback.rule.ownerId, submissionId, userId, submissionDate, today, prismaClient });
   }
 
   // ── (c) cross-facility — same product/date, any facility ──────────────────
@@ -243,16 +295,13 @@ export async function completeBatchSheetInstance(params: {
       status: { in: [...OPEN_STATUSES, "UPCOMING"] },
       rule: { formKey: "batch_sheet", triggerType: "PRODUCTION_ANY" },
     },
-    include: { rule: { select: { formKey: true, ownerId: true } } },
+    include: { rule: { select: RULE_MATCH_SELECT } },
     orderBy: [{ dueDate: "asc" }],
   });
 
   const anyProductMatches = anyInstances.filter((i) => batchLabelMatchesProduct(i.label, productName));
   const anyExact = anyProductMatches.find((i) => i.dueDate.toISOString().slice(0, 10) === submissionDate);
-  const crossTarget = anyExact ?? findNearestWithinDays(
-    anyProductMatches.filter((i) => (OPEN_STATUSES as readonly string[]).includes(i.status)),
-    submissionDate, 6
-  );
+  const crossTarget = anyExact ?? pickFallbackInstance(anyProductMatches, today, BATCH_SHEET_LOOKBACK_DAYS);
 
   if (crossTarget) {
     console.warn(`[batch-sheet-completion] cross-facility match: user ${userId} completing instance ${crossTarget.id} owned by ${crossTarget.rule.ownerId}`);
@@ -281,24 +330,6 @@ function batchLabelMatchesProduct(label: string | null, productName: string): bo
   return labelBase === pn || labelBase.includes(pn) || pn.includes(labelBase);
 }
 
-function findNearestWithinDays(
-  candidates: Array<{ dueDate: Date }>,
-  submissionDate: string,
-  maxDays: number
-): (typeof candidates)[number] | undefined {
-  const subMs = new Date(submissionDate + "T00:00:00Z").getTime();
-  let best: (typeof candidates)[number] | undefined;
-  let bestDiff = Infinity;
-  for (const c of candidates) {
-    const diff = Math.abs(c.dueDate.getTime() - subMs) / (1000 * 60 * 60 * 24);
-    if (diff <= maxDays && diff < bestDiff) {
-      best = c;
-      bestDiff = diff;
-    }
-  }
-  return best;
-}
-
 async function markDoneWithReview(opts: {
   instance: { id: string; dueDate: Date; ownerUserId: string | null };
   ruleOwnerId: string;
@@ -309,13 +340,9 @@ async function markDoneWithReview(opts: {
   reviewReason: string;
   prismaClient: PrismaClient;
 }): Promise<string> {
-  const { instance, ruleOwnerId, submissionId, userId, submissionDate, reviewReason, prismaClient } = opts;
+  const { instance, ruleOwnerId, submissionId, userId, today, reviewReason, prismaClient } = opts;
 
-  const dueDateStr = instance.dueDate.toISOString().slice(0, 10);
-  const completedLate = submissionDate > dueDateStr;
-  const daysLate = completedLate
-    ? Math.round((new Date(submissionDate).getTime() - new Date(dueDateStr).getTime()) / (1000 * 60 * 60 * 24))
-    : null;
+  const { completedLate, daysLate } = lateness(instance.dueDate, today);
   const effectiveOwner = instance.ownerUserId ?? ruleOwnerId;
 
   await prismaClient.$transaction([
