@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@/generated/prisma";
 import { matchSubmissionsConsume, FINISHED_STATUSES } from "@/lib/submission-matcher";
 import { getPacificToday, addDaysToDateStr, toPacificDateStr } from "@/lib/pacific-time";
+import { normalizeProductName, productNameFromTaskLabel } from "@/lib/product-name";
 
 /**
  * Batch sheet ↔ task linking.
@@ -46,18 +47,7 @@ export interface PlannedLink {
 const NEVER_TOUCHED = ["DONE", "SKIPPED", "MISSED"];
 export const NON_OWNER_REVIEW_REASON = "Completed by non-owner";
 
-/** Same expression as normalizeName in the production-schedule route (kept identical by a test). */
-export function normalizeProductName(s: string): string {
-  return s.replace(/[–—]/g, "-").replace(/\s+/g, " ").trim().toLowerCase();
-}
-
-/**
- * Task labels are written by the calendar generator as the sheet's product name plus an optional
- * " (<count> <unit>…)" quantity, or " #<n>" when a product-specific rule has several runs in a day.
- */
-export function productNameFromTaskLabel(label: string): string {
-  return label.replace(/\s*\(\d[^()]*\)\s*$/, "").replace(/\s+#\d+$/, "");
-}
+export { normalizeProductName, productNameFromTaskLabel };
 
 const isoDay = (d: Date) => d.toISOString().slice(0, 10);
 

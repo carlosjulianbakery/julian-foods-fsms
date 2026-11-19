@@ -250,7 +250,7 @@ describe("agreement with the Production Schedule's matcher", () => {
       if (!m) throw new Error(`${fn} not found in ${file}`);
       return m[1].replace(/\s+/g, " ");
     };
-    expect(body("../batch-sheet-reconcile.ts", "normalizeProductName")).toBe(
+    expect(body("../product-name.ts", "normalizeProductName")).toBe(
       body("../../app/api/dashboard/production-schedule/route.ts", "normalizeName"),
     );
   });
@@ -367,5 +367,31 @@ describe("resolveBatchSheetTaskLink", () => {
     expect(await resolveBatchSheetTaskLink(42, client)).toBeNull();
     db.ruleInstance.findUnique.mockResolvedValueOnce({ id: "preop", rule: { formKey: "preop" } } as never);
     expect(await resolveBatchSheetTaskLink("preop", client)).toBeNull();
+  });
+});
+
+describe("tasks relabelled by the calendar sync are still linked", () => {
+  const D = "2026-11-23";
+  const BREAD = [{ id: "p-bread", name: "Bread" }];
+  const rtask = (id: string, label: string, created: number): ReconTask => ({
+    id, label, dueDate: D, status: "UPCOMING", ruleId: "rule-batch", ruleOwnerId: IVAN, ownerUserId: null, completedBySubmissionId: null, createdAt: new Date(created),
+  });
+  const rsub = (id: string, at: string): ReconSubmission => ({
+    id, templateName: "Bread", productId: null, productionDate: new Date(D + "T00:00:00Z"), status: "PASS", submittedById: IVAN, submittedAt: new Date(at), taskInstanceId: null,
+  });
+
+  it("two runs of one product (the second labelled '#2') are each linked to their own sheet", () => {
+    const plan = planBatchSheetLinks({
+      tasks: [rtask("run-1", "Bread (2 Bowls)", 1), rtask("run-2", "Bread #2 (2 Bowls)", 2)],
+      submissions: [rsub("sheet-a", "2026-11-23T18:00:00Z"), rsub("sheet-b", "2026-11-23T20:00:00Z")],
+      products: BREAD,
+    });
+    expect(plan.map((p) => p.instanceId).sort()).toEqual(["run-1", "run-2"]);
+    expect(new Set(plan.map((p) => p.submissionId)).size).toBe(2);
+  });
+
+  it("a task whose label was updated to a new quantity is still linked to its sheet", () => {
+    const plan = planBatchSheetLinks({ tasks: [rtask("t", "Bread (40 Bowls)", 1)], submissions: [rsub("sheet", "2026-11-23T18:00:00Z")], products: BREAD });
+    expect(plan).toEqual([{ instanceId: "t", submissionId: "sheet", how: "exact date" }]);
   });
 });

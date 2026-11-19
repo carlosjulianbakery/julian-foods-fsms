@@ -65,10 +65,10 @@ describe("calendar generator — sortKey", () => {
       ["ProGranola - Chocolate", 1],
       ["", null],
     ]);
-    // identity keys are unchanged by this work
+    // the key's trailing number is the run of that product on that day, not the line position
     expect(created.map((c) => c.calendarKey)).toEqual([
       "prod:2026-11-18:premix-powder---egg-chocolate:0",
-      "prod:2026-11-18:progranola---chocolate:1",
+      "prod:2026-11-18:progranola---chocolate:0",
       "day:2026-11-18",
     ]);
   });

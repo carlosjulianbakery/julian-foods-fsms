@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { fetchSheetRows, invalidateSheetCache } from "@/lib/google-sheets-fetcher";
 import { parseDaysInRange } from "@/lib/sheet-parser";
 import { getPacificToday, addDaysToDateStr } from "@/lib/pacific-time";
+import { planCalendarTasks } from "@/lib/calendar-plan";
 
 const GENERATE_DAYS_AHEAD = 7;
 
@@ -14,6 +15,10 @@ export interface FacilitySyncResult {
   created: number;
   deleted: number;
   flagged: number;
+  /** Open tasks whose label was brought in line with the sheet (quantity or wording changed). */
+  labelsUpdated?: number;
+  /** Tasks whose stored line position changed. */
+  positionsUpdated?: number;
 }
 
 export interface CalendarGeneratorOpts {
@@ -169,67 +174,6 @@ async function processOneFacility(
     }
   }
 
-  interface ExpectedInst {
-    ruleId: string;
-    dueDate: string;
-    label: string;
-    calendarKey: string;
-    /** Position of the production within its day on the calendar; null for once-a-day tasks. */
-    sortKey: number | null;
-  }
-
-  const allExpected: ExpectedInst[] = [];
-
-  for (const rule of rules) {
-    if (rule.triggerType === "PRODUCTION_DAY") {
-      for (const day of days) {
-        const hasProduction = day.items.some((i) => i.item_type === "production");
-        if (!hasProduction) continue;
-        allExpected.push({
-          ruleId: rule.id,
-          dueDate: day.iso_date,
-          label: "",
-          calendarKey: `day:${day.iso_date}`,
-          sortKey: null,
-        });
-      }
-    } else if (rule.triggerType === "PRODUCTION_PRODUCT" && rule.productName) {
-      for (const day of days) {
-        const dayProductions = day.items.filter((i) => i.item_type === "production");
-        const matches = day.items.filter(
-          (i) => i.item_type === "production" && matchesProduct(i.product_name, rule.productName!)
-        );
-        const needsSuffix = matches.length > 1;
-        matches.forEach((item, idx) => {
-          const label = needsSuffix ? `${item.product_name} #${idx + 1}` : item.product_name;
-          allExpected.push({
-            ruleId: rule.id,
-            dueDate: day.iso_date,
-            label,
-            calendarKey: `prod:${day.iso_date}:${normalizeProductName(item.product_name)}:${idx}`,
-            sortKey: dayProductions.indexOf(item),
-          });
-        });
-      }
-    } else if (rule.triggerType === "PRODUCTION_ANY") {
-      for (const day of days) {
-        const productions = day.items.filter((i) => i.item_type === "production");
-        productions.forEach((item, idx) => {
-          const qty = item.base_unit_count != null
-            ? ` (${item.base_unit_count}${item.base_unit_label ? " " + item.base_unit_label : ""})`
-            : "";
-          allExpected.push({
-            ruleId: rule.id,
-            dueDate: day.iso_date,
-            label: `${item.product_name}${qty}`,
-            calendarKey: `prod:${day.iso_date}:${normalizeProductName(item.product_name)}:${idx}`,
-            sortKey: idx,
-          });
-        });
-      }
-    }
-  }
-
   // Load existing SCHEDULE instances for these rules in the window
   const ruleIds = rules.map((r) => r.id);
   const existingInstances = await prisma.ruleInstance.findMany({
@@ -249,39 +193,47 @@ async function processOneFacility(
       ownerUserId: true,
       completedBySubmissionId: true,
       sortKey: true,
+      label: true,
+      createdAt: true,
     },
   });
 
-  // Map: `${ruleId}:${calendarKey}` → instance
-  const existingByKey = new Map<string, typeof existingInstances[number]>();
-  for (const inst of existingInstances) {
-    if (inst.calendarKey) {
-      existingByKey.set(`${inst.ruleId}:${inst.calendarKey}`, inst);
-    }
-  }
-
-  // New instances to create
-  const toCreate = allExpected
-    .filter((exp) => !existingByKey.has(`${exp.ruleId}:${exp.calendarKey}`))
-    .map((exp) => ({
-      ruleId: exp.ruleId,
-      dueDate: new Date(`${exp.dueDate}T12:00:00Z`),
-      label: exp.label,
-      calendarKey: exp.calendarKey,
-      sortKey: exp.sortKey,
-      source: "SCHEDULE",
-      status: exp.dueDate === today ? "DUE_TODAY" : "UPCOMING",
-    }));
-
-  // Keep the stored calendar position current on tasks that already exist
-  const sortKeyUpdates = allExpected.flatMap((exp) => {
-    const existing = existingByKey.get(`${exp.ruleId}:${exp.calendarKey}`);
-    return existing && (existing.sortKey ?? null) !== exp.sortKey ? [{ id: existing.id, sortKey: exp.sortKey }] : [];
+  // Tasks are matched by rule + date + product + run of that product — never by line position
+  const { toCreate: plannedCreates, toDelete, toFlag, labelUpdates, sortKeyUpdates } = planCalendarTasks({
+    rules,
+    days,
+    existing: existingInstances,
   });
-  if (sortKeyUpdates.length > 0 && !dryRun) {
-    await prisma.$transaction(
-      sortKeyUpdates.map((u) => prisma.ruleInstance.update({ where: { id: u.id }, data: { sortKey: u.sortKey } })),
-    );
+
+  const toCreate = plannedCreates.map((c) => ({
+    ruleId: c.ruleId,
+    dueDate: new Date(`${c.dueDate}T12:00:00Z`),
+    label: c.label,
+    calendarKey: c.calendarKey,
+    sortKey: c.sortKey,
+    source: "SCHEDULE",
+    status: c.dueDate === today ? "DUE_TODAY" : "UPCOMING",
+  }));
+
+  result.labelsUpdated = labelUpdates.length;
+  result.positionsUpdated = sortKeyUpdates.length;
+
+  if (!dryRun) {
+    // Quantity or wording changed on the sheet: the open task's label follows, one at a time in a safe order
+    for (const u of labelUpdates) {
+      try {
+        await prisma.ruleInstance.update({ where: { id: u.id }, data: { label: u.label } });
+      } catch (e) {
+        result.labelsUpdated--;
+        console.warn(`[calendar-generator] label update skipped for ${u.id}:`, e instanceof Error ? e.message : e);
+      }
+    }
+    // Keep the stored calendar position current on tasks that already exist
+    if (sortKeyUpdates.length > 0) {
+      await prisma.$transaction(
+        sortKeyUpdates.map((u) => prisma.ruleInstance.update({ where: { id: u.id }, data: { sortKey: u.sortKey } })),
+      );
+    }
   }
 
   if (toCreate.length > 0) {
@@ -295,32 +247,6 @@ async function processOneFacility(
     } else {
       result.created = toCreate.length;
     }
-  }
-
-  // Reconciliation: instances whose calendarKey is no longer in the expected set
-  const allExpectedKeys = new Set(allExpected.map((e) => `${e.ruleId}:${e.calendarKey}`));
-
-  const toDelete: string[] = [];
-  const toFlag: string[] = [];
-
-  for (const inst of existingInstances) {
-    const lookupKey = `${inst.ruleId}:${inst.calendarKey}`;
-    if (allExpectedKeys.has(lookupKey)) continue;
-
-    const hasLinkedSubmission = inst.completedBySubmissionId != null;
-    const st = inst.status;
-
-    if (
-      (st === "UPCOMING" || st === "DUE_TODAY" || st === "OVERDUE") &&
-      !hasLinkedSubmission
-    ) {
-      // Untouched — safe to hard-delete
-      toDelete.push(inst.id);
-    } else if (st === "IN_PROGRESS" || st === "DONE" || hasLinkedSubmission) {
-      // Work started or submission linked — flag for admin review
-      toFlag.push(inst.id);
-    }
-    // SKIPPED / MISSED — leave alone
   }
 
   result.deleted += toDelete.length;
@@ -346,18 +272,4 @@ async function processOneFacility(
   }
 
   return result;
-}
-
-function matchesProduct(calendarProductName: string, ruleProductName: string): boolean {
-  const cal = calendarProductName.toLowerCase().trim();
-  const rule = ruleProductName.toLowerCase().trim();
-  return cal === rule || cal.includes(rule) || rule.includes(cal);
-}
-
-function normalizeProductName(name: string): string {
-  return name
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "");
 }
