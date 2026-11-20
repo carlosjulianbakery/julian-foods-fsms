@@ -136,3 +136,50 @@ export function formatMonthKeyLabel(monthKey: string): string {
     year: "numeric",
   });
 }
+
+// ── ISO weeks ─────────────────────────────────────────────────────────────────
+
+export interface IsoWeek {
+  /** "YYYY-Www", e.g. "2026-W48". The year is the ISO week-year, which near January 1st can differ from the calendar year. */
+  key: string;
+  /** Monday, "YYYY-MM-DD". */
+  start: string;
+  /** Sunday, "YYYY-MM-DD". */
+  end: string;
+  year: number;
+  week: number;
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+/** Monday (as a UTC-noon timestamp) of the week a "YYYY-MM-DD" date falls in. Pure calendar arithmetic, no time zone involved. */
+function mondayOf(dateStr: string): number {
+  const t = new Date(`${dateStr}T12:00:00Z`).getTime();
+  return t - ((new Date(t).getUTCDay() + 6) % 7) * DAY_MS;
+}
+const isoDay = (t: number) => new Date(t).toISOString().slice(0, 10);
+
+/**
+ * The ISO week (Monday to Sunday) a calendar date falls in. Week 1 is the week with the year's first
+ * Thursday, so a week belongs to the year its Thursday is in: Fri 2027-01-01 is in 2026-W53.
+ * Pass a Pacific date (e.g. getPacificToday()) to get the Pacific week.
+ */
+export function isoWeekOf(dateStr: string): IsoWeek {
+  const monday = mondayOf(dateStr);
+  const year = new Date(monday + 3 * DAY_MS).getUTCFullYear(); // the week's Thursday decides the year
+  const firstMonday = mondayOf(`${year}-01-04`); // January 4th is always in week 1
+  const week = Math.round((monday - firstMonday) / (7 * DAY_MS)) + 1;
+  return { key: `${year}-W${String(week).padStart(2, "0")}`, start: isoDay(monday), end: isoDay(monday + 6 * DAY_MS), year, week };
+}
+
+/** Parses "YYYY-Www"; null for anything that is not a real ISO week (e.g. W00, or W53 in a 52-week year). */
+export function parseIsoWeekKey(key: string): IsoWeek | null {
+  const m = /^(\d{4})-W(\d{2})$/.exec(key);
+  if (!m) return null;
+  const week = isoWeekOf(isoDay(mondayOf(`${m[1]}-01-04`) + (Number(m[2]) - 1) * 7 * DAY_MS));
+  return week.key === key ? week : null;
+}
+
+/** The current ISO week in America/Los_Angeles. */
+export function getPacificIsoWeek(): IsoWeek {
+  return isoWeekOf(getPacificToday());
+}

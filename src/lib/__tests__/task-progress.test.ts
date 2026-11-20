@@ -15,7 +15,7 @@ function db(over: { monthly?: unknown[]; verification?: unknown[]; inUse?: numbe
 
 describe("'Open this period' progress — one mechanism for every form with a draft per period", () => {
   it("has a provider for each such form and nothing form-specific elsewhere", () => {
-    expect(Object.keys(PROGRESS_PROVIDERS).sort()).toEqual(["monthly_cleaning_624", "verification_624"]);
+    expect(Object.keys(PROGRESS_PROVIDERS).sort()).toEqual(["facilities_checklist_624", "monthly_cleaning_624", "verification_624"]);
   });
 
   it("Monthly Cleaning 624 is unchanged: done + N/A out of all answered lines", async () => {

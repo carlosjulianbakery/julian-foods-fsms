@@ -1109,6 +1109,52 @@ exports.Prisma.Verification624RecordScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.FacilitiesChecklistItemScalarFieldEnum = {
+  id: 'id',
+  facility: 'facility',
+  groupName: 'groupName',
+  name: 'name',
+  description: 'description',
+  sortOrder: 'sortOrder',
+  retiredAt: 'retiredAt',
+  retiredById: 'retiredById',
+  createdById: 'createdById',
+  updatedById: 'updatedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FacilitiesChecklistListScalarFieldEnum = {
+  facility: 'facility',
+  version: 'version',
+  updatedById: 'updatedById',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FacilitiesChecklistRecordScalarFieldEnum = {
+  id: 'id',
+  facility: 'facility',
+  period: 'period',
+  periodStart: 'periodStart',
+  periodEnd: 'periodEnd',
+  status: 'status',
+  conductedBy: 'conductedBy',
+  initials: 'initials',
+  items: 'items',
+  listVersion: 'listVersion',
+  okCount: 'okCount',
+  failCount: 'failCount',
+  notes: 'notes',
+  lastEditedBy: 'lastEditedBy',
+  lastEditedAt: 'lastEditedAt',
+  createdById: 'createdById',
+  submittedAt: 'submittedAt',
+  submittedById: 'submittedById',
+  linkedInstanceId: 'linkedInstanceId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.NotificationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -1301,6 +1347,9 @@ exports.Prisma.ModelName = {
   Verification624Equipment: 'Verification624Equipment',
   Verification624List: 'Verification624List',
   Verification624Record: 'Verification624Record',
+  FacilitiesChecklistItem: 'FacilitiesChecklistItem',
+  FacilitiesChecklistList: 'FacilitiesChecklistList',
+  FacilitiesChecklistRecord: 'FacilitiesChecklistRecord',
   Notification: 'Notification'
 };
 

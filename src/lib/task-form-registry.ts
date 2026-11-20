@@ -46,6 +46,10 @@ export const TASK_FORM_REGISTRY: Record<string, TaskFormEntry> = {
     label: "Scales & Thermometer Verification (624)",
     href: () => "/dashboard/supervisor/verification-624",
   },
+  facilities_checklist_624: {
+    label: "Facilities Checklist (624)",
+    href: () => "/dashboard/supervisor/facilities-checklist-624",
+  },
   manual: {
     label: "Manual Task",
     href: () => null,

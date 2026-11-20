@@ -75,6 +75,12 @@ model User {
   verification624ListsUpdated      Verification624List[]          @relation("Verification624ListUpdated")
   verification624RecordsCreated    Verification624Record[]        @relation("Verification624RecordCreated")
   verification624RecordsSubmitted  Verification624Record[]        @relation("Verification624RecordSubmitted")
+  facilitiesChecklistItemsCreated    FacilitiesChecklistItem[]   @relation("FacilitiesChecklistItemCreated")
+  facilitiesChecklistItemsUpdated    FacilitiesChecklistItem[]   @relation("FacilitiesChecklistItemUpdated")
+  facilitiesChecklistItemsRetired    FacilitiesChecklistItem[]   @relation("FacilitiesChecklistItemRetired")
+  facilitiesChecklistListsUpdated    FacilitiesChecklistList[]   @relation("FacilitiesChecklistListUpdated")
+  facilitiesChecklistRecordsCreated  FacilitiesChecklistRecord[] @relation("FacilitiesChecklistRecordCreated")
+  facilitiesChecklistRecordsSubmitted FacilitiesChecklistRecord[] @relation("FacilitiesChecklistRecordSubmitted")
 
   @@map("users")
 }
@@ -1537,6 +1543,73 @@ model Verification624Record {
 
   @@unique([facility, period], map: "verification_624_records_facility_period_key")
   @@map("verification_624_records")
+}
+
+// ── Facilities Checklist (weekly) ─────────────────────────────────────────────
+// The editable list of checks. Items are retired, never deleted.
+model FacilitiesChecklistItem {
+  id          String    @id @default(cuid())
+  facility    String    @default("624")
+  groupName   String
+  name        String
+  description String    @default("")
+  sortOrder   Int       @default(0)
+  retiredAt   DateTime?
+  retiredById String?
+  createdById String?
+  updatedById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+
+  retiredBy User? @relation("FacilitiesChecklistItemRetired", fields: [retiredById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "facilities_checklist_items_retired_fkey")
+  createdBy User? @relation("FacilitiesChecklistItemCreated", fields: [createdById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "facilities_checklist_items_created_fkey")
+  updatedBy User? @relation("FacilitiesChecklistItemUpdated", fields: [updatedById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "facilities_checklist_items_updated_fkey")
+
+  @@index([facility, sortOrder], map: "facilities_checklist_items_facility_idx")
+  @@map("facilities_checklist_items")
+}
+
+// One row per facility; version goes up on every change to the checklist.
+model FacilitiesChecklistList {
+  facility    String   @id
+  version     Int      @default(1)
+  updatedById String?
+  updatedAt   DateTime @default(now()) @updatedAt
+
+  updatedBy User? @relation("FacilitiesChecklistListUpdated", fields: [updatedById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "facilities_checklist_lists_updated_fkey")
+
+  @@map("facilities_checklist_lists")
+}
+
+// One record per facility and ISO week in Pacific time ('2026-W48' = Mon 11/23 – Sun 11/29).
+model FacilitiesChecklistRecord {
+  id               String    @id @default(cuid())
+  facility         String    @default("624")
+  period           String
+  periodStart      DateTime  @db.Date
+  periodEnd        DateTime  @db.Date
+  status           String    @default("draft")
+  conductedBy      String    @default("")
+  initials         String    @default("")
+  items            Json      @default("[]")
+  listVersion      Int       @default(1)
+  okCount          Int       @default(0)
+  failCount        Int       @default(0)
+  notes            String?
+  lastEditedBy     String?
+  lastEditedAt     DateTime?
+  createdById      String?
+  submittedAt      DateTime?
+  submittedById    String?
+  linkedInstanceId String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @default(now()) @updatedAt
+
+  createdBy   User? @relation("FacilitiesChecklistRecordCreated", fields: [createdById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "facilities_checklist_records_created_fkey")
+  submittedBy User? @relation("FacilitiesChecklistRecordSubmitted", fields: [submittedById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "facilities_checklist_records_submitted_fkey")
+
+  @@unique([facility, period], map: "facilities_checklist_records_facility_period_key")
+  @@map("facilities_checklist_records")
 }
 
 model Notification {

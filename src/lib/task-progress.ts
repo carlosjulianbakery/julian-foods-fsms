@@ -1,5 +1,6 @@
 import type { PrismaClient } from "@/generated/prisma";
 import { VERIFICATION_FACILITY, VERIFICATION_FORM_KEY } from "@/lib/verification-624";
+import { FACILITIES_FACILITY, FACILITIES_FORM_KEY, splitStored as splitFacilitiesStored, resultOf as facilitiesResultOf } from "@/lib/facilities-checklist-624";
 
 export interface TaskProgress { done: number; total: number }
 export interface ProgressTask { id: string; dueDate: Date; rule: { formKey: string | null } }
@@ -42,6 +43,38 @@ export const PROGRESS_PROVIDERS: Record<string, Provider> = {
       const r = records.find((x) => x.linkedInstanceId === t.id) ?? records.find((x) => x.periodEnd.toISOString().slice(0, 10) === due);
       const done = r ? r.okCount + r.failCount : 0;
       if (r && total > 0 && done > 0) out.set(t.id, { done: Math.min(done, total), total });
+    }
+    return out;
+  },
+
+  // Weekly: the task is due on a weekday inside the week, so a draft is matched by the task it is linked
+  // to, or else by the task's due date falling inside the draft's Monday..Sunday.
+  [FACILITIES_FORM_KEY]: async (tasks, prismaClient) => {
+    const [records, live] = await Promise.all([
+      prismaClient.facilitiesChecklistRecord.findMany({
+        where: {
+          facility: FACILITIES_FACILITY,
+          status: "draft",
+          OR: [
+            { linkedInstanceId: { in: tasks.map((t) => t.id) } },
+            ...tasks.map((t) => ({ periodStart: { lte: t.dueDate }, periodEnd: { gte: t.dueDate } })),
+          ],
+        },
+        select: { linkedInstanceId: true, periodStart: true, periodEnd: true, items: true },
+      }),
+      prismaClient.facilitiesChecklistItem.findMany({ where: { facility: FACILITIES_FACILITY, retiredAt: null }, select: { id: true } }),
+    ]);
+    const liveIds = new Set(live.map((i) => i.id));
+    const out = new Map<string, TaskProgress>();
+    for (const t of tasks) {
+      const due = t.dueDate.toISOString().slice(0, 10);
+      const r =
+        records.find((x) => x.linkedInstanceId === t.id) ??
+        records.find((x) => x.periodStart.toISOString().slice(0, 10) <= due && x.periodEnd.toISOString().slice(0, 10) >= due);
+      if (!r || liveIds.size === 0) continue;
+      // Checked = live checks that already have OK or Not OK in the draft
+      const done = splitFacilitiesStored(r.items).entries.filter((v) => liveIds.has(v.itemId) && facilitiesResultOf(v) !== null).length;
+      if (done > 0) out.set(t.id, { done: Math.min(done, liveIds.size), total: liveIds.size });
     }
     return out;
   },

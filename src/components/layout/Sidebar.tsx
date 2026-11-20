@@ -112,6 +112,13 @@ const formsNav = [
     exact: false,
   },
   {
+    label: "Facilities Checklist - 624",
+    href: "/dashboard/supervisor/facilities-checklist-624",
+    icon: Building2,
+    roles: ["SUPERVISOR", "ADMIN"],
+    exact: false,
+  },
+  {
     label: "Batch Sheet",
     href: "/dashboard/supervisor/batch-sheet",
     icon: ScrollText,

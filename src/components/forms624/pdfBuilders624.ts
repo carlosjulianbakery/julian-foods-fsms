@@ -2,6 +2,7 @@ import {
   LABELS, SCALE_POINTS, SECTION_TITLES, hasSpec, instructionsFor, instructionsVerOf, marginText, periodLabel, scaleSpecOf, splitStored, unitDecimals,
   type ItemSnapshot, type Section,
 } from "@/lib/verification-624";
+import { periodDates as facilitiesPeriodDates, periodLabel as facilitiesPeriodLabel, splitStored as splitFacilitiesStored } from "@/lib/facilities-checklist-624";
 import type { DailyClean624Record, CleaningRowSnapshot, MonthlyClean624Record, MonthlyClean624LineSnapshot } from "./types";
 import { INSTRUCTIONS_TEXT_MONTHLY } from "@/app/(dashboard)/dashboard/supervisor/monthly-cleaning-624/config";
 
@@ -316,3 +317,69 @@ export function buildVerificationPdfHtml624(r: VerificationPdfRecord): string {
   </body></html>`;
 }
 
+// ── Facilities Checklist (weekly) ───────────────────────────────────────────────
+
+export interface FacilitiesPdfRecord {
+  period: string;
+  status: string;
+  conductedBy: string;
+  initials: string;
+  items: unknown;
+  listVersion: number;
+  okCount: number;
+  failCount: number;
+  notes: string | null;
+  submittedAt: string | Date | null;
+}
+
+export function buildFacilitiesPdfHtml624(r: FacilitiesPdfRecord): string {
+  const { header, snapshots } = splitFacilitiesStored(r.items);
+  const isDraft = r.status !== "submitted";
+  const ordered = [...snapshots].sort((a, b) => a.position - b.position);
+  const pt = (iso: string | null | undefined) =>
+    iso ? new Date(iso).toLocaleString("en-US", { timeZone: "America/Los_Angeles", month: "2-digit", day: "2-digit", year: "numeric", hour: "numeric", minute: "2-digit" }) : "—";
+
+  // One table per group, in the order the checks were shown
+  const groups: { name: string; rows: string[] }[] = [];
+  for (const i of ordered) {
+    const row = `<tr>
+      <td><b>${esc(i.name)}</b>${i.description ? `<br/><span style="color:#6b7280;font-size:10px">${esc(i.description)}</span>` : ""}</td>
+      <td>${resultCell(i.result)}</td>
+      <td>${esc(i.correctiveAction) || "—"}${i.result === "NOT_OK" ? `<br/><span style="color:#6b7280;font-size:10px">${i.reInspected ? "Re-inspected and confirmed corrected" : "Re-inspection pending"}</span>` : ""}</td>
+      <td>${esc(i.note) || "—"}</td>
+      <td class="n">${pt(i.checkedAt)}</td>
+    </tr>`;
+    const last = groups[groups.length - 1];
+    if (last && last.name === i.groupName) last.rows.push(row);
+    else groups.push({ name: i.groupName, rows: [row] });
+  }
+  const tables = groups.map((g) => `
+  <h2>${esc(g.name)}</h2>
+  <table><thead><tr><th style="width:38%">Check</th><th style="width:9%">Result</th><th style="width:22%">Corrective action</th><th style="width:17%">Note</th><th style="width:14%">Checked (PT)</th></tr></thead><tbody>${g.rows.join("")}</tbody></table>`).join("");
+
+  const submittedPT = r.submittedAt ? new Date(r.submittedAt).toLocaleString("en-US", { timeZone: "America/Los_Angeles" }) : "—";
+  const dateLine = header ? `${formatMDY(header.date)} ${esc(header.time)}` : "—";
+
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"/>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 28px; color: #111; }
+    h1 { font-size: 18px; margin: 0 0 4px; }
+    h2 { font-size: 13px; margin: 16px 0 6px; }
+    p.sub { font-size: 12px; color: #6b7280; margin: 0 0 10px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 5px 6px; font-size: 10px; color: #6b7280; text-transform: uppercase; border-bottom: 2px solid #e5e7eb; }
+    td { padding: 5px 6px; font-size: 11px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+    td.n { font-family: monospace; font-size: 10px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: #fef3c7; color: #92400e; }
+    .footer { margin-top: 20px; font-size: 10px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 8px; }
+  </style></head><body>
+  <h1>Facilities Checklist — 624${isDraft ? ' <span class="badge">DRAFT</span>' : ""}</h1>
+  <p class="sub">Week: ${esc(facilitiesPeriodDates(r.period))} (${esc(facilitiesPeriodLabel(r.period).split(" · ")[0])}) &nbsp;|&nbsp; Facility: 624 &nbsp;|&nbsp; Date: ${dateLine} &nbsp;|&nbsp; Initials: ${esc(r.initials) || "—"} &nbsp;|&nbsp; ${r.okCount} OK · ${r.failCount} Not OK</p>
+  ${tables || '<p class="sub">No checks recorded.</p>'}
+  <p class="footer">
+    ${isDraft ? "DRAFT — not yet submitted" : `Submitted: ${submittedPT} PT &nbsp;|&nbsp; By: ${esc(r.conductedBy) || "—"}${r.initials ? ` (${esc(r.initials)})` : ""}`}
+    ${r.notes ? ` &nbsp;|&nbsp; Notes: ${esc(r.notes)}` : ""}
+    &nbsp;|&nbsp; Checklist v${r.listVersion} &nbsp;|&nbsp; Julian Foods — 624 Facility
+  </p>
+  </body></html>`;
+}

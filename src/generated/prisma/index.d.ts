@@ -324,6 +324,21 @@ export type Verification624List = $Result.DefaultSelection<Prisma.$Verification6
  */
 export type Verification624Record = $Result.DefaultSelection<Prisma.$Verification624RecordPayload>
 /**
+ * Model FacilitiesChecklistItem
+ * 
+ */
+export type FacilitiesChecklistItem = $Result.DefaultSelection<Prisma.$FacilitiesChecklistItemPayload>
+/**
+ * Model FacilitiesChecklistList
+ * 
+ */
+export type FacilitiesChecklistList = $Result.DefaultSelection<Prisma.$FacilitiesChecklistListPayload>
+/**
+ * Model FacilitiesChecklistRecord
+ * 
+ */
+export type FacilitiesChecklistRecord = $Result.DefaultSelection<Prisma.$FacilitiesChecklistRecordPayload>
+/**
  * Model Notification
  * 
  */
@@ -1257,6 +1272,36 @@ export class PrismaClient<
   get verification624Record(): Prisma.Verification624RecordDelegate<ExtArgs>;
 
   /**
+   * `prisma.facilitiesChecklistItem`: Exposes CRUD operations for the **FacilitiesChecklistItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FacilitiesChecklistItems
+    * const facilitiesChecklistItems = await prisma.facilitiesChecklistItem.findMany()
+    * ```
+    */
+  get facilitiesChecklistItem(): Prisma.FacilitiesChecklistItemDelegate<ExtArgs>;
+
+  /**
+   * `prisma.facilitiesChecklistList`: Exposes CRUD operations for the **FacilitiesChecklistList** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FacilitiesChecklistLists
+    * const facilitiesChecklistLists = await prisma.facilitiesChecklistList.findMany()
+    * ```
+    */
+  get facilitiesChecklistList(): Prisma.FacilitiesChecklistListDelegate<ExtArgs>;
+
+  /**
+   * `prisma.facilitiesChecklistRecord`: Exposes CRUD operations for the **FacilitiesChecklistRecord** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FacilitiesChecklistRecords
+    * const facilitiesChecklistRecords = await prisma.facilitiesChecklistRecord.findMany()
+    * ```
+    */
+  get facilitiesChecklistRecord(): Prisma.FacilitiesChecklistRecordDelegate<ExtArgs>;
+
+  /**
    * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
     * Example usage:
     * ```ts
@@ -1768,6 +1813,9 @@ export namespace Prisma {
     Verification624Equipment: 'Verification624Equipment',
     Verification624List: 'Verification624List',
     Verification624Record: 'Verification624Record',
+    FacilitiesChecklistItem: 'FacilitiesChecklistItem',
+    FacilitiesChecklistList: 'FacilitiesChecklistList',
+    FacilitiesChecklistRecord: 'FacilitiesChecklistRecord',
     Notification: 'Notification'
   };
 
@@ -1784,7 +1832,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "record" | "preOpInspection" | "preOp624Inspection" | "dailyClean624Record" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "monthlyClean624Record" | "verification624Equipment" | "verification624List" | "verification624Record" | "notification"
+      modelProps: "user" | "form" | "formSubmission" | "record" | "preOpInspection" | "preOp624Inspection" | "dailyClean624Record" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "monthlyClean624Record" | "verification624Equipment" | "verification624List" | "verification624Record" | "facilitiesChecklistItem" | "facilitiesChecklistList" | "facilitiesChecklistRecord" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6128,6 +6176,216 @@ export namespace Prisma {
           }
         }
       }
+      FacilitiesChecklistItem: {
+        payload: Prisma.$FacilitiesChecklistItemPayload<ExtArgs>
+        fields: Prisma.FacilitiesChecklistItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FacilitiesChecklistItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FacilitiesChecklistItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistItemPayload>
+          }
+          findFirst: {
+            args: Prisma.FacilitiesChecklistItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FacilitiesChecklistItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistItemPayload>
+          }
+          findMany: {
+            args: Prisma.FacilitiesChecklistItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistItemPayload>[]
+          }
+          create: {
+            args: Prisma.FacilitiesChecklistItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistItemPayload>
+          }
+          createMany: {
+            args: Prisma.FacilitiesChecklistItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FacilitiesChecklistItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistItemPayload>[]
+          }
+          delete: {
+            args: Prisma.FacilitiesChecklistItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistItemPayload>
+          }
+          update: {
+            args: Prisma.FacilitiesChecklistItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.FacilitiesChecklistItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FacilitiesChecklistItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.FacilitiesChecklistItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistItemPayload>
+          }
+          aggregate: {
+            args: Prisma.FacilitiesChecklistItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFacilitiesChecklistItem>
+          }
+          groupBy: {
+            args: Prisma.FacilitiesChecklistItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FacilitiesChecklistItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FacilitiesChecklistItemCountArgs<ExtArgs>
+            result: $Utils.Optional<FacilitiesChecklistItemCountAggregateOutputType> | number
+          }
+        }
+      }
+      FacilitiesChecklistList: {
+        payload: Prisma.$FacilitiesChecklistListPayload<ExtArgs>
+        fields: Prisma.FacilitiesChecklistListFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FacilitiesChecklistListFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistListPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FacilitiesChecklistListFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistListPayload>
+          }
+          findFirst: {
+            args: Prisma.FacilitiesChecklistListFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistListPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FacilitiesChecklistListFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistListPayload>
+          }
+          findMany: {
+            args: Prisma.FacilitiesChecklistListFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistListPayload>[]
+          }
+          create: {
+            args: Prisma.FacilitiesChecklistListCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistListPayload>
+          }
+          createMany: {
+            args: Prisma.FacilitiesChecklistListCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FacilitiesChecklistListCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistListPayload>[]
+          }
+          delete: {
+            args: Prisma.FacilitiesChecklistListDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistListPayload>
+          }
+          update: {
+            args: Prisma.FacilitiesChecklistListUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistListPayload>
+          }
+          deleteMany: {
+            args: Prisma.FacilitiesChecklistListDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FacilitiesChecklistListUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.FacilitiesChecklistListUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistListPayload>
+          }
+          aggregate: {
+            args: Prisma.FacilitiesChecklistListAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFacilitiesChecklistList>
+          }
+          groupBy: {
+            args: Prisma.FacilitiesChecklistListGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FacilitiesChecklistListGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FacilitiesChecklistListCountArgs<ExtArgs>
+            result: $Utils.Optional<FacilitiesChecklistListCountAggregateOutputType> | number
+          }
+        }
+      }
+      FacilitiesChecklistRecord: {
+        payload: Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>
+        fields: Prisma.FacilitiesChecklistRecordFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FacilitiesChecklistRecordFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistRecordPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FacilitiesChecklistRecordFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistRecordPayload>
+          }
+          findFirst: {
+            args: Prisma.FacilitiesChecklistRecordFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistRecordPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FacilitiesChecklistRecordFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistRecordPayload>
+          }
+          findMany: {
+            args: Prisma.FacilitiesChecklistRecordFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistRecordPayload>[]
+          }
+          create: {
+            args: Prisma.FacilitiesChecklistRecordCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistRecordPayload>
+          }
+          createMany: {
+            args: Prisma.FacilitiesChecklistRecordCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FacilitiesChecklistRecordCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistRecordPayload>[]
+          }
+          delete: {
+            args: Prisma.FacilitiesChecklistRecordDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistRecordPayload>
+          }
+          update: {
+            args: Prisma.FacilitiesChecklistRecordUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistRecordPayload>
+          }
+          deleteMany: {
+            args: Prisma.FacilitiesChecklistRecordDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FacilitiesChecklistRecordUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.FacilitiesChecklistRecordUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FacilitiesChecklistRecordPayload>
+          }
+          aggregate: {
+            args: Prisma.FacilitiesChecklistRecordAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFacilitiesChecklistRecord>
+          }
+          groupBy: {
+            args: Prisma.FacilitiesChecklistRecordGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FacilitiesChecklistRecordGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FacilitiesChecklistRecordCountArgs<ExtArgs>
+            result: $Utils.Optional<FacilitiesChecklistRecordCountAggregateOutputType> | number
+          }
+        }
+      }
       Notification: {
         payload: Prisma.$NotificationPayload<ExtArgs>
         fields: Prisma.NotificationFieldRefs
@@ -6403,6 +6661,12 @@ export namespace Prisma {
     verification624ListsUpdated: number
     verification624RecordsCreated: number
     verification624RecordsSubmitted: number
+    facilitiesChecklistItemsCreated: number
+    facilitiesChecklistItemsUpdated: number
+    facilitiesChecklistItemsRetired: number
+    facilitiesChecklistListsUpdated: number
+    facilitiesChecklistRecordsCreated: number
+    facilitiesChecklistRecordsSubmitted: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6450,6 +6714,12 @@ export namespace Prisma {
     verification624ListsUpdated?: boolean | UserCountOutputTypeCountVerification624ListsUpdatedArgs
     verification624RecordsCreated?: boolean | UserCountOutputTypeCountVerification624RecordsCreatedArgs
     verification624RecordsSubmitted?: boolean | UserCountOutputTypeCountVerification624RecordsSubmittedArgs
+    facilitiesChecklistItemsCreated?: boolean | UserCountOutputTypeCountFacilitiesChecklistItemsCreatedArgs
+    facilitiesChecklistItemsUpdated?: boolean | UserCountOutputTypeCountFacilitiesChecklistItemsUpdatedArgs
+    facilitiesChecklistItemsRetired?: boolean | UserCountOutputTypeCountFacilitiesChecklistItemsRetiredArgs
+    facilitiesChecklistListsUpdated?: boolean | UserCountOutputTypeCountFacilitiesChecklistListsUpdatedArgs
+    facilitiesChecklistRecordsCreated?: boolean | UserCountOutputTypeCountFacilitiesChecklistRecordsCreatedArgs
+    facilitiesChecklistRecordsSubmitted?: boolean | UserCountOutputTypeCountFacilitiesChecklistRecordsSubmittedArgs
   }
 
   // Custom InputTypes
@@ -6769,6 +7039,48 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountVerification624RecordsSubmittedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: Verification624RecordWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFacilitiesChecklistItemsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FacilitiesChecklistItemWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFacilitiesChecklistItemsUpdatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FacilitiesChecklistItemWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFacilitiesChecklistItemsRetiredArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FacilitiesChecklistItemWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFacilitiesChecklistListsUpdatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FacilitiesChecklistListWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFacilitiesChecklistRecordsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FacilitiesChecklistRecordWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFacilitiesChecklistRecordsSubmittedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FacilitiesChecklistRecordWhereInput
   }
 
 
@@ -7933,6 +8245,12 @@ export namespace Prisma {
     verification624ListsUpdated?: boolean | User$verification624ListsUpdatedArgs<ExtArgs>
     verification624RecordsCreated?: boolean | User$verification624RecordsCreatedArgs<ExtArgs>
     verification624RecordsSubmitted?: boolean | User$verification624RecordsSubmittedArgs<ExtArgs>
+    facilitiesChecklistItemsCreated?: boolean | User$facilitiesChecklistItemsCreatedArgs<ExtArgs>
+    facilitiesChecklistItemsUpdated?: boolean | User$facilitiesChecklistItemsUpdatedArgs<ExtArgs>
+    facilitiesChecklistItemsRetired?: boolean | User$facilitiesChecklistItemsRetiredArgs<ExtArgs>
+    facilitiesChecklistListsUpdated?: boolean | User$facilitiesChecklistListsUpdatedArgs<ExtArgs>
+    facilitiesChecklistRecordsCreated?: boolean | User$facilitiesChecklistRecordsCreatedArgs<ExtArgs>
+    facilitiesChecklistRecordsSubmitted?: boolean | User$facilitiesChecklistRecordsSubmittedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -8005,6 +8323,12 @@ export namespace Prisma {
     verification624ListsUpdated?: boolean | User$verification624ListsUpdatedArgs<ExtArgs>
     verification624RecordsCreated?: boolean | User$verification624RecordsCreatedArgs<ExtArgs>
     verification624RecordsSubmitted?: boolean | User$verification624RecordsSubmittedArgs<ExtArgs>
+    facilitiesChecklistItemsCreated?: boolean | User$facilitiesChecklistItemsCreatedArgs<ExtArgs>
+    facilitiesChecklistItemsUpdated?: boolean | User$facilitiesChecklistItemsUpdatedArgs<ExtArgs>
+    facilitiesChecklistItemsRetired?: boolean | User$facilitiesChecklistItemsRetiredArgs<ExtArgs>
+    facilitiesChecklistListsUpdated?: boolean | User$facilitiesChecklistListsUpdatedArgs<ExtArgs>
+    facilitiesChecklistRecordsCreated?: boolean | User$facilitiesChecklistRecordsCreatedArgs<ExtArgs>
+    facilitiesChecklistRecordsSubmitted?: boolean | User$facilitiesChecklistRecordsSubmittedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8056,6 +8380,12 @@ export namespace Prisma {
       verification624ListsUpdated: Prisma.$Verification624ListPayload<ExtArgs>[]
       verification624RecordsCreated: Prisma.$Verification624RecordPayload<ExtArgs>[]
       verification624RecordsSubmitted: Prisma.$Verification624RecordPayload<ExtArgs>[]
+      facilitiesChecklistItemsCreated: Prisma.$FacilitiesChecklistItemPayload<ExtArgs>[]
+      facilitiesChecklistItemsUpdated: Prisma.$FacilitiesChecklistItemPayload<ExtArgs>[]
+      facilitiesChecklistItemsRetired: Prisma.$FacilitiesChecklistItemPayload<ExtArgs>[]
+      facilitiesChecklistListsUpdated: Prisma.$FacilitiesChecklistListPayload<ExtArgs>[]
+      facilitiesChecklistRecordsCreated: Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>[]
+      facilitiesChecklistRecordsSubmitted: Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8475,6 +8805,12 @@ export namespace Prisma {
     verification624ListsUpdated<T extends User$verification624ListsUpdatedArgs<ExtArgs> = {}>(args?: Subset<T, User$verification624ListsUpdatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Verification624ListPayload<ExtArgs>, T, "findMany"> | Null>
     verification624RecordsCreated<T extends User$verification624RecordsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$verification624RecordsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Verification624RecordPayload<ExtArgs>, T, "findMany"> | Null>
     verification624RecordsSubmitted<T extends User$verification624RecordsSubmittedArgs<ExtArgs> = {}>(args?: Subset<T, User$verification624RecordsSubmittedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Verification624RecordPayload<ExtArgs>, T, "findMany"> | Null>
+    facilitiesChecklistItemsCreated<T extends User$facilitiesChecklistItemsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$facilitiesChecklistItemsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilitiesChecklistItemPayload<ExtArgs>, T, "findMany"> | Null>
+    facilitiesChecklistItemsUpdated<T extends User$facilitiesChecklistItemsUpdatedArgs<ExtArgs> = {}>(args?: Subset<T, User$facilitiesChecklistItemsUpdatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilitiesChecklistItemPayload<ExtArgs>, T, "findMany"> | Null>
+    facilitiesChecklistItemsRetired<T extends User$facilitiesChecklistItemsRetiredArgs<ExtArgs> = {}>(args?: Subset<T, User$facilitiesChecklistItemsRetiredArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilitiesChecklistItemPayload<ExtArgs>, T, "findMany"> | Null>
+    facilitiesChecklistListsUpdated<T extends User$facilitiesChecklistListsUpdatedArgs<ExtArgs> = {}>(args?: Subset<T, User$facilitiesChecklistListsUpdatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilitiesChecklistListPayload<ExtArgs>, T, "findMany"> | Null>
+    facilitiesChecklistRecordsCreated<T extends User$facilitiesChecklistRecordsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$facilitiesChecklistRecordsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>, T, "findMany"> | Null>
+    facilitiesChecklistRecordsSubmitted<T extends User$facilitiesChecklistRecordsSubmittedArgs<ExtArgs> = {}>(args?: Subset<T, User$facilitiesChecklistRecordsSubmittedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9704,6 +10040,126 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: Verification624RecordScalarFieldEnum | Verification624RecordScalarFieldEnum[]
+  }
+
+  /**
+   * User.facilitiesChecklistItemsCreated
+   */
+  export type User$facilitiesChecklistItemsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistItem
+     */
+    select?: FacilitiesChecklistItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistItemInclude<ExtArgs> | null
+    where?: FacilitiesChecklistItemWhereInput
+    orderBy?: FacilitiesChecklistItemOrderByWithRelationInput | FacilitiesChecklistItemOrderByWithRelationInput[]
+    cursor?: FacilitiesChecklistItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FacilitiesChecklistItemScalarFieldEnum | FacilitiesChecklistItemScalarFieldEnum[]
+  }
+
+  /**
+   * User.facilitiesChecklistItemsUpdated
+   */
+  export type User$facilitiesChecklistItemsUpdatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistItem
+     */
+    select?: FacilitiesChecklistItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistItemInclude<ExtArgs> | null
+    where?: FacilitiesChecklistItemWhereInput
+    orderBy?: FacilitiesChecklistItemOrderByWithRelationInput | FacilitiesChecklistItemOrderByWithRelationInput[]
+    cursor?: FacilitiesChecklistItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FacilitiesChecklistItemScalarFieldEnum | FacilitiesChecklistItemScalarFieldEnum[]
+  }
+
+  /**
+   * User.facilitiesChecklistItemsRetired
+   */
+  export type User$facilitiesChecklistItemsRetiredArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistItem
+     */
+    select?: FacilitiesChecklistItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistItemInclude<ExtArgs> | null
+    where?: FacilitiesChecklistItemWhereInput
+    orderBy?: FacilitiesChecklistItemOrderByWithRelationInput | FacilitiesChecklistItemOrderByWithRelationInput[]
+    cursor?: FacilitiesChecklistItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FacilitiesChecklistItemScalarFieldEnum | FacilitiesChecklistItemScalarFieldEnum[]
+  }
+
+  /**
+   * User.facilitiesChecklistListsUpdated
+   */
+  export type User$facilitiesChecklistListsUpdatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistList
+     */
+    select?: FacilitiesChecklistListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistListInclude<ExtArgs> | null
+    where?: FacilitiesChecklistListWhereInput
+    orderBy?: FacilitiesChecklistListOrderByWithRelationInput | FacilitiesChecklistListOrderByWithRelationInput[]
+    cursor?: FacilitiesChecklistListWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FacilitiesChecklistListScalarFieldEnum | FacilitiesChecklistListScalarFieldEnum[]
+  }
+
+  /**
+   * User.facilitiesChecklistRecordsCreated
+   */
+  export type User$facilitiesChecklistRecordsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistRecord
+     */
+    select?: FacilitiesChecklistRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistRecordInclude<ExtArgs> | null
+    where?: FacilitiesChecklistRecordWhereInput
+    orderBy?: FacilitiesChecklistRecordOrderByWithRelationInput | FacilitiesChecklistRecordOrderByWithRelationInput[]
+    cursor?: FacilitiesChecklistRecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FacilitiesChecklistRecordScalarFieldEnum | FacilitiesChecklistRecordScalarFieldEnum[]
+  }
+
+  /**
+   * User.facilitiesChecklistRecordsSubmitted
+   */
+  export type User$facilitiesChecklistRecordsSubmittedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistRecord
+     */
+    select?: FacilitiesChecklistRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistRecordInclude<ExtArgs> | null
+    where?: FacilitiesChecklistRecordWhereInput
+    orderBy?: FacilitiesChecklistRecordOrderByWithRelationInput | FacilitiesChecklistRecordOrderByWithRelationInput[]
+    cursor?: FacilitiesChecklistRecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FacilitiesChecklistRecordScalarFieldEnum | FacilitiesChecklistRecordScalarFieldEnum[]
   }
 
   /**
@@ -75636,6 +76092,3283 @@ export namespace Prisma {
 
 
   /**
+   * Model FacilitiesChecklistItem
+   */
+
+  export type AggregateFacilitiesChecklistItem = {
+    _count: FacilitiesChecklistItemCountAggregateOutputType | null
+    _avg: FacilitiesChecklistItemAvgAggregateOutputType | null
+    _sum: FacilitiesChecklistItemSumAggregateOutputType | null
+    _min: FacilitiesChecklistItemMinAggregateOutputType | null
+    _max: FacilitiesChecklistItemMaxAggregateOutputType | null
+  }
+
+  export type FacilitiesChecklistItemAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type FacilitiesChecklistItemSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type FacilitiesChecklistItemMinAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    groupName: string | null
+    name: string | null
+    description: string | null
+    sortOrder: number | null
+    retiredAt: Date | null
+    retiredById: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FacilitiesChecklistItemMaxAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    groupName: string | null
+    name: string | null
+    description: string | null
+    sortOrder: number | null
+    retiredAt: Date | null
+    retiredById: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FacilitiesChecklistItemCountAggregateOutputType = {
+    id: number
+    facility: number
+    groupName: number
+    name: number
+    description: number
+    sortOrder: number
+    retiredAt: number
+    retiredById: number
+    createdById: number
+    updatedById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FacilitiesChecklistItemAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type FacilitiesChecklistItemSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type FacilitiesChecklistItemMinAggregateInputType = {
+    id?: true
+    facility?: true
+    groupName?: true
+    name?: true
+    description?: true
+    sortOrder?: true
+    retiredAt?: true
+    retiredById?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FacilitiesChecklistItemMaxAggregateInputType = {
+    id?: true
+    facility?: true
+    groupName?: true
+    name?: true
+    description?: true
+    sortOrder?: true
+    retiredAt?: true
+    retiredById?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FacilitiesChecklistItemCountAggregateInputType = {
+    id?: true
+    facility?: true
+    groupName?: true
+    name?: true
+    description?: true
+    sortOrder?: true
+    retiredAt?: true
+    retiredById?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FacilitiesChecklistItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FacilitiesChecklistItem to aggregate.
+     */
+    where?: FacilitiesChecklistItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilitiesChecklistItems to fetch.
+     */
+    orderBy?: FacilitiesChecklistItemOrderByWithRelationInput | FacilitiesChecklistItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FacilitiesChecklistItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilitiesChecklistItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilitiesChecklistItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FacilitiesChecklistItems
+    **/
+    _count?: true | FacilitiesChecklistItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FacilitiesChecklistItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FacilitiesChecklistItemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FacilitiesChecklistItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FacilitiesChecklistItemMaxAggregateInputType
+  }
+
+  export type GetFacilitiesChecklistItemAggregateType<T extends FacilitiesChecklistItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateFacilitiesChecklistItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFacilitiesChecklistItem[P]>
+      : GetScalarType<T[P], AggregateFacilitiesChecklistItem[P]>
+  }
+
+
+
+
+  export type FacilitiesChecklistItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FacilitiesChecklistItemWhereInput
+    orderBy?: FacilitiesChecklistItemOrderByWithAggregationInput | FacilitiesChecklistItemOrderByWithAggregationInput[]
+    by: FacilitiesChecklistItemScalarFieldEnum[] | FacilitiesChecklistItemScalarFieldEnum
+    having?: FacilitiesChecklistItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FacilitiesChecklistItemCountAggregateInputType | true
+    _avg?: FacilitiesChecklistItemAvgAggregateInputType
+    _sum?: FacilitiesChecklistItemSumAggregateInputType
+    _min?: FacilitiesChecklistItemMinAggregateInputType
+    _max?: FacilitiesChecklistItemMaxAggregateInputType
+  }
+
+  export type FacilitiesChecklistItemGroupByOutputType = {
+    id: string
+    facility: string
+    groupName: string
+    name: string
+    description: string
+    sortOrder: number
+    retiredAt: Date | null
+    retiredById: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: FacilitiesChecklistItemCountAggregateOutputType | null
+    _avg: FacilitiesChecklistItemAvgAggregateOutputType | null
+    _sum: FacilitiesChecklistItemSumAggregateOutputType | null
+    _min: FacilitiesChecklistItemMinAggregateOutputType | null
+    _max: FacilitiesChecklistItemMaxAggregateOutputType | null
+  }
+
+  type GetFacilitiesChecklistItemGroupByPayload<T extends FacilitiesChecklistItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FacilitiesChecklistItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FacilitiesChecklistItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FacilitiesChecklistItemGroupByOutputType[P]>
+            : GetScalarType<T[P], FacilitiesChecklistItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FacilitiesChecklistItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    groupName?: boolean
+    name?: boolean
+    description?: boolean
+    sortOrder?: boolean
+    retiredAt?: boolean
+    retiredById?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    retiredBy?: boolean | FacilitiesChecklistItem$retiredByArgs<ExtArgs>
+    createdBy?: boolean | FacilitiesChecklistItem$createdByArgs<ExtArgs>
+    updatedBy?: boolean | FacilitiesChecklistItem$updatedByArgs<ExtArgs>
+  }, ExtArgs["result"]["facilitiesChecklistItem"]>
+
+  export type FacilitiesChecklistItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    groupName?: boolean
+    name?: boolean
+    description?: boolean
+    sortOrder?: boolean
+    retiredAt?: boolean
+    retiredById?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    retiredBy?: boolean | FacilitiesChecklistItem$retiredByArgs<ExtArgs>
+    createdBy?: boolean | FacilitiesChecklistItem$createdByArgs<ExtArgs>
+    updatedBy?: boolean | FacilitiesChecklistItem$updatedByArgs<ExtArgs>
+  }, ExtArgs["result"]["facilitiesChecklistItem"]>
+
+  export type FacilitiesChecklistItemSelectScalar = {
+    id?: boolean
+    facility?: boolean
+    groupName?: boolean
+    name?: boolean
+    description?: boolean
+    sortOrder?: boolean
+    retiredAt?: boolean
+    retiredById?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FacilitiesChecklistItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    retiredBy?: boolean | FacilitiesChecklistItem$retiredByArgs<ExtArgs>
+    createdBy?: boolean | FacilitiesChecklistItem$createdByArgs<ExtArgs>
+    updatedBy?: boolean | FacilitiesChecklistItem$updatedByArgs<ExtArgs>
+  }
+  export type FacilitiesChecklistItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    retiredBy?: boolean | FacilitiesChecklistItem$retiredByArgs<ExtArgs>
+    createdBy?: boolean | FacilitiesChecklistItem$createdByArgs<ExtArgs>
+    updatedBy?: boolean | FacilitiesChecklistItem$updatedByArgs<ExtArgs>
+  }
+
+  export type $FacilitiesChecklistItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FacilitiesChecklistItem"
+    objects: {
+      retiredBy: Prisma.$UserPayload<ExtArgs> | null
+      createdBy: Prisma.$UserPayload<ExtArgs> | null
+      updatedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      facility: string
+      groupName: string
+      name: string
+      description: string
+      sortOrder: number
+      retiredAt: Date | null
+      retiredById: string | null
+      createdById: string | null
+      updatedById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["facilitiesChecklistItem"]>
+    composites: {}
+  }
+
+  type FacilitiesChecklistItemGetPayload<S extends boolean | null | undefined | FacilitiesChecklistItemDefaultArgs> = $Result.GetResult<Prisma.$FacilitiesChecklistItemPayload, S>
+
+  type FacilitiesChecklistItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<FacilitiesChecklistItemFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: FacilitiesChecklistItemCountAggregateInputType | true
+    }
+
+  export interface FacilitiesChecklistItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FacilitiesChecklistItem'], meta: { name: 'FacilitiesChecklistItem' } }
+    /**
+     * Find zero or one FacilitiesChecklistItem that matches the filter.
+     * @param {FacilitiesChecklistItemFindUniqueArgs} args - Arguments to find a FacilitiesChecklistItem
+     * @example
+     * // Get one FacilitiesChecklistItem
+     * const facilitiesChecklistItem = await prisma.facilitiesChecklistItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FacilitiesChecklistItemFindUniqueArgs>(args: SelectSubset<T, FacilitiesChecklistItemFindUniqueArgs<ExtArgs>>): Prisma__FacilitiesChecklistItemClient<$Result.GetResult<Prisma.$FacilitiesChecklistItemPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one FacilitiesChecklistItem that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {FacilitiesChecklistItemFindUniqueOrThrowArgs} args - Arguments to find a FacilitiesChecklistItem
+     * @example
+     * // Get one FacilitiesChecklistItem
+     * const facilitiesChecklistItem = await prisma.facilitiesChecklistItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FacilitiesChecklistItemFindUniqueOrThrowArgs>(args: SelectSubset<T, FacilitiesChecklistItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FacilitiesChecklistItemClient<$Result.GetResult<Prisma.$FacilitiesChecklistItemPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first FacilitiesChecklistItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistItemFindFirstArgs} args - Arguments to find a FacilitiesChecklistItem
+     * @example
+     * // Get one FacilitiesChecklistItem
+     * const facilitiesChecklistItem = await prisma.facilitiesChecklistItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FacilitiesChecklistItemFindFirstArgs>(args?: SelectSubset<T, FacilitiesChecklistItemFindFirstArgs<ExtArgs>>): Prisma__FacilitiesChecklistItemClient<$Result.GetResult<Prisma.$FacilitiesChecklistItemPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first FacilitiesChecklistItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistItemFindFirstOrThrowArgs} args - Arguments to find a FacilitiesChecklistItem
+     * @example
+     * // Get one FacilitiesChecklistItem
+     * const facilitiesChecklistItem = await prisma.facilitiesChecklistItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FacilitiesChecklistItemFindFirstOrThrowArgs>(args?: SelectSubset<T, FacilitiesChecklistItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__FacilitiesChecklistItemClient<$Result.GetResult<Prisma.$FacilitiesChecklistItemPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more FacilitiesChecklistItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FacilitiesChecklistItems
+     * const facilitiesChecklistItems = await prisma.facilitiesChecklistItem.findMany()
+     * 
+     * // Get first 10 FacilitiesChecklistItems
+     * const facilitiesChecklistItems = await prisma.facilitiesChecklistItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const facilitiesChecklistItemWithIdOnly = await prisma.facilitiesChecklistItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FacilitiesChecklistItemFindManyArgs>(args?: SelectSubset<T, FacilitiesChecklistItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilitiesChecklistItemPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a FacilitiesChecklistItem.
+     * @param {FacilitiesChecklistItemCreateArgs} args - Arguments to create a FacilitiesChecklistItem.
+     * @example
+     * // Create one FacilitiesChecklistItem
+     * const FacilitiesChecklistItem = await prisma.facilitiesChecklistItem.create({
+     *   data: {
+     *     // ... data to create a FacilitiesChecklistItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends FacilitiesChecklistItemCreateArgs>(args: SelectSubset<T, FacilitiesChecklistItemCreateArgs<ExtArgs>>): Prisma__FacilitiesChecklistItemClient<$Result.GetResult<Prisma.$FacilitiesChecklistItemPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many FacilitiesChecklistItems.
+     * @param {FacilitiesChecklistItemCreateManyArgs} args - Arguments to create many FacilitiesChecklistItems.
+     * @example
+     * // Create many FacilitiesChecklistItems
+     * const facilitiesChecklistItem = await prisma.facilitiesChecklistItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FacilitiesChecklistItemCreateManyArgs>(args?: SelectSubset<T, FacilitiesChecklistItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FacilitiesChecklistItems and returns the data saved in the database.
+     * @param {FacilitiesChecklistItemCreateManyAndReturnArgs} args - Arguments to create many FacilitiesChecklistItems.
+     * @example
+     * // Create many FacilitiesChecklistItems
+     * const facilitiesChecklistItem = await prisma.facilitiesChecklistItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FacilitiesChecklistItems and only return the `id`
+     * const facilitiesChecklistItemWithIdOnly = await prisma.facilitiesChecklistItem.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FacilitiesChecklistItemCreateManyAndReturnArgs>(args?: SelectSubset<T, FacilitiesChecklistItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilitiesChecklistItemPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a FacilitiesChecklistItem.
+     * @param {FacilitiesChecklistItemDeleteArgs} args - Arguments to delete one FacilitiesChecklistItem.
+     * @example
+     * // Delete one FacilitiesChecklistItem
+     * const FacilitiesChecklistItem = await prisma.facilitiesChecklistItem.delete({
+     *   where: {
+     *     // ... filter to delete one FacilitiesChecklistItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FacilitiesChecklistItemDeleteArgs>(args: SelectSubset<T, FacilitiesChecklistItemDeleteArgs<ExtArgs>>): Prisma__FacilitiesChecklistItemClient<$Result.GetResult<Prisma.$FacilitiesChecklistItemPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one FacilitiesChecklistItem.
+     * @param {FacilitiesChecklistItemUpdateArgs} args - Arguments to update one FacilitiesChecklistItem.
+     * @example
+     * // Update one FacilitiesChecklistItem
+     * const facilitiesChecklistItem = await prisma.facilitiesChecklistItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FacilitiesChecklistItemUpdateArgs>(args: SelectSubset<T, FacilitiesChecklistItemUpdateArgs<ExtArgs>>): Prisma__FacilitiesChecklistItemClient<$Result.GetResult<Prisma.$FacilitiesChecklistItemPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more FacilitiesChecklistItems.
+     * @param {FacilitiesChecklistItemDeleteManyArgs} args - Arguments to filter FacilitiesChecklistItems to delete.
+     * @example
+     * // Delete a few FacilitiesChecklistItems
+     * const { count } = await prisma.facilitiesChecklistItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FacilitiesChecklistItemDeleteManyArgs>(args?: SelectSubset<T, FacilitiesChecklistItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FacilitiesChecklistItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FacilitiesChecklistItems
+     * const facilitiesChecklistItem = await prisma.facilitiesChecklistItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FacilitiesChecklistItemUpdateManyArgs>(args: SelectSubset<T, FacilitiesChecklistItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one FacilitiesChecklistItem.
+     * @param {FacilitiesChecklistItemUpsertArgs} args - Arguments to update or create a FacilitiesChecklistItem.
+     * @example
+     * // Update or create a FacilitiesChecklistItem
+     * const facilitiesChecklistItem = await prisma.facilitiesChecklistItem.upsert({
+     *   create: {
+     *     // ... data to create a FacilitiesChecklistItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FacilitiesChecklistItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FacilitiesChecklistItemUpsertArgs>(args: SelectSubset<T, FacilitiesChecklistItemUpsertArgs<ExtArgs>>): Prisma__FacilitiesChecklistItemClient<$Result.GetResult<Prisma.$FacilitiesChecklistItemPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of FacilitiesChecklistItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistItemCountArgs} args - Arguments to filter FacilitiesChecklistItems to count.
+     * @example
+     * // Count the number of FacilitiesChecklistItems
+     * const count = await prisma.facilitiesChecklistItem.count({
+     *   where: {
+     *     // ... the filter for the FacilitiesChecklistItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends FacilitiesChecklistItemCountArgs>(
+      args?: Subset<T, FacilitiesChecklistItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FacilitiesChecklistItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FacilitiesChecklistItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FacilitiesChecklistItemAggregateArgs>(args: Subset<T, FacilitiesChecklistItemAggregateArgs>): Prisma.PrismaPromise<GetFacilitiesChecklistItemAggregateType<T>>
+
+    /**
+     * Group by FacilitiesChecklistItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FacilitiesChecklistItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FacilitiesChecklistItemGroupByArgs['orderBy'] }
+        : { orderBy?: FacilitiesChecklistItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FacilitiesChecklistItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFacilitiesChecklistItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FacilitiesChecklistItem model
+   */
+  readonly fields: FacilitiesChecklistItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FacilitiesChecklistItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FacilitiesChecklistItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    retiredBy<T extends FacilitiesChecklistItem$retiredByArgs<ExtArgs> = {}>(args?: Subset<T, FacilitiesChecklistItem$retiredByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    createdBy<T extends FacilitiesChecklistItem$createdByArgs<ExtArgs> = {}>(args?: Subset<T, FacilitiesChecklistItem$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    updatedBy<T extends FacilitiesChecklistItem$updatedByArgs<ExtArgs> = {}>(args?: Subset<T, FacilitiesChecklistItem$updatedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FacilitiesChecklistItem model
+   */ 
+  interface FacilitiesChecklistItemFieldRefs {
+    readonly id: FieldRef<"FacilitiesChecklistItem", 'String'>
+    readonly facility: FieldRef<"FacilitiesChecklistItem", 'String'>
+    readonly groupName: FieldRef<"FacilitiesChecklistItem", 'String'>
+    readonly name: FieldRef<"FacilitiesChecklistItem", 'String'>
+    readonly description: FieldRef<"FacilitiesChecklistItem", 'String'>
+    readonly sortOrder: FieldRef<"FacilitiesChecklistItem", 'Int'>
+    readonly retiredAt: FieldRef<"FacilitiesChecklistItem", 'DateTime'>
+    readonly retiredById: FieldRef<"FacilitiesChecklistItem", 'String'>
+    readonly createdById: FieldRef<"FacilitiesChecklistItem", 'String'>
+    readonly updatedById: FieldRef<"FacilitiesChecklistItem", 'String'>
+    readonly createdAt: FieldRef<"FacilitiesChecklistItem", 'DateTime'>
+    readonly updatedAt: FieldRef<"FacilitiesChecklistItem", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FacilitiesChecklistItem findUnique
+   */
+  export type FacilitiesChecklistItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistItem
+     */
+    select?: FacilitiesChecklistItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistItemInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilitiesChecklistItem to fetch.
+     */
+    where: FacilitiesChecklistItemWhereUniqueInput
+  }
+
+  /**
+   * FacilitiesChecklistItem findUniqueOrThrow
+   */
+  export type FacilitiesChecklistItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistItem
+     */
+    select?: FacilitiesChecklistItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistItemInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilitiesChecklistItem to fetch.
+     */
+    where: FacilitiesChecklistItemWhereUniqueInput
+  }
+
+  /**
+   * FacilitiesChecklistItem findFirst
+   */
+  export type FacilitiesChecklistItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistItem
+     */
+    select?: FacilitiesChecklistItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistItemInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilitiesChecklistItem to fetch.
+     */
+    where?: FacilitiesChecklistItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilitiesChecklistItems to fetch.
+     */
+    orderBy?: FacilitiesChecklistItemOrderByWithRelationInput | FacilitiesChecklistItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FacilitiesChecklistItems.
+     */
+    cursor?: FacilitiesChecklistItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilitiesChecklistItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilitiesChecklistItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FacilitiesChecklistItems.
+     */
+    distinct?: FacilitiesChecklistItemScalarFieldEnum | FacilitiesChecklistItemScalarFieldEnum[]
+  }
+
+  /**
+   * FacilitiesChecklistItem findFirstOrThrow
+   */
+  export type FacilitiesChecklistItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistItem
+     */
+    select?: FacilitiesChecklistItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistItemInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilitiesChecklistItem to fetch.
+     */
+    where?: FacilitiesChecklistItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilitiesChecklistItems to fetch.
+     */
+    orderBy?: FacilitiesChecklistItemOrderByWithRelationInput | FacilitiesChecklistItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FacilitiesChecklistItems.
+     */
+    cursor?: FacilitiesChecklistItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilitiesChecklistItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilitiesChecklistItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FacilitiesChecklistItems.
+     */
+    distinct?: FacilitiesChecklistItemScalarFieldEnum | FacilitiesChecklistItemScalarFieldEnum[]
+  }
+
+  /**
+   * FacilitiesChecklistItem findMany
+   */
+  export type FacilitiesChecklistItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistItem
+     */
+    select?: FacilitiesChecklistItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistItemInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilitiesChecklistItems to fetch.
+     */
+    where?: FacilitiesChecklistItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilitiesChecklistItems to fetch.
+     */
+    orderBy?: FacilitiesChecklistItemOrderByWithRelationInput | FacilitiesChecklistItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FacilitiesChecklistItems.
+     */
+    cursor?: FacilitiesChecklistItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilitiesChecklistItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilitiesChecklistItems.
+     */
+    skip?: number
+    distinct?: FacilitiesChecklistItemScalarFieldEnum | FacilitiesChecklistItemScalarFieldEnum[]
+  }
+
+  /**
+   * FacilitiesChecklistItem create
+   */
+  export type FacilitiesChecklistItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistItem
+     */
+    select?: FacilitiesChecklistItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FacilitiesChecklistItem.
+     */
+    data: XOR<FacilitiesChecklistItemCreateInput, FacilitiesChecklistItemUncheckedCreateInput>
+  }
+
+  /**
+   * FacilitiesChecklistItem createMany
+   */
+  export type FacilitiesChecklistItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FacilitiesChecklistItems.
+     */
+    data: FacilitiesChecklistItemCreateManyInput | FacilitiesChecklistItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FacilitiesChecklistItem createManyAndReturn
+   */
+  export type FacilitiesChecklistItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistItem
+     */
+    select?: FacilitiesChecklistItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many FacilitiesChecklistItems.
+     */
+    data: FacilitiesChecklistItemCreateManyInput | FacilitiesChecklistItemCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistItemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FacilitiesChecklistItem update
+   */
+  export type FacilitiesChecklistItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistItem
+     */
+    select?: FacilitiesChecklistItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FacilitiesChecklistItem.
+     */
+    data: XOR<FacilitiesChecklistItemUpdateInput, FacilitiesChecklistItemUncheckedUpdateInput>
+    /**
+     * Choose, which FacilitiesChecklistItem to update.
+     */
+    where: FacilitiesChecklistItemWhereUniqueInput
+  }
+
+  /**
+   * FacilitiesChecklistItem updateMany
+   */
+  export type FacilitiesChecklistItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FacilitiesChecklistItems.
+     */
+    data: XOR<FacilitiesChecklistItemUpdateManyMutationInput, FacilitiesChecklistItemUncheckedUpdateManyInput>
+    /**
+     * Filter which FacilitiesChecklistItems to update
+     */
+    where?: FacilitiesChecklistItemWhereInput
+  }
+
+  /**
+   * FacilitiesChecklistItem upsert
+   */
+  export type FacilitiesChecklistItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistItem
+     */
+    select?: FacilitiesChecklistItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FacilitiesChecklistItem to update in case it exists.
+     */
+    where: FacilitiesChecklistItemWhereUniqueInput
+    /**
+     * In case the FacilitiesChecklistItem found by the `where` argument doesn't exist, create a new FacilitiesChecklistItem with this data.
+     */
+    create: XOR<FacilitiesChecklistItemCreateInput, FacilitiesChecklistItemUncheckedCreateInput>
+    /**
+     * In case the FacilitiesChecklistItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FacilitiesChecklistItemUpdateInput, FacilitiesChecklistItemUncheckedUpdateInput>
+  }
+
+  /**
+   * FacilitiesChecklistItem delete
+   */
+  export type FacilitiesChecklistItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistItem
+     */
+    select?: FacilitiesChecklistItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistItemInclude<ExtArgs> | null
+    /**
+     * Filter which FacilitiesChecklistItem to delete.
+     */
+    where: FacilitiesChecklistItemWhereUniqueInput
+  }
+
+  /**
+   * FacilitiesChecklistItem deleteMany
+   */
+  export type FacilitiesChecklistItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FacilitiesChecklistItems to delete
+     */
+    where?: FacilitiesChecklistItemWhereInput
+  }
+
+  /**
+   * FacilitiesChecklistItem.retiredBy
+   */
+  export type FacilitiesChecklistItem$retiredByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * FacilitiesChecklistItem.createdBy
+   */
+  export type FacilitiesChecklistItem$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * FacilitiesChecklistItem.updatedBy
+   */
+  export type FacilitiesChecklistItem$updatedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * FacilitiesChecklistItem without action
+   */
+  export type FacilitiesChecklistItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistItem
+     */
+    select?: FacilitiesChecklistItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistItemInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FacilitiesChecklistList
+   */
+
+  export type AggregateFacilitiesChecklistList = {
+    _count: FacilitiesChecklistListCountAggregateOutputType | null
+    _avg: FacilitiesChecklistListAvgAggregateOutputType | null
+    _sum: FacilitiesChecklistListSumAggregateOutputType | null
+    _min: FacilitiesChecklistListMinAggregateOutputType | null
+    _max: FacilitiesChecklistListMaxAggregateOutputType | null
+  }
+
+  export type FacilitiesChecklistListAvgAggregateOutputType = {
+    version: number | null
+  }
+
+  export type FacilitiesChecklistListSumAggregateOutputType = {
+    version: number | null
+  }
+
+  export type FacilitiesChecklistListMinAggregateOutputType = {
+    facility: string | null
+    version: number | null
+    updatedById: string | null
+    updatedAt: Date | null
+  }
+
+  export type FacilitiesChecklistListMaxAggregateOutputType = {
+    facility: string | null
+    version: number | null
+    updatedById: string | null
+    updatedAt: Date | null
+  }
+
+  export type FacilitiesChecklistListCountAggregateOutputType = {
+    facility: number
+    version: number
+    updatedById: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FacilitiesChecklistListAvgAggregateInputType = {
+    version?: true
+  }
+
+  export type FacilitiesChecklistListSumAggregateInputType = {
+    version?: true
+  }
+
+  export type FacilitiesChecklistListMinAggregateInputType = {
+    facility?: true
+    version?: true
+    updatedById?: true
+    updatedAt?: true
+  }
+
+  export type FacilitiesChecklistListMaxAggregateInputType = {
+    facility?: true
+    version?: true
+    updatedById?: true
+    updatedAt?: true
+  }
+
+  export type FacilitiesChecklistListCountAggregateInputType = {
+    facility?: true
+    version?: true
+    updatedById?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FacilitiesChecklistListAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FacilitiesChecklistList to aggregate.
+     */
+    where?: FacilitiesChecklistListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilitiesChecklistLists to fetch.
+     */
+    orderBy?: FacilitiesChecklistListOrderByWithRelationInput | FacilitiesChecklistListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FacilitiesChecklistListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilitiesChecklistLists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilitiesChecklistLists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FacilitiesChecklistLists
+    **/
+    _count?: true | FacilitiesChecklistListCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FacilitiesChecklistListAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FacilitiesChecklistListSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FacilitiesChecklistListMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FacilitiesChecklistListMaxAggregateInputType
+  }
+
+  export type GetFacilitiesChecklistListAggregateType<T extends FacilitiesChecklistListAggregateArgs> = {
+        [P in keyof T & keyof AggregateFacilitiesChecklistList]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFacilitiesChecklistList[P]>
+      : GetScalarType<T[P], AggregateFacilitiesChecklistList[P]>
+  }
+
+
+
+
+  export type FacilitiesChecklistListGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FacilitiesChecklistListWhereInput
+    orderBy?: FacilitiesChecklistListOrderByWithAggregationInput | FacilitiesChecklistListOrderByWithAggregationInput[]
+    by: FacilitiesChecklistListScalarFieldEnum[] | FacilitiesChecklistListScalarFieldEnum
+    having?: FacilitiesChecklistListScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FacilitiesChecklistListCountAggregateInputType | true
+    _avg?: FacilitiesChecklistListAvgAggregateInputType
+    _sum?: FacilitiesChecklistListSumAggregateInputType
+    _min?: FacilitiesChecklistListMinAggregateInputType
+    _max?: FacilitiesChecklistListMaxAggregateInputType
+  }
+
+  export type FacilitiesChecklistListGroupByOutputType = {
+    facility: string
+    version: number
+    updatedById: string | null
+    updatedAt: Date
+    _count: FacilitiesChecklistListCountAggregateOutputType | null
+    _avg: FacilitiesChecklistListAvgAggregateOutputType | null
+    _sum: FacilitiesChecklistListSumAggregateOutputType | null
+    _min: FacilitiesChecklistListMinAggregateOutputType | null
+    _max: FacilitiesChecklistListMaxAggregateOutputType | null
+  }
+
+  type GetFacilitiesChecklistListGroupByPayload<T extends FacilitiesChecklistListGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FacilitiesChecklistListGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FacilitiesChecklistListGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FacilitiesChecklistListGroupByOutputType[P]>
+            : GetScalarType<T[P], FacilitiesChecklistListGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FacilitiesChecklistListSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    facility?: boolean
+    version?: boolean
+    updatedById?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean | FacilitiesChecklistList$updatedByArgs<ExtArgs>
+  }, ExtArgs["result"]["facilitiesChecklistList"]>
+
+  export type FacilitiesChecklistListSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    facility?: boolean
+    version?: boolean
+    updatedById?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean | FacilitiesChecklistList$updatedByArgs<ExtArgs>
+  }, ExtArgs["result"]["facilitiesChecklistList"]>
+
+  export type FacilitiesChecklistListSelectScalar = {
+    facility?: boolean
+    version?: boolean
+    updatedById?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FacilitiesChecklistListInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    updatedBy?: boolean | FacilitiesChecklistList$updatedByArgs<ExtArgs>
+  }
+  export type FacilitiesChecklistListIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    updatedBy?: boolean | FacilitiesChecklistList$updatedByArgs<ExtArgs>
+  }
+
+  export type $FacilitiesChecklistListPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FacilitiesChecklistList"
+    objects: {
+      updatedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      facility: string
+      version: number
+      updatedById: string | null
+      updatedAt: Date
+    }, ExtArgs["result"]["facilitiesChecklistList"]>
+    composites: {}
+  }
+
+  type FacilitiesChecklistListGetPayload<S extends boolean | null | undefined | FacilitiesChecklistListDefaultArgs> = $Result.GetResult<Prisma.$FacilitiesChecklistListPayload, S>
+
+  type FacilitiesChecklistListCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<FacilitiesChecklistListFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: FacilitiesChecklistListCountAggregateInputType | true
+    }
+
+  export interface FacilitiesChecklistListDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FacilitiesChecklistList'], meta: { name: 'FacilitiesChecklistList' } }
+    /**
+     * Find zero or one FacilitiesChecklistList that matches the filter.
+     * @param {FacilitiesChecklistListFindUniqueArgs} args - Arguments to find a FacilitiesChecklistList
+     * @example
+     * // Get one FacilitiesChecklistList
+     * const facilitiesChecklistList = await prisma.facilitiesChecklistList.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FacilitiesChecklistListFindUniqueArgs>(args: SelectSubset<T, FacilitiesChecklistListFindUniqueArgs<ExtArgs>>): Prisma__FacilitiesChecklistListClient<$Result.GetResult<Prisma.$FacilitiesChecklistListPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one FacilitiesChecklistList that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {FacilitiesChecklistListFindUniqueOrThrowArgs} args - Arguments to find a FacilitiesChecklistList
+     * @example
+     * // Get one FacilitiesChecklistList
+     * const facilitiesChecklistList = await prisma.facilitiesChecklistList.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FacilitiesChecklistListFindUniqueOrThrowArgs>(args: SelectSubset<T, FacilitiesChecklistListFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FacilitiesChecklistListClient<$Result.GetResult<Prisma.$FacilitiesChecklistListPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first FacilitiesChecklistList that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistListFindFirstArgs} args - Arguments to find a FacilitiesChecklistList
+     * @example
+     * // Get one FacilitiesChecklistList
+     * const facilitiesChecklistList = await prisma.facilitiesChecklistList.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FacilitiesChecklistListFindFirstArgs>(args?: SelectSubset<T, FacilitiesChecklistListFindFirstArgs<ExtArgs>>): Prisma__FacilitiesChecklistListClient<$Result.GetResult<Prisma.$FacilitiesChecklistListPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first FacilitiesChecklistList that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistListFindFirstOrThrowArgs} args - Arguments to find a FacilitiesChecklistList
+     * @example
+     * // Get one FacilitiesChecklistList
+     * const facilitiesChecklistList = await prisma.facilitiesChecklistList.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FacilitiesChecklistListFindFirstOrThrowArgs>(args?: SelectSubset<T, FacilitiesChecklistListFindFirstOrThrowArgs<ExtArgs>>): Prisma__FacilitiesChecklistListClient<$Result.GetResult<Prisma.$FacilitiesChecklistListPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more FacilitiesChecklistLists that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistListFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FacilitiesChecklistLists
+     * const facilitiesChecklistLists = await prisma.facilitiesChecklistList.findMany()
+     * 
+     * // Get first 10 FacilitiesChecklistLists
+     * const facilitiesChecklistLists = await prisma.facilitiesChecklistList.findMany({ take: 10 })
+     * 
+     * // Only select the `facility`
+     * const facilitiesChecklistListWithFacilityOnly = await prisma.facilitiesChecklistList.findMany({ select: { facility: true } })
+     * 
+     */
+    findMany<T extends FacilitiesChecklistListFindManyArgs>(args?: SelectSubset<T, FacilitiesChecklistListFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilitiesChecklistListPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a FacilitiesChecklistList.
+     * @param {FacilitiesChecklistListCreateArgs} args - Arguments to create a FacilitiesChecklistList.
+     * @example
+     * // Create one FacilitiesChecklistList
+     * const FacilitiesChecklistList = await prisma.facilitiesChecklistList.create({
+     *   data: {
+     *     // ... data to create a FacilitiesChecklistList
+     *   }
+     * })
+     * 
+     */
+    create<T extends FacilitiesChecklistListCreateArgs>(args: SelectSubset<T, FacilitiesChecklistListCreateArgs<ExtArgs>>): Prisma__FacilitiesChecklistListClient<$Result.GetResult<Prisma.$FacilitiesChecklistListPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many FacilitiesChecklistLists.
+     * @param {FacilitiesChecklistListCreateManyArgs} args - Arguments to create many FacilitiesChecklistLists.
+     * @example
+     * // Create many FacilitiesChecklistLists
+     * const facilitiesChecklistList = await prisma.facilitiesChecklistList.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FacilitiesChecklistListCreateManyArgs>(args?: SelectSubset<T, FacilitiesChecklistListCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FacilitiesChecklistLists and returns the data saved in the database.
+     * @param {FacilitiesChecklistListCreateManyAndReturnArgs} args - Arguments to create many FacilitiesChecklistLists.
+     * @example
+     * // Create many FacilitiesChecklistLists
+     * const facilitiesChecklistList = await prisma.facilitiesChecklistList.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FacilitiesChecklistLists and only return the `facility`
+     * const facilitiesChecklistListWithFacilityOnly = await prisma.facilitiesChecklistList.createManyAndReturn({ 
+     *   select: { facility: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FacilitiesChecklistListCreateManyAndReturnArgs>(args?: SelectSubset<T, FacilitiesChecklistListCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilitiesChecklistListPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a FacilitiesChecklistList.
+     * @param {FacilitiesChecklistListDeleteArgs} args - Arguments to delete one FacilitiesChecklistList.
+     * @example
+     * // Delete one FacilitiesChecklistList
+     * const FacilitiesChecklistList = await prisma.facilitiesChecklistList.delete({
+     *   where: {
+     *     // ... filter to delete one FacilitiesChecklistList
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FacilitiesChecklistListDeleteArgs>(args: SelectSubset<T, FacilitiesChecklistListDeleteArgs<ExtArgs>>): Prisma__FacilitiesChecklistListClient<$Result.GetResult<Prisma.$FacilitiesChecklistListPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one FacilitiesChecklistList.
+     * @param {FacilitiesChecklistListUpdateArgs} args - Arguments to update one FacilitiesChecklistList.
+     * @example
+     * // Update one FacilitiesChecklistList
+     * const facilitiesChecklistList = await prisma.facilitiesChecklistList.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FacilitiesChecklistListUpdateArgs>(args: SelectSubset<T, FacilitiesChecklistListUpdateArgs<ExtArgs>>): Prisma__FacilitiesChecklistListClient<$Result.GetResult<Prisma.$FacilitiesChecklistListPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more FacilitiesChecklistLists.
+     * @param {FacilitiesChecklistListDeleteManyArgs} args - Arguments to filter FacilitiesChecklistLists to delete.
+     * @example
+     * // Delete a few FacilitiesChecklistLists
+     * const { count } = await prisma.facilitiesChecklistList.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FacilitiesChecklistListDeleteManyArgs>(args?: SelectSubset<T, FacilitiesChecklistListDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FacilitiesChecklistLists.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistListUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FacilitiesChecklistLists
+     * const facilitiesChecklistList = await prisma.facilitiesChecklistList.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FacilitiesChecklistListUpdateManyArgs>(args: SelectSubset<T, FacilitiesChecklistListUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one FacilitiesChecklistList.
+     * @param {FacilitiesChecklistListUpsertArgs} args - Arguments to update or create a FacilitiesChecklistList.
+     * @example
+     * // Update or create a FacilitiesChecklistList
+     * const facilitiesChecklistList = await prisma.facilitiesChecklistList.upsert({
+     *   create: {
+     *     // ... data to create a FacilitiesChecklistList
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FacilitiesChecklistList we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FacilitiesChecklistListUpsertArgs>(args: SelectSubset<T, FacilitiesChecklistListUpsertArgs<ExtArgs>>): Prisma__FacilitiesChecklistListClient<$Result.GetResult<Prisma.$FacilitiesChecklistListPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of FacilitiesChecklistLists.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistListCountArgs} args - Arguments to filter FacilitiesChecklistLists to count.
+     * @example
+     * // Count the number of FacilitiesChecklistLists
+     * const count = await prisma.facilitiesChecklistList.count({
+     *   where: {
+     *     // ... the filter for the FacilitiesChecklistLists we want to count
+     *   }
+     * })
+    **/
+    count<T extends FacilitiesChecklistListCountArgs>(
+      args?: Subset<T, FacilitiesChecklistListCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FacilitiesChecklistListCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FacilitiesChecklistList.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistListAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FacilitiesChecklistListAggregateArgs>(args: Subset<T, FacilitiesChecklistListAggregateArgs>): Prisma.PrismaPromise<GetFacilitiesChecklistListAggregateType<T>>
+
+    /**
+     * Group by FacilitiesChecklistList.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistListGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FacilitiesChecklistListGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FacilitiesChecklistListGroupByArgs['orderBy'] }
+        : { orderBy?: FacilitiesChecklistListGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FacilitiesChecklistListGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFacilitiesChecklistListGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FacilitiesChecklistList model
+   */
+  readonly fields: FacilitiesChecklistListFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FacilitiesChecklistList.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FacilitiesChecklistListClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    updatedBy<T extends FacilitiesChecklistList$updatedByArgs<ExtArgs> = {}>(args?: Subset<T, FacilitiesChecklistList$updatedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FacilitiesChecklistList model
+   */ 
+  interface FacilitiesChecklistListFieldRefs {
+    readonly facility: FieldRef<"FacilitiesChecklistList", 'String'>
+    readonly version: FieldRef<"FacilitiesChecklistList", 'Int'>
+    readonly updatedById: FieldRef<"FacilitiesChecklistList", 'String'>
+    readonly updatedAt: FieldRef<"FacilitiesChecklistList", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FacilitiesChecklistList findUnique
+   */
+  export type FacilitiesChecklistListFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistList
+     */
+    select?: FacilitiesChecklistListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistListInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilitiesChecklistList to fetch.
+     */
+    where: FacilitiesChecklistListWhereUniqueInput
+  }
+
+  /**
+   * FacilitiesChecklistList findUniqueOrThrow
+   */
+  export type FacilitiesChecklistListFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistList
+     */
+    select?: FacilitiesChecklistListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistListInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilitiesChecklistList to fetch.
+     */
+    where: FacilitiesChecklistListWhereUniqueInput
+  }
+
+  /**
+   * FacilitiesChecklistList findFirst
+   */
+  export type FacilitiesChecklistListFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistList
+     */
+    select?: FacilitiesChecklistListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistListInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilitiesChecklistList to fetch.
+     */
+    where?: FacilitiesChecklistListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilitiesChecklistLists to fetch.
+     */
+    orderBy?: FacilitiesChecklistListOrderByWithRelationInput | FacilitiesChecklistListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FacilitiesChecklistLists.
+     */
+    cursor?: FacilitiesChecklistListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilitiesChecklistLists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilitiesChecklistLists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FacilitiesChecklistLists.
+     */
+    distinct?: FacilitiesChecklistListScalarFieldEnum | FacilitiesChecklistListScalarFieldEnum[]
+  }
+
+  /**
+   * FacilitiesChecklistList findFirstOrThrow
+   */
+  export type FacilitiesChecklistListFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistList
+     */
+    select?: FacilitiesChecklistListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistListInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilitiesChecklistList to fetch.
+     */
+    where?: FacilitiesChecklistListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilitiesChecklistLists to fetch.
+     */
+    orderBy?: FacilitiesChecklistListOrderByWithRelationInput | FacilitiesChecklistListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FacilitiesChecklistLists.
+     */
+    cursor?: FacilitiesChecklistListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilitiesChecklistLists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilitiesChecklistLists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FacilitiesChecklistLists.
+     */
+    distinct?: FacilitiesChecklistListScalarFieldEnum | FacilitiesChecklistListScalarFieldEnum[]
+  }
+
+  /**
+   * FacilitiesChecklistList findMany
+   */
+  export type FacilitiesChecklistListFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistList
+     */
+    select?: FacilitiesChecklistListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistListInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilitiesChecklistLists to fetch.
+     */
+    where?: FacilitiesChecklistListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilitiesChecklistLists to fetch.
+     */
+    orderBy?: FacilitiesChecklistListOrderByWithRelationInput | FacilitiesChecklistListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FacilitiesChecklistLists.
+     */
+    cursor?: FacilitiesChecklistListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilitiesChecklistLists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilitiesChecklistLists.
+     */
+    skip?: number
+    distinct?: FacilitiesChecklistListScalarFieldEnum | FacilitiesChecklistListScalarFieldEnum[]
+  }
+
+  /**
+   * FacilitiesChecklistList create
+   */
+  export type FacilitiesChecklistListCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistList
+     */
+    select?: FacilitiesChecklistListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistListInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FacilitiesChecklistList.
+     */
+    data: XOR<FacilitiesChecklistListCreateInput, FacilitiesChecklistListUncheckedCreateInput>
+  }
+
+  /**
+   * FacilitiesChecklistList createMany
+   */
+  export type FacilitiesChecklistListCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FacilitiesChecklistLists.
+     */
+    data: FacilitiesChecklistListCreateManyInput | FacilitiesChecklistListCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FacilitiesChecklistList createManyAndReturn
+   */
+  export type FacilitiesChecklistListCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistList
+     */
+    select?: FacilitiesChecklistListSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many FacilitiesChecklistLists.
+     */
+    data: FacilitiesChecklistListCreateManyInput | FacilitiesChecklistListCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistListIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FacilitiesChecklistList update
+   */
+  export type FacilitiesChecklistListUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistList
+     */
+    select?: FacilitiesChecklistListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistListInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FacilitiesChecklistList.
+     */
+    data: XOR<FacilitiesChecklistListUpdateInput, FacilitiesChecklistListUncheckedUpdateInput>
+    /**
+     * Choose, which FacilitiesChecklistList to update.
+     */
+    where: FacilitiesChecklistListWhereUniqueInput
+  }
+
+  /**
+   * FacilitiesChecklistList updateMany
+   */
+  export type FacilitiesChecklistListUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FacilitiesChecklistLists.
+     */
+    data: XOR<FacilitiesChecklistListUpdateManyMutationInput, FacilitiesChecklistListUncheckedUpdateManyInput>
+    /**
+     * Filter which FacilitiesChecklistLists to update
+     */
+    where?: FacilitiesChecklistListWhereInput
+  }
+
+  /**
+   * FacilitiesChecklistList upsert
+   */
+  export type FacilitiesChecklistListUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistList
+     */
+    select?: FacilitiesChecklistListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistListInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FacilitiesChecklistList to update in case it exists.
+     */
+    where: FacilitiesChecklistListWhereUniqueInput
+    /**
+     * In case the FacilitiesChecklistList found by the `where` argument doesn't exist, create a new FacilitiesChecklistList with this data.
+     */
+    create: XOR<FacilitiesChecklistListCreateInput, FacilitiesChecklistListUncheckedCreateInput>
+    /**
+     * In case the FacilitiesChecklistList was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FacilitiesChecklistListUpdateInput, FacilitiesChecklistListUncheckedUpdateInput>
+  }
+
+  /**
+   * FacilitiesChecklistList delete
+   */
+  export type FacilitiesChecklistListDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistList
+     */
+    select?: FacilitiesChecklistListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistListInclude<ExtArgs> | null
+    /**
+     * Filter which FacilitiesChecklistList to delete.
+     */
+    where: FacilitiesChecklistListWhereUniqueInput
+  }
+
+  /**
+   * FacilitiesChecklistList deleteMany
+   */
+  export type FacilitiesChecklistListDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FacilitiesChecklistLists to delete
+     */
+    where?: FacilitiesChecklistListWhereInput
+  }
+
+  /**
+   * FacilitiesChecklistList.updatedBy
+   */
+  export type FacilitiesChecklistList$updatedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * FacilitiesChecklistList without action
+   */
+  export type FacilitiesChecklistListDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistList
+     */
+    select?: FacilitiesChecklistListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistListInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FacilitiesChecklistRecord
+   */
+
+  export type AggregateFacilitiesChecklistRecord = {
+    _count: FacilitiesChecklistRecordCountAggregateOutputType | null
+    _avg: FacilitiesChecklistRecordAvgAggregateOutputType | null
+    _sum: FacilitiesChecklistRecordSumAggregateOutputType | null
+    _min: FacilitiesChecklistRecordMinAggregateOutputType | null
+    _max: FacilitiesChecklistRecordMaxAggregateOutputType | null
+  }
+
+  export type FacilitiesChecklistRecordAvgAggregateOutputType = {
+    listVersion: number | null
+    okCount: number | null
+    failCount: number | null
+  }
+
+  export type FacilitiesChecklistRecordSumAggregateOutputType = {
+    listVersion: number | null
+    okCount: number | null
+    failCount: number | null
+  }
+
+  export type FacilitiesChecklistRecordMinAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    period: string | null
+    periodStart: Date | null
+    periodEnd: Date | null
+    status: string | null
+    conductedBy: string | null
+    initials: string | null
+    listVersion: number | null
+    okCount: number | null
+    failCount: number | null
+    notes: string | null
+    lastEditedBy: string | null
+    lastEditedAt: Date | null
+    createdById: string | null
+    submittedAt: Date | null
+    submittedById: string | null
+    linkedInstanceId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FacilitiesChecklistRecordMaxAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    period: string | null
+    periodStart: Date | null
+    periodEnd: Date | null
+    status: string | null
+    conductedBy: string | null
+    initials: string | null
+    listVersion: number | null
+    okCount: number | null
+    failCount: number | null
+    notes: string | null
+    lastEditedBy: string | null
+    lastEditedAt: Date | null
+    createdById: string | null
+    submittedAt: Date | null
+    submittedById: string | null
+    linkedInstanceId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FacilitiesChecklistRecordCountAggregateOutputType = {
+    id: number
+    facility: number
+    period: number
+    periodStart: number
+    periodEnd: number
+    status: number
+    conductedBy: number
+    initials: number
+    items: number
+    listVersion: number
+    okCount: number
+    failCount: number
+    notes: number
+    lastEditedBy: number
+    lastEditedAt: number
+    createdById: number
+    submittedAt: number
+    submittedById: number
+    linkedInstanceId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FacilitiesChecklistRecordAvgAggregateInputType = {
+    listVersion?: true
+    okCount?: true
+    failCount?: true
+  }
+
+  export type FacilitiesChecklistRecordSumAggregateInputType = {
+    listVersion?: true
+    okCount?: true
+    failCount?: true
+  }
+
+  export type FacilitiesChecklistRecordMinAggregateInputType = {
+    id?: true
+    facility?: true
+    period?: true
+    periodStart?: true
+    periodEnd?: true
+    status?: true
+    conductedBy?: true
+    initials?: true
+    listVersion?: true
+    okCount?: true
+    failCount?: true
+    notes?: true
+    lastEditedBy?: true
+    lastEditedAt?: true
+    createdById?: true
+    submittedAt?: true
+    submittedById?: true
+    linkedInstanceId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FacilitiesChecklistRecordMaxAggregateInputType = {
+    id?: true
+    facility?: true
+    period?: true
+    periodStart?: true
+    periodEnd?: true
+    status?: true
+    conductedBy?: true
+    initials?: true
+    listVersion?: true
+    okCount?: true
+    failCount?: true
+    notes?: true
+    lastEditedBy?: true
+    lastEditedAt?: true
+    createdById?: true
+    submittedAt?: true
+    submittedById?: true
+    linkedInstanceId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FacilitiesChecklistRecordCountAggregateInputType = {
+    id?: true
+    facility?: true
+    period?: true
+    periodStart?: true
+    periodEnd?: true
+    status?: true
+    conductedBy?: true
+    initials?: true
+    items?: true
+    listVersion?: true
+    okCount?: true
+    failCount?: true
+    notes?: true
+    lastEditedBy?: true
+    lastEditedAt?: true
+    createdById?: true
+    submittedAt?: true
+    submittedById?: true
+    linkedInstanceId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FacilitiesChecklistRecordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FacilitiesChecklistRecord to aggregate.
+     */
+    where?: FacilitiesChecklistRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilitiesChecklistRecords to fetch.
+     */
+    orderBy?: FacilitiesChecklistRecordOrderByWithRelationInput | FacilitiesChecklistRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FacilitiesChecklistRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilitiesChecklistRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilitiesChecklistRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FacilitiesChecklistRecords
+    **/
+    _count?: true | FacilitiesChecklistRecordCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FacilitiesChecklistRecordAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FacilitiesChecklistRecordSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FacilitiesChecklistRecordMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FacilitiesChecklistRecordMaxAggregateInputType
+  }
+
+  export type GetFacilitiesChecklistRecordAggregateType<T extends FacilitiesChecklistRecordAggregateArgs> = {
+        [P in keyof T & keyof AggregateFacilitiesChecklistRecord]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFacilitiesChecklistRecord[P]>
+      : GetScalarType<T[P], AggregateFacilitiesChecklistRecord[P]>
+  }
+
+
+
+
+  export type FacilitiesChecklistRecordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FacilitiesChecklistRecordWhereInput
+    orderBy?: FacilitiesChecklistRecordOrderByWithAggregationInput | FacilitiesChecklistRecordOrderByWithAggregationInput[]
+    by: FacilitiesChecklistRecordScalarFieldEnum[] | FacilitiesChecklistRecordScalarFieldEnum
+    having?: FacilitiesChecklistRecordScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FacilitiesChecklistRecordCountAggregateInputType | true
+    _avg?: FacilitiesChecklistRecordAvgAggregateInputType
+    _sum?: FacilitiesChecklistRecordSumAggregateInputType
+    _min?: FacilitiesChecklistRecordMinAggregateInputType
+    _max?: FacilitiesChecklistRecordMaxAggregateInputType
+  }
+
+  export type FacilitiesChecklistRecordGroupByOutputType = {
+    id: string
+    facility: string
+    period: string
+    periodStart: Date
+    periodEnd: Date
+    status: string
+    conductedBy: string
+    initials: string
+    items: JsonValue
+    listVersion: number
+    okCount: number
+    failCount: number
+    notes: string | null
+    lastEditedBy: string | null
+    lastEditedAt: Date | null
+    createdById: string | null
+    submittedAt: Date | null
+    submittedById: string | null
+    linkedInstanceId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: FacilitiesChecklistRecordCountAggregateOutputType | null
+    _avg: FacilitiesChecklistRecordAvgAggregateOutputType | null
+    _sum: FacilitiesChecklistRecordSumAggregateOutputType | null
+    _min: FacilitiesChecklistRecordMinAggregateOutputType | null
+    _max: FacilitiesChecklistRecordMaxAggregateOutputType | null
+  }
+
+  type GetFacilitiesChecklistRecordGroupByPayload<T extends FacilitiesChecklistRecordGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FacilitiesChecklistRecordGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FacilitiesChecklistRecordGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FacilitiesChecklistRecordGroupByOutputType[P]>
+            : GetScalarType<T[P], FacilitiesChecklistRecordGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FacilitiesChecklistRecordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    period?: boolean
+    periodStart?: boolean
+    periodEnd?: boolean
+    status?: boolean
+    conductedBy?: boolean
+    initials?: boolean
+    items?: boolean
+    listVersion?: boolean
+    okCount?: boolean
+    failCount?: boolean
+    notes?: boolean
+    lastEditedBy?: boolean
+    lastEditedAt?: boolean
+    createdById?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    linkedInstanceId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | FacilitiesChecklistRecord$createdByArgs<ExtArgs>
+    submittedBy?: boolean | FacilitiesChecklistRecord$submittedByArgs<ExtArgs>
+  }, ExtArgs["result"]["facilitiesChecklistRecord"]>
+
+  export type FacilitiesChecklistRecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    period?: boolean
+    periodStart?: boolean
+    periodEnd?: boolean
+    status?: boolean
+    conductedBy?: boolean
+    initials?: boolean
+    items?: boolean
+    listVersion?: boolean
+    okCount?: boolean
+    failCount?: boolean
+    notes?: boolean
+    lastEditedBy?: boolean
+    lastEditedAt?: boolean
+    createdById?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    linkedInstanceId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | FacilitiesChecklistRecord$createdByArgs<ExtArgs>
+    submittedBy?: boolean | FacilitiesChecklistRecord$submittedByArgs<ExtArgs>
+  }, ExtArgs["result"]["facilitiesChecklistRecord"]>
+
+  export type FacilitiesChecklistRecordSelectScalar = {
+    id?: boolean
+    facility?: boolean
+    period?: boolean
+    periodStart?: boolean
+    periodEnd?: boolean
+    status?: boolean
+    conductedBy?: boolean
+    initials?: boolean
+    items?: boolean
+    listVersion?: boolean
+    okCount?: boolean
+    failCount?: boolean
+    notes?: boolean
+    lastEditedBy?: boolean
+    lastEditedAt?: boolean
+    createdById?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    linkedInstanceId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FacilitiesChecklistRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | FacilitiesChecklistRecord$createdByArgs<ExtArgs>
+    submittedBy?: boolean | FacilitiesChecklistRecord$submittedByArgs<ExtArgs>
+  }
+  export type FacilitiesChecklistRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | FacilitiesChecklistRecord$createdByArgs<ExtArgs>
+    submittedBy?: boolean | FacilitiesChecklistRecord$submittedByArgs<ExtArgs>
+  }
+
+  export type $FacilitiesChecklistRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FacilitiesChecklistRecord"
+    objects: {
+      createdBy: Prisma.$UserPayload<ExtArgs> | null
+      submittedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      facility: string
+      period: string
+      periodStart: Date
+      periodEnd: Date
+      status: string
+      conductedBy: string
+      initials: string
+      items: Prisma.JsonValue
+      listVersion: number
+      okCount: number
+      failCount: number
+      notes: string | null
+      lastEditedBy: string | null
+      lastEditedAt: Date | null
+      createdById: string | null
+      submittedAt: Date | null
+      submittedById: string | null
+      linkedInstanceId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["facilitiesChecklistRecord"]>
+    composites: {}
+  }
+
+  type FacilitiesChecklistRecordGetPayload<S extends boolean | null | undefined | FacilitiesChecklistRecordDefaultArgs> = $Result.GetResult<Prisma.$FacilitiesChecklistRecordPayload, S>
+
+  type FacilitiesChecklistRecordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<FacilitiesChecklistRecordFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: FacilitiesChecklistRecordCountAggregateInputType | true
+    }
+
+  export interface FacilitiesChecklistRecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FacilitiesChecklistRecord'], meta: { name: 'FacilitiesChecklistRecord' } }
+    /**
+     * Find zero or one FacilitiesChecklistRecord that matches the filter.
+     * @param {FacilitiesChecklistRecordFindUniqueArgs} args - Arguments to find a FacilitiesChecklistRecord
+     * @example
+     * // Get one FacilitiesChecklistRecord
+     * const facilitiesChecklistRecord = await prisma.facilitiesChecklistRecord.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FacilitiesChecklistRecordFindUniqueArgs>(args: SelectSubset<T, FacilitiesChecklistRecordFindUniqueArgs<ExtArgs>>): Prisma__FacilitiesChecklistRecordClient<$Result.GetResult<Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one FacilitiesChecklistRecord that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {FacilitiesChecklistRecordFindUniqueOrThrowArgs} args - Arguments to find a FacilitiesChecklistRecord
+     * @example
+     * // Get one FacilitiesChecklistRecord
+     * const facilitiesChecklistRecord = await prisma.facilitiesChecklistRecord.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FacilitiesChecklistRecordFindUniqueOrThrowArgs>(args: SelectSubset<T, FacilitiesChecklistRecordFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FacilitiesChecklistRecordClient<$Result.GetResult<Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first FacilitiesChecklistRecord that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistRecordFindFirstArgs} args - Arguments to find a FacilitiesChecklistRecord
+     * @example
+     * // Get one FacilitiesChecklistRecord
+     * const facilitiesChecklistRecord = await prisma.facilitiesChecklistRecord.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FacilitiesChecklistRecordFindFirstArgs>(args?: SelectSubset<T, FacilitiesChecklistRecordFindFirstArgs<ExtArgs>>): Prisma__FacilitiesChecklistRecordClient<$Result.GetResult<Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first FacilitiesChecklistRecord that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistRecordFindFirstOrThrowArgs} args - Arguments to find a FacilitiesChecklistRecord
+     * @example
+     * // Get one FacilitiesChecklistRecord
+     * const facilitiesChecklistRecord = await prisma.facilitiesChecklistRecord.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FacilitiesChecklistRecordFindFirstOrThrowArgs>(args?: SelectSubset<T, FacilitiesChecklistRecordFindFirstOrThrowArgs<ExtArgs>>): Prisma__FacilitiesChecklistRecordClient<$Result.GetResult<Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more FacilitiesChecklistRecords that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistRecordFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FacilitiesChecklistRecords
+     * const facilitiesChecklistRecords = await prisma.facilitiesChecklistRecord.findMany()
+     * 
+     * // Get first 10 FacilitiesChecklistRecords
+     * const facilitiesChecklistRecords = await prisma.facilitiesChecklistRecord.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const facilitiesChecklistRecordWithIdOnly = await prisma.facilitiesChecklistRecord.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FacilitiesChecklistRecordFindManyArgs>(args?: SelectSubset<T, FacilitiesChecklistRecordFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a FacilitiesChecklistRecord.
+     * @param {FacilitiesChecklistRecordCreateArgs} args - Arguments to create a FacilitiesChecklistRecord.
+     * @example
+     * // Create one FacilitiesChecklistRecord
+     * const FacilitiesChecklistRecord = await prisma.facilitiesChecklistRecord.create({
+     *   data: {
+     *     // ... data to create a FacilitiesChecklistRecord
+     *   }
+     * })
+     * 
+     */
+    create<T extends FacilitiesChecklistRecordCreateArgs>(args: SelectSubset<T, FacilitiesChecklistRecordCreateArgs<ExtArgs>>): Prisma__FacilitiesChecklistRecordClient<$Result.GetResult<Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many FacilitiesChecklistRecords.
+     * @param {FacilitiesChecklistRecordCreateManyArgs} args - Arguments to create many FacilitiesChecklistRecords.
+     * @example
+     * // Create many FacilitiesChecklistRecords
+     * const facilitiesChecklistRecord = await prisma.facilitiesChecklistRecord.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FacilitiesChecklistRecordCreateManyArgs>(args?: SelectSubset<T, FacilitiesChecklistRecordCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FacilitiesChecklistRecords and returns the data saved in the database.
+     * @param {FacilitiesChecklistRecordCreateManyAndReturnArgs} args - Arguments to create many FacilitiesChecklistRecords.
+     * @example
+     * // Create many FacilitiesChecklistRecords
+     * const facilitiesChecklistRecord = await prisma.facilitiesChecklistRecord.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FacilitiesChecklistRecords and only return the `id`
+     * const facilitiesChecklistRecordWithIdOnly = await prisma.facilitiesChecklistRecord.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FacilitiesChecklistRecordCreateManyAndReturnArgs>(args?: SelectSubset<T, FacilitiesChecklistRecordCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a FacilitiesChecklistRecord.
+     * @param {FacilitiesChecklistRecordDeleteArgs} args - Arguments to delete one FacilitiesChecklistRecord.
+     * @example
+     * // Delete one FacilitiesChecklistRecord
+     * const FacilitiesChecklistRecord = await prisma.facilitiesChecklistRecord.delete({
+     *   where: {
+     *     // ... filter to delete one FacilitiesChecklistRecord
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FacilitiesChecklistRecordDeleteArgs>(args: SelectSubset<T, FacilitiesChecklistRecordDeleteArgs<ExtArgs>>): Prisma__FacilitiesChecklistRecordClient<$Result.GetResult<Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one FacilitiesChecklistRecord.
+     * @param {FacilitiesChecklistRecordUpdateArgs} args - Arguments to update one FacilitiesChecklistRecord.
+     * @example
+     * // Update one FacilitiesChecklistRecord
+     * const facilitiesChecklistRecord = await prisma.facilitiesChecklistRecord.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FacilitiesChecklistRecordUpdateArgs>(args: SelectSubset<T, FacilitiesChecklistRecordUpdateArgs<ExtArgs>>): Prisma__FacilitiesChecklistRecordClient<$Result.GetResult<Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more FacilitiesChecklistRecords.
+     * @param {FacilitiesChecklistRecordDeleteManyArgs} args - Arguments to filter FacilitiesChecklistRecords to delete.
+     * @example
+     * // Delete a few FacilitiesChecklistRecords
+     * const { count } = await prisma.facilitiesChecklistRecord.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FacilitiesChecklistRecordDeleteManyArgs>(args?: SelectSubset<T, FacilitiesChecklistRecordDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FacilitiesChecklistRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistRecordUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FacilitiesChecklistRecords
+     * const facilitiesChecklistRecord = await prisma.facilitiesChecklistRecord.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FacilitiesChecklistRecordUpdateManyArgs>(args: SelectSubset<T, FacilitiesChecklistRecordUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one FacilitiesChecklistRecord.
+     * @param {FacilitiesChecklistRecordUpsertArgs} args - Arguments to update or create a FacilitiesChecklistRecord.
+     * @example
+     * // Update or create a FacilitiesChecklistRecord
+     * const facilitiesChecklistRecord = await prisma.facilitiesChecklistRecord.upsert({
+     *   create: {
+     *     // ... data to create a FacilitiesChecklistRecord
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FacilitiesChecklistRecord we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FacilitiesChecklistRecordUpsertArgs>(args: SelectSubset<T, FacilitiesChecklistRecordUpsertArgs<ExtArgs>>): Prisma__FacilitiesChecklistRecordClient<$Result.GetResult<Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of FacilitiesChecklistRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistRecordCountArgs} args - Arguments to filter FacilitiesChecklistRecords to count.
+     * @example
+     * // Count the number of FacilitiesChecklistRecords
+     * const count = await prisma.facilitiesChecklistRecord.count({
+     *   where: {
+     *     // ... the filter for the FacilitiesChecklistRecords we want to count
+     *   }
+     * })
+    **/
+    count<T extends FacilitiesChecklistRecordCountArgs>(
+      args?: Subset<T, FacilitiesChecklistRecordCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FacilitiesChecklistRecordCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FacilitiesChecklistRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistRecordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FacilitiesChecklistRecordAggregateArgs>(args: Subset<T, FacilitiesChecklistRecordAggregateArgs>): Prisma.PrismaPromise<GetFacilitiesChecklistRecordAggregateType<T>>
+
+    /**
+     * Group by FacilitiesChecklistRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FacilitiesChecklistRecordGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FacilitiesChecklistRecordGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FacilitiesChecklistRecordGroupByArgs['orderBy'] }
+        : { orderBy?: FacilitiesChecklistRecordGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FacilitiesChecklistRecordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFacilitiesChecklistRecordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FacilitiesChecklistRecord model
+   */
+  readonly fields: FacilitiesChecklistRecordFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FacilitiesChecklistRecord.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FacilitiesChecklistRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    createdBy<T extends FacilitiesChecklistRecord$createdByArgs<ExtArgs> = {}>(args?: Subset<T, FacilitiesChecklistRecord$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    submittedBy<T extends FacilitiesChecklistRecord$submittedByArgs<ExtArgs> = {}>(args?: Subset<T, FacilitiesChecklistRecord$submittedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FacilitiesChecklistRecord model
+   */ 
+  interface FacilitiesChecklistRecordFieldRefs {
+    readonly id: FieldRef<"FacilitiesChecklistRecord", 'String'>
+    readonly facility: FieldRef<"FacilitiesChecklistRecord", 'String'>
+    readonly period: FieldRef<"FacilitiesChecklistRecord", 'String'>
+    readonly periodStart: FieldRef<"FacilitiesChecklistRecord", 'DateTime'>
+    readonly periodEnd: FieldRef<"FacilitiesChecklistRecord", 'DateTime'>
+    readonly status: FieldRef<"FacilitiesChecklistRecord", 'String'>
+    readonly conductedBy: FieldRef<"FacilitiesChecklistRecord", 'String'>
+    readonly initials: FieldRef<"FacilitiesChecklistRecord", 'String'>
+    readonly items: FieldRef<"FacilitiesChecklistRecord", 'Json'>
+    readonly listVersion: FieldRef<"FacilitiesChecklistRecord", 'Int'>
+    readonly okCount: FieldRef<"FacilitiesChecklistRecord", 'Int'>
+    readonly failCount: FieldRef<"FacilitiesChecklistRecord", 'Int'>
+    readonly notes: FieldRef<"FacilitiesChecklistRecord", 'String'>
+    readonly lastEditedBy: FieldRef<"FacilitiesChecklistRecord", 'String'>
+    readonly lastEditedAt: FieldRef<"FacilitiesChecklistRecord", 'DateTime'>
+    readonly createdById: FieldRef<"FacilitiesChecklistRecord", 'String'>
+    readonly submittedAt: FieldRef<"FacilitiesChecklistRecord", 'DateTime'>
+    readonly submittedById: FieldRef<"FacilitiesChecklistRecord", 'String'>
+    readonly linkedInstanceId: FieldRef<"FacilitiesChecklistRecord", 'String'>
+    readonly createdAt: FieldRef<"FacilitiesChecklistRecord", 'DateTime'>
+    readonly updatedAt: FieldRef<"FacilitiesChecklistRecord", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FacilitiesChecklistRecord findUnique
+   */
+  export type FacilitiesChecklistRecordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistRecord
+     */
+    select?: FacilitiesChecklistRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilitiesChecklistRecord to fetch.
+     */
+    where: FacilitiesChecklistRecordWhereUniqueInput
+  }
+
+  /**
+   * FacilitiesChecklistRecord findUniqueOrThrow
+   */
+  export type FacilitiesChecklistRecordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistRecord
+     */
+    select?: FacilitiesChecklistRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilitiesChecklistRecord to fetch.
+     */
+    where: FacilitiesChecklistRecordWhereUniqueInput
+  }
+
+  /**
+   * FacilitiesChecklistRecord findFirst
+   */
+  export type FacilitiesChecklistRecordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistRecord
+     */
+    select?: FacilitiesChecklistRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilitiesChecklistRecord to fetch.
+     */
+    where?: FacilitiesChecklistRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilitiesChecklistRecords to fetch.
+     */
+    orderBy?: FacilitiesChecklistRecordOrderByWithRelationInput | FacilitiesChecklistRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FacilitiesChecklistRecords.
+     */
+    cursor?: FacilitiesChecklistRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilitiesChecklistRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilitiesChecklistRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FacilitiesChecklistRecords.
+     */
+    distinct?: FacilitiesChecklistRecordScalarFieldEnum | FacilitiesChecklistRecordScalarFieldEnum[]
+  }
+
+  /**
+   * FacilitiesChecklistRecord findFirstOrThrow
+   */
+  export type FacilitiesChecklistRecordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistRecord
+     */
+    select?: FacilitiesChecklistRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilitiesChecklistRecord to fetch.
+     */
+    where?: FacilitiesChecklistRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilitiesChecklistRecords to fetch.
+     */
+    orderBy?: FacilitiesChecklistRecordOrderByWithRelationInput | FacilitiesChecklistRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FacilitiesChecklistRecords.
+     */
+    cursor?: FacilitiesChecklistRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilitiesChecklistRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilitiesChecklistRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FacilitiesChecklistRecords.
+     */
+    distinct?: FacilitiesChecklistRecordScalarFieldEnum | FacilitiesChecklistRecordScalarFieldEnum[]
+  }
+
+  /**
+   * FacilitiesChecklistRecord findMany
+   */
+  export type FacilitiesChecklistRecordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistRecord
+     */
+    select?: FacilitiesChecklistRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which FacilitiesChecklistRecords to fetch.
+     */
+    where?: FacilitiesChecklistRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FacilitiesChecklistRecords to fetch.
+     */
+    orderBy?: FacilitiesChecklistRecordOrderByWithRelationInput | FacilitiesChecklistRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FacilitiesChecklistRecords.
+     */
+    cursor?: FacilitiesChecklistRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FacilitiesChecklistRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FacilitiesChecklistRecords.
+     */
+    skip?: number
+    distinct?: FacilitiesChecklistRecordScalarFieldEnum | FacilitiesChecklistRecordScalarFieldEnum[]
+  }
+
+  /**
+   * FacilitiesChecklistRecord create
+   */
+  export type FacilitiesChecklistRecordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistRecord
+     */
+    select?: FacilitiesChecklistRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FacilitiesChecklistRecord.
+     */
+    data: XOR<FacilitiesChecklistRecordCreateInput, FacilitiesChecklistRecordUncheckedCreateInput>
+  }
+
+  /**
+   * FacilitiesChecklistRecord createMany
+   */
+  export type FacilitiesChecklistRecordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FacilitiesChecklistRecords.
+     */
+    data: FacilitiesChecklistRecordCreateManyInput | FacilitiesChecklistRecordCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FacilitiesChecklistRecord createManyAndReturn
+   */
+  export type FacilitiesChecklistRecordCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistRecord
+     */
+    select?: FacilitiesChecklistRecordSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many FacilitiesChecklistRecords.
+     */
+    data: FacilitiesChecklistRecordCreateManyInput | FacilitiesChecklistRecordCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistRecordIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FacilitiesChecklistRecord update
+   */
+  export type FacilitiesChecklistRecordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistRecord
+     */
+    select?: FacilitiesChecklistRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FacilitiesChecklistRecord.
+     */
+    data: XOR<FacilitiesChecklistRecordUpdateInput, FacilitiesChecklistRecordUncheckedUpdateInput>
+    /**
+     * Choose, which FacilitiesChecklistRecord to update.
+     */
+    where: FacilitiesChecklistRecordWhereUniqueInput
+  }
+
+  /**
+   * FacilitiesChecklistRecord updateMany
+   */
+  export type FacilitiesChecklistRecordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FacilitiesChecklistRecords.
+     */
+    data: XOR<FacilitiesChecklistRecordUpdateManyMutationInput, FacilitiesChecklistRecordUncheckedUpdateManyInput>
+    /**
+     * Filter which FacilitiesChecklistRecords to update
+     */
+    where?: FacilitiesChecklistRecordWhereInput
+  }
+
+  /**
+   * FacilitiesChecklistRecord upsert
+   */
+  export type FacilitiesChecklistRecordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistRecord
+     */
+    select?: FacilitiesChecklistRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistRecordInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FacilitiesChecklistRecord to update in case it exists.
+     */
+    where: FacilitiesChecklistRecordWhereUniqueInput
+    /**
+     * In case the FacilitiesChecklistRecord found by the `where` argument doesn't exist, create a new FacilitiesChecklistRecord with this data.
+     */
+    create: XOR<FacilitiesChecklistRecordCreateInput, FacilitiesChecklistRecordUncheckedCreateInput>
+    /**
+     * In case the FacilitiesChecklistRecord was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FacilitiesChecklistRecordUpdateInput, FacilitiesChecklistRecordUncheckedUpdateInput>
+  }
+
+  /**
+   * FacilitiesChecklistRecord delete
+   */
+  export type FacilitiesChecklistRecordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistRecord
+     */
+    select?: FacilitiesChecklistRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistRecordInclude<ExtArgs> | null
+    /**
+     * Filter which FacilitiesChecklistRecord to delete.
+     */
+    where: FacilitiesChecklistRecordWhereUniqueInput
+  }
+
+  /**
+   * FacilitiesChecklistRecord deleteMany
+   */
+  export type FacilitiesChecklistRecordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FacilitiesChecklistRecords to delete
+     */
+    where?: FacilitiesChecklistRecordWhereInput
+  }
+
+  /**
+   * FacilitiesChecklistRecord.createdBy
+   */
+  export type FacilitiesChecklistRecord$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * FacilitiesChecklistRecord.submittedBy
+   */
+  export type FacilitiesChecklistRecord$submittedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * FacilitiesChecklistRecord without action
+   */
+  export type FacilitiesChecklistRecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FacilitiesChecklistRecord
+     */
+    select?: FacilitiesChecklistRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FacilitiesChecklistRecordInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Notification
    */
 
@@ -77803,6 +81536,61 @@ export namespace Prisma {
   export type Verification624RecordScalarFieldEnum = (typeof Verification624RecordScalarFieldEnum)[keyof typeof Verification624RecordScalarFieldEnum]
 
 
+  export const FacilitiesChecklistItemScalarFieldEnum: {
+    id: 'id',
+    facility: 'facility',
+    groupName: 'groupName',
+    name: 'name',
+    description: 'description',
+    sortOrder: 'sortOrder',
+    retiredAt: 'retiredAt',
+    retiredById: 'retiredById',
+    createdById: 'createdById',
+    updatedById: 'updatedById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FacilitiesChecklistItemScalarFieldEnum = (typeof FacilitiesChecklistItemScalarFieldEnum)[keyof typeof FacilitiesChecklistItemScalarFieldEnum]
+
+
+  export const FacilitiesChecklistListScalarFieldEnum: {
+    facility: 'facility',
+    version: 'version',
+    updatedById: 'updatedById',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FacilitiesChecklistListScalarFieldEnum = (typeof FacilitiesChecklistListScalarFieldEnum)[keyof typeof FacilitiesChecklistListScalarFieldEnum]
+
+
+  export const FacilitiesChecklistRecordScalarFieldEnum: {
+    id: 'id',
+    facility: 'facility',
+    period: 'period',
+    periodStart: 'periodStart',
+    periodEnd: 'periodEnd',
+    status: 'status',
+    conductedBy: 'conductedBy',
+    initials: 'initials',
+    items: 'items',
+    listVersion: 'listVersion',
+    okCount: 'okCount',
+    failCount: 'failCount',
+    notes: 'notes',
+    lastEditedBy: 'lastEditedBy',
+    lastEditedAt: 'lastEditedAt',
+    createdById: 'createdById',
+    submittedAt: 'submittedAt',
+    submittedById: 'submittedById',
+    linkedInstanceId: 'linkedInstanceId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FacilitiesChecklistRecordScalarFieldEnum = (typeof FacilitiesChecklistRecordScalarFieldEnum)[keyof typeof FacilitiesChecklistRecordScalarFieldEnum]
+
+
   export const NotificationScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -78197,6 +81985,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListListRelationFilter
     verification624RecordsCreated?: Verification624RecordListRelationFilter
     verification624RecordsSubmitted?: Verification624RecordListRelationFilter
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemListRelationFilter
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemListRelationFilter
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemListRelationFilter
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListListRelationFilter
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordListRelationFilter
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -78253,6 +82047,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListOrderByRelationAggregateInput
     verification624RecordsCreated?: Verification624RecordOrderByRelationAggregateInput
     verification624RecordsSubmitted?: Verification624RecordOrderByRelationAggregateInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemOrderByRelationAggregateInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemOrderByRelationAggregateInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemOrderByRelationAggregateInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListOrderByRelationAggregateInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordOrderByRelationAggregateInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -78312,6 +82112,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListListRelationFilter
     verification624RecordsCreated?: Verification624RecordListRelationFilter
     verification624RecordsSubmitted?: Verification624RecordListRelationFilter
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemListRelationFilter
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemListRelationFilter
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemListRelationFilter
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListListRelationFilter
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordListRelationFilter
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -84500,6 +88306,297 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Verification624Record"> | Date | string
   }
 
+  export type FacilitiesChecklistItemWhereInput = {
+    AND?: FacilitiesChecklistItemWhereInput | FacilitiesChecklistItemWhereInput[]
+    OR?: FacilitiesChecklistItemWhereInput[]
+    NOT?: FacilitiesChecklistItemWhereInput | FacilitiesChecklistItemWhereInput[]
+    id?: StringFilter<"FacilitiesChecklistItem"> | string
+    facility?: StringFilter<"FacilitiesChecklistItem"> | string
+    groupName?: StringFilter<"FacilitiesChecklistItem"> | string
+    name?: StringFilter<"FacilitiesChecklistItem"> | string
+    description?: StringFilter<"FacilitiesChecklistItem"> | string
+    sortOrder?: IntFilter<"FacilitiesChecklistItem"> | number
+    retiredAt?: DateTimeNullableFilter<"FacilitiesChecklistItem"> | Date | string | null
+    retiredById?: StringNullableFilter<"FacilitiesChecklistItem"> | string | null
+    createdById?: StringNullableFilter<"FacilitiesChecklistItem"> | string | null
+    updatedById?: StringNullableFilter<"FacilitiesChecklistItem"> | string | null
+    createdAt?: DateTimeFilter<"FacilitiesChecklistItem"> | Date | string
+    updatedAt?: DateTimeFilter<"FacilitiesChecklistItem"> | Date | string
+    retiredBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    createdBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    updatedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }
+
+  export type FacilitiesChecklistItemOrderByWithRelationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    groupName?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrderInput | SortOrder
+    retiredById?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    retiredBy?: UserOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+    updatedBy?: UserOrderByWithRelationInput
+  }
+
+  export type FacilitiesChecklistItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FacilitiesChecklistItemWhereInput | FacilitiesChecklistItemWhereInput[]
+    OR?: FacilitiesChecklistItemWhereInput[]
+    NOT?: FacilitiesChecklistItemWhereInput | FacilitiesChecklistItemWhereInput[]
+    facility?: StringFilter<"FacilitiesChecklistItem"> | string
+    groupName?: StringFilter<"FacilitiesChecklistItem"> | string
+    name?: StringFilter<"FacilitiesChecklistItem"> | string
+    description?: StringFilter<"FacilitiesChecklistItem"> | string
+    sortOrder?: IntFilter<"FacilitiesChecklistItem"> | number
+    retiredAt?: DateTimeNullableFilter<"FacilitiesChecklistItem"> | Date | string | null
+    retiredById?: StringNullableFilter<"FacilitiesChecklistItem"> | string | null
+    createdById?: StringNullableFilter<"FacilitiesChecklistItem"> | string | null
+    updatedById?: StringNullableFilter<"FacilitiesChecklistItem"> | string | null
+    createdAt?: DateTimeFilter<"FacilitiesChecklistItem"> | Date | string
+    updatedAt?: DateTimeFilter<"FacilitiesChecklistItem"> | Date | string
+    retiredBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    createdBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    updatedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type FacilitiesChecklistItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    groupName?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrderInput | SortOrder
+    retiredById?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FacilitiesChecklistItemCountOrderByAggregateInput
+    _avg?: FacilitiesChecklistItemAvgOrderByAggregateInput
+    _max?: FacilitiesChecklistItemMaxOrderByAggregateInput
+    _min?: FacilitiesChecklistItemMinOrderByAggregateInput
+    _sum?: FacilitiesChecklistItemSumOrderByAggregateInput
+  }
+
+  export type FacilitiesChecklistItemScalarWhereWithAggregatesInput = {
+    AND?: FacilitiesChecklistItemScalarWhereWithAggregatesInput | FacilitiesChecklistItemScalarWhereWithAggregatesInput[]
+    OR?: FacilitiesChecklistItemScalarWhereWithAggregatesInput[]
+    NOT?: FacilitiesChecklistItemScalarWhereWithAggregatesInput | FacilitiesChecklistItemScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FacilitiesChecklistItem"> | string
+    facility?: StringWithAggregatesFilter<"FacilitiesChecklistItem"> | string
+    groupName?: StringWithAggregatesFilter<"FacilitiesChecklistItem"> | string
+    name?: StringWithAggregatesFilter<"FacilitiesChecklistItem"> | string
+    description?: StringWithAggregatesFilter<"FacilitiesChecklistItem"> | string
+    sortOrder?: IntWithAggregatesFilter<"FacilitiesChecklistItem"> | number
+    retiredAt?: DateTimeNullableWithAggregatesFilter<"FacilitiesChecklistItem"> | Date | string | null
+    retiredById?: StringNullableWithAggregatesFilter<"FacilitiesChecklistItem"> | string | null
+    createdById?: StringNullableWithAggregatesFilter<"FacilitiesChecklistItem"> | string | null
+    updatedById?: StringNullableWithAggregatesFilter<"FacilitiesChecklistItem"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"FacilitiesChecklistItem"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FacilitiesChecklistItem"> | Date | string
+  }
+
+  export type FacilitiesChecklistListWhereInput = {
+    AND?: FacilitiesChecklistListWhereInput | FacilitiesChecklistListWhereInput[]
+    OR?: FacilitiesChecklistListWhereInput[]
+    NOT?: FacilitiesChecklistListWhereInput | FacilitiesChecklistListWhereInput[]
+    facility?: StringFilter<"FacilitiesChecklistList"> | string
+    version?: IntFilter<"FacilitiesChecklistList"> | number
+    updatedById?: StringNullableFilter<"FacilitiesChecklistList"> | string | null
+    updatedAt?: DateTimeFilter<"FacilitiesChecklistList"> | Date | string
+    updatedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }
+
+  export type FacilitiesChecklistListOrderByWithRelationInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: UserOrderByWithRelationInput
+  }
+
+  export type FacilitiesChecklistListWhereUniqueInput = Prisma.AtLeast<{
+    facility?: string
+    AND?: FacilitiesChecklistListWhereInput | FacilitiesChecklistListWhereInput[]
+    OR?: FacilitiesChecklistListWhereInput[]
+    NOT?: FacilitiesChecklistListWhereInput | FacilitiesChecklistListWhereInput[]
+    version?: IntFilter<"FacilitiesChecklistList"> | number
+    updatedById?: StringNullableFilter<"FacilitiesChecklistList"> | string | null
+    updatedAt?: DateTimeFilter<"FacilitiesChecklistList"> | Date | string
+    updatedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }, "facility">
+
+  export type FacilitiesChecklistListOrderByWithAggregationInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    _count?: FacilitiesChecklistListCountOrderByAggregateInput
+    _avg?: FacilitiesChecklistListAvgOrderByAggregateInput
+    _max?: FacilitiesChecklistListMaxOrderByAggregateInput
+    _min?: FacilitiesChecklistListMinOrderByAggregateInput
+    _sum?: FacilitiesChecklistListSumOrderByAggregateInput
+  }
+
+  export type FacilitiesChecklistListScalarWhereWithAggregatesInput = {
+    AND?: FacilitiesChecklistListScalarWhereWithAggregatesInput | FacilitiesChecklistListScalarWhereWithAggregatesInput[]
+    OR?: FacilitiesChecklistListScalarWhereWithAggregatesInput[]
+    NOT?: FacilitiesChecklistListScalarWhereWithAggregatesInput | FacilitiesChecklistListScalarWhereWithAggregatesInput[]
+    facility?: StringWithAggregatesFilter<"FacilitiesChecklistList"> | string
+    version?: IntWithAggregatesFilter<"FacilitiesChecklistList"> | number
+    updatedById?: StringNullableWithAggregatesFilter<"FacilitiesChecklistList"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"FacilitiesChecklistList"> | Date | string
+  }
+
+  export type FacilitiesChecklistRecordWhereInput = {
+    AND?: FacilitiesChecklistRecordWhereInput | FacilitiesChecklistRecordWhereInput[]
+    OR?: FacilitiesChecklistRecordWhereInput[]
+    NOT?: FacilitiesChecklistRecordWhereInput | FacilitiesChecklistRecordWhereInput[]
+    id?: StringFilter<"FacilitiesChecklistRecord"> | string
+    facility?: StringFilter<"FacilitiesChecklistRecord"> | string
+    period?: StringFilter<"FacilitiesChecklistRecord"> | string
+    periodStart?: DateTimeFilter<"FacilitiesChecklistRecord"> | Date | string
+    periodEnd?: DateTimeFilter<"FacilitiesChecklistRecord"> | Date | string
+    status?: StringFilter<"FacilitiesChecklistRecord"> | string
+    conductedBy?: StringFilter<"FacilitiesChecklistRecord"> | string
+    initials?: StringFilter<"FacilitiesChecklistRecord"> | string
+    items?: JsonFilter<"FacilitiesChecklistRecord">
+    listVersion?: IntFilter<"FacilitiesChecklistRecord"> | number
+    okCount?: IntFilter<"FacilitiesChecklistRecord"> | number
+    failCount?: IntFilter<"FacilitiesChecklistRecord"> | number
+    notes?: StringNullableFilter<"FacilitiesChecklistRecord"> | string | null
+    lastEditedBy?: StringNullableFilter<"FacilitiesChecklistRecord"> | string | null
+    lastEditedAt?: DateTimeNullableFilter<"FacilitiesChecklistRecord"> | Date | string | null
+    createdById?: StringNullableFilter<"FacilitiesChecklistRecord"> | string | null
+    submittedAt?: DateTimeNullableFilter<"FacilitiesChecklistRecord"> | Date | string | null
+    submittedById?: StringNullableFilter<"FacilitiesChecklistRecord"> | string | null
+    linkedInstanceId?: StringNullableFilter<"FacilitiesChecklistRecord"> | string | null
+    createdAt?: DateTimeFilter<"FacilitiesChecklistRecord"> | Date | string
+    updatedAt?: DateTimeFilter<"FacilitiesChecklistRecord"> | Date | string
+    createdBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    submittedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }
+
+  export type FacilitiesChecklistRecordOrderByWithRelationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    items?: SortOrder
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    lastEditedBy?: SortOrderInput | SortOrder
+    lastEditedAt?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    submittedById?: SortOrderInput | SortOrder
+    linkedInstanceId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: UserOrderByWithRelationInput
+    submittedBy?: UserOrderByWithRelationInput
+  }
+
+  export type FacilitiesChecklistRecordWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    facility_period?: FacilitiesChecklistRecordFacilityPeriodCompoundUniqueInput
+    AND?: FacilitiesChecklistRecordWhereInput | FacilitiesChecklistRecordWhereInput[]
+    OR?: FacilitiesChecklistRecordWhereInput[]
+    NOT?: FacilitiesChecklistRecordWhereInput | FacilitiesChecklistRecordWhereInput[]
+    facility?: StringFilter<"FacilitiesChecklistRecord"> | string
+    period?: StringFilter<"FacilitiesChecklistRecord"> | string
+    periodStart?: DateTimeFilter<"FacilitiesChecklistRecord"> | Date | string
+    periodEnd?: DateTimeFilter<"FacilitiesChecklistRecord"> | Date | string
+    status?: StringFilter<"FacilitiesChecklistRecord"> | string
+    conductedBy?: StringFilter<"FacilitiesChecklistRecord"> | string
+    initials?: StringFilter<"FacilitiesChecklistRecord"> | string
+    items?: JsonFilter<"FacilitiesChecklistRecord">
+    listVersion?: IntFilter<"FacilitiesChecklistRecord"> | number
+    okCount?: IntFilter<"FacilitiesChecklistRecord"> | number
+    failCount?: IntFilter<"FacilitiesChecklistRecord"> | number
+    notes?: StringNullableFilter<"FacilitiesChecklistRecord"> | string | null
+    lastEditedBy?: StringNullableFilter<"FacilitiesChecklistRecord"> | string | null
+    lastEditedAt?: DateTimeNullableFilter<"FacilitiesChecklistRecord"> | Date | string | null
+    createdById?: StringNullableFilter<"FacilitiesChecklistRecord"> | string | null
+    submittedAt?: DateTimeNullableFilter<"FacilitiesChecklistRecord"> | Date | string | null
+    submittedById?: StringNullableFilter<"FacilitiesChecklistRecord"> | string | null
+    linkedInstanceId?: StringNullableFilter<"FacilitiesChecklistRecord"> | string | null
+    createdAt?: DateTimeFilter<"FacilitiesChecklistRecord"> | Date | string
+    updatedAt?: DateTimeFilter<"FacilitiesChecklistRecord"> | Date | string
+    createdBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    submittedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }, "id" | "facility_period">
+
+  export type FacilitiesChecklistRecordOrderByWithAggregationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    items?: SortOrder
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    lastEditedBy?: SortOrderInput | SortOrder
+    lastEditedAt?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    submittedById?: SortOrderInput | SortOrder
+    linkedInstanceId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FacilitiesChecklistRecordCountOrderByAggregateInput
+    _avg?: FacilitiesChecklistRecordAvgOrderByAggregateInput
+    _max?: FacilitiesChecklistRecordMaxOrderByAggregateInput
+    _min?: FacilitiesChecklistRecordMinOrderByAggregateInput
+    _sum?: FacilitiesChecklistRecordSumOrderByAggregateInput
+  }
+
+  export type FacilitiesChecklistRecordScalarWhereWithAggregatesInput = {
+    AND?: FacilitiesChecklistRecordScalarWhereWithAggregatesInput | FacilitiesChecklistRecordScalarWhereWithAggregatesInput[]
+    OR?: FacilitiesChecklistRecordScalarWhereWithAggregatesInput[]
+    NOT?: FacilitiesChecklistRecordScalarWhereWithAggregatesInput | FacilitiesChecklistRecordScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FacilitiesChecklistRecord"> | string
+    facility?: StringWithAggregatesFilter<"FacilitiesChecklistRecord"> | string
+    period?: StringWithAggregatesFilter<"FacilitiesChecklistRecord"> | string
+    periodStart?: DateTimeWithAggregatesFilter<"FacilitiesChecklistRecord"> | Date | string
+    periodEnd?: DateTimeWithAggregatesFilter<"FacilitiesChecklistRecord"> | Date | string
+    status?: StringWithAggregatesFilter<"FacilitiesChecklistRecord"> | string
+    conductedBy?: StringWithAggregatesFilter<"FacilitiesChecklistRecord"> | string
+    initials?: StringWithAggregatesFilter<"FacilitiesChecklistRecord"> | string
+    items?: JsonWithAggregatesFilter<"FacilitiesChecklistRecord">
+    listVersion?: IntWithAggregatesFilter<"FacilitiesChecklistRecord"> | number
+    okCount?: IntWithAggregatesFilter<"FacilitiesChecklistRecord"> | number
+    failCount?: IntWithAggregatesFilter<"FacilitiesChecklistRecord"> | number
+    notes?: StringNullableWithAggregatesFilter<"FacilitiesChecklistRecord"> | string | null
+    lastEditedBy?: StringNullableWithAggregatesFilter<"FacilitiesChecklistRecord"> | string | null
+    lastEditedAt?: DateTimeNullableWithAggregatesFilter<"FacilitiesChecklistRecord"> | Date | string | null
+    createdById?: StringNullableWithAggregatesFilter<"FacilitiesChecklistRecord"> | string | null
+    submittedAt?: DateTimeNullableWithAggregatesFilter<"FacilitiesChecklistRecord"> | Date | string | null
+    submittedById?: StringNullableWithAggregatesFilter<"FacilitiesChecklistRecord"> | string | null
+    linkedInstanceId?: StringNullableWithAggregatesFilter<"FacilitiesChecklistRecord"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"FacilitiesChecklistRecord"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FacilitiesChecklistRecord"> | Date | string
+  }
+
   export type NotificationWhereInput = {
     AND?: NotificationWhereInput | NotificationWhereInput[]
     OR?: NotificationWhereInput[]
@@ -84629,6 +88726,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -84685,6 +88788,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUpdateInput = {
@@ -84741,6 +88850,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -84797,6 +88912,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -91790,6 +95911,322 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type FacilitiesChecklistItemCreateInput = {
+    id?: string
+    facility?: string
+    groupName: string
+    name: string
+    description?: string
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    retiredBy?: UserCreateNestedOneWithoutFacilitiesChecklistItemsRetiredInput
+    createdBy?: UserCreateNestedOneWithoutFacilitiesChecklistItemsCreatedInput
+    updatedBy?: UserCreateNestedOneWithoutFacilitiesChecklistItemsUpdatedInput
+  }
+
+  export type FacilitiesChecklistItemUncheckedCreateInput = {
+    id?: string
+    facility?: string
+    groupName: string
+    name: string
+    description?: string
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    groupName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    retiredBy?: UserUpdateOneWithoutFacilitiesChecklistItemsRetiredNestedInput
+    createdBy?: UserUpdateOneWithoutFacilitiesChecklistItemsCreatedNestedInput
+    updatedBy?: UserUpdateOneWithoutFacilitiesChecklistItemsUpdatedNestedInput
+  }
+
+  export type FacilitiesChecklistItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    groupName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistItemCreateManyInput = {
+    id?: string
+    facility?: string
+    groupName: string
+    name: string
+    description?: string
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    groupName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    groupName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistListCreateInput = {
+    facility: string
+    version?: number
+    updatedAt?: Date | string
+    updatedBy?: UserCreateNestedOneWithoutFacilitiesChecklistListsUpdatedInput
+  }
+
+  export type FacilitiesChecklistListUncheckedCreateInput = {
+    facility: string
+    version?: number
+    updatedById?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistListUpdateInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: UserUpdateOneWithoutFacilitiesChecklistListsUpdatedNestedInput
+  }
+
+  export type FacilitiesChecklistListUncheckedUpdateInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistListCreateManyInput = {
+    facility: string
+    version?: number
+    updatedById?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistListUpdateManyMutationInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistListUncheckedUpdateManyInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistRecordCreateInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: UserCreateNestedOneWithoutFacilitiesChecklistRecordsCreatedInput
+    submittedBy?: UserCreateNestedOneWithoutFacilitiesChecklistRecordsSubmittedInput
+  }
+
+  export type FacilitiesChecklistRecordUncheckedCreateInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistRecordUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneWithoutFacilitiesChecklistRecordsCreatedNestedInput
+    submittedBy?: UserUpdateOneWithoutFacilitiesChecklistRecordsSubmittedNestedInput
+  }
+
+  export type FacilitiesChecklistRecordUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistRecordCreateManyInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistRecordUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistRecordUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type NotificationCreateInput = {
     id?: string
     type: $Enums.NotificationType
@@ -92142,6 +96579,24 @@ export namespace Prisma {
     none?: Verification624RecordWhereInput
   }
 
+  export type FacilitiesChecklistItemListRelationFilter = {
+    every?: FacilitiesChecklistItemWhereInput
+    some?: FacilitiesChecklistItemWhereInput
+    none?: FacilitiesChecklistItemWhereInput
+  }
+
+  export type FacilitiesChecklistListListRelationFilter = {
+    every?: FacilitiesChecklistListWhereInput
+    some?: FacilitiesChecklistListWhereInput
+    none?: FacilitiesChecklistListWhereInput
+  }
+
+  export type FacilitiesChecklistRecordListRelationFilter = {
+    every?: FacilitiesChecklistRecordWhereInput
+    some?: FacilitiesChecklistRecordWhereInput
+    none?: FacilitiesChecklistRecordWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -92288,6 +96743,18 @@ export namespace Prisma {
   }
 
   export type Verification624RecordOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FacilitiesChecklistItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FacilitiesChecklistListOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FacilitiesChecklistRecordOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -96501,6 +100968,175 @@ export namespace Prisma {
     notInUseCount?: SortOrder
   }
 
+  export type FacilitiesChecklistItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    groupName?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrder
+    retiredById?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FacilitiesChecklistItemAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type FacilitiesChecklistItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    groupName?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrder
+    retiredById?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FacilitiesChecklistItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    groupName?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrder
+    retiredById?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FacilitiesChecklistItemSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type FacilitiesChecklistListCountOrderByAggregateInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FacilitiesChecklistListAvgOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type FacilitiesChecklistListMaxOrderByAggregateInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FacilitiesChecklistListMinOrderByAggregateInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FacilitiesChecklistListSumOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type FacilitiesChecklistRecordFacilityPeriodCompoundUniqueInput = {
+    facility: string
+    period: string
+  }
+
+  export type FacilitiesChecklistRecordCountOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    items?: SortOrder
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notes?: SortOrder
+    lastEditedBy?: SortOrder
+    lastEditedAt?: SortOrder
+    createdById?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FacilitiesChecklistRecordAvgOrderByAggregateInput = {
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+  }
+
+  export type FacilitiesChecklistRecordMaxOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notes?: SortOrder
+    lastEditedBy?: SortOrder
+    lastEditedAt?: SortOrder
+    createdById?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FacilitiesChecklistRecordMinOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notes?: SortOrder
+    lastEditedBy?: SortOrder
+    lastEditedAt?: SortOrder
+    createdById?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FacilitiesChecklistRecordSumOrderByAggregateInput = {
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+  }
+
   export type EnumNotificationTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
     in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
@@ -96862,6 +101498,48 @@ export namespace Prisma {
     connect?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
   }
 
+  export type FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<FacilitiesChecklistItemCreateWithoutCreatedByInput, FacilitiesChecklistItemUncheckedCreateWithoutCreatedByInput> | FacilitiesChecklistItemCreateWithoutCreatedByInput[] | FacilitiesChecklistItemUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FacilitiesChecklistItemCreateOrConnectWithoutCreatedByInput | FacilitiesChecklistItemCreateOrConnectWithoutCreatedByInput[]
+    createMany?: FacilitiesChecklistItemCreateManyCreatedByInputEnvelope
+    connect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+  }
+
+  export type FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput = {
+    create?: XOR<FacilitiesChecklistItemCreateWithoutUpdatedByInput, FacilitiesChecklistItemUncheckedCreateWithoutUpdatedByInput> | FacilitiesChecklistItemCreateWithoutUpdatedByInput[] | FacilitiesChecklistItemUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: FacilitiesChecklistItemCreateOrConnectWithoutUpdatedByInput | FacilitiesChecklistItemCreateOrConnectWithoutUpdatedByInput[]
+    createMany?: FacilitiesChecklistItemCreateManyUpdatedByInputEnvelope
+    connect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+  }
+
+  export type FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput = {
+    create?: XOR<FacilitiesChecklistItemCreateWithoutRetiredByInput, FacilitiesChecklistItemUncheckedCreateWithoutRetiredByInput> | FacilitiesChecklistItemCreateWithoutRetiredByInput[] | FacilitiesChecklistItemUncheckedCreateWithoutRetiredByInput[]
+    connectOrCreate?: FacilitiesChecklistItemCreateOrConnectWithoutRetiredByInput | FacilitiesChecklistItemCreateOrConnectWithoutRetiredByInput[]
+    createMany?: FacilitiesChecklistItemCreateManyRetiredByInputEnvelope
+    connect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+  }
+
+  export type FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput = {
+    create?: XOR<FacilitiesChecklistListCreateWithoutUpdatedByInput, FacilitiesChecklistListUncheckedCreateWithoutUpdatedByInput> | FacilitiesChecklistListCreateWithoutUpdatedByInput[] | FacilitiesChecklistListUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: FacilitiesChecklistListCreateOrConnectWithoutUpdatedByInput | FacilitiesChecklistListCreateOrConnectWithoutUpdatedByInput[]
+    createMany?: FacilitiesChecklistListCreateManyUpdatedByInputEnvelope
+    connect?: FacilitiesChecklistListWhereUniqueInput | FacilitiesChecklistListWhereUniqueInput[]
+  }
+
+  export type FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<FacilitiesChecklistRecordCreateWithoutCreatedByInput, FacilitiesChecklistRecordUncheckedCreateWithoutCreatedByInput> | FacilitiesChecklistRecordCreateWithoutCreatedByInput[] | FacilitiesChecklistRecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FacilitiesChecklistRecordCreateOrConnectWithoutCreatedByInput | FacilitiesChecklistRecordCreateOrConnectWithoutCreatedByInput[]
+    createMany?: FacilitiesChecklistRecordCreateManyCreatedByInputEnvelope
+    connect?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+  }
+
+  export type FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput = {
+    create?: XOR<FacilitiesChecklistRecordCreateWithoutSubmittedByInput, FacilitiesChecklistRecordUncheckedCreateWithoutSubmittedByInput> | FacilitiesChecklistRecordCreateWithoutSubmittedByInput[] | FacilitiesChecklistRecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: FacilitiesChecklistRecordCreateOrConnectWithoutSubmittedByInput | FacilitiesChecklistRecordCreateOrConnectWithoutSubmittedByInput[]
+    createMany?: FacilitiesChecklistRecordCreateManySubmittedByInputEnvelope
+    connect?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+  }
+
   export type FormUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -97168,6 +101846,48 @@ export namespace Prisma {
     connectOrCreate?: Verification624RecordCreateOrConnectWithoutSubmittedByInput | Verification624RecordCreateOrConnectWithoutSubmittedByInput[]
     createMany?: Verification624RecordCreateManySubmittedByInputEnvelope
     connect?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+  }
+
+  export type FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<FacilitiesChecklistItemCreateWithoutCreatedByInput, FacilitiesChecklistItemUncheckedCreateWithoutCreatedByInput> | FacilitiesChecklistItemCreateWithoutCreatedByInput[] | FacilitiesChecklistItemUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FacilitiesChecklistItemCreateOrConnectWithoutCreatedByInput | FacilitiesChecklistItemCreateOrConnectWithoutCreatedByInput[]
+    createMany?: FacilitiesChecklistItemCreateManyCreatedByInputEnvelope
+    connect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+  }
+
+  export type FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput = {
+    create?: XOR<FacilitiesChecklistItemCreateWithoutUpdatedByInput, FacilitiesChecklistItemUncheckedCreateWithoutUpdatedByInput> | FacilitiesChecklistItemCreateWithoutUpdatedByInput[] | FacilitiesChecklistItemUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: FacilitiesChecklistItemCreateOrConnectWithoutUpdatedByInput | FacilitiesChecklistItemCreateOrConnectWithoutUpdatedByInput[]
+    createMany?: FacilitiesChecklistItemCreateManyUpdatedByInputEnvelope
+    connect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+  }
+
+  export type FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput = {
+    create?: XOR<FacilitiesChecklistItemCreateWithoutRetiredByInput, FacilitiesChecklistItemUncheckedCreateWithoutRetiredByInput> | FacilitiesChecklistItemCreateWithoutRetiredByInput[] | FacilitiesChecklistItemUncheckedCreateWithoutRetiredByInput[]
+    connectOrCreate?: FacilitiesChecklistItemCreateOrConnectWithoutRetiredByInput | FacilitiesChecklistItemCreateOrConnectWithoutRetiredByInput[]
+    createMany?: FacilitiesChecklistItemCreateManyRetiredByInputEnvelope
+    connect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+  }
+
+  export type FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput = {
+    create?: XOR<FacilitiesChecklistListCreateWithoutUpdatedByInput, FacilitiesChecklistListUncheckedCreateWithoutUpdatedByInput> | FacilitiesChecklistListCreateWithoutUpdatedByInput[] | FacilitiesChecklistListUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: FacilitiesChecklistListCreateOrConnectWithoutUpdatedByInput | FacilitiesChecklistListCreateOrConnectWithoutUpdatedByInput[]
+    createMany?: FacilitiesChecklistListCreateManyUpdatedByInputEnvelope
+    connect?: FacilitiesChecklistListWhereUniqueInput | FacilitiesChecklistListWhereUniqueInput[]
+  }
+
+  export type FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<FacilitiesChecklistRecordCreateWithoutCreatedByInput, FacilitiesChecklistRecordUncheckedCreateWithoutCreatedByInput> | FacilitiesChecklistRecordCreateWithoutCreatedByInput[] | FacilitiesChecklistRecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FacilitiesChecklistRecordCreateOrConnectWithoutCreatedByInput | FacilitiesChecklistRecordCreateOrConnectWithoutCreatedByInput[]
+    createMany?: FacilitiesChecklistRecordCreateManyCreatedByInputEnvelope
+    connect?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+  }
+
+  export type FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput = {
+    create?: XOR<FacilitiesChecklistRecordCreateWithoutSubmittedByInput, FacilitiesChecklistRecordUncheckedCreateWithoutSubmittedByInput> | FacilitiesChecklistRecordCreateWithoutSubmittedByInput[] | FacilitiesChecklistRecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: FacilitiesChecklistRecordCreateOrConnectWithoutSubmittedByInput | FacilitiesChecklistRecordCreateOrConnectWithoutSubmittedByInput[]
+    createMany?: FacilitiesChecklistRecordCreateManySubmittedByInputEnvelope
+    connect?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -97806,6 +102526,90 @@ export namespace Prisma {
     deleteMany?: Verification624RecordScalarWhereInput | Verification624RecordScalarWhereInput[]
   }
 
+  export type FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<FacilitiesChecklistItemCreateWithoutCreatedByInput, FacilitiesChecklistItemUncheckedCreateWithoutCreatedByInput> | FacilitiesChecklistItemCreateWithoutCreatedByInput[] | FacilitiesChecklistItemUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FacilitiesChecklistItemCreateOrConnectWithoutCreatedByInput | FacilitiesChecklistItemCreateOrConnectWithoutCreatedByInput[]
+    upsert?: FacilitiesChecklistItemUpsertWithWhereUniqueWithoutCreatedByInput | FacilitiesChecklistItemUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: FacilitiesChecklistItemCreateManyCreatedByInputEnvelope
+    set?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    disconnect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    delete?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    connect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    update?: FacilitiesChecklistItemUpdateWithWhereUniqueWithoutCreatedByInput | FacilitiesChecklistItemUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: FacilitiesChecklistItemUpdateManyWithWhereWithoutCreatedByInput | FacilitiesChecklistItemUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: FacilitiesChecklistItemScalarWhereInput | FacilitiesChecklistItemScalarWhereInput[]
+  }
+
+  export type FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput = {
+    create?: XOR<FacilitiesChecklistItemCreateWithoutUpdatedByInput, FacilitiesChecklistItemUncheckedCreateWithoutUpdatedByInput> | FacilitiesChecklistItemCreateWithoutUpdatedByInput[] | FacilitiesChecklistItemUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: FacilitiesChecklistItemCreateOrConnectWithoutUpdatedByInput | FacilitiesChecklistItemCreateOrConnectWithoutUpdatedByInput[]
+    upsert?: FacilitiesChecklistItemUpsertWithWhereUniqueWithoutUpdatedByInput | FacilitiesChecklistItemUpsertWithWhereUniqueWithoutUpdatedByInput[]
+    createMany?: FacilitiesChecklistItemCreateManyUpdatedByInputEnvelope
+    set?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    disconnect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    delete?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    connect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    update?: FacilitiesChecklistItemUpdateWithWhereUniqueWithoutUpdatedByInput | FacilitiesChecklistItemUpdateWithWhereUniqueWithoutUpdatedByInput[]
+    updateMany?: FacilitiesChecklistItemUpdateManyWithWhereWithoutUpdatedByInput | FacilitiesChecklistItemUpdateManyWithWhereWithoutUpdatedByInput[]
+    deleteMany?: FacilitiesChecklistItemScalarWhereInput | FacilitiesChecklistItemScalarWhereInput[]
+  }
+
+  export type FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput = {
+    create?: XOR<FacilitiesChecklistItemCreateWithoutRetiredByInput, FacilitiesChecklistItemUncheckedCreateWithoutRetiredByInput> | FacilitiesChecklistItemCreateWithoutRetiredByInput[] | FacilitiesChecklistItemUncheckedCreateWithoutRetiredByInput[]
+    connectOrCreate?: FacilitiesChecklistItemCreateOrConnectWithoutRetiredByInput | FacilitiesChecklistItemCreateOrConnectWithoutRetiredByInput[]
+    upsert?: FacilitiesChecklistItemUpsertWithWhereUniqueWithoutRetiredByInput | FacilitiesChecklistItemUpsertWithWhereUniqueWithoutRetiredByInput[]
+    createMany?: FacilitiesChecklistItemCreateManyRetiredByInputEnvelope
+    set?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    disconnect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    delete?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    connect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    update?: FacilitiesChecklistItemUpdateWithWhereUniqueWithoutRetiredByInput | FacilitiesChecklistItemUpdateWithWhereUniqueWithoutRetiredByInput[]
+    updateMany?: FacilitiesChecklistItemUpdateManyWithWhereWithoutRetiredByInput | FacilitiesChecklistItemUpdateManyWithWhereWithoutRetiredByInput[]
+    deleteMany?: FacilitiesChecklistItemScalarWhereInput | FacilitiesChecklistItemScalarWhereInput[]
+  }
+
+  export type FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput = {
+    create?: XOR<FacilitiesChecklistListCreateWithoutUpdatedByInput, FacilitiesChecklistListUncheckedCreateWithoutUpdatedByInput> | FacilitiesChecklistListCreateWithoutUpdatedByInput[] | FacilitiesChecklistListUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: FacilitiesChecklistListCreateOrConnectWithoutUpdatedByInput | FacilitiesChecklistListCreateOrConnectWithoutUpdatedByInput[]
+    upsert?: FacilitiesChecklistListUpsertWithWhereUniqueWithoutUpdatedByInput | FacilitiesChecklistListUpsertWithWhereUniqueWithoutUpdatedByInput[]
+    createMany?: FacilitiesChecklistListCreateManyUpdatedByInputEnvelope
+    set?: FacilitiesChecklistListWhereUniqueInput | FacilitiesChecklistListWhereUniqueInput[]
+    disconnect?: FacilitiesChecklistListWhereUniqueInput | FacilitiesChecklistListWhereUniqueInput[]
+    delete?: FacilitiesChecklistListWhereUniqueInput | FacilitiesChecklistListWhereUniqueInput[]
+    connect?: FacilitiesChecklistListWhereUniqueInput | FacilitiesChecklistListWhereUniqueInput[]
+    update?: FacilitiesChecklistListUpdateWithWhereUniqueWithoutUpdatedByInput | FacilitiesChecklistListUpdateWithWhereUniqueWithoutUpdatedByInput[]
+    updateMany?: FacilitiesChecklistListUpdateManyWithWhereWithoutUpdatedByInput | FacilitiesChecklistListUpdateManyWithWhereWithoutUpdatedByInput[]
+    deleteMany?: FacilitiesChecklistListScalarWhereInput | FacilitiesChecklistListScalarWhereInput[]
+  }
+
+  export type FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<FacilitiesChecklistRecordCreateWithoutCreatedByInput, FacilitiesChecklistRecordUncheckedCreateWithoutCreatedByInput> | FacilitiesChecklistRecordCreateWithoutCreatedByInput[] | FacilitiesChecklistRecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FacilitiesChecklistRecordCreateOrConnectWithoutCreatedByInput | FacilitiesChecklistRecordCreateOrConnectWithoutCreatedByInput[]
+    upsert?: FacilitiesChecklistRecordUpsertWithWhereUniqueWithoutCreatedByInput | FacilitiesChecklistRecordUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: FacilitiesChecklistRecordCreateManyCreatedByInputEnvelope
+    set?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    disconnect?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    delete?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    connect?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    update?: FacilitiesChecklistRecordUpdateWithWhereUniqueWithoutCreatedByInput | FacilitiesChecklistRecordUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: FacilitiesChecklistRecordUpdateManyWithWhereWithoutCreatedByInput | FacilitiesChecklistRecordUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: FacilitiesChecklistRecordScalarWhereInput | FacilitiesChecklistRecordScalarWhereInput[]
+  }
+
+  export type FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput = {
+    create?: XOR<FacilitiesChecklistRecordCreateWithoutSubmittedByInput, FacilitiesChecklistRecordUncheckedCreateWithoutSubmittedByInput> | FacilitiesChecklistRecordCreateWithoutSubmittedByInput[] | FacilitiesChecklistRecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: FacilitiesChecklistRecordCreateOrConnectWithoutSubmittedByInput | FacilitiesChecklistRecordCreateOrConnectWithoutSubmittedByInput[]
+    upsert?: FacilitiesChecklistRecordUpsertWithWhereUniqueWithoutSubmittedByInput | FacilitiesChecklistRecordUpsertWithWhereUniqueWithoutSubmittedByInput[]
+    createMany?: FacilitiesChecklistRecordCreateManySubmittedByInputEnvelope
+    set?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    disconnect?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    delete?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    connect?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    update?: FacilitiesChecklistRecordUpdateWithWhereUniqueWithoutSubmittedByInput | FacilitiesChecklistRecordUpdateWithWhereUniqueWithoutSubmittedByInput[]
+    updateMany?: FacilitiesChecklistRecordUpdateManyWithWhereWithoutSubmittedByInput | FacilitiesChecklistRecordUpdateManyWithWhereWithoutSubmittedByInput[]
+    deleteMany?: FacilitiesChecklistRecordScalarWhereInput | FacilitiesChecklistRecordScalarWhereInput[]
+  }
+
   export type FormUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -98420,6 +103224,90 @@ export namespace Prisma {
     update?: Verification624RecordUpdateWithWhereUniqueWithoutSubmittedByInput | Verification624RecordUpdateWithWhereUniqueWithoutSubmittedByInput[]
     updateMany?: Verification624RecordUpdateManyWithWhereWithoutSubmittedByInput | Verification624RecordUpdateManyWithWhereWithoutSubmittedByInput[]
     deleteMany?: Verification624RecordScalarWhereInput | Verification624RecordScalarWhereInput[]
+  }
+
+  export type FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<FacilitiesChecklistItemCreateWithoutCreatedByInput, FacilitiesChecklistItemUncheckedCreateWithoutCreatedByInput> | FacilitiesChecklistItemCreateWithoutCreatedByInput[] | FacilitiesChecklistItemUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FacilitiesChecklistItemCreateOrConnectWithoutCreatedByInput | FacilitiesChecklistItemCreateOrConnectWithoutCreatedByInput[]
+    upsert?: FacilitiesChecklistItemUpsertWithWhereUniqueWithoutCreatedByInput | FacilitiesChecklistItemUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: FacilitiesChecklistItemCreateManyCreatedByInputEnvelope
+    set?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    disconnect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    delete?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    connect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    update?: FacilitiesChecklistItemUpdateWithWhereUniqueWithoutCreatedByInput | FacilitiesChecklistItemUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: FacilitiesChecklistItemUpdateManyWithWhereWithoutCreatedByInput | FacilitiesChecklistItemUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: FacilitiesChecklistItemScalarWhereInput | FacilitiesChecklistItemScalarWhereInput[]
+  }
+
+  export type FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput = {
+    create?: XOR<FacilitiesChecklistItemCreateWithoutUpdatedByInput, FacilitiesChecklistItemUncheckedCreateWithoutUpdatedByInput> | FacilitiesChecklistItemCreateWithoutUpdatedByInput[] | FacilitiesChecklistItemUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: FacilitiesChecklistItemCreateOrConnectWithoutUpdatedByInput | FacilitiesChecklistItemCreateOrConnectWithoutUpdatedByInput[]
+    upsert?: FacilitiesChecklistItemUpsertWithWhereUniqueWithoutUpdatedByInput | FacilitiesChecklistItemUpsertWithWhereUniqueWithoutUpdatedByInput[]
+    createMany?: FacilitiesChecklistItemCreateManyUpdatedByInputEnvelope
+    set?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    disconnect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    delete?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    connect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    update?: FacilitiesChecklistItemUpdateWithWhereUniqueWithoutUpdatedByInput | FacilitiesChecklistItemUpdateWithWhereUniqueWithoutUpdatedByInput[]
+    updateMany?: FacilitiesChecklistItemUpdateManyWithWhereWithoutUpdatedByInput | FacilitiesChecklistItemUpdateManyWithWhereWithoutUpdatedByInput[]
+    deleteMany?: FacilitiesChecklistItemScalarWhereInput | FacilitiesChecklistItemScalarWhereInput[]
+  }
+
+  export type FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput = {
+    create?: XOR<FacilitiesChecklistItemCreateWithoutRetiredByInput, FacilitiesChecklistItemUncheckedCreateWithoutRetiredByInput> | FacilitiesChecklistItemCreateWithoutRetiredByInput[] | FacilitiesChecklistItemUncheckedCreateWithoutRetiredByInput[]
+    connectOrCreate?: FacilitiesChecklistItemCreateOrConnectWithoutRetiredByInput | FacilitiesChecklistItemCreateOrConnectWithoutRetiredByInput[]
+    upsert?: FacilitiesChecklistItemUpsertWithWhereUniqueWithoutRetiredByInput | FacilitiesChecklistItemUpsertWithWhereUniqueWithoutRetiredByInput[]
+    createMany?: FacilitiesChecklistItemCreateManyRetiredByInputEnvelope
+    set?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    disconnect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    delete?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    connect?: FacilitiesChecklistItemWhereUniqueInput | FacilitiesChecklistItemWhereUniqueInput[]
+    update?: FacilitiesChecklistItemUpdateWithWhereUniqueWithoutRetiredByInput | FacilitiesChecklistItemUpdateWithWhereUniqueWithoutRetiredByInput[]
+    updateMany?: FacilitiesChecklistItemUpdateManyWithWhereWithoutRetiredByInput | FacilitiesChecklistItemUpdateManyWithWhereWithoutRetiredByInput[]
+    deleteMany?: FacilitiesChecklistItemScalarWhereInput | FacilitiesChecklistItemScalarWhereInput[]
+  }
+
+  export type FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput = {
+    create?: XOR<FacilitiesChecklistListCreateWithoutUpdatedByInput, FacilitiesChecklistListUncheckedCreateWithoutUpdatedByInput> | FacilitiesChecklistListCreateWithoutUpdatedByInput[] | FacilitiesChecklistListUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: FacilitiesChecklistListCreateOrConnectWithoutUpdatedByInput | FacilitiesChecklistListCreateOrConnectWithoutUpdatedByInput[]
+    upsert?: FacilitiesChecklistListUpsertWithWhereUniqueWithoutUpdatedByInput | FacilitiesChecklistListUpsertWithWhereUniqueWithoutUpdatedByInput[]
+    createMany?: FacilitiesChecklistListCreateManyUpdatedByInputEnvelope
+    set?: FacilitiesChecklistListWhereUniqueInput | FacilitiesChecklistListWhereUniqueInput[]
+    disconnect?: FacilitiesChecklistListWhereUniqueInput | FacilitiesChecklistListWhereUniqueInput[]
+    delete?: FacilitiesChecklistListWhereUniqueInput | FacilitiesChecklistListWhereUniqueInput[]
+    connect?: FacilitiesChecklistListWhereUniqueInput | FacilitiesChecklistListWhereUniqueInput[]
+    update?: FacilitiesChecklistListUpdateWithWhereUniqueWithoutUpdatedByInput | FacilitiesChecklistListUpdateWithWhereUniqueWithoutUpdatedByInput[]
+    updateMany?: FacilitiesChecklistListUpdateManyWithWhereWithoutUpdatedByInput | FacilitiesChecklistListUpdateManyWithWhereWithoutUpdatedByInput[]
+    deleteMany?: FacilitiesChecklistListScalarWhereInput | FacilitiesChecklistListScalarWhereInput[]
+  }
+
+  export type FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<FacilitiesChecklistRecordCreateWithoutCreatedByInput, FacilitiesChecklistRecordUncheckedCreateWithoutCreatedByInput> | FacilitiesChecklistRecordCreateWithoutCreatedByInput[] | FacilitiesChecklistRecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FacilitiesChecklistRecordCreateOrConnectWithoutCreatedByInput | FacilitiesChecklistRecordCreateOrConnectWithoutCreatedByInput[]
+    upsert?: FacilitiesChecklistRecordUpsertWithWhereUniqueWithoutCreatedByInput | FacilitiesChecklistRecordUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: FacilitiesChecklistRecordCreateManyCreatedByInputEnvelope
+    set?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    disconnect?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    delete?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    connect?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    update?: FacilitiesChecklistRecordUpdateWithWhereUniqueWithoutCreatedByInput | FacilitiesChecklistRecordUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: FacilitiesChecklistRecordUpdateManyWithWhereWithoutCreatedByInput | FacilitiesChecklistRecordUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: FacilitiesChecklistRecordScalarWhereInput | FacilitiesChecklistRecordScalarWhereInput[]
+  }
+
+  export type FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput = {
+    create?: XOR<FacilitiesChecklistRecordCreateWithoutSubmittedByInput, FacilitiesChecklistRecordUncheckedCreateWithoutSubmittedByInput> | FacilitiesChecklistRecordCreateWithoutSubmittedByInput[] | FacilitiesChecklistRecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: FacilitiesChecklistRecordCreateOrConnectWithoutSubmittedByInput | FacilitiesChecklistRecordCreateOrConnectWithoutSubmittedByInput[]
+    upsert?: FacilitiesChecklistRecordUpsertWithWhereUniqueWithoutSubmittedByInput | FacilitiesChecklistRecordUpsertWithWhereUniqueWithoutSubmittedByInput[]
+    createMany?: FacilitiesChecklistRecordCreateManySubmittedByInputEnvelope
+    set?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    disconnect?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    delete?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    connect?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+    update?: FacilitiesChecklistRecordUpdateWithWhereUniqueWithoutSubmittedByInput | FacilitiesChecklistRecordUpdateWithWhereUniqueWithoutSubmittedByInput[]
+    updateMany?: FacilitiesChecklistRecordUpdateManyWithWhereWithoutSubmittedByInput | FacilitiesChecklistRecordUpdateManyWithWhereWithoutSubmittedByInput[]
+    deleteMany?: FacilitiesChecklistRecordScalarWhereInput | FacilitiesChecklistRecordScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedFormsInput = {
@@ -102347,6 +107235,102 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutVerification624RecordsSubmittedInput, UserUpdateWithoutVerification624RecordsSubmittedInput>, UserUncheckedUpdateWithoutVerification624RecordsSubmittedInput>
   }
 
+  export type UserCreateNestedOneWithoutFacilitiesChecklistItemsRetiredInput = {
+    create?: XOR<UserCreateWithoutFacilitiesChecklistItemsRetiredInput, UserUncheckedCreateWithoutFacilitiesChecklistItemsRetiredInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFacilitiesChecklistItemsRetiredInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutFacilitiesChecklistItemsCreatedInput = {
+    create?: XOR<UserCreateWithoutFacilitiesChecklistItemsCreatedInput, UserUncheckedCreateWithoutFacilitiesChecklistItemsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFacilitiesChecklistItemsCreatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutFacilitiesChecklistItemsUpdatedInput = {
+    create?: XOR<UserCreateWithoutFacilitiesChecklistItemsUpdatedInput, UserUncheckedCreateWithoutFacilitiesChecklistItemsUpdatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFacilitiesChecklistItemsUpdatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutFacilitiesChecklistItemsRetiredNestedInput = {
+    create?: XOR<UserCreateWithoutFacilitiesChecklistItemsRetiredInput, UserUncheckedCreateWithoutFacilitiesChecklistItemsRetiredInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFacilitiesChecklistItemsRetiredInput
+    upsert?: UserUpsertWithoutFacilitiesChecklistItemsRetiredInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFacilitiesChecklistItemsRetiredInput, UserUpdateWithoutFacilitiesChecklistItemsRetiredInput>, UserUncheckedUpdateWithoutFacilitiesChecklistItemsRetiredInput>
+  }
+
+  export type UserUpdateOneWithoutFacilitiesChecklistItemsCreatedNestedInput = {
+    create?: XOR<UserCreateWithoutFacilitiesChecklistItemsCreatedInput, UserUncheckedCreateWithoutFacilitiesChecklistItemsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFacilitiesChecklistItemsCreatedInput
+    upsert?: UserUpsertWithoutFacilitiesChecklistItemsCreatedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFacilitiesChecklistItemsCreatedInput, UserUpdateWithoutFacilitiesChecklistItemsCreatedInput>, UserUncheckedUpdateWithoutFacilitiesChecklistItemsCreatedInput>
+  }
+
+  export type UserUpdateOneWithoutFacilitiesChecklistItemsUpdatedNestedInput = {
+    create?: XOR<UserCreateWithoutFacilitiesChecklistItemsUpdatedInput, UserUncheckedCreateWithoutFacilitiesChecklistItemsUpdatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFacilitiesChecklistItemsUpdatedInput
+    upsert?: UserUpsertWithoutFacilitiesChecklistItemsUpdatedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFacilitiesChecklistItemsUpdatedInput, UserUpdateWithoutFacilitiesChecklistItemsUpdatedInput>, UserUncheckedUpdateWithoutFacilitiesChecklistItemsUpdatedInput>
+  }
+
+  export type UserCreateNestedOneWithoutFacilitiesChecklistListsUpdatedInput = {
+    create?: XOR<UserCreateWithoutFacilitiesChecklistListsUpdatedInput, UserUncheckedCreateWithoutFacilitiesChecklistListsUpdatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFacilitiesChecklistListsUpdatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutFacilitiesChecklistListsUpdatedNestedInput = {
+    create?: XOR<UserCreateWithoutFacilitiesChecklistListsUpdatedInput, UserUncheckedCreateWithoutFacilitiesChecklistListsUpdatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFacilitiesChecklistListsUpdatedInput
+    upsert?: UserUpsertWithoutFacilitiesChecklistListsUpdatedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFacilitiesChecklistListsUpdatedInput, UserUpdateWithoutFacilitiesChecklistListsUpdatedInput>, UserUncheckedUpdateWithoutFacilitiesChecklistListsUpdatedInput>
+  }
+
+  export type UserCreateNestedOneWithoutFacilitiesChecklistRecordsCreatedInput = {
+    create?: XOR<UserCreateWithoutFacilitiesChecklistRecordsCreatedInput, UserUncheckedCreateWithoutFacilitiesChecklistRecordsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFacilitiesChecklistRecordsCreatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutFacilitiesChecklistRecordsSubmittedInput = {
+    create?: XOR<UserCreateWithoutFacilitiesChecklistRecordsSubmittedInput, UserUncheckedCreateWithoutFacilitiesChecklistRecordsSubmittedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFacilitiesChecklistRecordsSubmittedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutFacilitiesChecklistRecordsCreatedNestedInput = {
+    create?: XOR<UserCreateWithoutFacilitiesChecklistRecordsCreatedInput, UserUncheckedCreateWithoutFacilitiesChecklistRecordsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFacilitiesChecklistRecordsCreatedInput
+    upsert?: UserUpsertWithoutFacilitiesChecklistRecordsCreatedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFacilitiesChecklistRecordsCreatedInput, UserUpdateWithoutFacilitiesChecklistRecordsCreatedInput>, UserUncheckedUpdateWithoutFacilitiesChecklistRecordsCreatedInput>
+  }
+
+  export type UserUpdateOneWithoutFacilitiesChecklistRecordsSubmittedNestedInput = {
+    create?: XOR<UserCreateWithoutFacilitiesChecklistRecordsSubmittedInput, UserUncheckedCreateWithoutFacilitiesChecklistRecordsSubmittedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFacilitiesChecklistRecordsSubmittedInput
+    upsert?: UserUpsertWithoutFacilitiesChecklistRecordsSubmittedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFacilitiesChecklistRecordsSubmittedInput, UserUpdateWithoutFacilitiesChecklistRecordsSubmittedInput>, UserUncheckedUpdateWithoutFacilitiesChecklistRecordsSubmittedInput>
+  }
+
   export type UserCreateNestedOneWithoutNotificationsInput = {
     create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
@@ -104968,6 +109952,254 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FacilitiesChecklistItemCreateWithoutCreatedByInput = {
+    id?: string
+    facility?: string
+    groupName: string
+    name: string
+    description?: string
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    retiredBy?: UserCreateNestedOneWithoutFacilitiesChecklistItemsRetiredInput
+    updatedBy?: UserCreateNestedOneWithoutFacilitiesChecklistItemsUpdatedInput
+  }
+
+  export type FacilitiesChecklistItemUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    facility?: string
+    groupName: string
+    name: string
+    description?: string
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistItemCreateOrConnectWithoutCreatedByInput = {
+    where: FacilitiesChecklistItemWhereUniqueInput
+    create: XOR<FacilitiesChecklistItemCreateWithoutCreatedByInput, FacilitiesChecklistItemUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type FacilitiesChecklistItemCreateManyCreatedByInputEnvelope = {
+    data: FacilitiesChecklistItemCreateManyCreatedByInput | FacilitiesChecklistItemCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FacilitiesChecklistItemCreateWithoutUpdatedByInput = {
+    id?: string
+    facility?: string
+    groupName: string
+    name: string
+    description?: string
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    retiredBy?: UserCreateNestedOneWithoutFacilitiesChecklistItemsRetiredInput
+    createdBy?: UserCreateNestedOneWithoutFacilitiesChecklistItemsCreatedInput
+  }
+
+  export type FacilitiesChecklistItemUncheckedCreateWithoutUpdatedByInput = {
+    id?: string
+    facility?: string
+    groupName: string
+    name: string
+    description?: string
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistItemCreateOrConnectWithoutUpdatedByInput = {
+    where: FacilitiesChecklistItemWhereUniqueInput
+    create: XOR<FacilitiesChecklistItemCreateWithoutUpdatedByInput, FacilitiesChecklistItemUncheckedCreateWithoutUpdatedByInput>
+  }
+
+  export type FacilitiesChecklistItemCreateManyUpdatedByInputEnvelope = {
+    data: FacilitiesChecklistItemCreateManyUpdatedByInput | FacilitiesChecklistItemCreateManyUpdatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FacilitiesChecklistItemCreateWithoutRetiredByInput = {
+    id?: string
+    facility?: string
+    groupName: string
+    name: string
+    description?: string
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: UserCreateNestedOneWithoutFacilitiesChecklistItemsCreatedInput
+    updatedBy?: UserCreateNestedOneWithoutFacilitiesChecklistItemsUpdatedInput
+  }
+
+  export type FacilitiesChecklistItemUncheckedCreateWithoutRetiredByInput = {
+    id?: string
+    facility?: string
+    groupName: string
+    name: string
+    description?: string
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistItemCreateOrConnectWithoutRetiredByInput = {
+    where: FacilitiesChecklistItemWhereUniqueInput
+    create: XOR<FacilitiesChecklistItemCreateWithoutRetiredByInput, FacilitiesChecklistItemUncheckedCreateWithoutRetiredByInput>
+  }
+
+  export type FacilitiesChecklistItemCreateManyRetiredByInputEnvelope = {
+    data: FacilitiesChecklistItemCreateManyRetiredByInput | FacilitiesChecklistItemCreateManyRetiredByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FacilitiesChecklistListCreateWithoutUpdatedByInput = {
+    facility: string
+    version?: number
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistListUncheckedCreateWithoutUpdatedByInput = {
+    facility: string
+    version?: number
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistListCreateOrConnectWithoutUpdatedByInput = {
+    where: FacilitiesChecklistListWhereUniqueInput
+    create: XOR<FacilitiesChecklistListCreateWithoutUpdatedByInput, FacilitiesChecklistListUncheckedCreateWithoutUpdatedByInput>
+  }
+
+  export type FacilitiesChecklistListCreateManyUpdatedByInputEnvelope = {
+    data: FacilitiesChecklistListCreateManyUpdatedByInput | FacilitiesChecklistListCreateManyUpdatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FacilitiesChecklistRecordCreateWithoutCreatedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    submittedBy?: UserCreateNestedOneWithoutFacilitiesChecklistRecordsSubmittedInput
+  }
+
+  export type FacilitiesChecklistRecordUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistRecordCreateOrConnectWithoutCreatedByInput = {
+    where: FacilitiesChecklistRecordWhereUniqueInput
+    create: XOR<FacilitiesChecklistRecordCreateWithoutCreatedByInput, FacilitiesChecklistRecordUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type FacilitiesChecklistRecordCreateManyCreatedByInputEnvelope = {
+    data: FacilitiesChecklistRecordCreateManyCreatedByInput | FacilitiesChecklistRecordCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FacilitiesChecklistRecordCreateWithoutSubmittedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: UserCreateNestedOneWithoutFacilitiesChecklistRecordsCreatedInput
+  }
+
+  export type FacilitiesChecklistRecordUncheckedCreateWithoutSubmittedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistRecordCreateOrConnectWithoutSubmittedByInput = {
+    where: FacilitiesChecklistRecordWhereUniqueInput
+    create: XOR<FacilitiesChecklistRecordCreateWithoutSubmittedByInput, FacilitiesChecklistRecordUncheckedCreateWithoutSubmittedByInput>
+  }
+
+  export type FacilitiesChecklistRecordCreateManySubmittedByInputEnvelope = {
+    data: FacilitiesChecklistRecordCreateManySubmittedByInput | FacilitiesChecklistRecordCreateManySubmittedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FormUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: FormWhereUniqueInput
     update: XOR<FormUpdateWithoutCreatedByInput, FormUncheckedUpdateWithoutCreatedByInput>
@@ -106420,6 +111652,157 @@ export namespace Prisma {
     data: XOR<Verification624RecordUpdateManyMutationInput, Verification624RecordUncheckedUpdateManyWithoutSubmittedByInput>
   }
 
+  export type FacilitiesChecklistItemUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: FacilitiesChecklistItemWhereUniqueInput
+    update: XOR<FacilitiesChecklistItemUpdateWithoutCreatedByInput, FacilitiesChecklistItemUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<FacilitiesChecklistItemCreateWithoutCreatedByInput, FacilitiesChecklistItemUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type FacilitiesChecklistItemUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: FacilitiesChecklistItemWhereUniqueInput
+    data: XOR<FacilitiesChecklistItemUpdateWithoutCreatedByInput, FacilitiesChecklistItemUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type FacilitiesChecklistItemUpdateManyWithWhereWithoutCreatedByInput = {
+    where: FacilitiesChecklistItemScalarWhereInput
+    data: XOR<FacilitiesChecklistItemUpdateManyMutationInput, FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type FacilitiesChecklistItemScalarWhereInput = {
+    AND?: FacilitiesChecklistItemScalarWhereInput | FacilitiesChecklistItemScalarWhereInput[]
+    OR?: FacilitiesChecklistItemScalarWhereInput[]
+    NOT?: FacilitiesChecklistItemScalarWhereInput | FacilitiesChecklistItemScalarWhereInput[]
+    id?: StringFilter<"FacilitiesChecklistItem"> | string
+    facility?: StringFilter<"FacilitiesChecklistItem"> | string
+    groupName?: StringFilter<"FacilitiesChecklistItem"> | string
+    name?: StringFilter<"FacilitiesChecklistItem"> | string
+    description?: StringFilter<"FacilitiesChecklistItem"> | string
+    sortOrder?: IntFilter<"FacilitiesChecklistItem"> | number
+    retiredAt?: DateTimeNullableFilter<"FacilitiesChecklistItem"> | Date | string | null
+    retiredById?: StringNullableFilter<"FacilitiesChecklistItem"> | string | null
+    createdById?: StringNullableFilter<"FacilitiesChecklistItem"> | string | null
+    updatedById?: StringNullableFilter<"FacilitiesChecklistItem"> | string | null
+    createdAt?: DateTimeFilter<"FacilitiesChecklistItem"> | Date | string
+    updatedAt?: DateTimeFilter<"FacilitiesChecklistItem"> | Date | string
+  }
+
+  export type FacilitiesChecklistItemUpsertWithWhereUniqueWithoutUpdatedByInput = {
+    where: FacilitiesChecklistItemWhereUniqueInput
+    update: XOR<FacilitiesChecklistItemUpdateWithoutUpdatedByInput, FacilitiesChecklistItemUncheckedUpdateWithoutUpdatedByInput>
+    create: XOR<FacilitiesChecklistItemCreateWithoutUpdatedByInput, FacilitiesChecklistItemUncheckedCreateWithoutUpdatedByInput>
+  }
+
+  export type FacilitiesChecklistItemUpdateWithWhereUniqueWithoutUpdatedByInput = {
+    where: FacilitiesChecklistItemWhereUniqueInput
+    data: XOR<FacilitiesChecklistItemUpdateWithoutUpdatedByInput, FacilitiesChecklistItemUncheckedUpdateWithoutUpdatedByInput>
+  }
+
+  export type FacilitiesChecklistItemUpdateManyWithWhereWithoutUpdatedByInput = {
+    where: FacilitiesChecklistItemScalarWhereInput
+    data: XOR<FacilitiesChecklistItemUpdateManyMutationInput, FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByInput>
+  }
+
+  export type FacilitiesChecklistItemUpsertWithWhereUniqueWithoutRetiredByInput = {
+    where: FacilitiesChecklistItemWhereUniqueInput
+    update: XOR<FacilitiesChecklistItemUpdateWithoutRetiredByInput, FacilitiesChecklistItemUncheckedUpdateWithoutRetiredByInput>
+    create: XOR<FacilitiesChecklistItemCreateWithoutRetiredByInput, FacilitiesChecklistItemUncheckedCreateWithoutRetiredByInput>
+  }
+
+  export type FacilitiesChecklistItemUpdateWithWhereUniqueWithoutRetiredByInput = {
+    where: FacilitiesChecklistItemWhereUniqueInput
+    data: XOR<FacilitiesChecklistItemUpdateWithoutRetiredByInput, FacilitiesChecklistItemUncheckedUpdateWithoutRetiredByInput>
+  }
+
+  export type FacilitiesChecklistItemUpdateManyWithWhereWithoutRetiredByInput = {
+    where: FacilitiesChecklistItemScalarWhereInput
+    data: XOR<FacilitiesChecklistItemUpdateManyMutationInput, FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByInput>
+  }
+
+  export type FacilitiesChecklistListUpsertWithWhereUniqueWithoutUpdatedByInput = {
+    where: FacilitiesChecklistListWhereUniqueInput
+    update: XOR<FacilitiesChecklistListUpdateWithoutUpdatedByInput, FacilitiesChecklistListUncheckedUpdateWithoutUpdatedByInput>
+    create: XOR<FacilitiesChecklistListCreateWithoutUpdatedByInput, FacilitiesChecklistListUncheckedCreateWithoutUpdatedByInput>
+  }
+
+  export type FacilitiesChecklistListUpdateWithWhereUniqueWithoutUpdatedByInput = {
+    where: FacilitiesChecklistListWhereUniqueInput
+    data: XOR<FacilitiesChecklistListUpdateWithoutUpdatedByInput, FacilitiesChecklistListUncheckedUpdateWithoutUpdatedByInput>
+  }
+
+  export type FacilitiesChecklistListUpdateManyWithWhereWithoutUpdatedByInput = {
+    where: FacilitiesChecklistListScalarWhereInput
+    data: XOR<FacilitiesChecklistListUpdateManyMutationInput, FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByInput>
+  }
+
+  export type FacilitiesChecklistListScalarWhereInput = {
+    AND?: FacilitiesChecklistListScalarWhereInput | FacilitiesChecklistListScalarWhereInput[]
+    OR?: FacilitiesChecklistListScalarWhereInput[]
+    NOT?: FacilitiesChecklistListScalarWhereInput | FacilitiesChecklistListScalarWhereInput[]
+    facility?: StringFilter<"FacilitiesChecklistList"> | string
+    version?: IntFilter<"FacilitiesChecklistList"> | number
+    updatedById?: StringNullableFilter<"FacilitiesChecklistList"> | string | null
+    updatedAt?: DateTimeFilter<"FacilitiesChecklistList"> | Date | string
+  }
+
+  export type FacilitiesChecklistRecordUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: FacilitiesChecklistRecordWhereUniqueInput
+    update: XOR<FacilitiesChecklistRecordUpdateWithoutCreatedByInput, FacilitiesChecklistRecordUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<FacilitiesChecklistRecordCreateWithoutCreatedByInput, FacilitiesChecklistRecordUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type FacilitiesChecklistRecordUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: FacilitiesChecklistRecordWhereUniqueInput
+    data: XOR<FacilitiesChecklistRecordUpdateWithoutCreatedByInput, FacilitiesChecklistRecordUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type FacilitiesChecklistRecordUpdateManyWithWhereWithoutCreatedByInput = {
+    where: FacilitiesChecklistRecordScalarWhereInput
+    data: XOR<FacilitiesChecklistRecordUpdateManyMutationInput, FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type FacilitiesChecklistRecordScalarWhereInput = {
+    AND?: FacilitiesChecklistRecordScalarWhereInput | FacilitiesChecklistRecordScalarWhereInput[]
+    OR?: FacilitiesChecklistRecordScalarWhereInput[]
+    NOT?: FacilitiesChecklistRecordScalarWhereInput | FacilitiesChecklistRecordScalarWhereInput[]
+    id?: StringFilter<"FacilitiesChecklistRecord"> | string
+    facility?: StringFilter<"FacilitiesChecklistRecord"> | string
+    period?: StringFilter<"FacilitiesChecklistRecord"> | string
+    periodStart?: DateTimeFilter<"FacilitiesChecklistRecord"> | Date | string
+    periodEnd?: DateTimeFilter<"FacilitiesChecklistRecord"> | Date | string
+    status?: StringFilter<"FacilitiesChecklistRecord"> | string
+    conductedBy?: StringFilter<"FacilitiesChecklistRecord"> | string
+    initials?: StringFilter<"FacilitiesChecklistRecord"> | string
+    items?: JsonFilter<"FacilitiesChecklistRecord">
+    listVersion?: IntFilter<"FacilitiesChecklistRecord"> | number
+    okCount?: IntFilter<"FacilitiesChecklistRecord"> | number
+    failCount?: IntFilter<"FacilitiesChecklistRecord"> | number
+    notes?: StringNullableFilter<"FacilitiesChecklistRecord"> | string | null
+    lastEditedBy?: StringNullableFilter<"FacilitiesChecklistRecord"> | string | null
+    lastEditedAt?: DateTimeNullableFilter<"FacilitiesChecklistRecord"> | Date | string | null
+    createdById?: StringNullableFilter<"FacilitiesChecklistRecord"> | string | null
+    submittedAt?: DateTimeNullableFilter<"FacilitiesChecklistRecord"> | Date | string | null
+    submittedById?: StringNullableFilter<"FacilitiesChecklistRecord"> | string | null
+    linkedInstanceId?: StringNullableFilter<"FacilitiesChecklistRecord"> | string | null
+    createdAt?: DateTimeFilter<"FacilitiesChecklistRecord"> | Date | string
+    updatedAt?: DateTimeFilter<"FacilitiesChecklistRecord"> | Date | string
+  }
+
+  export type FacilitiesChecklistRecordUpsertWithWhereUniqueWithoutSubmittedByInput = {
+    where: FacilitiesChecklistRecordWhereUniqueInput
+    update: XOR<FacilitiesChecklistRecordUpdateWithoutSubmittedByInput, FacilitiesChecklistRecordUncheckedUpdateWithoutSubmittedByInput>
+    create: XOR<FacilitiesChecklistRecordCreateWithoutSubmittedByInput, FacilitiesChecklistRecordUncheckedCreateWithoutSubmittedByInput>
+  }
+
+  export type FacilitiesChecklistRecordUpdateWithWhereUniqueWithoutSubmittedByInput = {
+    where: FacilitiesChecklistRecordWhereUniqueInput
+    data: XOR<FacilitiesChecklistRecordUpdateWithoutSubmittedByInput, FacilitiesChecklistRecordUncheckedUpdateWithoutSubmittedByInput>
+  }
+
+  export type FacilitiesChecklistRecordUpdateManyWithWhereWithoutSubmittedByInput = {
+    where: FacilitiesChecklistRecordScalarWhereInput
+    data: XOR<FacilitiesChecklistRecordUpdateManyMutationInput, FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByInput>
+  }
+
   export type UserCreateWithoutCreatedFormsInput = {
     id?: string
     name: string
@@ -106473,6 +111856,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFormsInput = {
@@ -106528,6 +111917,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFormsInput = {
@@ -106631,6 +112026,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFormsInput = {
@@ -106686,6 +112087,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutFormInput = {
@@ -106788,6 +112195,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -106843,6 +112256,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -106903,6 +112322,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSubmissionsInput = {
@@ -106958,6 +112383,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSubmissionsInput = {
@@ -107066,6 +112497,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -107121,6 +112558,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutApprovedSubmissionsInput = {
@@ -107187,6 +112630,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSubmissionsInput = {
@@ -107242,6 +112691,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutRecordsInput = {
@@ -107297,6 +112752,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRecordsInput = {
@@ -107352,6 +112813,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRecordsInput = {
@@ -107423,6 +112890,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecordsInput = {
@@ -107478,6 +112951,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutPreOpInspectionsInput = {
@@ -107533,6 +113012,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOpInspectionsInput = {
@@ -107588,6 +113073,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOpInspectionsInput = {
@@ -107659,6 +113150,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOpInspectionsInput = {
@@ -107714,6 +113211,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutPreOp624InspectionsInput = {
@@ -107769,6 +113272,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOp624InspectionsInput = {
@@ -107824,6 +113333,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOp624InspectionsInput = {
@@ -107895,6 +113410,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOp624InspectionsInput = {
@@ -107950,6 +113471,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutDailyClean624RecordsInput = {
@@ -108005,6 +113532,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyClean624RecordsInput = {
@@ -108060,6 +113593,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyClean624RecordsInput = {
@@ -108131,6 +113670,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyClean624RecordsInput = {
@@ -108186,6 +113731,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutCreatedBatchTemplatesInput = {
@@ -108241,6 +113792,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBatchTemplatesInput = {
@@ -108296,6 +113853,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
@@ -108492,6 +114055,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBatchTemplatesInput = {
@@ -108547,6 +114116,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductUpsertWithoutTemplatesInput = {
@@ -108742,6 +114317,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchSheetSubmissionsInput = {
@@ -108797,6 +114378,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
@@ -109018,6 +114605,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchSheetSubmissionsInput = {
@@ -109073,6 +114666,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductUpsertWithoutSubmissionsInput = {
@@ -109201,6 +114800,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyCleaningChecklistsInput = {
@@ -109256,6 +114861,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyCleaningChecklistsInput = {
@@ -109327,6 +114938,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyCleaningChecklistsInput = {
@@ -109382,6 +114999,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -109437,6 +115060,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -109492,6 +115121,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput = {
@@ -109563,6 +115198,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput = {
@@ -109618,6 +115259,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductCreateWithoutWipMaterialsInput = {
@@ -111630,6 +117277,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutFormTemplatesInput = {
@@ -111685,6 +117338,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutFormTemplatesInput = {
@@ -111801,6 +117460,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFormTemplatesInput = {
@@ -111856,6 +117521,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SupplierCreateWithoutDocumentsInput = {
@@ -113011,6 +118682,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductsInput = {
@@ -113066,6 +118743,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductsInput = {
@@ -113393,6 +119076,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductsInput = {
@@ -113448,6 +119137,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput = {
@@ -113648,6 +119343,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutPurchaseOrdersInput = {
@@ -113703,6 +119404,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutPurchaseOrdersInput = {
@@ -113949,6 +119656,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPurchaseOrdersInput = {
@@ -114004,6 +119717,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type PurchaseOrderItemUpsertWithWhereUniqueWithoutPoInput = {
@@ -114339,6 +120058,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutReceivingRecordsInput = {
@@ -114394,6 +120119,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutReceivingRecordsInput = {
@@ -114808,6 +120539,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -114863,6 +120600,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialUpsertWithoutReceivingRecordsInput = {
@@ -115320,6 +121063,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutResolvedQuarantineRecordsInput = {
@@ -115375,6 +121124,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutResolvedQuarantineRecordsInput = {
@@ -115523,6 +121278,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput = {
@@ -115578,6 +121339,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutInventoryLotsInput = {
@@ -116383,6 +122150,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutInventoryMovementsInput = {
@@ -116438,6 +122211,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutInventoryMovementsInput = {
@@ -116645,6 +122424,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -116700,6 +122485,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutCycleCountsInput = {
@@ -116879,6 +122670,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCycleCountsInput = {
@@ -116934,6 +122731,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCycleCountsInput = {
@@ -117141,6 +122944,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCycleCountsInput = {
@@ -117196,6 +123005,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutInitialStockEntriesInput = {
@@ -117430,6 +123245,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutInitialStockEntriesInput = {
@@ -117485,6 +123306,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutInitialStockEntriesInput = {
@@ -117753,6 +123580,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInitialStockEntriesInput = {
@@ -117808,6 +123641,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -117934,6 +123773,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -117989,6 +123834,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutStockAlertAcknowledgmentsInput = {
@@ -118137,6 +123988,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStockAlertAcknowledgmentsInput = {
@@ -118192,6 +124049,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutForecastExclusionsInput = {
@@ -118247,6 +124110,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutForecastExclusionsInput = {
@@ -118302,6 +124171,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutForecastExclusionsInput = {
@@ -118424,6 +124299,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForecastExclusionsInput = {
@@ -118479,6 +124360,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductUpsertWithoutForecastExclusionsInput = {
@@ -118731,6 +124618,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutAuditExclusionsInput = {
@@ -118786,6 +124679,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutAuditExclusionsInput = {
@@ -119009,6 +124908,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditExclusionsInput = {
@@ -119064,6 +124969,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ShipstationBundleComponentCreateWithoutBundleProductInput = {
@@ -119876,6 +125787,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdIngredientsInput = {
@@ -119931,6 +125848,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdIngredientsInput = {
@@ -120002,6 +125925,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdIngredientsInput = {
@@ -120057,6 +125986,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutRdProjectsInput = {
@@ -120112,6 +126047,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdProjectsInput = {
@@ -120167,6 +126108,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdProjectsInput = {
@@ -120310,6 +126257,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdProjectsInput = {
@@ -120365,6 +126318,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type RdIterationUpsertWithWhereUniqueWithoutProjectInput = {
@@ -120950,6 +126909,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdAttachmentsInput = {
@@ -121005,6 +126970,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdAttachmentsInput = {
@@ -121149,6 +127120,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdAttachmentsInput = {
@@ -121204,6 +127181,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutRdNutritionProfilesInput = {
@@ -121259,6 +127242,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdNutritionProfilesInput = {
@@ -121314,6 +127303,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdNutritionProfilesInput = {
@@ -121385,6 +127380,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdNutritionProfilesInput = {
@@ -121440,6 +127441,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutAuditAcknowledgmentsInput = {
@@ -121566,6 +127573,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutAuditAcknowledgmentsInput = {
@@ -121621,6 +127634,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutAuditAcknowledgmentsInput = {
@@ -121769,6 +127788,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditAcknowledgmentsInput = {
@@ -121824,6 +127849,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SopCertificationScopeCreateWithoutCertificationInput = {
@@ -121921,6 +127952,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSopDocumentsInput = {
@@ -121976,6 +128013,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSopDocumentsInput = {
@@ -122141,6 +128184,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSopDocumentsInput = {
@@ -122196,6 +128245,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SopCertificationScopeUpsertWithWhereUniqueWithoutSopInput = {
@@ -122680,6 +128735,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSopReviewLogsInput = {
@@ -122735,6 +128796,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSopReviewLogsInput = {
@@ -122855,6 +128922,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSopReviewLogsInput = {
@@ -122910,6 +128983,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SopDocumentCreateWithoutRemindersInput = {
@@ -123154,6 +129233,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutOwnedTaskRulesInput = {
@@ -123209,6 +129294,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutOwnedTaskRulesInput = {
@@ -123373,6 +129464,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedTaskRulesInput = {
@@ -123428,6 +129525,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type RuleInstanceUpsertWithWhereUniqueWithoutRuleInput = {
@@ -123552,6 +129655,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutDoneRuleInstancesInput = {
@@ -123607,6 +129716,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutDoneRuleInstancesInput = {
@@ -123667,6 +129782,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSkippedRuleInstancesInput = {
@@ -123722,6 +129843,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSkippedRuleInstancesInput = {
@@ -123782,6 +129909,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedRuleInstancesInput = {
@@ -123837,6 +129970,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedRuleInstancesInput = {
@@ -123897,6 +130036,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutMarkedMissedRuleInstancesInput = {
@@ -123952,6 +130097,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutMarkedMissedRuleInstancesInput = {
@@ -124108,6 +130259,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDoneRuleInstancesInput = {
@@ -124163,6 +130320,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutSkippedRuleInstancesInput = {
@@ -124229,6 +130392,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSkippedRuleInstancesInput = {
@@ -124284,6 +130453,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutAssignedRuleInstancesInput = {
@@ -124350,6 +130525,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedRuleInstancesInput = {
@@ -124405,6 +130586,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutMarkedMissedRuleInstancesInput = {
@@ -124471,6 +130658,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMarkedMissedRuleInstancesInput = {
@@ -124526,6 +130719,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type TaskInstanceAuditUpsertWithWhereUniqueWithoutInstanceInput = {
@@ -124656,6 +130855,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutTaskInstanceAuditLogsInput = {
@@ -124711,6 +130916,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutTaskInstanceAuditLogsInput = {
@@ -124847,6 +131058,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskInstanceAuditLogsInput = {
@@ -124902,6 +131119,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutMonthlyClean624SubmittedRecordsInput = {
@@ -124957,6 +131180,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyClean624SubmittedRecordsInput = {
@@ -125012,6 +131241,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyClean624SubmittedRecordsInput = {
@@ -125072,6 +131307,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyClean624CreatedRecordsInput = {
@@ -125127,6 +131368,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyClean624CreatedRecordsInput = {
@@ -125198,6 +131445,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyClean624SubmittedRecordsInput = {
@@ -125253,6 +131506,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutMonthlyClean624CreatedRecordsInput = {
@@ -125319,6 +131578,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyClean624CreatedRecordsInput = {
@@ -125374,6 +131639,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutVerification624EquipmentRetiredInput = {
@@ -125429,6 +131700,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutVerification624EquipmentRetiredInput = {
@@ -125484,6 +131761,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutVerification624EquipmentRetiredInput = {
@@ -125544,6 +131827,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutVerification624EquipmentCreatedInput = {
@@ -125599,6 +131888,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutVerification624EquipmentCreatedInput = {
@@ -125659,6 +131954,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutVerification624EquipmentUpdatedInput = {
@@ -125714,6 +132015,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutVerification624EquipmentUpdatedInput = {
@@ -125785,6 +132092,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerification624EquipmentRetiredInput = {
@@ -125840,6 +132153,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutVerification624EquipmentCreatedInput = {
@@ -125906,6 +132225,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerification624EquipmentCreatedInput = {
@@ -125961,6 +132286,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutVerification624EquipmentUpdatedInput = {
@@ -126027,6 +132358,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerification624EquipmentUpdatedInput = {
@@ -126082,6 +132419,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutVerification624ListsUpdatedInput = {
@@ -126137,6 +132480,12 @@ export namespace Prisma {
     verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutVerification624ListsUpdatedInput = {
@@ -126192,6 +132541,12 @@ export namespace Prisma {
     verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutVerification624ListsUpdatedInput = {
@@ -126263,6 +132618,12 @@ export namespace Prisma {
     verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerification624ListsUpdatedInput = {
@@ -126318,6 +132679,12 @@ export namespace Prisma {
     verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutVerification624RecordsCreatedInput = {
@@ -126373,6 +132740,12 @@ export namespace Prisma {
     verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutVerification624RecordsCreatedInput = {
@@ -126428,6 +132801,12 @@ export namespace Prisma {
     verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutVerification624RecordsCreatedInput = {
@@ -126488,6 +132867,12 @@ export namespace Prisma {
     verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutVerification624RecordsSubmittedInput = {
@@ -126543,6 +132928,12 @@ export namespace Prisma {
     verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutVerification624RecordsSubmittedInput = {
@@ -126614,6 +133005,12 @@ export namespace Prisma {
     verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerification624RecordsCreatedInput = {
@@ -126669,6 +133066,12 @@ export namespace Prisma {
     verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutVerification624RecordsSubmittedInput = {
@@ -126735,6 +133138,12 @@ export namespace Prisma {
     verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerification624RecordsSubmittedInput = {
@@ -126790,6 +133199,1572 @@ export namespace Prisma {
     verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserCreateWithoutFacilitiesChecklistItemsRetiredInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutFacilitiesChecklistItemsRetiredInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutFacilitiesChecklistItemsRetiredInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFacilitiesChecklistItemsRetiredInput, UserUncheckedCreateWithoutFacilitiesChecklistItemsRetiredInput>
+  }
+
+  export type UserCreateWithoutFacilitiesChecklistItemsCreatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutFacilitiesChecklistItemsCreatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutFacilitiesChecklistItemsCreatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFacilitiesChecklistItemsCreatedInput, UserUncheckedCreateWithoutFacilitiesChecklistItemsCreatedInput>
+  }
+
+  export type UserCreateWithoutFacilitiesChecklistItemsUpdatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutFacilitiesChecklistItemsUpdatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutFacilitiesChecklistItemsUpdatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFacilitiesChecklistItemsUpdatedInput, UserUncheckedCreateWithoutFacilitiesChecklistItemsUpdatedInput>
+  }
+
+  export type UserUpsertWithoutFacilitiesChecklistItemsRetiredInput = {
+    update: XOR<UserUpdateWithoutFacilitiesChecklistItemsRetiredInput, UserUncheckedUpdateWithoutFacilitiesChecklistItemsRetiredInput>
+    create: XOR<UserCreateWithoutFacilitiesChecklistItemsRetiredInput, UserUncheckedCreateWithoutFacilitiesChecklistItemsRetiredInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFacilitiesChecklistItemsRetiredInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFacilitiesChecklistItemsRetiredInput, UserUncheckedUpdateWithoutFacilitiesChecklistItemsRetiredInput>
+  }
+
+  export type UserUpdateWithoutFacilitiesChecklistItemsRetiredInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFacilitiesChecklistItemsRetiredInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUpsertWithoutFacilitiesChecklistItemsCreatedInput = {
+    update: XOR<UserUpdateWithoutFacilitiesChecklistItemsCreatedInput, UserUncheckedUpdateWithoutFacilitiesChecklistItemsCreatedInput>
+    create: XOR<UserCreateWithoutFacilitiesChecklistItemsCreatedInput, UserUncheckedCreateWithoutFacilitiesChecklistItemsCreatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFacilitiesChecklistItemsCreatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFacilitiesChecklistItemsCreatedInput, UserUncheckedUpdateWithoutFacilitiesChecklistItemsCreatedInput>
+  }
+
+  export type UserUpdateWithoutFacilitiesChecklistItemsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFacilitiesChecklistItemsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUpsertWithoutFacilitiesChecklistItemsUpdatedInput = {
+    update: XOR<UserUpdateWithoutFacilitiesChecklistItemsUpdatedInput, UserUncheckedUpdateWithoutFacilitiesChecklistItemsUpdatedInput>
+    create: XOR<UserCreateWithoutFacilitiesChecklistItemsUpdatedInput, UserUncheckedCreateWithoutFacilitiesChecklistItemsUpdatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFacilitiesChecklistItemsUpdatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFacilitiesChecklistItemsUpdatedInput, UserUncheckedUpdateWithoutFacilitiesChecklistItemsUpdatedInput>
+  }
+
+  export type UserUpdateWithoutFacilitiesChecklistItemsUpdatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFacilitiesChecklistItemsUpdatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserCreateWithoutFacilitiesChecklistListsUpdatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutFacilitiesChecklistListsUpdatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutFacilitiesChecklistListsUpdatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFacilitiesChecklistListsUpdatedInput, UserUncheckedCreateWithoutFacilitiesChecklistListsUpdatedInput>
+  }
+
+  export type UserUpsertWithoutFacilitiesChecklistListsUpdatedInput = {
+    update: XOR<UserUpdateWithoutFacilitiesChecklistListsUpdatedInput, UserUncheckedUpdateWithoutFacilitiesChecklistListsUpdatedInput>
+    create: XOR<UserCreateWithoutFacilitiesChecklistListsUpdatedInput, UserUncheckedCreateWithoutFacilitiesChecklistListsUpdatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFacilitiesChecklistListsUpdatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFacilitiesChecklistListsUpdatedInput, UserUncheckedUpdateWithoutFacilitiesChecklistListsUpdatedInput>
+  }
+
+  export type UserUpdateWithoutFacilitiesChecklistListsUpdatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFacilitiesChecklistListsUpdatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserCreateWithoutFacilitiesChecklistRecordsCreatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutFacilitiesChecklistRecordsCreatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutFacilitiesChecklistRecordsCreatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFacilitiesChecklistRecordsCreatedInput, UserUncheckedCreateWithoutFacilitiesChecklistRecordsCreatedInput>
+  }
+
+  export type UserCreateWithoutFacilitiesChecklistRecordsSubmittedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutFacilitiesChecklistRecordsSubmittedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutFacilitiesChecklistRecordsSubmittedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFacilitiesChecklistRecordsSubmittedInput, UserUncheckedCreateWithoutFacilitiesChecklistRecordsSubmittedInput>
+  }
+
+  export type UserUpsertWithoutFacilitiesChecklistRecordsCreatedInput = {
+    update: XOR<UserUpdateWithoutFacilitiesChecklistRecordsCreatedInput, UserUncheckedUpdateWithoutFacilitiesChecklistRecordsCreatedInput>
+    create: XOR<UserCreateWithoutFacilitiesChecklistRecordsCreatedInput, UserUncheckedCreateWithoutFacilitiesChecklistRecordsCreatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFacilitiesChecklistRecordsCreatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFacilitiesChecklistRecordsCreatedInput, UserUncheckedUpdateWithoutFacilitiesChecklistRecordsCreatedInput>
+  }
+
+  export type UserUpdateWithoutFacilitiesChecklistRecordsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFacilitiesChecklistRecordsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUpsertWithoutFacilitiesChecklistRecordsSubmittedInput = {
+    update: XOR<UserUpdateWithoutFacilitiesChecklistRecordsSubmittedInput, UserUncheckedUpdateWithoutFacilitiesChecklistRecordsSubmittedInput>
+    create: XOR<UserCreateWithoutFacilitiesChecklistRecordsSubmittedInput, UserUncheckedCreateWithoutFacilitiesChecklistRecordsSubmittedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFacilitiesChecklistRecordsSubmittedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFacilitiesChecklistRecordsSubmittedInput, UserUncheckedUpdateWithoutFacilitiesChecklistRecordsSubmittedInput>
+  }
+
+  export type UserUpdateWithoutFacilitiesChecklistRecordsSubmittedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFacilitiesChecklistRecordsSubmittedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -126845,6 +134820,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -126900,6 +134881,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
     verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -126971,6 +134958,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -127026,6 +135019,12 @@ export namespace Prisma {
     verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
     verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
     verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type FormCreateManyCreatedByInput = {
@@ -127794,6 +135793,100 @@ export namespace Prisma {
     okCount?: number
     failCount?: number
     notInUseCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistItemCreateManyCreatedByInput = {
+    id?: string
+    facility?: string
+    groupName: string
+    name: string
+    description?: string
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistItemCreateManyUpdatedByInput = {
+    id?: string
+    facility?: string
+    groupName: string
+    name: string
+    description?: string
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistItemCreateManyRetiredByInput = {
+    id?: string
+    facility?: string
+    groupName: string
+    name: string
+    description?: string
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistListCreateManyUpdatedByInput = {
+    facility: string
+    version?: number
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistRecordCreateManyCreatedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FacilitiesChecklistRecordCreateManySubmittedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
     notes?: string | null
     lastEditedBy?: string | null
     lastEditedAt?: Date | string | null
@@ -130168,6 +138261,288 @@ export namespace Prisma {
     okCount?: IntFieldUpdateOperationsInput | number
     failCount?: IntFieldUpdateOperationsInput | number
     notInUseCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistItemUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    groupName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    retiredBy?: UserUpdateOneWithoutFacilitiesChecklistItemsRetiredNestedInput
+    updatedBy?: UserUpdateOneWithoutFacilitiesChecklistItemsUpdatedNestedInput
+  }
+
+  export type FacilitiesChecklistItemUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    groupName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    groupName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistItemUpdateWithoutUpdatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    groupName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    retiredBy?: UserUpdateOneWithoutFacilitiesChecklistItemsRetiredNestedInput
+    createdBy?: UserUpdateOneWithoutFacilitiesChecklistItemsCreatedNestedInput
+  }
+
+  export type FacilitiesChecklistItemUncheckedUpdateWithoutUpdatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    groupName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    groupName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistItemUpdateWithoutRetiredByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    groupName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneWithoutFacilitiesChecklistItemsCreatedNestedInput
+    updatedBy?: UserUpdateOneWithoutFacilitiesChecklistItemsUpdatedNestedInput
+  }
+
+  export type FacilitiesChecklistItemUncheckedUpdateWithoutRetiredByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    groupName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    groupName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistListUpdateWithoutUpdatedByInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistListUncheckedUpdateWithoutUpdatedByInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistRecordUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedBy?: UserUpdateOneWithoutFacilitiesChecklistRecordsSubmittedNestedInput
+  }
+
+  export type FacilitiesChecklistRecordUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistRecordUpdateWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneWithoutFacilitiesChecklistRecordsCreatedNestedInput
+  }
+
+  export type FacilitiesChecklistRecordUncheckedUpdateWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
     lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -133781,6 +142156,18 @@ export namespace Prisma {
      * @deprecated Use Verification624RecordDefaultArgs instead
      */
     export type Verification624RecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Verification624RecordDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use FacilitiesChecklistItemDefaultArgs instead
+     */
+    export type FacilitiesChecklistItemArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FacilitiesChecklistItemDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use FacilitiesChecklistListDefaultArgs instead
+     */
+    export type FacilitiesChecklistListArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FacilitiesChecklistListDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use FacilitiesChecklistRecordDefaultArgs instead
+     */
+    export type FacilitiesChecklistRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FacilitiesChecklistRecordDefaultArgs<ExtArgs>
     /**
      * @deprecated Use NotificationDefaultArgs instead
      */
