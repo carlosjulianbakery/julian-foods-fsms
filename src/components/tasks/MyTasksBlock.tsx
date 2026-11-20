@@ -5,6 +5,7 @@ import type { Prisma } from "@/generated/prisma";
 import { getPacificToday, addDaysToDateStr } from "@/lib/pacific-time";
 import { computeWindowStart, isInWindow, windowOverlapsRange } from "@/lib/window-tasks";
 import { sortTasks } from "@/lib/task-order";
+import { fetchTaskProgress } from "@/lib/task-progress";
 import { MyTasksClient, type TaskInstance } from "./MyTasksClient";
 
 function getMondayOf(dateStr: string): string {
@@ -165,20 +166,8 @@ export async function MyTasksBlock() {
     return dueStr > calendarWeekEnd && windowOverlapsRange(windowStartOf(inst), dueStr, calendarWeekStart, calendarWeekEnd);
   });
 
-  // Fetch MC624 progress for open window instances
-  const mc624InstanceIds = openWindowInstances
-    .filter((i) => i.rule.formKey === "monthly_cleaning_624")
-    .map((i) => i.id);
-  const mc624Records =
-    mc624InstanceIds.length > 0
-      ? await prisma.monthlyClean624Record.findMany({
-          where: { linkedInstanceId: { in: mc624InstanceIds } },
-          select: { linkedInstanceId: true, doneCount: true, naCount: true, notDoneCount: true },
-        })
-      : [];
-  const mc624ByInstanceId = new Map(
-    mc624Records.filter((r) => r.linkedInstanceId != null).map((r) => [r.linkedInstanceId!, r]),
-  );
+  // Progress for "Open this period" cards, for any form that registers a provider
+  const progressByInstanceId = await fetchTaskProgress(openWindowInstances, prisma);
 
   function serializeInst(inst: typeof instances[number]): TaskInstance {
     return {
@@ -222,12 +211,9 @@ export async function MyTasksBlock() {
   ].map(serializeInst));
 
   function serializeWindowInst(inst: typeof openWindowInstances[number]): TaskInstance {
-    const mc624 = mc624ByInstanceId.get(inst.id);
-    const total = mc624 ? mc624.doneCount + mc624.naCount + mc624.notDoneCount : null;
-    const done = mc624 ? mc624.doneCount + mc624.naCount : null;
     return {
       ...serializeInst(inst),
-      progress: total != null && total > 0 ? { done: done!, total } : null,
+      progress: progressByInstanceId.get(inst.id) ?? null,
     };
   }
 

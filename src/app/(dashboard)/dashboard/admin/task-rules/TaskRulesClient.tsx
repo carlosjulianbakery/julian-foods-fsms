@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { TASK_FORM_REGISTRY, getFormKeyOptions, getFormLabel } from "@/lib/task-form-registry";
-import { buildRulePayload, ruleToFormState, showEndOfMonthOption, type TaskRuleFormState } from "@/lib/task-rule-form";
+import { buildRulePayload, ruleToFormState, showEndOfMonthOption, showEveryOption, recurrenceLabel, RECURRENCE_UNITS, type TaskRuleFormState } from "@/lib/task-rule-form";
 
 interface Rule {
   id: string;
@@ -74,11 +74,7 @@ function triggerLabel(rule: Rule): string {
   if (rule.triggerType === "PRODUCTION_ANY") return "Batch Sheet (every production)";
   if (rule.triggerType === "PRODUCTION_PRODUCT")
     return rule.productName ? `Product: ${rule.productName}` : "Production product";
-  const every = rule.recurrenceEvery ?? 1;
-  const unit = rule.recurrenceUnit ?? "day";
-  const suffix = unit === "month" && rule.recurrenceEndOfMonth ? " (last day)" : "";
-  if (every === 1) return unit.charAt(0).toUpperCase() + unit.slice(1) + "ly" + suffix;
-  return `Every ${every} ${unit}s${suffix}`;
+  return recurrenceLabel(rule);
 }
 
 function formatPT(isoString: string | null): string {
@@ -606,7 +602,7 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
               )}
               {form.triggerType === "RECURRING" && (
                 <div className="grid grid-cols-2 gap-3">
-                  <div>
+                  <div className={showEveryOption(form) ? "" : "hidden"}>
                     <label className="block text-sm font-medium mb-1">Every</label>
                     <input
                       type="number"
@@ -618,16 +614,16 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
                       }
                     />
                   </div>
-                  <div>
+                  <div className={showEveryOption(form) ? "" : "col-span-2"}>
                     <label className="block text-sm font-medium mb-1">Unit</label>
                     <select
                       className="input w-full"
                       value={form.recurrenceUnit}
                       onChange={(e) => setForm((f) => ({ ...f, recurrenceUnit: e.target.value }))}
                     >
-                      <option value="day">Day(s)</option>
-                      <option value="week">Week(s)</option>
-                      <option value="month">Month(s)</option>
+                      {RECURRENCE_UNITS.map((u) => (
+                        <option key={u.value} value={u.value}>{u.label}</option>
+                      ))}
                     </select>
                   </div>
                 </div>

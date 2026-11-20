@@ -43,7 +43,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ notFound: true }, { status: 404 });
   }
 
-  const exact = candidates.find((i) => i.dueDate.toISOString().slice(0, 10) === today);
+  // A form that knows which period it is for sends that period's due date, so the right task is marked
+  const wantedDue = typeof body?.dueDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(body.dueDate) ? body.dueDate : null;
+  if (wantedDue) {
+    const forPeriod = candidates.find((i) => i.dueDate.toISOString().slice(0, 10) === wantedDue);
+    if (!forPeriod) return NextResponse.json({ notFound: true }, { status: 404 });
+    candidates.splice(0, candidates.length, forPeriod);
+  }
+
+  const exact = candidates.find((i) => i.dueDate.toISOString().slice(0, 10) === (wantedDue ?? today));
   const openCandidates = candidates.filter((i) => (OPEN_STATUSES as readonly string[]).includes(i.status));
   const target = exact ?? openCandidates.find((i) => i.status === "OVERDUE") ?? openCandidates[0] ?? candidates[0];
 

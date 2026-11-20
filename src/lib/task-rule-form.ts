@@ -30,6 +30,28 @@ export interface TaskRuleFormSource {
   windowDaysBefore: number | null;
 }
 
+export const RECURRENCE_UNITS = [
+  { value: "day", label: "Day(s)" },
+  { value: "week", label: "Week(s)" },
+  { value: "month", label: "Month(s)" },
+  { value: "half_month", label: "Twice a month (15th and last day)" },
+] as const;
+
+/** "Every N" has no meaning for twice-a-month rules. */
+export function showEveryOption(form: Pick<TaskRuleFormState, "triggerType" | "recurrenceUnit">): boolean {
+  return form.triggerType === "RECURRING" && form.recurrenceUnit !== "half_month";
+}
+
+/** Text for the rules list. */
+export function recurrenceLabel(rule: { recurrenceUnit: string | null; recurrenceEvery: number | null; recurrenceEndOfMonth?: boolean | null }): string {
+  const unit = rule.recurrenceUnit ?? "day";
+  if (unit === "half_month") return "Twice a month";
+  const every = rule.recurrenceEvery ?? 1;
+  const suffix = unit === "month" && rule.recurrenceEndOfMonth ? " (last day)" : "";
+  if (every === 1) return unit.charAt(0).toUpperCase() + unit.slice(1) + "ly" + suffix;
+  return `Every ${every} ${unit}s${suffix}`;
+}
+
 export function showEndOfMonthOption(form: Pick<TaskRuleFormState, "triggerType" | "recurrenceUnit">): boolean {
   return form.triggerType === "RECURRING" && form.recurrenceUnit === "month";
 }
@@ -61,7 +83,7 @@ export function buildRulePayload(form: TaskRuleFormState): Record<string, unknow
     ownerId: form.ownerId,
     triggerType: form.triggerType,
     recurrenceUnit: recurring ? form.recurrenceUnit : null,
-    recurrenceEvery: recurring ? form.recurrenceEvery : null,
+    recurrenceEvery: recurring ? (form.recurrenceUnit === "half_month" ? 1 : form.recurrenceEvery) : null,
     recurrenceStart: form.recurrenceStart,
     recurrenceEndOfMonth: showEndOfMonthOption(form) ? form.recurrenceEndOfMonth : false,
     formKey: form.formKey || null,

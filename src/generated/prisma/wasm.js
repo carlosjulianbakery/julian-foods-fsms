@@ -1058,6 +1058,54 @@ exports.Prisma.MonthlyClean624RecordScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.Verification624EquipmentScalarFieldEnum = {
+  id: 'id',
+  facility: 'facility',
+  section: 'section',
+  name: 'name',
+  location: 'location',
+  inUse: 'inUse',
+  sortOrder: 'sortOrder',
+  retiredAt: 'retiredAt',
+  retiredById: 'retiredById',
+  createdById: 'createdById',
+  updatedById: 'updatedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.Verification624ListScalarFieldEnum = {
+  facility: 'facility',
+  version: 'version',
+  updatedById: 'updatedById',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.Verification624RecordScalarFieldEnum = {
+  id: 'id',
+  facility: 'facility',
+  period: 'period',
+  periodStart: 'periodStart',
+  periodEnd: 'periodEnd',
+  status: 'status',
+  conductedBy: 'conductedBy',
+  initials: 'initials',
+  items: 'items',
+  listVersion: 'listVersion',
+  okCount: 'okCount',
+  failCount: 'failCount',
+  notInUseCount: 'notInUseCount',
+  notes: 'notes',
+  lastEditedBy: 'lastEditedBy',
+  lastEditedAt: 'lastEditedAt',
+  createdById: 'createdById',
+  submittedAt: 'submittedAt',
+  submittedById: 'submittedById',
+  linkedInstanceId: 'linkedInstanceId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.NotificationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -1247,6 +1295,9 @@ exports.Prisma.ModelName = {
   RuleInstance: 'RuleInstance',
   TaskInstanceAudit: 'TaskInstanceAudit',
   MonthlyClean624Record: 'MonthlyClean624Record',
+  Verification624Equipment: 'Verification624Equipment',
+  Verification624List: 'Verification624List',
+  Verification624Record: 'Verification624Record',
   Notification: 'Notification'
 };
 

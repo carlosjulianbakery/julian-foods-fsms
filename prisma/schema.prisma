@@ -69,6 +69,12 @@ model User {
   dailyClean624Records             DailyClean624Record[]          @relation("DailyClean624Submissions")
   monthlyClean624SubmittedRecords  MonthlyClean624Record[]        @relation("MonthlyClean624Submitted")
   monthlyClean624CreatedRecords    MonthlyClean624Record[]        @relation("MonthlyClean624Created")
+  verification624EquipmentCreated  Verification624Equipment[]     @relation("Verification624EquipmentCreated")
+  verification624EquipmentUpdated  Verification624Equipment[]     @relation("Verification624EquipmentUpdated")
+  verification624EquipmentRetired  Verification624Equipment[]     @relation("Verification624EquipmentRetired")
+  verification624ListsUpdated      Verification624List[]          @relation("Verification624ListUpdated")
+  verification624RecordsCreated    Verification624Record[]        @relation("Verification624RecordCreated")
+  verification624RecordsSubmitted  Verification624Record[]        @relation("Verification624RecordSubmitted")
 
   @@map("users")
 }
@@ -1457,6 +1463,76 @@ model MonthlyClean624Record {
 
   @@unique([facility, month])
   @@map("monthly_clean_624_records")
+}
+
+// ─── Scales & Thermometer Verification — 624 ─────────────────────────────────
+
+// Editable equipment list. Items are retired, never deleted, so old records keep their names.
+model Verification624Equipment {
+  id          String    @id @default(cuid())
+  facility    String    @default("624")
+  section     String // 'portable_thermometer' | 'fixed_thermometer' | 'scale'
+  name        String
+  location    String    @default("")
+  inUse       Boolean   @default(true)
+  sortOrder   Int       @default(0)
+  retiredAt   DateTime?
+  retiredById String?
+  createdById String?
+  updatedById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+
+  retiredBy User? @relation("Verification624EquipmentRetired", fields: [retiredById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "verification_624_equipment_retired_fkey")
+  createdBy User? @relation("Verification624EquipmentCreated", fields: [createdById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "verification_624_equipment_created_fkey")
+  updatedBy User? @relation("Verification624EquipmentUpdated", fields: [updatedById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "verification_624_equipment_updated_fkey")
+
+  @@index([facility, section, sortOrder], map: "verification_624_equipment_facility_idx")
+  @@map("verification_624_equipment")
+}
+
+// One row per facility; version goes up on every change to the equipment list.
+model Verification624List {
+  facility    String   @id
+  version     Int      @default(1)
+  updatedById String?
+  updatedAt   DateTime @default(now()) @updatedAt
+
+  updatedBy User? @relation("Verification624ListUpdated", fields: [updatedById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "verification_624_lists_updated_fkey")
+
+  @@map("verification_624_lists")
+}
+
+// One record per facility and half-month period ('2026-11-A' = 1st–15th, '2026-11-B' = 16th–last day).
+model Verification624Record {
+  id               String    @id @default(cuid())
+  facility         String    @default("624")
+  period           String
+  periodStart      DateTime  @db.Date
+  periodEnd        DateTime  @db.Date
+  status           String    @default("draft")
+  conductedBy      String    @default("")
+  initials         String    @default("")
+  items            Json      @default("[]")
+  listVersion      Int       @default(1)
+  okCount          Int       @default(0)
+  failCount        Int       @default(0)
+  notInUseCount    Int       @default(0)
+  notes            String?
+  lastEditedBy     String?
+  lastEditedAt     DateTime?
+  createdById      String?
+  submittedAt      DateTime?
+  submittedById    String?
+  linkedInstanceId String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @default(now()) @updatedAt
+
+  createdBy   User? @relation("Verification624RecordCreated", fields: [createdById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "verification_624_records_created_fkey")
+  submittedBy User? @relation("Verification624RecordSubmitted", fields: [submittedById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "verification_624_records_submitted_fkey")
+
+  @@unique([facility, period], map: "verification_624_records_facility_period_key")
+  @@map("verification_624_records")
 }
 
 model Notification {

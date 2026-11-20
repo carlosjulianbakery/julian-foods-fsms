@@ -309,6 +309,21 @@ export type TaskInstanceAudit = $Result.DefaultSelection<Prisma.$TaskInstanceAud
  */
 export type MonthlyClean624Record = $Result.DefaultSelection<Prisma.$MonthlyClean624RecordPayload>
 /**
+ * Model Verification624Equipment
+ * 
+ */
+export type Verification624Equipment = $Result.DefaultSelection<Prisma.$Verification624EquipmentPayload>
+/**
+ * Model Verification624List
+ * 
+ */
+export type Verification624List = $Result.DefaultSelection<Prisma.$Verification624ListPayload>
+/**
+ * Model Verification624Record
+ * 
+ */
+export type Verification624Record = $Result.DefaultSelection<Prisma.$Verification624RecordPayload>
+/**
  * Model Notification
  * 
  */
@@ -1212,6 +1227,36 @@ export class PrismaClient<
   get monthlyClean624Record(): Prisma.MonthlyClean624RecordDelegate<ExtArgs>;
 
   /**
+   * `prisma.verification624Equipment`: Exposes CRUD operations for the **Verification624Equipment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Verification624Equipments
+    * const verification624Equipments = await prisma.verification624Equipment.findMany()
+    * ```
+    */
+  get verification624Equipment(): Prisma.Verification624EquipmentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.verification624List`: Exposes CRUD operations for the **Verification624List** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Verification624Lists
+    * const verification624Lists = await prisma.verification624List.findMany()
+    * ```
+    */
+  get verification624List(): Prisma.Verification624ListDelegate<ExtArgs>;
+
+  /**
+   * `prisma.verification624Record`: Exposes CRUD operations for the **Verification624Record** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Verification624Records
+    * const verification624Records = await prisma.verification624Record.findMany()
+    * ```
+    */
+  get verification624Record(): Prisma.Verification624RecordDelegate<ExtArgs>;
+
+  /**
    * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
     * Example usage:
     * ```ts
@@ -1720,6 +1765,9 @@ export namespace Prisma {
     RuleInstance: 'RuleInstance',
     TaskInstanceAudit: 'TaskInstanceAudit',
     MonthlyClean624Record: 'MonthlyClean624Record',
+    Verification624Equipment: 'Verification624Equipment',
+    Verification624List: 'Verification624List',
+    Verification624Record: 'Verification624Record',
     Notification: 'Notification'
   };
 
@@ -1736,7 +1784,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "record" | "preOpInspection" | "preOp624Inspection" | "dailyClean624Record" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "monthlyClean624Record" | "notification"
+      modelProps: "user" | "form" | "formSubmission" | "record" | "preOpInspection" | "preOp624Inspection" | "dailyClean624Record" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "monthlyClean624Record" | "verification624Equipment" | "verification624List" | "verification624Record" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5870,6 +5918,216 @@ export namespace Prisma {
           }
         }
       }
+      Verification624Equipment: {
+        payload: Prisma.$Verification624EquipmentPayload<ExtArgs>
+        fields: Prisma.Verification624EquipmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.Verification624EquipmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624EquipmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.Verification624EquipmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624EquipmentPayload>
+          }
+          findFirst: {
+            args: Prisma.Verification624EquipmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624EquipmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.Verification624EquipmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624EquipmentPayload>
+          }
+          findMany: {
+            args: Prisma.Verification624EquipmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624EquipmentPayload>[]
+          }
+          create: {
+            args: Prisma.Verification624EquipmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624EquipmentPayload>
+          }
+          createMany: {
+            args: Prisma.Verification624EquipmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.Verification624EquipmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624EquipmentPayload>[]
+          }
+          delete: {
+            args: Prisma.Verification624EquipmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624EquipmentPayload>
+          }
+          update: {
+            args: Prisma.Verification624EquipmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624EquipmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.Verification624EquipmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.Verification624EquipmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.Verification624EquipmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624EquipmentPayload>
+          }
+          aggregate: {
+            args: Prisma.Verification624EquipmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVerification624Equipment>
+          }
+          groupBy: {
+            args: Prisma.Verification624EquipmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Verification624EquipmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.Verification624EquipmentCountArgs<ExtArgs>
+            result: $Utils.Optional<Verification624EquipmentCountAggregateOutputType> | number
+          }
+        }
+      }
+      Verification624List: {
+        payload: Prisma.$Verification624ListPayload<ExtArgs>
+        fields: Prisma.Verification624ListFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.Verification624ListFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624ListPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.Verification624ListFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624ListPayload>
+          }
+          findFirst: {
+            args: Prisma.Verification624ListFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624ListPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.Verification624ListFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624ListPayload>
+          }
+          findMany: {
+            args: Prisma.Verification624ListFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624ListPayload>[]
+          }
+          create: {
+            args: Prisma.Verification624ListCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624ListPayload>
+          }
+          createMany: {
+            args: Prisma.Verification624ListCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.Verification624ListCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624ListPayload>[]
+          }
+          delete: {
+            args: Prisma.Verification624ListDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624ListPayload>
+          }
+          update: {
+            args: Prisma.Verification624ListUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624ListPayload>
+          }
+          deleteMany: {
+            args: Prisma.Verification624ListDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.Verification624ListUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.Verification624ListUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624ListPayload>
+          }
+          aggregate: {
+            args: Prisma.Verification624ListAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVerification624List>
+          }
+          groupBy: {
+            args: Prisma.Verification624ListGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Verification624ListGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.Verification624ListCountArgs<ExtArgs>
+            result: $Utils.Optional<Verification624ListCountAggregateOutputType> | number
+          }
+        }
+      }
+      Verification624Record: {
+        payload: Prisma.$Verification624RecordPayload<ExtArgs>
+        fields: Prisma.Verification624RecordFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.Verification624RecordFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624RecordPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.Verification624RecordFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624RecordPayload>
+          }
+          findFirst: {
+            args: Prisma.Verification624RecordFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624RecordPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.Verification624RecordFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624RecordPayload>
+          }
+          findMany: {
+            args: Prisma.Verification624RecordFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624RecordPayload>[]
+          }
+          create: {
+            args: Prisma.Verification624RecordCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624RecordPayload>
+          }
+          createMany: {
+            args: Prisma.Verification624RecordCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.Verification624RecordCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624RecordPayload>[]
+          }
+          delete: {
+            args: Prisma.Verification624RecordDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624RecordPayload>
+          }
+          update: {
+            args: Prisma.Verification624RecordUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624RecordPayload>
+          }
+          deleteMany: {
+            args: Prisma.Verification624RecordDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.Verification624RecordUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.Verification624RecordUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$Verification624RecordPayload>
+          }
+          aggregate: {
+            args: Prisma.Verification624RecordAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVerification624Record>
+          }
+          groupBy: {
+            args: Prisma.Verification624RecordGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Verification624RecordGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.Verification624RecordCountArgs<ExtArgs>
+            result: $Utils.Optional<Verification624RecordCountAggregateOutputType> | number
+          }
+        }
+      }
       Notification: {
         payload: Prisma.$NotificationPayload<ExtArgs>
         fields: Prisma.NotificationFieldRefs
@@ -6139,6 +6397,12 @@ export namespace Prisma {
     dailyClean624Records: number
     monthlyClean624SubmittedRecords: number
     monthlyClean624CreatedRecords: number
+    verification624EquipmentCreated: number
+    verification624EquipmentUpdated: number
+    verification624EquipmentRetired: number
+    verification624ListsUpdated: number
+    verification624RecordsCreated: number
+    verification624RecordsSubmitted: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6180,6 +6444,12 @@ export namespace Prisma {
     dailyClean624Records?: boolean | UserCountOutputTypeCountDailyClean624RecordsArgs
     monthlyClean624SubmittedRecords?: boolean | UserCountOutputTypeCountMonthlyClean624SubmittedRecordsArgs
     monthlyClean624CreatedRecords?: boolean | UserCountOutputTypeCountMonthlyClean624CreatedRecordsArgs
+    verification624EquipmentCreated?: boolean | UserCountOutputTypeCountVerification624EquipmentCreatedArgs
+    verification624EquipmentUpdated?: boolean | UserCountOutputTypeCountVerification624EquipmentUpdatedArgs
+    verification624EquipmentRetired?: boolean | UserCountOutputTypeCountVerification624EquipmentRetiredArgs
+    verification624ListsUpdated?: boolean | UserCountOutputTypeCountVerification624ListsUpdatedArgs
+    verification624RecordsCreated?: boolean | UserCountOutputTypeCountVerification624RecordsCreatedArgs
+    verification624RecordsSubmitted?: boolean | UserCountOutputTypeCountVerification624RecordsSubmittedArgs
   }
 
   // Custom InputTypes
@@ -6457,6 +6727,48 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountMonthlyClean624CreatedRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MonthlyClean624RecordWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountVerification624EquipmentCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Verification624EquipmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountVerification624EquipmentUpdatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Verification624EquipmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountVerification624EquipmentRetiredArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Verification624EquipmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountVerification624ListsUpdatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Verification624ListWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountVerification624RecordsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Verification624RecordWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountVerification624RecordsSubmittedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Verification624RecordWhereInput
   }
 
 
@@ -7615,6 +7927,12 @@ export namespace Prisma {
     dailyClean624Records?: boolean | User$dailyClean624RecordsArgs<ExtArgs>
     monthlyClean624SubmittedRecords?: boolean | User$monthlyClean624SubmittedRecordsArgs<ExtArgs>
     monthlyClean624CreatedRecords?: boolean | User$monthlyClean624CreatedRecordsArgs<ExtArgs>
+    verification624EquipmentCreated?: boolean | User$verification624EquipmentCreatedArgs<ExtArgs>
+    verification624EquipmentUpdated?: boolean | User$verification624EquipmentUpdatedArgs<ExtArgs>
+    verification624EquipmentRetired?: boolean | User$verification624EquipmentRetiredArgs<ExtArgs>
+    verification624ListsUpdated?: boolean | User$verification624ListsUpdatedArgs<ExtArgs>
+    verification624RecordsCreated?: boolean | User$verification624RecordsCreatedArgs<ExtArgs>
+    verification624RecordsSubmitted?: boolean | User$verification624RecordsSubmittedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -7681,6 +7999,12 @@ export namespace Prisma {
     dailyClean624Records?: boolean | User$dailyClean624RecordsArgs<ExtArgs>
     monthlyClean624SubmittedRecords?: boolean | User$monthlyClean624SubmittedRecordsArgs<ExtArgs>
     monthlyClean624CreatedRecords?: boolean | User$monthlyClean624CreatedRecordsArgs<ExtArgs>
+    verification624EquipmentCreated?: boolean | User$verification624EquipmentCreatedArgs<ExtArgs>
+    verification624EquipmentUpdated?: boolean | User$verification624EquipmentUpdatedArgs<ExtArgs>
+    verification624EquipmentRetired?: boolean | User$verification624EquipmentRetiredArgs<ExtArgs>
+    verification624ListsUpdated?: boolean | User$verification624ListsUpdatedArgs<ExtArgs>
+    verification624RecordsCreated?: boolean | User$verification624RecordsCreatedArgs<ExtArgs>
+    verification624RecordsSubmitted?: boolean | User$verification624RecordsSubmittedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -7726,6 +8050,12 @@ export namespace Prisma {
       dailyClean624Records: Prisma.$DailyClean624RecordPayload<ExtArgs>[]
       monthlyClean624SubmittedRecords: Prisma.$MonthlyClean624RecordPayload<ExtArgs>[]
       monthlyClean624CreatedRecords: Prisma.$MonthlyClean624RecordPayload<ExtArgs>[]
+      verification624EquipmentCreated: Prisma.$Verification624EquipmentPayload<ExtArgs>[]
+      verification624EquipmentUpdated: Prisma.$Verification624EquipmentPayload<ExtArgs>[]
+      verification624EquipmentRetired: Prisma.$Verification624EquipmentPayload<ExtArgs>[]
+      verification624ListsUpdated: Prisma.$Verification624ListPayload<ExtArgs>[]
+      verification624RecordsCreated: Prisma.$Verification624RecordPayload<ExtArgs>[]
+      verification624RecordsSubmitted: Prisma.$Verification624RecordPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8139,6 +8469,12 @@ export namespace Prisma {
     dailyClean624Records<T extends User$dailyClean624RecordsArgs<ExtArgs> = {}>(args?: Subset<T, User$dailyClean624RecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyClean624RecordPayload<ExtArgs>, T, "findMany"> | Null>
     monthlyClean624SubmittedRecords<T extends User$monthlyClean624SubmittedRecordsArgs<ExtArgs> = {}>(args?: Subset<T, User$monthlyClean624SubmittedRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyClean624RecordPayload<ExtArgs>, T, "findMany"> | Null>
     monthlyClean624CreatedRecords<T extends User$monthlyClean624CreatedRecordsArgs<ExtArgs> = {}>(args?: Subset<T, User$monthlyClean624CreatedRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyClean624RecordPayload<ExtArgs>, T, "findMany"> | Null>
+    verification624EquipmentCreated<T extends User$verification624EquipmentCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$verification624EquipmentCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Verification624EquipmentPayload<ExtArgs>, T, "findMany"> | Null>
+    verification624EquipmentUpdated<T extends User$verification624EquipmentUpdatedArgs<ExtArgs> = {}>(args?: Subset<T, User$verification624EquipmentUpdatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Verification624EquipmentPayload<ExtArgs>, T, "findMany"> | Null>
+    verification624EquipmentRetired<T extends User$verification624EquipmentRetiredArgs<ExtArgs> = {}>(args?: Subset<T, User$verification624EquipmentRetiredArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Verification624EquipmentPayload<ExtArgs>, T, "findMany"> | Null>
+    verification624ListsUpdated<T extends User$verification624ListsUpdatedArgs<ExtArgs> = {}>(args?: Subset<T, User$verification624ListsUpdatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Verification624ListPayload<ExtArgs>, T, "findMany"> | Null>
+    verification624RecordsCreated<T extends User$verification624RecordsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$verification624RecordsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Verification624RecordPayload<ExtArgs>, T, "findMany"> | Null>
+    verification624RecordsSubmitted<T extends User$verification624RecordsSubmittedArgs<ExtArgs> = {}>(args?: Subset<T, User$verification624RecordsSubmittedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Verification624RecordPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9248,6 +9584,126 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MonthlyClean624RecordScalarFieldEnum | MonthlyClean624RecordScalarFieldEnum[]
+  }
+
+  /**
+   * User.verification624EquipmentCreated
+   */
+  export type User$verification624EquipmentCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Equipment
+     */
+    select?: Verification624EquipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624EquipmentInclude<ExtArgs> | null
+    where?: Verification624EquipmentWhereInput
+    orderBy?: Verification624EquipmentOrderByWithRelationInput | Verification624EquipmentOrderByWithRelationInput[]
+    cursor?: Verification624EquipmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Verification624EquipmentScalarFieldEnum | Verification624EquipmentScalarFieldEnum[]
+  }
+
+  /**
+   * User.verification624EquipmentUpdated
+   */
+  export type User$verification624EquipmentUpdatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Equipment
+     */
+    select?: Verification624EquipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624EquipmentInclude<ExtArgs> | null
+    where?: Verification624EquipmentWhereInput
+    orderBy?: Verification624EquipmentOrderByWithRelationInput | Verification624EquipmentOrderByWithRelationInput[]
+    cursor?: Verification624EquipmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Verification624EquipmentScalarFieldEnum | Verification624EquipmentScalarFieldEnum[]
+  }
+
+  /**
+   * User.verification624EquipmentRetired
+   */
+  export type User$verification624EquipmentRetiredArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Equipment
+     */
+    select?: Verification624EquipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624EquipmentInclude<ExtArgs> | null
+    where?: Verification624EquipmentWhereInput
+    orderBy?: Verification624EquipmentOrderByWithRelationInput | Verification624EquipmentOrderByWithRelationInput[]
+    cursor?: Verification624EquipmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Verification624EquipmentScalarFieldEnum | Verification624EquipmentScalarFieldEnum[]
+  }
+
+  /**
+   * User.verification624ListsUpdated
+   */
+  export type User$verification624ListsUpdatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624List
+     */
+    select?: Verification624ListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624ListInclude<ExtArgs> | null
+    where?: Verification624ListWhereInput
+    orderBy?: Verification624ListOrderByWithRelationInput | Verification624ListOrderByWithRelationInput[]
+    cursor?: Verification624ListWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Verification624ListScalarFieldEnum | Verification624ListScalarFieldEnum[]
+  }
+
+  /**
+   * User.verification624RecordsCreated
+   */
+  export type User$verification624RecordsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Record
+     */
+    select?: Verification624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624RecordInclude<ExtArgs> | null
+    where?: Verification624RecordWhereInput
+    orderBy?: Verification624RecordOrderByWithRelationInput | Verification624RecordOrderByWithRelationInput[]
+    cursor?: Verification624RecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Verification624RecordScalarFieldEnum | Verification624RecordScalarFieldEnum[]
+  }
+
+  /**
+   * User.verification624RecordsSubmitted
+   */
+  export type User$verification624RecordsSubmittedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Record
+     */
+    select?: Verification624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624RecordInclude<ExtArgs> | null
+    where?: Verification624RecordWhereInput
+    orderBy?: Verification624RecordOrderByWithRelationInput | Verification624RecordOrderByWithRelationInput[]
+    cursor?: Verification624RecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Verification624RecordScalarFieldEnum | Verification624RecordScalarFieldEnum[]
   }
 
   /**
@@ -71831,6 +72287,3311 @@ export namespace Prisma {
 
 
   /**
+   * Model Verification624Equipment
+   */
+
+  export type AggregateVerification624Equipment = {
+    _count: Verification624EquipmentCountAggregateOutputType | null
+    _avg: Verification624EquipmentAvgAggregateOutputType | null
+    _sum: Verification624EquipmentSumAggregateOutputType | null
+    _min: Verification624EquipmentMinAggregateOutputType | null
+    _max: Verification624EquipmentMaxAggregateOutputType | null
+  }
+
+  export type Verification624EquipmentAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type Verification624EquipmentSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type Verification624EquipmentMinAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    section: string | null
+    name: string | null
+    location: string | null
+    inUse: boolean | null
+    sortOrder: number | null
+    retiredAt: Date | null
+    retiredById: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Verification624EquipmentMaxAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    section: string | null
+    name: string | null
+    location: string | null
+    inUse: boolean | null
+    sortOrder: number | null
+    retiredAt: Date | null
+    retiredById: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Verification624EquipmentCountAggregateOutputType = {
+    id: number
+    facility: number
+    section: number
+    name: number
+    location: number
+    inUse: number
+    sortOrder: number
+    retiredAt: number
+    retiredById: number
+    createdById: number
+    updatedById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type Verification624EquipmentAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type Verification624EquipmentSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type Verification624EquipmentMinAggregateInputType = {
+    id?: true
+    facility?: true
+    section?: true
+    name?: true
+    location?: true
+    inUse?: true
+    sortOrder?: true
+    retiredAt?: true
+    retiredById?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Verification624EquipmentMaxAggregateInputType = {
+    id?: true
+    facility?: true
+    section?: true
+    name?: true
+    location?: true
+    inUse?: true
+    sortOrder?: true
+    retiredAt?: true
+    retiredById?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Verification624EquipmentCountAggregateInputType = {
+    id?: true
+    facility?: true
+    section?: true
+    name?: true
+    location?: true
+    inUse?: true
+    sortOrder?: true
+    retiredAt?: true
+    retiredById?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type Verification624EquipmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Verification624Equipment to aggregate.
+     */
+    where?: Verification624EquipmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Verification624Equipments to fetch.
+     */
+    orderBy?: Verification624EquipmentOrderByWithRelationInput | Verification624EquipmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: Verification624EquipmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Verification624Equipments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Verification624Equipments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Verification624Equipments
+    **/
+    _count?: true | Verification624EquipmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Verification624EquipmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Verification624EquipmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Verification624EquipmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Verification624EquipmentMaxAggregateInputType
+  }
+
+  export type GetVerification624EquipmentAggregateType<T extends Verification624EquipmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateVerification624Equipment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVerification624Equipment[P]>
+      : GetScalarType<T[P], AggregateVerification624Equipment[P]>
+  }
+
+
+
+
+  export type Verification624EquipmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Verification624EquipmentWhereInput
+    orderBy?: Verification624EquipmentOrderByWithAggregationInput | Verification624EquipmentOrderByWithAggregationInput[]
+    by: Verification624EquipmentScalarFieldEnum[] | Verification624EquipmentScalarFieldEnum
+    having?: Verification624EquipmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Verification624EquipmentCountAggregateInputType | true
+    _avg?: Verification624EquipmentAvgAggregateInputType
+    _sum?: Verification624EquipmentSumAggregateInputType
+    _min?: Verification624EquipmentMinAggregateInputType
+    _max?: Verification624EquipmentMaxAggregateInputType
+  }
+
+  export type Verification624EquipmentGroupByOutputType = {
+    id: string
+    facility: string
+    section: string
+    name: string
+    location: string
+    inUse: boolean
+    sortOrder: number
+    retiredAt: Date | null
+    retiredById: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: Verification624EquipmentCountAggregateOutputType | null
+    _avg: Verification624EquipmentAvgAggregateOutputType | null
+    _sum: Verification624EquipmentSumAggregateOutputType | null
+    _min: Verification624EquipmentMinAggregateOutputType | null
+    _max: Verification624EquipmentMaxAggregateOutputType | null
+  }
+
+  type GetVerification624EquipmentGroupByPayload<T extends Verification624EquipmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Verification624EquipmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Verification624EquipmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Verification624EquipmentGroupByOutputType[P]>
+            : GetScalarType<T[P], Verification624EquipmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type Verification624EquipmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    section?: boolean
+    name?: boolean
+    location?: boolean
+    inUse?: boolean
+    sortOrder?: boolean
+    retiredAt?: boolean
+    retiredById?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    retiredBy?: boolean | Verification624Equipment$retiredByArgs<ExtArgs>
+    createdBy?: boolean | Verification624Equipment$createdByArgs<ExtArgs>
+    updatedBy?: boolean | Verification624Equipment$updatedByArgs<ExtArgs>
+  }, ExtArgs["result"]["verification624Equipment"]>
+
+  export type Verification624EquipmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    section?: boolean
+    name?: boolean
+    location?: boolean
+    inUse?: boolean
+    sortOrder?: boolean
+    retiredAt?: boolean
+    retiredById?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    retiredBy?: boolean | Verification624Equipment$retiredByArgs<ExtArgs>
+    createdBy?: boolean | Verification624Equipment$createdByArgs<ExtArgs>
+    updatedBy?: boolean | Verification624Equipment$updatedByArgs<ExtArgs>
+  }, ExtArgs["result"]["verification624Equipment"]>
+
+  export type Verification624EquipmentSelectScalar = {
+    id?: boolean
+    facility?: boolean
+    section?: boolean
+    name?: boolean
+    location?: boolean
+    inUse?: boolean
+    sortOrder?: boolean
+    retiredAt?: boolean
+    retiredById?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type Verification624EquipmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    retiredBy?: boolean | Verification624Equipment$retiredByArgs<ExtArgs>
+    createdBy?: boolean | Verification624Equipment$createdByArgs<ExtArgs>
+    updatedBy?: boolean | Verification624Equipment$updatedByArgs<ExtArgs>
+  }
+  export type Verification624EquipmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    retiredBy?: boolean | Verification624Equipment$retiredByArgs<ExtArgs>
+    createdBy?: boolean | Verification624Equipment$createdByArgs<ExtArgs>
+    updatedBy?: boolean | Verification624Equipment$updatedByArgs<ExtArgs>
+  }
+
+  export type $Verification624EquipmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Verification624Equipment"
+    objects: {
+      retiredBy: Prisma.$UserPayload<ExtArgs> | null
+      createdBy: Prisma.$UserPayload<ExtArgs> | null
+      updatedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      facility: string
+      section: string
+      name: string
+      location: string
+      inUse: boolean
+      sortOrder: number
+      retiredAt: Date | null
+      retiredById: string | null
+      createdById: string | null
+      updatedById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["verification624Equipment"]>
+    composites: {}
+  }
+
+  type Verification624EquipmentGetPayload<S extends boolean | null | undefined | Verification624EquipmentDefaultArgs> = $Result.GetResult<Prisma.$Verification624EquipmentPayload, S>
+
+  type Verification624EquipmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<Verification624EquipmentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: Verification624EquipmentCountAggregateInputType | true
+    }
+
+  export interface Verification624EquipmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Verification624Equipment'], meta: { name: 'Verification624Equipment' } }
+    /**
+     * Find zero or one Verification624Equipment that matches the filter.
+     * @param {Verification624EquipmentFindUniqueArgs} args - Arguments to find a Verification624Equipment
+     * @example
+     * // Get one Verification624Equipment
+     * const verification624Equipment = await prisma.verification624Equipment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends Verification624EquipmentFindUniqueArgs>(args: SelectSubset<T, Verification624EquipmentFindUniqueArgs<ExtArgs>>): Prisma__Verification624EquipmentClient<$Result.GetResult<Prisma.$Verification624EquipmentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Verification624Equipment that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {Verification624EquipmentFindUniqueOrThrowArgs} args - Arguments to find a Verification624Equipment
+     * @example
+     * // Get one Verification624Equipment
+     * const verification624Equipment = await prisma.verification624Equipment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends Verification624EquipmentFindUniqueOrThrowArgs>(args: SelectSubset<T, Verification624EquipmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__Verification624EquipmentClient<$Result.GetResult<Prisma.$Verification624EquipmentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Verification624Equipment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624EquipmentFindFirstArgs} args - Arguments to find a Verification624Equipment
+     * @example
+     * // Get one Verification624Equipment
+     * const verification624Equipment = await prisma.verification624Equipment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends Verification624EquipmentFindFirstArgs>(args?: SelectSubset<T, Verification624EquipmentFindFirstArgs<ExtArgs>>): Prisma__Verification624EquipmentClient<$Result.GetResult<Prisma.$Verification624EquipmentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Verification624Equipment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624EquipmentFindFirstOrThrowArgs} args - Arguments to find a Verification624Equipment
+     * @example
+     * // Get one Verification624Equipment
+     * const verification624Equipment = await prisma.verification624Equipment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends Verification624EquipmentFindFirstOrThrowArgs>(args?: SelectSubset<T, Verification624EquipmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__Verification624EquipmentClient<$Result.GetResult<Prisma.$Verification624EquipmentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Verification624Equipments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624EquipmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Verification624Equipments
+     * const verification624Equipments = await prisma.verification624Equipment.findMany()
+     * 
+     * // Get first 10 Verification624Equipments
+     * const verification624Equipments = await prisma.verification624Equipment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const verification624EquipmentWithIdOnly = await prisma.verification624Equipment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends Verification624EquipmentFindManyArgs>(args?: SelectSubset<T, Verification624EquipmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Verification624EquipmentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Verification624Equipment.
+     * @param {Verification624EquipmentCreateArgs} args - Arguments to create a Verification624Equipment.
+     * @example
+     * // Create one Verification624Equipment
+     * const Verification624Equipment = await prisma.verification624Equipment.create({
+     *   data: {
+     *     // ... data to create a Verification624Equipment
+     *   }
+     * })
+     * 
+     */
+    create<T extends Verification624EquipmentCreateArgs>(args: SelectSubset<T, Verification624EquipmentCreateArgs<ExtArgs>>): Prisma__Verification624EquipmentClient<$Result.GetResult<Prisma.$Verification624EquipmentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Verification624Equipments.
+     * @param {Verification624EquipmentCreateManyArgs} args - Arguments to create many Verification624Equipments.
+     * @example
+     * // Create many Verification624Equipments
+     * const verification624Equipment = await prisma.verification624Equipment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends Verification624EquipmentCreateManyArgs>(args?: SelectSubset<T, Verification624EquipmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Verification624Equipments and returns the data saved in the database.
+     * @param {Verification624EquipmentCreateManyAndReturnArgs} args - Arguments to create many Verification624Equipments.
+     * @example
+     * // Create many Verification624Equipments
+     * const verification624Equipment = await prisma.verification624Equipment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Verification624Equipments and only return the `id`
+     * const verification624EquipmentWithIdOnly = await prisma.verification624Equipment.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends Verification624EquipmentCreateManyAndReturnArgs>(args?: SelectSubset<T, Verification624EquipmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Verification624EquipmentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Verification624Equipment.
+     * @param {Verification624EquipmentDeleteArgs} args - Arguments to delete one Verification624Equipment.
+     * @example
+     * // Delete one Verification624Equipment
+     * const Verification624Equipment = await prisma.verification624Equipment.delete({
+     *   where: {
+     *     // ... filter to delete one Verification624Equipment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends Verification624EquipmentDeleteArgs>(args: SelectSubset<T, Verification624EquipmentDeleteArgs<ExtArgs>>): Prisma__Verification624EquipmentClient<$Result.GetResult<Prisma.$Verification624EquipmentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Verification624Equipment.
+     * @param {Verification624EquipmentUpdateArgs} args - Arguments to update one Verification624Equipment.
+     * @example
+     * // Update one Verification624Equipment
+     * const verification624Equipment = await prisma.verification624Equipment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends Verification624EquipmentUpdateArgs>(args: SelectSubset<T, Verification624EquipmentUpdateArgs<ExtArgs>>): Prisma__Verification624EquipmentClient<$Result.GetResult<Prisma.$Verification624EquipmentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Verification624Equipments.
+     * @param {Verification624EquipmentDeleteManyArgs} args - Arguments to filter Verification624Equipments to delete.
+     * @example
+     * // Delete a few Verification624Equipments
+     * const { count } = await prisma.verification624Equipment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends Verification624EquipmentDeleteManyArgs>(args?: SelectSubset<T, Verification624EquipmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Verification624Equipments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624EquipmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Verification624Equipments
+     * const verification624Equipment = await prisma.verification624Equipment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends Verification624EquipmentUpdateManyArgs>(args: SelectSubset<T, Verification624EquipmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Verification624Equipment.
+     * @param {Verification624EquipmentUpsertArgs} args - Arguments to update or create a Verification624Equipment.
+     * @example
+     * // Update or create a Verification624Equipment
+     * const verification624Equipment = await prisma.verification624Equipment.upsert({
+     *   create: {
+     *     // ... data to create a Verification624Equipment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Verification624Equipment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends Verification624EquipmentUpsertArgs>(args: SelectSubset<T, Verification624EquipmentUpsertArgs<ExtArgs>>): Prisma__Verification624EquipmentClient<$Result.GetResult<Prisma.$Verification624EquipmentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Verification624Equipments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624EquipmentCountArgs} args - Arguments to filter Verification624Equipments to count.
+     * @example
+     * // Count the number of Verification624Equipments
+     * const count = await prisma.verification624Equipment.count({
+     *   where: {
+     *     // ... the filter for the Verification624Equipments we want to count
+     *   }
+     * })
+    **/
+    count<T extends Verification624EquipmentCountArgs>(
+      args?: Subset<T, Verification624EquipmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Verification624EquipmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Verification624Equipment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624EquipmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Verification624EquipmentAggregateArgs>(args: Subset<T, Verification624EquipmentAggregateArgs>): Prisma.PrismaPromise<GetVerification624EquipmentAggregateType<T>>
+
+    /**
+     * Group by Verification624Equipment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624EquipmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends Verification624EquipmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: Verification624EquipmentGroupByArgs['orderBy'] }
+        : { orderBy?: Verification624EquipmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, Verification624EquipmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVerification624EquipmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Verification624Equipment model
+   */
+  readonly fields: Verification624EquipmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Verification624Equipment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__Verification624EquipmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    retiredBy<T extends Verification624Equipment$retiredByArgs<ExtArgs> = {}>(args?: Subset<T, Verification624Equipment$retiredByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    createdBy<T extends Verification624Equipment$createdByArgs<ExtArgs> = {}>(args?: Subset<T, Verification624Equipment$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    updatedBy<T extends Verification624Equipment$updatedByArgs<ExtArgs> = {}>(args?: Subset<T, Verification624Equipment$updatedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Verification624Equipment model
+   */ 
+  interface Verification624EquipmentFieldRefs {
+    readonly id: FieldRef<"Verification624Equipment", 'String'>
+    readonly facility: FieldRef<"Verification624Equipment", 'String'>
+    readonly section: FieldRef<"Verification624Equipment", 'String'>
+    readonly name: FieldRef<"Verification624Equipment", 'String'>
+    readonly location: FieldRef<"Verification624Equipment", 'String'>
+    readonly inUse: FieldRef<"Verification624Equipment", 'Boolean'>
+    readonly sortOrder: FieldRef<"Verification624Equipment", 'Int'>
+    readonly retiredAt: FieldRef<"Verification624Equipment", 'DateTime'>
+    readonly retiredById: FieldRef<"Verification624Equipment", 'String'>
+    readonly createdById: FieldRef<"Verification624Equipment", 'String'>
+    readonly updatedById: FieldRef<"Verification624Equipment", 'String'>
+    readonly createdAt: FieldRef<"Verification624Equipment", 'DateTime'>
+    readonly updatedAt: FieldRef<"Verification624Equipment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Verification624Equipment findUnique
+   */
+  export type Verification624EquipmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Equipment
+     */
+    select?: Verification624EquipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624EquipmentInclude<ExtArgs> | null
+    /**
+     * Filter, which Verification624Equipment to fetch.
+     */
+    where: Verification624EquipmentWhereUniqueInput
+  }
+
+  /**
+   * Verification624Equipment findUniqueOrThrow
+   */
+  export type Verification624EquipmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Equipment
+     */
+    select?: Verification624EquipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624EquipmentInclude<ExtArgs> | null
+    /**
+     * Filter, which Verification624Equipment to fetch.
+     */
+    where: Verification624EquipmentWhereUniqueInput
+  }
+
+  /**
+   * Verification624Equipment findFirst
+   */
+  export type Verification624EquipmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Equipment
+     */
+    select?: Verification624EquipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624EquipmentInclude<ExtArgs> | null
+    /**
+     * Filter, which Verification624Equipment to fetch.
+     */
+    where?: Verification624EquipmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Verification624Equipments to fetch.
+     */
+    orderBy?: Verification624EquipmentOrderByWithRelationInput | Verification624EquipmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Verification624Equipments.
+     */
+    cursor?: Verification624EquipmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Verification624Equipments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Verification624Equipments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Verification624Equipments.
+     */
+    distinct?: Verification624EquipmentScalarFieldEnum | Verification624EquipmentScalarFieldEnum[]
+  }
+
+  /**
+   * Verification624Equipment findFirstOrThrow
+   */
+  export type Verification624EquipmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Equipment
+     */
+    select?: Verification624EquipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624EquipmentInclude<ExtArgs> | null
+    /**
+     * Filter, which Verification624Equipment to fetch.
+     */
+    where?: Verification624EquipmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Verification624Equipments to fetch.
+     */
+    orderBy?: Verification624EquipmentOrderByWithRelationInput | Verification624EquipmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Verification624Equipments.
+     */
+    cursor?: Verification624EquipmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Verification624Equipments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Verification624Equipments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Verification624Equipments.
+     */
+    distinct?: Verification624EquipmentScalarFieldEnum | Verification624EquipmentScalarFieldEnum[]
+  }
+
+  /**
+   * Verification624Equipment findMany
+   */
+  export type Verification624EquipmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Equipment
+     */
+    select?: Verification624EquipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624EquipmentInclude<ExtArgs> | null
+    /**
+     * Filter, which Verification624Equipments to fetch.
+     */
+    where?: Verification624EquipmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Verification624Equipments to fetch.
+     */
+    orderBy?: Verification624EquipmentOrderByWithRelationInput | Verification624EquipmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Verification624Equipments.
+     */
+    cursor?: Verification624EquipmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Verification624Equipments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Verification624Equipments.
+     */
+    skip?: number
+    distinct?: Verification624EquipmentScalarFieldEnum | Verification624EquipmentScalarFieldEnum[]
+  }
+
+  /**
+   * Verification624Equipment create
+   */
+  export type Verification624EquipmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Equipment
+     */
+    select?: Verification624EquipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624EquipmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Verification624Equipment.
+     */
+    data: XOR<Verification624EquipmentCreateInput, Verification624EquipmentUncheckedCreateInput>
+  }
+
+  /**
+   * Verification624Equipment createMany
+   */
+  export type Verification624EquipmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Verification624Equipments.
+     */
+    data: Verification624EquipmentCreateManyInput | Verification624EquipmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Verification624Equipment createManyAndReturn
+   */
+  export type Verification624EquipmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Equipment
+     */
+    select?: Verification624EquipmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Verification624Equipments.
+     */
+    data: Verification624EquipmentCreateManyInput | Verification624EquipmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624EquipmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Verification624Equipment update
+   */
+  export type Verification624EquipmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Equipment
+     */
+    select?: Verification624EquipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624EquipmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Verification624Equipment.
+     */
+    data: XOR<Verification624EquipmentUpdateInput, Verification624EquipmentUncheckedUpdateInput>
+    /**
+     * Choose, which Verification624Equipment to update.
+     */
+    where: Verification624EquipmentWhereUniqueInput
+  }
+
+  /**
+   * Verification624Equipment updateMany
+   */
+  export type Verification624EquipmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Verification624Equipments.
+     */
+    data: XOR<Verification624EquipmentUpdateManyMutationInput, Verification624EquipmentUncheckedUpdateManyInput>
+    /**
+     * Filter which Verification624Equipments to update
+     */
+    where?: Verification624EquipmentWhereInput
+  }
+
+  /**
+   * Verification624Equipment upsert
+   */
+  export type Verification624EquipmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Equipment
+     */
+    select?: Verification624EquipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624EquipmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Verification624Equipment to update in case it exists.
+     */
+    where: Verification624EquipmentWhereUniqueInput
+    /**
+     * In case the Verification624Equipment found by the `where` argument doesn't exist, create a new Verification624Equipment with this data.
+     */
+    create: XOR<Verification624EquipmentCreateInput, Verification624EquipmentUncheckedCreateInput>
+    /**
+     * In case the Verification624Equipment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<Verification624EquipmentUpdateInput, Verification624EquipmentUncheckedUpdateInput>
+  }
+
+  /**
+   * Verification624Equipment delete
+   */
+  export type Verification624EquipmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Equipment
+     */
+    select?: Verification624EquipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624EquipmentInclude<ExtArgs> | null
+    /**
+     * Filter which Verification624Equipment to delete.
+     */
+    where: Verification624EquipmentWhereUniqueInput
+  }
+
+  /**
+   * Verification624Equipment deleteMany
+   */
+  export type Verification624EquipmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Verification624Equipments to delete
+     */
+    where?: Verification624EquipmentWhereInput
+  }
+
+  /**
+   * Verification624Equipment.retiredBy
+   */
+  export type Verification624Equipment$retiredByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Verification624Equipment.createdBy
+   */
+  export type Verification624Equipment$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Verification624Equipment.updatedBy
+   */
+  export type Verification624Equipment$updatedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Verification624Equipment without action
+   */
+  export type Verification624EquipmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Equipment
+     */
+    select?: Verification624EquipmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624EquipmentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Verification624List
+   */
+
+  export type AggregateVerification624List = {
+    _count: Verification624ListCountAggregateOutputType | null
+    _avg: Verification624ListAvgAggregateOutputType | null
+    _sum: Verification624ListSumAggregateOutputType | null
+    _min: Verification624ListMinAggregateOutputType | null
+    _max: Verification624ListMaxAggregateOutputType | null
+  }
+
+  export type Verification624ListAvgAggregateOutputType = {
+    version: number | null
+  }
+
+  export type Verification624ListSumAggregateOutputType = {
+    version: number | null
+  }
+
+  export type Verification624ListMinAggregateOutputType = {
+    facility: string | null
+    version: number | null
+    updatedById: string | null
+    updatedAt: Date | null
+  }
+
+  export type Verification624ListMaxAggregateOutputType = {
+    facility: string | null
+    version: number | null
+    updatedById: string | null
+    updatedAt: Date | null
+  }
+
+  export type Verification624ListCountAggregateOutputType = {
+    facility: number
+    version: number
+    updatedById: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type Verification624ListAvgAggregateInputType = {
+    version?: true
+  }
+
+  export type Verification624ListSumAggregateInputType = {
+    version?: true
+  }
+
+  export type Verification624ListMinAggregateInputType = {
+    facility?: true
+    version?: true
+    updatedById?: true
+    updatedAt?: true
+  }
+
+  export type Verification624ListMaxAggregateInputType = {
+    facility?: true
+    version?: true
+    updatedById?: true
+    updatedAt?: true
+  }
+
+  export type Verification624ListCountAggregateInputType = {
+    facility?: true
+    version?: true
+    updatedById?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type Verification624ListAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Verification624List to aggregate.
+     */
+    where?: Verification624ListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Verification624Lists to fetch.
+     */
+    orderBy?: Verification624ListOrderByWithRelationInput | Verification624ListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: Verification624ListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Verification624Lists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Verification624Lists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Verification624Lists
+    **/
+    _count?: true | Verification624ListCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Verification624ListAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Verification624ListSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Verification624ListMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Verification624ListMaxAggregateInputType
+  }
+
+  export type GetVerification624ListAggregateType<T extends Verification624ListAggregateArgs> = {
+        [P in keyof T & keyof AggregateVerification624List]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVerification624List[P]>
+      : GetScalarType<T[P], AggregateVerification624List[P]>
+  }
+
+
+
+
+  export type Verification624ListGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Verification624ListWhereInput
+    orderBy?: Verification624ListOrderByWithAggregationInput | Verification624ListOrderByWithAggregationInput[]
+    by: Verification624ListScalarFieldEnum[] | Verification624ListScalarFieldEnum
+    having?: Verification624ListScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Verification624ListCountAggregateInputType | true
+    _avg?: Verification624ListAvgAggregateInputType
+    _sum?: Verification624ListSumAggregateInputType
+    _min?: Verification624ListMinAggregateInputType
+    _max?: Verification624ListMaxAggregateInputType
+  }
+
+  export type Verification624ListGroupByOutputType = {
+    facility: string
+    version: number
+    updatedById: string | null
+    updatedAt: Date
+    _count: Verification624ListCountAggregateOutputType | null
+    _avg: Verification624ListAvgAggregateOutputType | null
+    _sum: Verification624ListSumAggregateOutputType | null
+    _min: Verification624ListMinAggregateOutputType | null
+    _max: Verification624ListMaxAggregateOutputType | null
+  }
+
+  type GetVerification624ListGroupByPayload<T extends Verification624ListGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Verification624ListGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Verification624ListGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Verification624ListGroupByOutputType[P]>
+            : GetScalarType<T[P], Verification624ListGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type Verification624ListSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    facility?: boolean
+    version?: boolean
+    updatedById?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean | Verification624List$updatedByArgs<ExtArgs>
+  }, ExtArgs["result"]["verification624List"]>
+
+  export type Verification624ListSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    facility?: boolean
+    version?: boolean
+    updatedById?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean | Verification624List$updatedByArgs<ExtArgs>
+  }, ExtArgs["result"]["verification624List"]>
+
+  export type Verification624ListSelectScalar = {
+    facility?: boolean
+    version?: boolean
+    updatedById?: boolean
+    updatedAt?: boolean
+  }
+
+  export type Verification624ListInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    updatedBy?: boolean | Verification624List$updatedByArgs<ExtArgs>
+  }
+  export type Verification624ListIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    updatedBy?: boolean | Verification624List$updatedByArgs<ExtArgs>
+  }
+
+  export type $Verification624ListPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Verification624List"
+    objects: {
+      updatedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      facility: string
+      version: number
+      updatedById: string | null
+      updatedAt: Date
+    }, ExtArgs["result"]["verification624List"]>
+    composites: {}
+  }
+
+  type Verification624ListGetPayload<S extends boolean | null | undefined | Verification624ListDefaultArgs> = $Result.GetResult<Prisma.$Verification624ListPayload, S>
+
+  type Verification624ListCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<Verification624ListFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: Verification624ListCountAggregateInputType | true
+    }
+
+  export interface Verification624ListDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Verification624List'], meta: { name: 'Verification624List' } }
+    /**
+     * Find zero or one Verification624List that matches the filter.
+     * @param {Verification624ListFindUniqueArgs} args - Arguments to find a Verification624List
+     * @example
+     * // Get one Verification624List
+     * const verification624List = await prisma.verification624List.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends Verification624ListFindUniqueArgs>(args: SelectSubset<T, Verification624ListFindUniqueArgs<ExtArgs>>): Prisma__Verification624ListClient<$Result.GetResult<Prisma.$Verification624ListPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Verification624List that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {Verification624ListFindUniqueOrThrowArgs} args - Arguments to find a Verification624List
+     * @example
+     * // Get one Verification624List
+     * const verification624List = await prisma.verification624List.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends Verification624ListFindUniqueOrThrowArgs>(args: SelectSubset<T, Verification624ListFindUniqueOrThrowArgs<ExtArgs>>): Prisma__Verification624ListClient<$Result.GetResult<Prisma.$Verification624ListPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Verification624List that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624ListFindFirstArgs} args - Arguments to find a Verification624List
+     * @example
+     * // Get one Verification624List
+     * const verification624List = await prisma.verification624List.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends Verification624ListFindFirstArgs>(args?: SelectSubset<T, Verification624ListFindFirstArgs<ExtArgs>>): Prisma__Verification624ListClient<$Result.GetResult<Prisma.$Verification624ListPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Verification624List that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624ListFindFirstOrThrowArgs} args - Arguments to find a Verification624List
+     * @example
+     * // Get one Verification624List
+     * const verification624List = await prisma.verification624List.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends Verification624ListFindFirstOrThrowArgs>(args?: SelectSubset<T, Verification624ListFindFirstOrThrowArgs<ExtArgs>>): Prisma__Verification624ListClient<$Result.GetResult<Prisma.$Verification624ListPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Verification624Lists that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624ListFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Verification624Lists
+     * const verification624Lists = await prisma.verification624List.findMany()
+     * 
+     * // Get first 10 Verification624Lists
+     * const verification624Lists = await prisma.verification624List.findMany({ take: 10 })
+     * 
+     * // Only select the `facility`
+     * const verification624ListWithFacilityOnly = await prisma.verification624List.findMany({ select: { facility: true } })
+     * 
+     */
+    findMany<T extends Verification624ListFindManyArgs>(args?: SelectSubset<T, Verification624ListFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Verification624ListPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Verification624List.
+     * @param {Verification624ListCreateArgs} args - Arguments to create a Verification624List.
+     * @example
+     * // Create one Verification624List
+     * const Verification624List = await prisma.verification624List.create({
+     *   data: {
+     *     // ... data to create a Verification624List
+     *   }
+     * })
+     * 
+     */
+    create<T extends Verification624ListCreateArgs>(args: SelectSubset<T, Verification624ListCreateArgs<ExtArgs>>): Prisma__Verification624ListClient<$Result.GetResult<Prisma.$Verification624ListPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Verification624Lists.
+     * @param {Verification624ListCreateManyArgs} args - Arguments to create many Verification624Lists.
+     * @example
+     * // Create many Verification624Lists
+     * const verification624List = await prisma.verification624List.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends Verification624ListCreateManyArgs>(args?: SelectSubset<T, Verification624ListCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Verification624Lists and returns the data saved in the database.
+     * @param {Verification624ListCreateManyAndReturnArgs} args - Arguments to create many Verification624Lists.
+     * @example
+     * // Create many Verification624Lists
+     * const verification624List = await prisma.verification624List.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Verification624Lists and only return the `facility`
+     * const verification624ListWithFacilityOnly = await prisma.verification624List.createManyAndReturn({ 
+     *   select: { facility: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends Verification624ListCreateManyAndReturnArgs>(args?: SelectSubset<T, Verification624ListCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Verification624ListPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Verification624List.
+     * @param {Verification624ListDeleteArgs} args - Arguments to delete one Verification624List.
+     * @example
+     * // Delete one Verification624List
+     * const Verification624List = await prisma.verification624List.delete({
+     *   where: {
+     *     // ... filter to delete one Verification624List
+     *   }
+     * })
+     * 
+     */
+    delete<T extends Verification624ListDeleteArgs>(args: SelectSubset<T, Verification624ListDeleteArgs<ExtArgs>>): Prisma__Verification624ListClient<$Result.GetResult<Prisma.$Verification624ListPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Verification624List.
+     * @param {Verification624ListUpdateArgs} args - Arguments to update one Verification624List.
+     * @example
+     * // Update one Verification624List
+     * const verification624List = await prisma.verification624List.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends Verification624ListUpdateArgs>(args: SelectSubset<T, Verification624ListUpdateArgs<ExtArgs>>): Prisma__Verification624ListClient<$Result.GetResult<Prisma.$Verification624ListPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Verification624Lists.
+     * @param {Verification624ListDeleteManyArgs} args - Arguments to filter Verification624Lists to delete.
+     * @example
+     * // Delete a few Verification624Lists
+     * const { count } = await prisma.verification624List.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends Verification624ListDeleteManyArgs>(args?: SelectSubset<T, Verification624ListDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Verification624Lists.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624ListUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Verification624Lists
+     * const verification624List = await prisma.verification624List.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends Verification624ListUpdateManyArgs>(args: SelectSubset<T, Verification624ListUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Verification624List.
+     * @param {Verification624ListUpsertArgs} args - Arguments to update or create a Verification624List.
+     * @example
+     * // Update or create a Verification624List
+     * const verification624List = await prisma.verification624List.upsert({
+     *   create: {
+     *     // ... data to create a Verification624List
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Verification624List we want to update
+     *   }
+     * })
+     */
+    upsert<T extends Verification624ListUpsertArgs>(args: SelectSubset<T, Verification624ListUpsertArgs<ExtArgs>>): Prisma__Verification624ListClient<$Result.GetResult<Prisma.$Verification624ListPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Verification624Lists.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624ListCountArgs} args - Arguments to filter Verification624Lists to count.
+     * @example
+     * // Count the number of Verification624Lists
+     * const count = await prisma.verification624List.count({
+     *   where: {
+     *     // ... the filter for the Verification624Lists we want to count
+     *   }
+     * })
+    **/
+    count<T extends Verification624ListCountArgs>(
+      args?: Subset<T, Verification624ListCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Verification624ListCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Verification624List.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624ListAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Verification624ListAggregateArgs>(args: Subset<T, Verification624ListAggregateArgs>): Prisma.PrismaPromise<GetVerification624ListAggregateType<T>>
+
+    /**
+     * Group by Verification624List.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624ListGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends Verification624ListGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: Verification624ListGroupByArgs['orderBy'] }
+        : { orderBy?: Verification624ListGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, Verification624ListGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVerification624ListGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Verification624List model
+   */
+  readonly fields: Verification624ListFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Verification624List.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__Verification624ListClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    updatedBy<T extends Verification624List$updatedByArgs<ExtArgs> = {}>(args?: Subset<T, Verification624List$updatedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Verification624List model
+   */ 
+  interface Verification624ListFieldRefs {
+    readonly facility: FieldRef<"Verification624List", 'String'>
+    readonly version: FieldRef<"Verification624List", 'Int'>
+    readonly updatedById: FieldRef<"Verification624List", 'String'>
+    readonly updatedAt: FieldRef<"Verification624List", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Verification624List findUnique
+   */
+  export type Verification624ListFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624List
+     */
+    select?: Verification624ListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624ListInclude<ExtArgs> | null
+    /**
+     * Filter, which Verification624List to fetch.
+     */
+    where: Verification624ListWhereUniqueInput
+  }
+
+  /**
+   * Verification624List findUniqueOrThrow
+   */
+  export type Verification624ListFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624List
+     */
+    select?: Verification624ListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624ListInclude<ExtArgs> | null
+    /**
+     * Filter, which Verification624List to fetch.
+     */
+    where: Verification624ListWhereUniqueInput
+  }
+
+  /**
+   * Verification624List findFirst
+   */
+  export type Verification624ListFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624List
+     */
+    select?: Verification624ListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624ListInclude<ExtArgs> | null
+    /**
+     * Filter, which Verification624List to fetch.
+     */
+    where?: Verification624ListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Verification624Lists to fetch.
+     */
+    orderBy?: Verification624ListOrderByWithRelationInput | Verification624ListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Verification624Lists.
+     */
+    cursor?: Verification624ListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Verification624Lists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Verification624Lists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Verification624Lists.
+     */
+    distinct?: Verification624ListScalarFieldEnum | Verification624ListScalarFieldEnum[]
+  }
+
+  /**
+   * Verification624List findFirstOrThrow
+   */
+  export type Verification624ListFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624List
+     */
+    select?: Verification624ListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624ListInclude<ExtArgs> | null
+    /**
+     * Filter, which Verification624List to fetch.
+     */
+    where?: Verification624ListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Verification624Lists to fetch.
+     */
+    orderBy?: Verification624ListOrderByWithRelationInput | Verification624ListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Verification624Lists.
+     */
+    cursor?: Verification624ListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Verification624Lists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Verification624Lists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Verification624Lists.
+     */
+    distinct?: Verification624ListScalarFieldEnum | Verification624ListScalarFieldEnum[]
+  }
+
+  /**
+   * Verification624List findMany
+   */
+  export type Verification624ListFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624List
+     */
+    select?: Verification624ListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624ListInclude<ExtArgs> | null
+    /**
+     * Filter, which Verification624Lists to fetch.
+     */
+    where?: Verification624ListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Verification624Lists to fetch.
+     */
+    orderBy?: Verification624ListOrderByWithRelationInput | Verification624ListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Verification624Lists.
+     */
+    cursor?: Verification624ListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Verification624Lists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Verification624Lists.
+     */
+    skip?: number
+    distinct?: Verification624ListScalarFieldEnum | Verification624ListScalarFieldEnum[]
+  }
+
+  /**
+   * Verification624List create
+   */
+  export type Verification624ListCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624List
+     */
+    select?: Verification624ListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624ListInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Verification624List.
+     */
+    data: XOR<Verification624ListCreateInput, Verification624ListUncheckedCreateInput>
+  }
+
+  /**
+   * Verification624List createMany
+   */
+  export type Verification624ListCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Verification624Lists.
+     */
+    data: Verification624ListCreateManyInput | Verification624ListCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Verification624List createManyAndReturn
+   */
+  export type Verification624ListCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624List
+     */
+    select?: Verification624ListSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Verification624Lists.
+     */
+    data: Verification624ListCreateManyInput | Verification624ListCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624ListIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Verification624List update
+   */
+  export type Verification624ListUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624List
+     */
+    select?: Verification624ListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624ListInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Verification624List.
+     */
+    data: XOR<Verification624ListUpdateInput, Verification624ListUncheckedUpdateInput>
+    /**
+     * Choose, which Verification624List to update.
+     */
+    where: Verification624ListWhereUniqueInput
+  }
+
+  /**
+   * Verification624List updateMany
+   */
+  export type Verification624ListUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Verification624Lists.
+     */
+    data: XOR<Verification624ListUpdateManyMutationInput, Verification624ListUncheckedUpdateManyInput>
+    /**
+     * Filter which Verification624Lists to update
+     */
+    where?: Verification624ListWhereInput
+  }
+
+  /**
+   * Verification624List upsert
+   */
+  export type Verification624ListUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624List
+     */
+    select?: Verification624ListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624ListInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Verification624List to update in case it exists.
+     */
+    where: Verification624ListWhereUniqueInput
+    /**
+     * In case the Verification624List found by the `where` argument doesn't exist, create a new Verification624List with this data.
+     */
+    create: XOR<Verification624ListCreateInput, Verification624ListUncheckedCreateInput>
+    /**
+     * In case the Verification624List was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<Verification624ListUpdateInput, Verification624ListUncheckedUpdateInput>
+  }
+
+  /**
+   * Verification624List delete
+   */
+  export type Verification624ListDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624List
+     */
+    select?: Verification624ListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624ListInclude<ExtArgs> | null
+    /**
+     * Filter which Verification624List to delete.
+     */
+    where: Verification624ListWhereUniqueInput
+  }
+
+  /**
+   * Verification624List deleteMany
+   */
+  export type Verification624ListDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Verification624Lists to delete
+     */
+    where?: Verification624ListWhereInput
+  }
+
+  /**
+   * Verification624List.updatedBy
+   */
+  export type Verification624List$updatedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Verification624List without action
+   */
+  export type Verification624ListDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624List
+     */
+    select?: Verification624ListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624ListInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Verification624Record
+   */
+
+  export type AggregateVerification624Record = {
+    _count: Verification624RecordCountAggregateOutputType | null
+    _avg: Verification624RecordAvgAggregateOutputType | null
+    _sum: Verification624RecordSumAggregateOutputType | null
+    _min: Verification624RecordMinAggregateOutputType | null
+    _max: Verification624RecordMaxAggregateOutputType | null
+  }
+
+  export type Verification624RecordAvgAggregateOutputType = {
+    listVersion: number | null
+    okCount: number | null
+    failCount: number | null
+    notInUseCount: number | null
+  }
+
+  export type Verification624RecordSumAggregateOutputType = {
+    listVersion: number | null
+    okCount: number | null
+    failCount: number | null
+    notInUseCount: number | null
+  }
+
+  export type Verification624RecordMinAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    period: string | null
+    periodStart: Date | null
+    periodEnd: Date | null
+    status: string | null
+    conductedBy: string | null
+    initials: string | null
+    listVersion: number | null
+    okCount: number | null
+    failCount: number | null
+    notInUseCount: number | null
+    notes: string | null
+    lastEditedBy: string | null
+    lastEditedAt: Date | null
+    createdById: string | null
+    submittedAt: Date | null
+    submittedById: string | null
+    linkedInstanceId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Verification624RecordMaxAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    period: string | null
+    periodStart: Date | null
+    periodEnd: Date | null
+    status: string | null
+    conductedBy: string | null
+    initials: string | null
+    listVersion: number | null
+    okCount: number | null
+    failCount: number | null
+    notInUseCount: number | null
+    notes: string | null
+    lastEditedBy: string | null
+    lastEditedAt: Date | null
+    createdById: string | null
+    submittedAt: Date | null
+    submittedById: string | null
+    linkedInstanceId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Verification624RecordCountAggregateOutputType = {
+    id: number
+    facility: number
+    period: number
+    periodStart: number
+    periodEnd: number
+    status: number
+    conductedBy: number
+    initials: number
+    items: number
+    listVersion: number
+    okCount: number
+    failCount: number
+    notInUseCount: number
+    notes: number
+    lastEditedBy: number
+    lastEditedAt: number
+    createdById: number
+    submittedAt: number
+    submittedById: number
+    linkedInstanceId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type Verification624RecordAvgAggregateInputType = {
+    listVersion?: true
+    okCount?: true
+    failCount?: true
+    notInUseCount?: true
+  }
+
+  export type Verification624RecordSumAggregateInputType = {
+    listVersion?: true
+    okCount?: true
+    failCount?: true
+    notInUseCount?: true
+  }
+
+  export type Verification624RecordMinAggregateInputType = {
+    id?: true
+    facility?: true
+    period?: true
+    periodStart?: true
+    periodEnd?: true
+    status?: true
+    conductedBy?: true
+    initials?: true
+    listVersion?: true
+    okCount?: true
+    failCount?: true
+    notInUseCount?: true
+    notes?: true
+    lastEditedBy?: true
+    lastEditedAt?: true
+    createdById?: true
+    submittedAt?: true
+    submittedById?: true
+    linkedInstanceId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Verification624RecordMaxAggregateInputType = {
+    id?: true
+    facility?: true
+    period?: true
+    periodStart?: true
+    periodEnd?: true
+    status?: true
+    conductedBy?: true
+    initials?: true
+    listVersion?: true
+    okCount?: true
+    failCount?: true
+    notInUseCount?: true
+    notes?: true
+    lastEditedBy?: true
+    lastEditedAt?: true
+    createdById?: true
+    submittedAt?: true
+    submittedById?: true
+    linkedInstanceId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Verification624RecordCountAggregateInputType = {
+    id?: true
+    facility?: true
+    period?: true
+    periodStart?: true
+    periodEnd?: true
+    status?: true
+    conductedBy?: true
+    initials?: true
+    items?: true
+    listVersion?: true
+    okCount?: true
+    failCount?: true
+    notInUseCount?: true
+    notes?: true
+    lastEditedBy?: true
+    lastEditedAt?: true
+    createdById?: true
+    submittedAt?: true
+    submittedById?: true
+    linkedInstanceId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type Verification624RecordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Verification624Record to aggregate.
+     */
+    where?: Verification624RecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Verification624Records to fetch.
+     */
+    orderBy?: Verification624RecordOrderByWithRelationInput | Verification624RecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: Verification624RecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Verification624Records from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Verification624Records.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Verification624Records
+    **/
+    _count?: true | Verification624RecordCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Verification624RecordAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Verification624RecordSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Verification624RecordMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Verification624RecordMaxAggregateInputType
+  }
+
+  export type GetVerification624RecordAggregateType<T extends Verification624RecordAggregateArgs> = {
+        [P in keyof T & keyof AggregateVerification624Record]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVerification624Record[P]>
+      : GetScalarType<T[P], AggregateVerification624Record[P]>
+  }
+
+
+
+
+  export type Verification624RecordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: Verification624RecordWhereInput
+    orderBy?: Verification624RecordOrderByWithAggregationInput | Verification624RecordOrderByWithAggregationInput[]
+    by: Verification624RecordScalarFieldEnum[] | Verification624RecordScalarFieldEnum
+    having?: Verification624RecordScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Verification624RecordCountAggregateInputType | true
+    _avg?: Verification624RecordAvgAggregateInputType
+    _sum?: Verification624RecordSumAggregateInputType
+    _min?: Verification624RecordMinAggregateInputType
+    _max?: Verification624RecordMaxAggregateInputType
+  }
+
+  export type Verification624RecordGroupByOutputType = {
+    id: string
+    facility: string
+    period: string
+    periodStart: Date
+    periodEnd: Date
+    status: string
+    conductedBy: string
+    initials: string
+    items: JsonValue
+    listVersion: number
+    okCount: number
+    failCount: number
+    notInUseCount: number
+    notes: string | null
+    lastEditedBy: string | null
+    lastEditedAt: Date | null
+    createdById: string | null
+    submittedAt: Date | null
+    submittedById: string | null
+    linkedInstanceId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: Verification624RecordCountAggregateOutputType | null
+    _avg: Verification624RecordAvgAggregateOutputType | null
+    _sum: Verification624RecordSumAggregateOutputType | null
+    _min: Verification624RecordMinAggregateOutputType | null
+    _max: Verification624RecordMaxAggregateOutputType | null
+  }
+
+  type GetVerification624RecordGroupByPayload<T extends Verification624RecordGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Verification624RecordGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Verification624RecordGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Verification624RecordGroupByOutputType[P]>
+            : GetScalarType<T[P], Verification624RecordGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type Verification624RecordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    period?: boolean
+    periodStart?: boolean
+    periodEnd?: boolean
+    status?: boolean
+    conductedBy?: boolean
+    initials?: boolean
+    items?: boolean
+    listVersion?: boolean
+    okCount?: boolean
+    failCount?: boolean
+    notInUseCount?: boolean
+    notes?: boolean
+    lastEditedBy?: boolean
+    lastEditedAt?: boolean
+    createdById?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    linkedInstanceId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | Verification624Record$createdByArgs<ExtArgs>
+    submittedBy?: boolean | Verification624Record$submittedByArgs<ExtArgs>
+  }, ExtArgs["result"]["verification624Record"]>
+
+  export type Verification624RecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    period?: boolean
+    periodStart?: boolean
+    periodEnd?: boolean
+    status?: boolean
+    conductedBy?: boolean
+    initials?: boolean
+    items?: boolean
+    listVersion?: boolean
+    okCount?: boolean
+    failCount?: boolean
+    notInUseCount?: boolean
+    notes?: boolean
+    lastEditedBy?: boolean
+    lastEditedAt?: boolean
+    createdById?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    linkedInstanceId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | Verification624Record$createdByArgs<ExtArgs>
+    submittedBy?: boolean | Verification624Record$submittedByArgs<ExtArgs>
+  }, ExtArgs["result"]["verification624Record"]>
+
+  export type Verification624RecordSelectScalar = {
+    id?: boolean
+    facility?: boolean
+    period?: boolean
+    periodStart?: boolean
+    periodEnd?: boolean
+    status?: boolean
+    conductedBy?: boolean
+    initials?: boolean
+    items?: boolean
+    listVersion?: boolean
+    okCount?: boolean
+    failCount?: boolean
+    notInUseCount?: boolean
+    notes?: boolean
+    lastEditedBy?: boolean
+    lastEditedAt?: boolean
+    createdById?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    linkedInstanceId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type Verification624RecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | Verification624Record$createdByArgs<ExtArgs>
+    submittedBy?: boolean | Verification624Record$submittedByArgs<ExtArgs>
+  }
+  export type Verification624RecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | Verification624Record$createdByArgs<ExtArgs>
+    submittedBy?: boolean | Verification624Record$submittedByArgs<ExtArgs>
+  }
+
+  export type $Verification624RecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Verification624Record"
+    objects: {
+      createdBy: Prisma.$UserPayload<ExtArgs> | null
+      submittedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      facility: string
+      period: string
+      periodStart: Date
+      periodEnd: Date
+      status: string
+      conductedBy: string
+      initials: string
+      items: Prisma.JsonValue
+      listVersion: number
+      okCount: number
+      failCount: number
+      notInUseCount: number
+      notes: string | null
+      lastEditedBy: string | null
+      lastEditedAt: Date | null
+      createdById: string | null
+      submittedAt: Date | null
+      submittedById: string | null
+      linkedInstanceId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["verification624Record"]>
+    composites: {}
+  }
+
+  type Verification624RecordGetPayload<S extends boolean | null | undefined | Verification624RecordDefaultArgs> = $Result.GetResult<Prisma.$Verification624RecordPayload, S>
+
+  type Verification624RecordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<Verification624RecordFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: Verification624RecordCountAggregateInputType | true
+    }
+
+  export interface Verification624RecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Verification624Record'], meta: { name: 'Verification624Record' } }
+    /**
+     * Find zero or one Verification624Record that matches the filter.
+     * @param {Verification624RecordFindUniqueArgs} args - Arguments to find a Verification624Record
+     * @example
+     * // Get one Verification624Record
+     * const verification624Record = await prisma.verification624Record.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends Verification624RecordFindUniqueArgs>(args: SelectSubset<T, Verification624RecordFindUniqueArgs<ExtArgs>>): Prisma__Verification624RecordClient<$Result.GetResult<Prisma.$Verification624RecordPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Verification624Record that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {Verification624RecordFindUniqueOrThrowArgs} args - Arguments to find a Verification624Record
+     * @example
+     * // Get one Verification624Record
+     * const verification624Record = await prisma.verification624Record.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends Verification624RecordFindUniqueOrThrowArgs>(args: SelectSubset<T, Verification624RecordFindUniqueOrThrowArgs<ExtArgs>>): Prisma__Verification624RecordClient<$Result.GetResult<Prisma.$Verification624RecordPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Verification624Record that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624RecordFindFirstArgs} args - Arguments to find a Verification624Record
+     * @example
+     * // Get one Verification624Record
+     * const verification624Record = await prisma.verification624Record.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends Verification624RecordFindFirstArgs>(args?: SelectSubset<T, Verification624RecordFindFirstArgs<ExtArgs>>): Prisma__Verification624RecordClient<$Result.GetResult<Prisma.$Verification624RecordPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Verification624Record that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624RecordFindFirstOrThrowArgs} args - Arguments to find a Verification624Record
+     * @example
+     * // Get one Verification624Record
+     * const verification624Record = await prisma.verification624Record.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends Verification624RecordFindFirstOrThrowArgs>(args?: SelectSubset<T, Verification624RecordFindFirstOrThrowArgs<ExtArgs>>): Prisma__Verification624RecordClient<$Result.GetResult<Prisma.$Verification624RecordPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Verification624Records that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624RecordFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Verification624Records
+     * const verification624Records = await prisma.verification624Record.findMany()
+     * 
+     * // Get first 10 Verification624Records
+     * const verification624Records = await prisma.verification624Record.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const verification624RecordWithIdOnly = await prisma.verification624Record.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends Verification624RecordFindManyArgs>(args?: SelectSubset<T, Verification624RecordFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Verification624RecordPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Verification624Record.
+     * @param {Verification624RecordCreateArgs} args - Arguments to create a Verification624Record.
+     * @example
+     * // Create one Verification624Record
+     * const Verification624Record = await prisma.verification624Record.create({
+     *   data: {
+     *     // ... data to create a Verification624Record
+     *   }
+     * })
+     * 
+     */
+    create<T extends Verification624RecordCreateArgs>(args: SelectSubset<T, Verification624RecordCreateArgs<ExtArgs>>): Prisma__Verification624RecordClient<$Result.GetResult<Prisma.$Verification624RecordPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Verification624Records.
+     * @param {Verification624RecordCreateManyArgs} args - Arguments to create many Verification624Records.
+     * @example
+     * // Create many Verification624Records
+     * const verification624Record = await prisma.verification624Record.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends Verification624RecordCreateManyArgs>(args?: SelectSubset<T, Verification624RecordCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Verification624Records and returns the data saved in the database.
+     * @param {Verification624RecordCreateManyAndReturnArgs} args - Arguments to create many Verification624Records.
+     * @example
+     * // Create many Verification624Records
+     * const verification624Record = await prisma.verification624Record.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Verification624Records and only return the `id`
+     * const verification624RecordWithIdOnly = await prisma.verification624Record.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends Verification624RecordCreateManyAndReturnArgs>(args?: SelectSubset<T, Verification624RecordCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$Verification624RecordPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Verification624Record.
+     * @param {Verification624RecordDeleteArgs} args - Arguments to delete one Verification624Record.
+     * @example
+     * // Delete one Verification624Record
+     * const Verification624Record = await prisma.verification624Record.delete({
+     *   where: {
+     *     // ... filter to delete one Verification624Record
+     *   }
+     * })
+     * 
+     */
+    delete<T extends Verification624RecordDeleteArgs>(args: SelectSubset<T, Verification624RecordDeleteArgs<ExtArgs>>): Prisma__Verification624RecordClient<$Result.GetResult<Prisma.$Verification624RecordPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Verification624Record.
+     * @param {Verification624RecordUpdateArgs} args - Arguments to update one Verification624Record.
+     * @example
+     * // Update one Verification624Record
+     * const verification624Record = await prisma.verification624Record.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends Verification624RecordUpdateArgs>(args: SelectSubset<T, Verification624RecordUpdateArgs<ExtArgs>>): Prisma__Verification624RecordClient<$Result.GetResult<Prisma.$Verification624RecordPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Verification624Records.
+     * @param {Verification624RecordDeleteManyArgs} args - Arguments to filter Verification624Records to delete.
+     * @example
+     * // Delete a few Verification624Records
+     * const { count } = await prisma.verification624Record.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends Verification624RecordDeleteManyArgs>(args?: SelectSubset<T, Verification624RecordDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Verification624Records.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624RecordUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Verification624Records
+     * const verification624Record = await prisma.verification624Record.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends Verification624RecordUpdateManyArgs>(args: SelectSubset<T, Verification624RecordUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Verification624Record.
+     * @param {Verification624RecordUpsertArgs} args - Arguments to update or create a Verification624Record.
+     * @example
+     * // Update or create a Verification624Record
+     * const verification624Record = await prisma.verification624Record.upsert({
+     *   create: {
+     *     // ... data to create a Verification624Record
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Verification624Record we want to update
+     *   }
+     * })
+     */
+    upsert<T extends Verification624RecordUpsertArgs>(args: SelectSubset<T, Verification624RecordUpsertArgs<ExtArgs>>): Prisma__Verification624RecordClient<$Result.GetResult<Prisma.$Verification624RecordPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Verification624Records.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624RecordCountArgs} args - Arguments to filter Verification624Records to count.
+     * @example
+     * // Count the number of Verification624Records
+     * const count = await prisma.verification624Record.count({
+     *   where: {
+     *     // ... the filter for the Verification624Records we want to count
+     *   }
+     * })
+    **/
+    count<T extends Verification624RecordCountArgs>(
+      args?: Subset<T, Verification624RecordCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Verification624RecordCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Verification624Record.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624RecordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Verification624RecordAggregateArgs>(args: Subset<T, Verification624RecordAggregateArgs>): Prisma.PrismaPromise<GetVerification624RecordAggregateType<T>>
+
+    /**
+     * Group by Verification624Record.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Verification624RecordGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends Verification624RecordGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: Verification624RecordGroupByArgs['orderBy'] }
+        : { orderBy?: Verification624RecordGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, Verification624RecordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVerification624RecordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Verification624Record model
+   */
+  readonly fields: Verification624RecordFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Verification624Record.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__Verification624RecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    createdBy<T extends Verification624Record$createdByArgs<ExtArgs> = {}>(args?: Subset<T, Verification624Record$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    submittedBy<T extends Verification624Record$submittedByArgs<ExtArgs> = {}>(args?: Subset<T, Verification624Record$submittedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Verification624Record model
+   */ 
+  interface Verification624RecordFieldRefs {
+    readonly id: FieldRef<"Verification624Record", 'String'>
+    readonly facility: FieldRef<"Verification624Record", 'String'>
+    readonly period: FieldRef<"Verification624Record", 'String'>
+    readonly periodStart: FieldRef<"Verification624Record", 'DateTime'>
+    readonly periodEnd: FieldRef<"Verification624Record", 'DateTime'>
+    readonly status: FieldRef<"Verification624Record", 'String'>
+    readonly conductedBy: FieldRef<"Verification624Record", 'String'>
+    readonly initials: FieldRef<"Verification624Record", 'String'>
+    readonly items: FieldRef<"Verification624Record", 'Json'>
+    readonly listVersion: FieldRef<"Verification624Record", 'Int'>
+    readonly okCount: FieldRef<"Verification624Record", 'Int'>
+    readonly failCount: FieldRef<"Verification624Record", 'Int'>
+    readonly notInUseCount: FieldRef<"Verification624Record", 'Int'>
+    readonly notes: FieldRef<"Verification624Record", 'String'>
+    readonly lastEditedBy: FieldRef<"Verification624Record", 'String'>
+    readonly lastEditedAt: FieldRef<"Verification624Record", 'DateTime'>
+    readonly createdById: FieldRef<"Verification624Record", 'String'>
+    readonly submittedAt: FieldRef<"Verification624Record", 'DateTime'>
+    readonly submittedById: FieldRef<"Verification624Record", 'String'>
+    readonly linkedInstanceId: FieldRef<"Verification624Record", 'String'>
+    readonly createdAt: FieldRef<"Verification624Record", 'DateTime'>
+    readonly updatedAt: FieldRef<"Verification624Record", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Verification624Record findUnique
+   */
+  export type Verification624RecordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Record
+     */
+    select?: Verification624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624RecordInclude<ExtArgs> | null
+    /**
+     * Filter, which Verification624Record to fetch.
+     */
+    where: Verification624RecordWhereUniqueInput
+  }
+
+  /**
+   * Verification624Record findUniqueOrThrow
+   */
+  export type Verification624RecordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Record
+     */
+    select?: Verification624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624RecordInclude<ExtArgs> | null
+    /**
+     * Filter, which Verification624Record to fetch.
+     */
+    where: Verification624RecordWhereUniqueInput
+  }
+
+  /**
+   * Verification624Record findFirst
+   */
+  export type Verification624RecordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Record
+     */
+    select?: Verification624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624RecordInclude<ExtArgs> | null
+    /**
+     * Filter, which Verification624Record to fetch.
+     */
+    where?: Verification624RecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Verification624Records to fetch.
+     */
+    orderBy?: Verification624RecordOrderByWithRelationInput | Verification624RecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Verification624Records.
+     */
+    cursor?: Verification624RecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Verification624Records from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Verification624Records.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Verification624Records.
+     */
+    distinct?: Verification624RecordScalarFieldEnum | Verification624RecordScalarFieldEnum[]
+  }
+
+  /**
+   * Verification624Record findFirstOrThrow
+   */
+  export type Verification624RecordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Record
+     */
+    select?: Verification624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624RecordInclude<ExtArgs> | null
+    /**
+     * Filter, which Verification624Record to fetch.
+     */
+    where?: Verification624RecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Verification624Records to fetch.
+     */
+    orderBy?: Verification624RecordOrderByWithRelationInput | Verification624RecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Verification624Records.
+     */
+    cursor?: Verification624RecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Verification624Records from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Verification624Records.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Verification624Records.
+     */
+    distinct?: Verification624RecordScalarFieldEnum | Verification624RecordScalarFieldEnum[]
+  }
+
+  /**
+   * Verification624Record findMany
+   */
+  export type Verification624RecordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Record
+     */
+    select?: Verification624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624RecordInclude<ExtArgs> | null
+    /**
+     * Filter, which Verification624Records to fetch.
+     */
+    where?: Verification624RecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Verification624Records to fetch.
+     */
+    orderBy?: Verification624RecordOrderByWithRelationInput | Verification624RecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Verification624Records.
+     */
+    cursor?: Verification624RecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Verification624Records from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Verification624Records.
+     */
+    skip?: number
+    distinct?: Verification624RecordScalarFieldEnum | Verification624RecordScalarFieldEnum[]
+  }
+
+  /**
+   * Verification624Record create
+   */
+  export type Verification624RecordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Record
+     */
+    select?: Verification624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624RecordInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Verification624Record.
+     */
+    data: XOR<Verification624RecordCreateInput, Verification624RecordUncheckedCreateInput>
+  }
+
+  /**
+   * Verification624Record createMany
+   */
+  export type Verification624RecordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Verification624Records.
+     */
+    data: Verification624RecordCreateManyInput | Verification624RecordCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Verification624Record createManyAndReturn
+   */
+  export type Verification624RecordCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Record
+     */
+    select?: Verification624RecordSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Verification624Records.
+     */
+    data: Verification624RecordCreateManyInput | Verification624RecordCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624RecordIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Verification624Record update
+   */
+  export type Verification624RecordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Record
+     */
+    select?: Verification624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624RecordInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Verification624Record.
+     */
+    data: XOR<Verification624RecordUpdateInput, Verification624RecordUncheckedUpdateInput>
+    /**
+     * Choose, which Verification624Record to update.
+     */
+    where: Verification624RecordWhereUniqueInput
+  }
+
+  /**
+   * Verification624Record updateMany
+   */
+  export type Verification624RecordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Verification624Records.
+     */
+    data: XOR<Verification624RecordUpdateManyMutationInput, Verification624RecordUncheckedUpdateManyInput>
+    /**
+     * Filter which Verification624Records to update
+     */
+    where?: Verification624RecordWhereInput
+  }
+
+  /**
+   * Verification624Record upsert
+   */
+  export type Verification624RecordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Record
+     */
+    select?: Verification624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624RecordInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Verification624Record to update in case it exists.
+     */
+    where: Verification624RecordWhereUniqueInput
+    /**
+     * In case the Verification624Record found by the `where` argument doesn't exist, create a new Verification624Record with this data.
+     */
+    create: XOR<Verification624RecordCreateInput, Verification624RecordUncheckedCreateInput>
+    /**
+     * In case the Verification624Record was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<Verification624RecordUpdateInput, Verification624RecordUncheckedUpdateInput>
+  }
+
+  /**
+   * Verification624Record delete
+   */
+  export type Verification624RecordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Record
+     */
+    select?: Verification624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624RecordInclude<ExtArgs> | null
+    /**
+     * Filter which Verification624Record to delete.
+     */
+    where: Verification624RecordWhereUniqueInput
+  }
+
+  /**
+   * Verification624Record deleteMany
+   */
+  export type Verification624RecordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Verification624Records to delete
+     */
+    where?: Verification624RecordWhereInput
+  }
+
+  /**
+   * Verification624Record.createdBy
+   */
+  export type Verification624Record$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Verification624Record.submittedBy
+   */
+  export type Verification624Record$submittedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Verification624Record without action
+   */
+  export type Verification624RecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Verification624Record
+     */
+    select?: Verification624RecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Verification624RecordInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Notification
    */
 
@@ -73938,6 +77699,63 @@ export namespace Prisma {
   export type MonthlyClean624RecordScalarFieldEnum = (typeof MonthlyClean624RecordScalarFieldEnum)[keyof typeof MonthlyClean624RecordScalarFieldEnum]
 
 
+  export const Verification624EquipmentScalarFieldEnum: {
+    id: 'id',
+    facility: 'facility',
+    section: 'section',
+    name: 'name',
+    location: 'location',
+    inUse: 'inUse',
+    sortOrder: 'sortOrder',
+    retiredAt: 'retiredAt',
+    retiredById: 'retiredById',
+    createdById: 'createdById',
+    updatedById: 'updatedById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type Verification624EquipmentScalarFieldEnum = (typeof Verification624EquipmentScalarFieldEnum)[keyof typeof Verification624EquipmentScalarFieldEnum]
+
+
+  export const Verification624ListScalarFieldEnum: {
+    facility: 'facility',
+    version: 'version',
+    updatedById: 'updatedById',
+    updatedAt: 'updatedAt'
+  };
+
+  export type Verification624ListScalarFieldEnum = (typeof Verification624ListScalarFieldEnum)[keyof typeof Verification624ListScalarFieldEnum]
+
+
+  export const Verification624RecordScalarFieldEnum: {
+    id: 'id',
+    facility: 'facility',
+    period: 'period',
+    periodStart: 'periodStart',
+    periodEnd: 'periodEnd',
+    status: 'status',
+    conductedBy: 'conductedBy',
+    initials: 'initials',
+    items: 'items',
+    listVersion: 'listVersion',
+    okCount: 'okCount',
+    failCount: 'failCount',
+    notInUseCount: 'notInUseCount',
+    notes: 'notes',
+    lastEditedBy: 'lastEditedBy',
+    lastEditedAt: 'lastEditedAt',
+    createdById: 'createdById',
+    submittedAt: 'submittedAt',
+    submittedById: 'submittedById',
+    linkedInstanceId: 'linkedInstanceId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type Verification624RecordScalarFieldEnum = (typeof Verification624RecordScalarFieldEnum)[keyof typeof Verification624RecordScalarFieldEnum]
+
+
   export const NotificationScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -74326,6 +78144,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordListRelationFilter
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordListRelationFilter
     monthlyClean624CreatedRecords?: MonthlyClean624RecordListRelationFilter
+    verification624EquipmentCreated?: Verification624EquipmentListRelationFilter
+    verification624EquipmentUpdated?: Verification624EquipmentListRelationFilter
+    verification624EquipmentRetired?: Verification624EquipmentListRelationFilter
+    verification624ListsUpdated?: Verification624ListListRelationFilter
+    verification624RecordsCreated?: Verification624RecordListRelationFilter
+    verification624RecordsSubmitted?: Verification624RecordListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -74376,6 +78200,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordOrderByRelationAggregateInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordOrderByRelationAggregateInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordOrderByRelationAggregateInput
+    verification624EquipmentCreated?: Verification624EquipmentOrderByRelationAggregateInput
+    verification624EquipmentUpdated?: Verification624EquipmentOrderByRelationAggregateInput
+    verification624EquipmentRetired?: Verification624EquipmentOrderByRelationAggregateInput
+    verification624ListsUpdated?: Verification624ListOrderByRelationAggregateInput
+    verification624RecordsCreated?: Verification624RecordOrderByRelationAggregateInput
+    verification624RecordsSubmitted?: Verification624RecordOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -74429,6 +78259,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordListRelationFilter
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordListRelationFilter
     monthlyClean624CreatedRecords?: MonthlyClean624RecordListRelationFilter
+    verification624EquipmentCreated?: Verification624EquipmentListRelationFilter
+    verification624EquipmentUpdated?: Verification624EquipmentListRelationFilter
+    verification624EquipmentRetired?: Verification624EquipmentListRelationFilter
+    verification624ListsUpdated?: Verification624ListListRelationFilter
+    verification624RecordsCreated?: Verification624RecordListRelationFilter
+    verification624RecordsSubmitted?: Verification624RecordListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -80301,6 +84137,307 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"MonthlyClean624Record"> | Date | string
   }
 
+  export type Verification624EquipmentWhereInput = {
+    AND?: Verification624EquipmentWhereInput | Verification624EquipmentWhereInput[]
+    OR?: Verification624EquipmentWhereInput[]
+    NOT?: Verification624EquipmentWhereInput | Verification624EquipmentWhereInput[]
+    id?: StringFilter<"Verification624Equipment"> | string
+    facility?: StringFilter<"Verification624Equipment"> | string
+    section?: StringFilter<"Verification624Equipment"> | string
+    name?: StringFilter<"Verification624Equipment"> | string
+    location?: StringFilter<"Verification624Equipment"> | string
+    inUse?: BoolFilter<"Verification624Equipment"> | boolean
+    sortOrder?: IntFilter<"Verification624Equipment"> | number
+    retiredAt?: DateTimeNullableFilter<"Verification624Equipment"> | Date | string | null
+    retiredById?: StringNullableFilter<"Verification624Equipment"> | string | null
+    createdById?: StringNullableFilter<"Verification624Equipment"> | string | null
+    updatedById?: StringNullableFilter<"Verification624Equipment"> | string | null
+    createdAt?: DateTimeFilter<"Verification624Equipment"> | Date | string
+    updatedAt?: DateTimeFilter<"Verification624Equipment"> | Date | string
+    retiredBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    createdBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    updatedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }
+
+  export type Verification624EquipmentOrderByWithRelationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    section?: SortOrder
+    name?: SortOrder
+    location?: SortOrder
+    inUse?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrderInput | SortOrder
+    retiredById?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    retiredBy?: UserOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+    updatedBy?: UserOrderByWithRelationInput
+  }
+
+  export type Verification624EquipmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: Verification624EquipmentWhereInput | Verification624EquipmentWhereInput[]
+    OR?: Verification624EquipmentWhereInput[]
+    NOT?: Verification624EquipmentWhereInput | Verification624EquipmentWhereInput[]
+    facility?: StringFilter<"Verification624Equipment"> | string
+    section?: StringFilter<"Verification624Equipment"> | string
+    name?: StringFilter<"Verification624Equipment"> | string
+    location?: StringFilter<"Verification624Equipment"> | string
+    inUse?: BoolFilter<"Verification624Equipment"> | boolean
+    sortOrder?: IntFilter<"Verification624Equipment"> | number
+    retiredAt?: DateTimeNullableFilter<"Verification624Equipment"> | Date | string | null
+    retiredById?: StringNullableFilter<"Verification624Equipment"> | string | null
+    createdById?: StringNullableFilter<"Verification624Equipment"> | string | null
+    updatedById?: StringNullableFilter<"Verification624Equipment"> | string | null
+    createdAt?: DateTimeFilter<"Verification624Equipment"> | Date | string
+    updatedAt?: DateTimeFilter<"Verification624Equipment"> | Date | string
+    retiredBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    createdBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    updatedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type Verification624EquipmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    section?: SortOrder
+    name?: SortOrder
+    location?: SortOrder
+    inUse?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrderInput | SortOrder
+    retiredById?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: Verification624EquipmentCountOrderByAggregateInput
+    _avg?: Verification624EquipmentAvgOrderByAggregateInput
+    _max?: Verification624EquipmentMaxOrderByAggregateInput
+    _min?: Verification624EquipmentMinOrderByAggregateInput
+    _sum?: Verification624EquipmentSumOrderByAggregateInput
+  }
+
+  export type Verification624EquipmentScalarWhereWithAggregatesInput = {
+    AND?: Verification624EquipmentScalarWhereWithAggregatesInput | Verification624EquipmentScalarWhereWithAggregatesInput[]
+    OR?: Verification624EquipmentScalarWhereWithAggregatesInput[]
+    NOT?: Verification624EquipmentScalarWhereWithAggregatesInput | Verification624EquipmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Verification624Equipment"> | string
+    facility?: StringWithAggregatesFilter<"Verification624Equipment"> | string
+    section?: StringWithAggregatesFilter<"Verification624Equipment"> | string
+    name?: StringWithAggregatesFilter<"Verification624Equipment"> | string
+    location?: StringWithAggregatesFilter<"Verification624Equipment"> | string
+    inUse?: BoolWithAggregatesFilter<"Verification624Equipment"> | boolean
+    sortOrder?: IntWithAggregatesFilter<"Verification624Equipment"> | number
+    retiredAt?: DateTimeNullableWithAggregatesFilter<"Verification624Equipment"> | Date | string | null
+    retiredById?: StringNullableWithAggregatesFilter<"Verification624Equipment"> | string | null
+    createdById?: StringNullableWithAggregatesFilter<"Verification624Equipment"> | string | null
+    updatedById?: StringNullableWithAggregatesFilter<"Verification624Equipment"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Verification624Equipment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Verification624Equipment"> | Date | string
+  }
+
+  export type Verification624ListWhereInput = {
+    AND?: Verification624ListWhereInput | Verification624ListWhereInput[]
+    OR?: Verification624ListWhereInput[]
+    NOT?: Verification624ListWhereInput | Verification624ListWhereInput[]
+    facility?: StringFilter<"Verification624List"> | string
+    version?: IntFilter<"Verification624List"> | number
+    updatedById?: StringNullableFilter<"Verification624List"> | string | null
+    updatedAt?: DateTimeFilter<"Verification624List"> | Date | string
+    updatedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }
+
+  export type Verification624ListOrderByWithRelationInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: UserOrderByWithRelationInput
+  }
+
+  export type Verification624ListWhereUniqueInput = Prisma.AtLeast<{
+    facility?: string
+    AND?: Verification624ListWhereInput | Verification624ListWhereInput[]
+    OR?: Verification624ListWhereInput[]
+    NOT?: Verification624ListWhereInput | Verification624ListWhereInput[]
+    version?: IntFilter<"Verification624List"> | number
+    updatedById?: StringNullableFilter<"Verification624List"> | string | null
+    updatedAt?: DateTimeFilter<"Verification624List"> | Date | string
+    updatedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }, "facility">
+
+  export type Verification624ListOrderByWithAggregationInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    _count?: Verification624ListCountOrderByAggregateInput
+    _avg?: Verification624ListAvgOrderByAggregateInput
+    _max?: Verification624ListMaxOrderByAggregateInput
+    _min?: Verification624ListMinOrderByAggregateInput
+    _sum?: Verification624ListSumOrderByAggregateInput
+  }
+
+  export type Verification624ListScalarWhereWithAggregatesInput = {
+    AND?: Verification624ListScalarWhereWithAggregatesInput | Verification624ListScalarWhereWithAggregatesInput[]
+    OR?: Verification624ListScalarWhereWithAggregatesInput[]
+    NOT?: Verification624ListScalarWhereWithAggregatesInput | Verification624ListScalarWhereWithAggregatesInput[]
+    facility?: StringWithAggregatesFilter<"Verification624List"> | string
+    version?: IntWithAggregatesFilter<"Verification624List"> | number
+    updatedById?: StringNullableWithAggregatesFilter<"Verification624List"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"Verification624List"> | Date | string
+  }
+
+  export type Verification624RecordWhereInput = {
+    AND?: Verification624RecordWhereInput | Verification624RecordWhereInput[]
+    OR?: Verification624RecordWhereInput[]
+    NOT?: Verification624RecordWhereInput | Verification624RecordWhereInput[]
+    id?: StringFilter<"Verification624Record"> | string
+    facility?: StringFilter<"Verification624Record"> | string
+    period?: StringFilter<"Verification624Record"> | string
+    periodStart?: DateTimeFilter<"Verification624Record"> | Date | string
+    periodEnd?: DateTimeFilter<"Verification624Record"> | Date | string
+    status?: StringFilter<"Verification624Record"> | string
+    conductedBy?: StringFilter<"Verification624Record"> | string
+    initials?: StringFilter<"Verification624Record"> | string
+    items?: JsonFilter<"Verification624Record">
+    listVersion?: IntFilter<"Verification624Record"> | number
+    okCount?: IntFilter<"Verification624Record"> | number
+    failCount?: IntFilter<"Verification624Record"> | number
+    notInUseCount?: IntFilter<"Verification624Record"> | number
+    notes?: StringNullableFilter<"Verification624Record"> | string | null
+    lastEditedBy?: StringNullableFilter<"Verification624Record"> | string | null
+    lastEditedAt?: DateTimeNullableFilter<"Verification624Record"> | Date | string | null
+    createdById?: StringNullableFilter<"Verification624Record"> | string | null
+    submittedAt?: DateTimeNullableFilter<"Verification624Record"> | Date | string | null
+    submittedById?: StringNullableFilter<"Verification624Record"> | string | null
+    linkedInstanceId?: StringNullableFilter<"Verification624Record"> | string | null
+    createdAt?: DateTimeFilter<"Verification624Record"> | Date | string
+    updatedAt?: DateTimeFilter<"Verification624Record"> | Date | string
+    createdBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    submittedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }
+
+  export type Verification624RecordOrderByWithRelationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    items?: SortOrder
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notInUseCount?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    lastEditedBy?: SortOrderInput | SortOrder
+    lastEditedAt?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    submittedById?: SortOrderInput | SortOrder
+    linkedInstanceId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: UserOrderByWithRelationInput
+    submittedBy?: UserOrderByWithRelationInput
+  }
+
+  export type Verification624RecordWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    facility_period?: Verification624RecordFacilityPeriodCompoundUniqueInput
+    AND?: Verification624RecordWhereInput | Verification624RecordWhereInput[]
+    OR?: Verification624RecordWhereInput[]
+    NOT?: Verification624RecordWhereInput | Verification624RecordWhereInput[]
+    facility?: StringFilter<"Verification624Record"> | string
+    period?: StringFilter<"Verification624Record"> | string
+    periodStart?: DateTimeFilter<"Verification624Record"> | Date | string
+    periodEnd?: DateTimeFilter<"Verification624Record"> | Date | string
+    status?: StringFilter<"Verification624Record"> | string
+    conductedBy?: StringFilter<"Verification624Record"> | string
+    initials?: StringFilter<"Verification624Record"> | string
+    items?: JsonFilter<"Verification624Record">
+    listVersion?: IntFilter<"Verification624Record"> | number
+    okCount?: IntFilter<"Verification624Record"> | number
+    failCount?: IntFilter<"Verification624Record"> | number
+    notInUseCount?: IntFilter<"Verification624Record"> | number
+    notes?: StringNullableFilter<"Verification624Record"> | string | null
+    lastEditedBy?: StringNullableFilter<"Verification624Record"> | string | null
+    lastEditedAt?: DateTimeNullableFilter<"Verification624Record"> | Date | string | null
+    createdById?: StringNullableFilter<"Verification624Record"> | string | null
+    submittedAt?: DateTimeNullableFilter<"Verification624Record"> | Date | string | null
+    submittedById?: StringNullableFilter<"Verification624Record"> | string | null
+    linkedInstanceId?: StringNullableFilter<"Verification624Record"> | string | null
+    createdAt?: DateTimeFilter<"Verification624Record"> | Date | string
+    updatedAt?: DateTimeFilter<"Verification624Record"> | Date | string
+    createdBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    submittedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }, "id" | "facility_period">
+
+  export type Verification624RecordOrderByWithAggregationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    items?: SortOrder
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notInUseCount?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    lastEditedBy?: SortOrderInput | SortOrder
+    lastEditedAt?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    submittedById?: SortOrderInput | SortOrder
+    linkedInstanceId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: Verification624RecordCountOrderByAggregateInput
+    _avg?: Verification624RecordAvgOrderByAggregateInput
+    _max?: Verification624RecordMaxOrderByAggregateInput
+    _min?: Verification624RecordMinOrderByAggregateInput
+    _sum?: Verification624RecordSumOrderByAggregateInput
+  }
+
+  export type Verification624RecordScalarWhereWithAggregatesInput = {
+    AND?: Verification624RecordScalarWhereWithAggregatesInput | Verification624RecordScalarWhereWithAggregatesInput[]
+    OR?: Verification624RecordScalarWhereWithAggregatesInput[]
+    NOT?: Verification624RecordScalarWhereWithAggregatesInput | Verification624RecordScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Verification624Record"> | string
+    facility?: StringWithAggregatesFilter<"Verification624Record"> | string
+    period?: StringWithAggregatesFilter<"Verification624Record"> | string
+    periodStart?: DateTimeWithAggregatesFilter<"Verification624Record"> | Date | string
+    periodEnd?: DateTimeWithAggregatesFilter<"Verification624Record"> | Date | string
+    status?: StringWithAggregatesFilter<"Verification624Record"> | string
+    conductedBy?: StringWithAggregatesFilter<"Verification624Record"> | string
+    initials?: StringWithAggregatesFilter<"Verification624Record"> | string
+    items?: JsonWithAggregatesFilter<"Verification624Record">
+    listVersion?: IntWithAggregatesFilter<"Verification624Record"> | number
+    okCount?: IntWithAggregatesFilter<"Verification624Record"> | number
+    failCount?: IntWithAggregatesFilter<"Verification624Record"> | number
+    notInUseCount?: IntWithAggregatesFilter<"Verification624Record"> | number
+    notes?: StringNullableWithAggregatesFilter<"Verification624Record"> | string | null
+    lastEditedBy?: StringNullableWithAggregatesFilter<"Verification624Record"> | string | null
+    lastEditedAt?: DateTimeNullableWithAggregatesFilter<"Verification624Record"> | Date | string | null
+    createdById?: StringNullableWithAggregatesFilter<"Verification624Record"> | string | null
+    submittedAt?: DateTimeNullableWithAggregatesFilter<"Verification624Record"> | Date | string | null
+    submittedById?: StringNullableWithAggregatesFilter<"Verification624Record"> | string | null
+    linkedInstanceId?: StringNullableWithAggregatesFilter<"Verification624Record"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Verification624Record"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Verification624Record"> | Date | string
+  }
+
   export type NotificationWhereInput = {
     AND?: NotificationWhereInput | NotificationWhereInput[]
     OR?: NotificationWhereInput[]
@@ -80424,6 +84561,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -80474,6 +84617,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUpdateInput = {
@@ -80524,6 +84673,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -80574,6 +84729,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -87216,6 +91377,336 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type Verification624EquipmentCreateInput = {
+    id?: string
+    facility?: string
+    section: string
+    name: string
+    location?: string
+    inUse?: boolean
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    retiredBy?: UserCreateNestedOneWithoutVerification624EquipmentRetiredInput
+    createdBy?: UserCreateNestedOneWithoutVerification624EquipmentCreatedInput
+    updatedBy?: UserCreateNestedOneWithoutVerification624EquipmentUpdatedInput
+  }
+
+  export type Verification624EquipmentUncheckedCreateInput = {
+    id?: string
+    facility?: string
+    section: string
+    name: string
+    location?: string
+    inUse?: boolean
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type Verification624EquipmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    inUse?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    retiredBy?: UserUpdateOneWithoutVerification624EquipmentRetiredNestedInput
+    createdBy?: UserUpdateOneWithoutVerification624EquipmentCreatedNestedInput
+    updatedBy?: UserUpdateOneWithoutVerification624EquipmentUpdatedNestedInput
+  }
+
+  export type Verification624EquipmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    inUse?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624EquipmentCreateManyInput = {
+    id?: string
+    facility?: string
+    section: string
+    name: string
+    location?: string
+    inUse?: boolean
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type Verification624EquipmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    inUse?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624EquipmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    inUse?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624ListCreateInput = {
+    facility: string
+    version?: number
+    updatedAt?: Date | string
+    updatedBy?: UserCreateNestedOneWithoutVerification624ListsUpdatedInput
+  }
+
+  export type Verification624ListUncheckedCreateInput = {
+    facility: string
+    version?: number
+    updatedById?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type Verification624ListUpdateInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: UserUpdateOneWithoutVerification624ListsUpdatedNestedInput
+  }
+
+  export type Verification624ListUncheckedUpdateInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624ListCreateManyInput = {
+    facility: string
+    version?: number
+    updatedById?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type Verification624ListUpdateManyMutationInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624ListUncheckedUpdateManyInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624RecordCreateInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notInUseCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: UserCreateNestedOneWithoutVerification624RecordsCreatedInput
+    submittedBy?: UserCreateNestedOneWithoutVerification624RecordsSubmittedInput
+  }
+
+  export type Verification624RecordUncheckedCreateInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notInUseCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type Verification624RecordUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notInUseCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneWithoutVerification624RecordsCreatedNestedInput
+    submittedBy?: UserUpdateOneWithoutVerification624RecordsSubmittedNestedInput
+  }
+
+  export type Verification624RecordUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notInUseCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624RecordCreateManyInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notInUseCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type Verification624RecordUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notInUseCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624RecordUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notInUseCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type NotificationCreateInput = {
     id?: string
     type: $Enums.NotificationType
@@ -87550,6 +92041,24 @@ export namespace Prisma {
     none?: MonthlyClean624RecordWhereInput
   }
 
+  export type Verification624EquipmentListRelationFilter = {
+    every?: Verification624EquipmentWhereInput
+    some?: Verification624EquipmentWhereInput
+    none?: Verification624EquipmentWhereInput
+  }
+
+  export type Verification624ListListRelationFilter = {
+    every?: Verification624ListWhereInput
+    some?: Verification624ListWhereInput
+    none?: Verification624ListWhereInput
+  }
+
+  export type Verification624RecordListRelationFilter = {
+    every?: Verification624RecordWhereInput
+    some?: Verification624RecordWhereInput
+    none?: Verification624RecordWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -87684,6 +92193,18 @@ export namespace Prisma {
   }
 
   export type MonthlyClean624RecordOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type Verification624EquipmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type Verification624ListOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type Verification624RecordOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -91707,6 +96228,183 @@ export namespace Prisma {
     notDoneCount?: SortOrder
   }
 
+  export type Verification624EquipmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    section?: SortOrder
+    name?: SortOrder
+    location?: SortOrder
+    inUse?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrder
+    retiredById?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type Verification624EquipmentAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type Verification624EquipmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    section?: SortOrder
+    name?: SortOrder
+    location?: SortOrder
+    inUse?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrder
+    retiredById?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type Verification624EquipmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    section?: SortOrder
+    name?: SortOrder
+    location?: SortOrder
+    inUse?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrder
+    retiredById?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type Verification624EquipmentSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type Verification624ListCountOrderByAggregateInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type Verification624ListAvgOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type Verification624ListMaxOrderByAggregateInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type Verification624ListMinOrderByAggregateInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type Verification624ListSumOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type Verification624RecordFacilityPeriodCompoundUniqueInput = {
+    facility: string
+    period: string
+  }
+
+  export type Verification624RecordCountOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    items?: SortOrder
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notInUseCount?: SortOrder
+    notes?: SortOrder
+    lastEditedBy?: SortOrder
+    lastEditedAt?: SortOrder
+    createdById?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type Verification624RecordAvgOrderByAggregateInput = {
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notInUseCount?: SortOrder
+  }
+
+  export type Verification624RecordMaxOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notInUseCount?: SortOrder
+    notes?: SortOrder
+    lastEditedBy?: SortOrder
+    lastEditedAt?: SortOrder
+    createdById?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type Verification624RecordMinOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notInUseCount?: SortOrder
+    notes?: SortOrder
+    lastEditedBy?: SortOrder
+    lastEditedAt?: SortOrder
+    createdById?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type Verification624RecordSumOrderByAggregateInput = {
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notInUseCount?: SortOrder
+  }
+
   export type EnumNotificationTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
     in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
@@ -92026,6 +96724,48 @@ export namespace Prisma {
     connect?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
   }
 
+  export type Verification624EquipmentCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<Verification624EquipmentCreateWithoutCreatedByInput, Verification624EquipmentUncheckedCreateWithoutCreatedByInput> | Verification624EquipmentCreateWithoutCreatedByInput[] | Verification624EquipmentUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: Verification624EquipmentCreateOrConnectWithoutCreatedByInput | Verification624EquipmentCreateOrConnectWithoutCreatedByInput[]
+    createMany?: Verification624EquipmentCreateManyCreatedByInputEnvelope
+    connect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+  }
+
+  export type Verification624EquipmentCreateNestedManyWithoutUpdatedByInput = {
+    create?: XOR<Verification624EquipmentCreateWithoutUpdatedByInput, Verification624EquipmentUncheckedCreateWithoutUpdatedByInput> | Verification624EquipmentCreateWithoutUpdatedByInput[] | Verification624EquipmentUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: Verification624EquipmentCreateOrConnectWithoutUpdatedByInput | Verification624EquipmentCreateOrConnectWithoutUpdatedByInput[]
+    createMany?: Verification624EquipmentCreateManyUpdatedByInputEnvelope
+    connect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+  }
+
+  export type Verification624EquipmentCreateNestedManyWithoutRetiredByInput = {
+    create?: XOR<Verification624EquipmentCreateWithoutRetiredByInput, Verification624EquipmentUncheckedCreateWithoutRetiredByInput> | Verification624EquipmentCreateWithoutRetiredByInput[] | Verification624EquipmentUncheckedCreateWithoutRetiredByInput[]
+    connectOrCreate?: Verification624EquipmentCreateOrConnectWithoutRetiredByInput | Verification624EquipmentCreateOrConnectWithoutRetiredByInput[]
+    createMany?: Verification624EquipmentCreateManyRetiredByInputEnvelope
+    connect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+  }
+
+  export type Verification624ListCreateNestedManyWithoutUpdatedByInput = {
+    create?: XOR<Verification624ListCreateWithoutUpdatedByInput, Verification624ListUncheckedCreateWithoutUpdatedByInput> | Verification624ListCreateWithoutUpdatedByInput[] | Verification624ListUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: Verification624ListCreateOrConnectWithoutUpdatedByInput | Verification624ListCreateOrConnectWithoutUpdatedByInput[]
+    createMany?: Verification624ListCreateManyUpdatedByInputEnvelope
+    connect?: Verification624ListWhereUniqueInput | Verification624ListWhereUniqueInput[]
+  }
+
+  export type Verification624RecordCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<Verification624RecordCreateWithoutCreatedByInput, Verification624RecordUncheckedCreateWithoutCreatedByInput> | Verification624RecordCreateWithoutCreatedByInput[] | Verification624RecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: Verification624RecordCreateOrConnectWithoutCreatedByInput | Verification624RecordCreateOrConnectWithoutCreatedByInput[]
+    createMany?: Verification624RecordCreateManyCreatedByInputEnvelope
+    connect?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+  }
+
+  export type Verification624RecordCreateNestedManyWithoutSubmittedByInput = {
+    create?: XOR<Verification624RecordCreateWithoutSubmittedByInput, Verification624RecordUncheckedCreateWithoutSubmittedByInput> | Verification624RecordCreateWithoutSubmittedByInput[] | Verification624RecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: Verification624RecordCreateOrConnectWithoutSubmittedByInput | Verification624RecordCreateOrConnectWithoutSubmittedByInput[]
+    createMany?: Verification624RecordCreateManySubmittedByInputEnvelope
+    connect?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+  }
+
   export type FormUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -92290,6 +97030,48 @@ export namespace Prisma {
     connectOrCreate?: MonthlyClean624RecordCreateOrConnectWithoutCreatedByInput | MonthlyClean624RecordCreateOrConnectWithoutCreatedByInput[]
     createMany?: MonthlyClean624RecordCreateManyCreatedByInputEnvelope
     connect?: MonthlyClean624RecordWhereUniqueInput | MonthlyClean624RecordWhereUniqueInput[]
+  }
+
+  export type Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<Verification624EquipmentCreateWithoutCreatedByInput, Verification624EquipmentUncheckedCreateWithoutCreatedByInput> | Verification624EquipmentCreateWithoutCreatedByInput[] | Verification624EquipmentUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: Verification624EquipmentCreateOrConnectWithoutCreatedByInput | Verification624EquipmentCreateOrConnectWithoutCreatedByInput[]
+    createMany?: Verification624EquipmentCreateManyCreatedByInputEnvelope
+    connect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+  }
+
+  export type Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput = {
+    create?: XOR<Verification624EquipmentCreateWithoutUpdatedByInput, Verification624EquipmentUncheckedCreateWithoutUpdatedByInput> | Verification624EquipmentCreateWithoutUpdatedByInput[] | Verification624EquipmentUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: Verification624EquipmentCreateOrConnectWithoutUpdatedByInput | Verification624EquipmentCreateOrConnectWithoutUpdatedByInput[]
+    createMany?: Verification624EquipmentCreateManyUpdatedByInputEnvelope
+    connect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+  }
+
+  export type Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput = {
+    create?: XOR<Verification624EquipmentCreateWithoutRetiredByInput, Verification624EquipmentUncheckedCreateWithoutRetiredByInput> | Verification624EquipmentCreateWithoutRetiredByInput[] | Verification624EquipmentUncheckedCreateWithoutRetiredByInput[]
+    connectOrCreate?: Verification624EquipmentCreateOrConnectWithoutRetiredByInput | Verification624EquipmentCreateOrConnectWithoutRetiredByInput[]
+    createMany?: Verification624EquipmentCreateManyRetiredByInputEnvelope
+    connect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+  }
+
+  export type Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput = {
+    create?: XOR<Verification624ListCreateWithoutUpdatedByInput, Verification624ListUncheckedCreateWithoutUpdatedByInput> | Verification624ListCreateWithoutUpdatedByInput[] | Verification624ListUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: Verification624ListCreateOrConnectWithoutUpdatedByInput | Verification624ListCreateOrConnectWithoutUpdatedByInput[]
+    createMany?: Verification624ListCreateManyUpdatedByInputEnvelope
+    connect?: Verification624ListWhereUniqueInput | Verification624ListWhereUniqueInput[]
+  }
+
+  export type Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<Verification624RecordCreateWithoutCreatedByInput, Verification624RecordUncheckedCreateWithoutCreatedByInput> | Verification624RecordCreateWithoutCreatedByInput[] | Verification624RecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: Verification624RecordCreateOrConnectWithoutCreatedByInput | Verification624RecordCreateOrConnectWithoutCreatedByInput[]
+    createMany?: Verification624RecordCreateManyCreatedByInputEnvelope
+    connect?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+  }
+
+  export type Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput = {
+    create?: XOR<Verification624RecordCreateWithoutSubmittedByInput, Verification624RecordUncheckedCreateWithoutSubmittedByInput> | Verification624RecordCreateWithoutSubmittedByInput[] | Verification624RecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: Verification624RecordCreateOrConnectWithoutSubmittedByInput | Verification624RecordCreateOrConnectWithoutSubmittedByInput[]
+    createMany?: Verification624RecordCreateManySubmittedByInputEnvelope
+    connect?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -92844,6 +97626,90 @@ export namespace Prisma {
     deleteMany?: MonthlyClean624RecordScalarWhereInput | MonthlyClean624RecordScalarWhereInput[]
   }
 
+  export type Verification624EquipmentUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<Verification624EquipmentCreateWithoutCreatedByInput, Verification624EquipmentUncheckedCreateWithoutCreatedByInput> | Verification624EquipmentCreateWithoutCreatedByInput[] | Verification624EquipmentUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: Verification624EquipmentCreateOrConnectWithoutCreatedByInput | Verification624EquipmentCreateOrConnectWithoutCreatedByInput[]
+    upsert?: Verification624EquipmentUpsertWithWhereUniqueWithoutCreatedByInput | Verification624EquipmentUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: Verification624EquipmentCreateManyCreatedByInputEnvelope
+    set?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    disconnect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    delete?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    connect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    update?: Verification624EquipmentUpdateWithWhereUniqueWithoutCreatedByInput | Verification624EquipmentUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: Verification624EquipmentUpdateManyWithWhereWithoutCreatedByInput | Verification624EquipmentUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: Verification624EquipmentScalarWhereInput | Verification624EquipmentScalarWhereInput[]
+  }
+
+  export type Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput = {
+    create?: XOR<Verification624EquipmentCreateWithoutUpdatedByInput, Verification624EquipmentUncheckedCreateWithoutUpdatedByInput> | Verification624EquipmentCreateWithoutUpdatedByInput[] | Verification624EquipmentUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: Verification624EquipmentCreateOrConnectWithoutUpdatedByInput | Verification624EquipmentCreateOrConnectWithoutUpdatedByInput[]
+    upsert?: Verification624EquipmentUpsertWithWhereUniqueWithoutUpdatedByInput | Verification624EquipmentUpsertWithWhereUniqueWithoutUpdatedByInput[]
+    createMany?: Verification624EquipmentCreateManyUpdatedByInputEnvelope
+    set?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    disconnect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    delete?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    connect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    update?: Verification624EquipmentUpdateWithWhereUniqueWithoutUpdatedByInput | Verification624EquipmentUpdateWithWhereUniqueWithoutUpdatedByInput[]
+    updateMany?: Verification624EquipmentUpdateManyWithWhereWithoutUpdatedByInput | Verification624EquipmentUpdateManyWithWhereWithoutUpdatedByInput[]
+    deleteMany?: Verification624EquipmentScalarWhereInput | Verification624EquipmentScalarWhereInput[]
+  }
+
+  export type Verification624EquipmentUpdateManyWithoutRetiredByNestedInput = {
+    create?: XOR<Verification624EquipmentCreateWithoutRetiredByInput, Verification624EquipmentUncheckedCreateWithoutRetiredByInput> | Verification624EquipmentCreateWithoutRetiredByInput[] | Verification624EquipmentUncheckedCreateWithoutRetiredByInput[]
+    connectOrCreate?: Verification624EquipmentCreateOrConnectWithoutRetiredByInput | Verification624EquipmentCreateOrConnectWithoutRetiredByInput[]
+    upsert?: Verification624EquipmentUpsertWithWhereUniqueWithoutRetiredByInput | Verification624EquipmentUpsertWithWhereUniqueWithoutRetiredByInput[]
+    createMany?: Verification624EquipmentCreateManyRetiredByInputEnvelope
+    set?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    disconnect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    delete?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    connect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    update?: Verification624EquipmentUpdateWithWhereUniqueWithoutRetiredByInput | Verification624EquipmentUpdateWithWhereUniqueWithoutRetiredByInput[]
+    updateMany?: Verification624EquipmentUpdateManyWithWhereWithoutRetiredByInput | Verification624EquipmentUpdateManyWithWhereWithoutRetiredByInput[]
+    deleteMany?: Verification624EquipmentScalarWhereInput | Verification624EquipmentScalarWhereInput[]
+  }
+
+  export type Verification624ListUpdateManyWithoutUpdatedByNestedInput = {
+    create?: XOR<Verification624ListCreateWithoutUpdatedByInput, Verification624ListUncheckedCreateWithoutUpdatedByInput> | Verification624ListCreateWithoutUpdatedByInput[] | Verification624ListUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: Verification624ListCreateOrConnectWithoutUpdatedByInput | Verification624ListCreateOrConnectWithoutUpdatedByInput[]
+    upsert?: Verification624ListUpsertWithWhereUniqueWithoutUpdatedByInput | Verification624ListUpsertWithWhereUniqueWithoutUpdatedByInput[]
+    createMany?: Verification624ListCreateManyUpdatedByInputEnvelope
+    set?: Verification624ListWhereUniqueInput | Verification624ListWhereUniqueInput[]
+    disconnect?: Verification624ListWhereUniqueInput | Verification624ListWhereUniqueInput[]
+    delete?: Verification624ListWhereUniqueInput | Verification624ListWhereUniqueInput[]
+    connect?: Verification624ListWhereUniqueInput | Verification624ListWhereUniqueInput[]
+    update?: Verification624ListUpdateWithWhereUniqueWithoutUpdatedByInput | Verification624ListUpdateWithWhereUniqueWithoutUpdatedByInput[]
+    updateMany?: Verification624ListUpdateManyWithWhereWithoutUpdatedByInput | Verification624ListUpdateManyWithWhereWithoutUpdatedByInput[]
+    deleteMany?: Verification624ListScalarWhereInput | Verification624ListScalarWhereInput[]
+  }
+
+  export type Verification624RecordUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<Verification624RecordCreateWithoutCreatedByInput, Verification624RecordUncheckedCreateWithoutCreatedByInput> | Verification624RecordCreateWithoutCreatedByInput[] | Verification624RecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: Verification624RecordCreateOrConnectWithoutCreatedByInput | Verification624RecordCreateOrConnectWithoutCreatedByInput[]
+    upsert?: Verification624RecordUpsertWithWhereUniqueWithoutCreatedByInput | Verification624RecordUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: Verification624RecordCreateManyCreatedByInputEnvelope
+    set?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    disconnect?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    delete?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    connect?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    update?: Verification624RecordUpdateWithWhereUniqueWithoutCreatedByInput | Verification624RecordUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: Verification624RecordUpdateManyWithWhereWithoutCreatedByInput | Verification624RecordUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: Verification624RecordScalarWhereInput | Verification624RecordScalarWhereInput[]
+  }
+
+  export type Verification624RecordUpdateManyWithoutSubmittedByNestedInput = {
+    create?: XOR<Verification624RecordCreateWithoutSubmittedByInput, Verification624RecordUncheckedCreateWithoutSubmittedByInput> | Verification624RecordCreateWithoutSubmittedByInput[] | Verification624RecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: Verification624RecordCreateOrConnectWithoutSubmittedByInput | Verification624RecordCreateOrConnectWithoutSubmittedByInput[]
+    upsert?: Verification624RecordUpsertWithWhereUniqueWithoutSubmittedByInput | Verification624RecordUpsertWithWhereUniqueWithoutSubmittedByInput[]
+    createMany?: Verification624RecordCreateManySubmittedByInputEnvelope
+    set?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    disconnect?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    delete?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    connect?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    update?: Verification624RecordUpdateWithWhereUniqueWithoutSubmittedByInput | Verification624RecordUpdateWithWhereUniqueWithoutSubmittedByInput[]
+    updateMany?: Verification624RecordUpdateManyWithWhereWithoutSubmittedByInput | Verification624RecordUpdateManyWithWhereWithoutSubmittedByInput[]
+    deleteMany?: Verification624RecordScalarWhereInput | Verification624RecordScalarWhereInput[]
+  }
+
   export type FormUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -93374,6 +98240,90 @@ export namespace Prisma {
     update?: MonthlyClean624RecordUpdateWithWhereUniqueWithoutCreatedByInput | MonthlyClean624RecordUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: MonthlyClean624RecordUpdateManyWithWhereWithoutCreatedByInput | MonthlyClean624RecordUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: MonthlyClean624RecordScalarWhereInput | MonthlyClean624RecordScalarWhereInput[]
+  }
+
+  export type Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<Verification624EquipmentCreateWithoutCreatedByInput, Verification624EquipmentUncheckedCreateWithoutCreatedByInput> | Verification624EquipmentCreateWithoutCreatedByInput[] | Verification624EquipmentUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: Verification624EquipmentCreateOrConnectWithoutCreatedByInput | Verification624EquipmentCreateOrConnectWithoutCreatedByInput[]
+    upsert?: Verification624EquipmentUpsertWithWhereUniqueWithoutCreatedByInput | Verification624EquipmentUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: Verification624EquipmentCreateManyCreatedByInputEnvelope
+    set?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    disconnect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    delete?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    connect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    update?: Verification624EquipmentUpdateWithWhereUniqueWithoutCreatedByInput | Verification624EquipmentUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: Verification624EquipmentUpdateManyWithWhereWithoutCreatedByInput | Verification624EquipmentUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: Verification624EquipmentScalarWhereInput | Verification624EquipmentScalarWhereInput[]
+  }
+
+  export type Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput = {
+    create?: XOR<Verification624EquipmentCreateWithoutUpdatedByInput, Verification624EquipmentUncheckedCreateWithoutUpdatedByInput> | Verification624EquipmentCreateWithoutUpdatedByInput[] | Verification624EquipmentUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: Verification624EquipmentCreateOrConnectWithoutUpdatedByInput | Verification624EquipmentCreateOrConnectWithoutUpdatedByInput[]
+    upsert?: Verification624EquipmentUpsertWithWhereUniqueWithoutUpdatedByInput | Verification624EquipmentUpsertWithWhereUniqueWithoutUpdatedByInput[]
+    createMany?: Verification624EquipmentCreateManyUpdatedByInputEnvelope
+    set?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    disconnect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    delete?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    connect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    update?: Verification624EquipmentUpdateWithWhereUniqueWithoutUpdatedByInput | Verification624EquipmentUpdateWithWhereUniqueWithoutUpdatedByInput[]
+    updateMany?: Verification624EquipmentUpdateManyWithWhereWithoutUpdatedByInput | Verification624EquipmentUpdateManyWithWhereWithoutUpdatedByInput[]
+    deleteMany?: Verification624EquipmentScalarWhereInput | Verification624EquipmentScalarWhereInput[]
+  }
+
+  export type Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput = {
+    create?: XOR<Verification624EquipmentCreateWithoutRetiredByInput, Verification624EquipmentUncheckedCreateWithoutRetiredByInput> | Verification624EquipmentCreateWithoutRetiredByInput[] | Verification624EquipmentUncheckedCreateWithoutRetiredByInput[]
+    connectOrCreate?: Verification624EquipmentCreateOrConnectWithoutRetiredByInput | Verification624EquipmentCreateOrConnectWithoutRetiredByInput[]
+    upsert?: Verification624EquipmentUpsertWithWhereUniqueWithoutRetiredByInput | Verification624EquipmentUpsertWithWhereUniqueWithoutRetiredByInput[]
+    createMany?: Verification624EquipmentCreateManyRetiredByInputEnvelope
+    set?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    disconnect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    delete?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    connect?: Verification624EquipmentWhereUniqueInput | Verification624EquipmentWhereUniqueInput[]
+    update?: Verification624EquipmentUpdateWithWhereUniqueWithoutRetiredByInput | Verification624EquipmentUpdateWithWhereUniqueWithoutRetiredByInput[]
+    updateMany?: Verification624EquipmentUpdateManyWithWhereWithoutRetiredByInput | Verification624EquipmentUpdateManyWithWhereWithoutRetiredByInput[]
+    deleteMany?: Verification624EquipmentScalarWhereInput | Verification624EquipmentScalarWhereInput[]
+  }
+
+  export type Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput = {
+    create?: XOR<Verification624ListCreateWithoutUpdatedByInput, Verification624ListUncheckedCreateWithoutUpdatedByInput> | Verification624ListCreateWithoutUpdatedByInput[] | Verification624ListUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: Verification624ListCreateOrConnectWithoutUpdatedByInput | Verification624ListCreateOrConnectWithoutUpdatedByInput[]
+    upsert?: Verification624ListUpsertWithWhereUniqueWithoutUpdatedByInput | Verification624ListUpsertWithWhereUniqueWithoutUpdatedByInput[]
+    createMany?: Verification624ListCreateManyUpdatedByInputEnvelope
+    set?: Verification624ListWhereUniqueInput | Verification624ListWhereUniqueInput[]
+    disconnect?: Verification624ListWhereUniqueInput | Verification624ListWhereUniqueInput[]
+    delete?: Verification624ListWhereUniqueInput | Verification624ListWhereUniqueInput[]
+    connect?: Verification624ListWhereUniqueInput | Verification624ListWhereUniqueInput[]
+    update?: Verification624ListUpdateWithWhereUniqueWithoutUpdatedByInput | Verification624ListUpdateWithWhereUniqueWithoutUpdatedByInput[]
+    updateMany?: Verification624ListUpdateManyWithWhereWithoutUpdatedByInput | Verification624ListUpdateManyWithWhereWithoutUpdatedByInput[]
+    deleteMany?: Verification624ListScalarWhereInput | Verification624ListScalarWhereInput[]
+  }
+
+  export type Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<Verification624RecordCreateWithoutCreatedByInput, Verification624RecordUncheckedCreateWithoutCreatedByInput> | Verification624RecordCreateWithoutCreatedByInput[] | Verification624RecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: Verification624RecordCreateOrConnectWithoutCreatedByInput | Verification624RecordCreateOrConnectWithoutCreatedByInput[]
+    upsert?: Verification624RecordUpsertWithWhereUniqueWithoutCreatedByInput | Verification624RecordUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: Verification624RecordCreateManyCreatedByInputEnvelope
+    set?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    disconnect?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    delete?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    connect?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    update?: Verification624RecordUpdateWithWhereUniqueWithoutCreatedByInput | Verification624RecordUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: Verification624RecordUpdateManyWithWhereWithoutCreatedByInput | Verification624RecordUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: Verification624RecordScalarWhereInput | Verification624RecordScalarWhereInput[]
+  }
+
+  export type Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput = {
+    create?: XOR<Verification624RecordCreateWithoutSubmittedByInput, Verification624RecordUncheckedCreateWithoutSubmittedByInput> | Verification624RecordCreateWithoutSubmittedByInput[] | Verification624RecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: Verification624RecordCreateOrConnectWithoutSubmittedByInput | Verification624RecordCreateOrConnectWithoutSubmittedByInput[]
+    upsert?: Verification624RecordUpsertWithWhereUniqueWithoutSubmittedByInput | Verification624RecordUpsertWithWhereUniqueWithoutSubmittedByInput[]
+    createMany?: Verification624RecordCreateManySubmittedByInputEnvelope
+    set?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    disconnect?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    delete?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    connect?: Verification624RecordWhereUniqueInput | Verification624RecordWhereUniqueInput[]
+    update?: Verification624RecordUpdateWithWhereUniqueWithoutSubmittedByInput | Verification624RecordUpdateWithWhereUniqueWithoutSubmittedByInput[]
+    updateMany?: Verification624RecordUpdateManyWithWhereWithoutSubmittedByInput | Verification624RecordUpdateManyWithWhereWithoutSubmittedByInput[]
+    deleteMany?: Verification624RecordScalarWhereInput | Verification624RecordScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedFormsInput = {
@@ -97205,6 +102155,102 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMonthlyClean624CreatedRecordsInput, UserUpdateWithoutMonthlyClean624CreatedRecordsInput>, UserUncheckedUpdateWithoutMonthlyClean624CreatedRecordsInput>
   }
 
+  export type UserCreateNestedOneWithoutVerification624EquipmentRetiredInput = {
+    create?: XOR<UserCreateWithoutVerification624EquipmentRetiredInput, UserUncheckedCreateWithoutVerification624EquipmentRetiredInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerification624EquipmentRetiredInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutVerification624EquipmentCreatedInput = {
+    create?: XOR<UserCreateWithoutVerification624EquipmentCreatedInput, UserUncheckedCreateWithoutVerification624EquipmentCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerification624EquipmentCreatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutVerification624EquipmentUpdatedInput = {
+    create?: XOR<UserCreateWithoutVerification624EquipmentUpdatedInput, UserUncheckedCreateWithoutVerification624EquipmentUpdatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerification624EquipmentUpdatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutVerification624EquipmentRetiredNestedInput = {
+    create?: XOR<UserCreateWithoutVerification624EquipmentRetiredInput, UserUncheckedCreateWithoutVerification624EquipmentRetiredInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerification624EquipmentRetiredInput
+    upsert?: UserUpsertWithoutVerification624EquipmentRetiredInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutVerification624EquipmentRetiredInput, UserUpdateWithoutVerification624EquipmentRetiredInput>, UserUncheckedUpdateWithoutVerification624EquipmentRetiredInput>
+  }
+
+  export type UserUpdateOneWithoutVerification624EquipmentCreatedNestedInput = {
+    create?: XOR<UserCreateWithoutVerification624EquipmentCreatedInput, UserUncheckedCreateWithoutVerification624EquipmentCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerification624EquipmentCreatedInput
+    upsert?: UserUpsertWithoutVerification624EquipmentCreatedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutVerification624EquipmentCreatedInput, UserUpdateWithoutVerification624EquipmentCreatedInput>, UserUncheckedUpdateWithoutVerification624EquipmentCreatedInput>
+  }
+
+  export type UserUpdateOneWithoutVerification624EquipmentUpdatedNestedInput = {
+    create?: XOR<UserCreateWithoutVerification624EquipmentUpdatedInput, UserUncheckedCreateWithoutVerification624EquipmentUpdatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerification624EquipmentUpdatedInput
+    upsert?: UserUpsertWithoutVerification624EquipmentUpdatedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutVerification624EquipmentUpdatedInput, UserUpdateWithoutVerification624EquipmentUpdatedInput>, UserUncheckedUpdateWithoutVerification624EquipmentUpdatedInput>
+  }
+
+  export type UserCreateNestedOneWithoutVerification624ListsUpdatedInput = {
+    create?: XOR<UserCreateWithoutVerification624ListsUpdatedInput, UserUncheckedCreateWithoutVerification624ListsUpdatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerification624ListsUpdatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutVerification624ListsUpdatedNestedInput = {
+    create?: XOR<UserCreateWithoutVerification624ListsUpdatedInput, UserUncheckedCreateWithoutVerification624ListsUpdatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerification624ListsUpdatedInput
+    upsert?: UserUpsertWithoutVerification624ListsUpdatedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutVerification624ListsUpdatedInput, UserUpdateWithoutVerification624ListsUpdatedInput>, UserUncheckedUpdateWithoutVerification624ListsUpdatedInput>
+  }
+
+  export type UserCreateNestedOneWithoutVerification624RecordsCreatedInput = {
+    create?: XOR<UserCreateWithoutVerification624RecordsCreatedInput, UserUncheckedCreateWithoutVerification624RecordsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerification624RecordsCreatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutVerification624RecordsSubmittedInput = {
+    create?: XOR<UserCreateWithoutVerification624RecordsSubmittedInput, UserUncheckedCreateWithoutVerification624RecordsSubmittedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerification624RecordsSubmittedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutVerification624RecordsCreatedNestedInput = {
+    create?: XOR<UserCreateWithoutVerification624RecordsCreatedInput, UserUncheckedCreateWithoutVerification624RecordsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerification624RecordsCreatedInput
+    upsert?: UserUpsertWithoutVerification624RecordsCreatedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutVerification624RecordsCreatedInput, UserUpdateWithoutVerification624RecordsCreatedInput>, UserUncheckedUpdateWithoutVerification624RecordsCreatedInput>
+  }
+
+  export type UserUpdateOneWithoutVerification624RecordsSubmittedNestedInput = {
+    create?: XOR<UserCreateWithoutVerification624RecordsSubmittedInput, UserUncheckedCreateWithoutVerification624RecordsSubmittedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerification624RecordsSubmittedInput
+    upsert?: UserUpsertWithoutVerification624RecordsSubmittedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutVerification624RecordsSubmittedInput, UserUpdateWithoutVerification624RecordsSubmittedInput>, UserUncheckedUpdateWithoutVerification624RecordsSubmittedInput>
+  }
+
   export type UserCreateNestedOneWithoutNotificationsInput = {
     create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
@@ -99550,6 +104596,264 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type Verification624EquipmentCreateWithoutCreatedByInput = {
+    id?: string
+    facility?: string
+    section: string
+    name: string
+    location?: string
+    inUse?: boolean
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    retiredBy?: UserCreateNestedOneWithoutVerification624EquipmentRetiredInput
+    updatedBy?: UserCreateNestedOneWithoutVerification624EquipmentUpdatedInput
+  }
+
+  export type Verification624EquipmentUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    facility?: string
+    section: string
+    name: string
+    location?: string
+    inUse?: boolean
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type Verification624EquipmentCreateOrConnectWithoutCreatedByInput = {
+    where: Verification624EquipmentWhereUniqueInput
+    create: XOR<Verification624EquipmentCreateWithoutCreatedByInput, Verification624EquipmentUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type Verification624EquipmentCreateManyCreatedByInputEnvelope = {
+    data: Verification624EquipmentCreateManyCreatedByInput | Verification624EquipmentCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type Verification624EquipmentCreateWithoutUpdatedByInput = {
+    id?: string
+    facility?: string
+    section: string
+    name: string
+    location?: string
+    inUse?: boolean
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    retiredBy?: UserCreateNestedOneWithoutVerification624EquipmentRetiredInput
+    createdBy?: UserCreateNestedOneWithoutVerification624EquipmentCreatedInput
+  }
+
+  export type Verification624EquipmentUncheckedCreateWithoutUpdatedByInput = {
+    id?: string
+    facility?: string
+    section: string
+    name: string
+    location?: string
+    inUse?: boolean
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type Verification624EquipmentCreateOrConnectWithoutUpdatedByInput = {
+    where: Verification624EquipmentWhereUniqueInput
+    create: XOR<Verification624EquipmentCreateWithoutUpdatedByInput, Verification624EquipmentUncheckedCreateWithoutUpdatedByInput>
+  }
+
+  export type Verification624EquipmentCreateManyUpdatedByInputEnvelope = {
+    data: Verification624EquipmentCreateManyUpdatedByInput | Verification624EquipmentCreateManyUpdatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type Verification624EquipmentCreateWithoutRetiredByInput = {
+    id?: string
+    facility?: string
+    section: string
+    name: string
+    location?: string
+    inUse?: boolean
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: UserCreateNestedOneWithoutVerification624EquipmentCreatedInput
+    updatedBy?: UserCreateNestedOneWithoutVerification624EquipmentUpdatedInput
+  }
+
+  export type Verification624EquipmentUncheckedCreateWithoutRetiredByInput = {
+    id?: string
+    facility?: string
+    section: string
+    name: string
+    location?: string
+    inUse?: boolean
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type Verification624EquipmentCreateOrConnectWithoutRetiredByInput = {
+    where: Verification624EquipmentWhereUniqueInput
+    create: XOR<Verification624EquipmentCreateWithoutRetiredByInput, Verification624EquipmentUncheckedCreateWithoutRetiredByInput>
+  }
+
+  export type Verification624EquipmentCreateManyRetiredByInputEnvelope = {
+    data: Verification624EquipmentCreateManyRetiredByInput | Verification624EquipmentCreateManyRetiredByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type Verification624ListCreateWithoutUpdatedByInput = {
+    facility: string
+    version?: number
+    updatedAt?: Date | string
+  }
+
+  export type Verification624ListUncheckedCreateWithoutUpdatedByInput = {
+    facility: string
+    version?: number
+    updatedAt?: Date | string
+  }
+
+  export type Verification624ListCreateOrConnectWithoutUpdatedByInput = {
+    where: Verification624ListWhereUniqueInput
+    create: XOR<Verification624ListCreateWithoutUpdatedByInput, Verification624ListUncheckedCreateWithoutUpdatedByInput>
+  }
+
+  export type Verification624ListCreateManyUpdatedByInputEnvelope = {
+    data: Verification624ListCreateManyUpdatedByInput | Verification624ListCreateManyUpdatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type Verification624RecordCreateWithoutCreatedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notInUseCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    submittedBy?: UserCreateNestedOneWithoutVerification624RecordsSubmittedInput
+  }
+
+  export type Verification624RecordUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notInUseCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type Verification624RecordCreateOrConnectWithoutCreatedByInput = {
+    where: Verification624RecordWhereUniqueInput
+    create: XOR<Verification624RecordCreateWithoutCreatedByInput, Verification624RecordUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type Verification624RecordCreateManyCreatedByInputEnvelope = {
+    data: Verification624RecordCreateManyCreatedByInput | Verification624RecordCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type Verification624RecordCreateWithoutSubmittedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notInUseCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: UserCreateNestedOneWithoutVerification624RecordsCreatedInput
+  }
+
+  export type Verification624RecordUncheckedCreateWithoutSubmittedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notInUseCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type Verification624RecordCreateOrConnectWithoutSubmittedByInput = {
+    where: Verification624RecordWhereUniqueInput
+    create: XOR<Verification624RecordCreateWithoutSubmittedByInput, Verification624RecordUncheckedCreateWithoutSubmittedByInput>
+  }
+
+  export type Verification624RecordCreateManySubmittedByInputEnvelope = {
+    data: Verification624RecordCreateManySubmittedByInput | Verification624RecordCreateManySubmittedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FormUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: FormWhereUniqueInput
     update: XOR<FormUpdateWithoutCreatedByInput, FormUncheckedUpdateWithoutCreatedByInput>
@@ -100846,6 +106150,159 @@ export namespace Prisma {
     data: XOR<MonthlyClean624RecordUpdateManyMutationInput, MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByInput>
   }
 
+  export type Verification624EquipmentUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: Verification624EquipmentWhereUniqueInput
+    update: XOR<Verification624EquipmentUpdateWithoutCreatedByInput, Verification624EquipmentUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<Verification624EquipmentCreateWithoutCreatedByInput, Verification624EquipmentUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type Verification624EquipmentUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: Verification624EquipmentWhereUniqueInput
+    data: XOR<Verification624EquipmentUpdateWithoutCreatedByInput, Verification624EquipmentUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type Verification624EquipmentUpdateManyWithWhereWithoutCreatedByInput = {
+    where: Verification624EquipmentScalarWhereInput
+    data: XOR<Verification624EquipmentUpdateManyMutationInput, Verification624EquipmentUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type Verification624EquipmentScalarWhereInput = {
+    AND?: Verification624EquipmentScalarWhereInput | Verification624EquipmentScalarWhereInput[]
+    OR?: Verification624EquipmentScalarWhereInput[]
+    NOT?: Verification624EquipmentScalarWhereInput | Verification624EquipmentScalarWhereInput[]
+    id?: StringFilter<"Verification624Equipment"> | string
+    facility?: StringFilter<"Verification624Equipment"> | string
+    section?: StringFilter<"Verification624Equipment"> | string
+    name?: StringFilter<"Verification624Equipment"> | string
+    location?: StringFilter<"Verification624Equipment"> | string
+    inUse?: BoolFilter<"Verification624Equipment"> | boolean
+    sortOrder?: IntFilter<"Verification624Equipment"> | number
+    retiredAt?: DateTimeNullableFilter<"Verification624Equipment"> | Date | string | null
+    retiredById?: StringNullableFilter<"Verification624Equipment"> | string | null
+    createdById?: StringNullableFilter<"Verification624Equipment"> | string | null
+    updatedById?: StringNullableFilter<"Verification624Equipment"> | string | null
+    createdAt?: DateTimeFilter<"Verification624Equipment"> | Date | string
+    updatedAt?: DateTimeFilter<"Verification624Equipment"> | Date | string
+  }
+
+  export type Verification624EquipmentUpsertWithWhereUniqueWithoutUpdatedByInput = {
+    where: Verification624EquipmentWhereUniqueInput
+    update: XOR<Verification624EquipmentUpdateWithoutUpdatedByInput, Verification624EquipmentUncheckedUpdateWithoutUpdatedByInput>
+    create: XOR<Verification624EquipmentCreateWithoutUpdatedByInput, Verification624EquipmentUncheckedCreateWithoutUpdatedByInput>
+  }
+
+  export type Verification624EquipmentUpdateWithWhereUniqueWithoutUpdatedByInput = {
+    where: Verification624EquipmentWhereUniqueInput
+    data: XOR<Verification624EquipmentUpdateWithoutUpdatedByInput, Verification624EquipmentUncheckedUpdateWithoutUpdatedByInput>
+  }
+
+  export type Verification624EquipmentUpdateManyWithWhereWithoutUpdatedByInput = {
+    where: Verification624EquipmentScalarWhereInput
+    data: XOR<Verification624EquipmentUpdateManyMutationInput, Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByInput>
+  }
+
+  export type Verification624EquipmentUpsertWithWhereUniqueWithoutRetiredByInput = {
+    where: Verification624EquipmentWhereUniqueInput
+    update: XOR<Verification624EquipmentUpdateWithoutRetiredByInput, Verification624EquipmentUncheckedUpdateWithoutRetiredByInput>
+    create: XOR<Verification624EquipmentCreateWithoutRetiredByInput, Verification624EquipmentUncheckedCreateWithoutRetiredByInput>
+  }
+
+  export type Verification624EquipmentUpdateWithWhereUniqueWithoutRetiredByInput = {
+    where: Verification624EquipmentWhereUniqueInput
+    data: XOR<Verification624EquipmentUpdateWithoutRetiredByInput, Verification624EquipmentUncheckedUpdateWithoutRetiredByInput>
+  }
+
+  export type Verification624EquipmentUpdateManyWithWhereWithoutRetiredByInput = {
+    where: Verification624EquipmentScalarWhereInput
+    data: XOR<Verification624EquipmentUpdateManyMutationInput, Verification624EquipmentUncheckedUpdateManyWithoutRetiredByInput>
+  }
+
+  export type Verification624ListUpsertWithWhereUniqueWithoutUpdatedByInput = {
+    where: Verification624ListWhereUniqueInput
+    update: XOR<Verification624ListUpdateWithoutUpdatedByInput, Verification624ListUncheckedUpdateWithoutUpdatedByInput>
+    create: XOR<Verification624ListCreateWithoutUpdatedByInput, Verification624ListUncheckedCreateWithoutUpdatedByInput>
+  }
+
+  export type Verification624ListUpdateWithWhereUniqueWithoutUpdatedByInput = {
+    where: Verification624ListWhereUniqueInput
+    data: XOR<Verification624ListUpdateWithoutUpdatedByInput, Verification624ListUncheckedUpdateWithoutUpdatedByInput>
+  }
+
+  export type Verification624ListUpdateManyWithWhereWithoutUpdatedByInput = {
+    where: Verification624ListScalarWhereInput
+    data: XOR<Verification624ListUpdateManyMutationInput, Verification624ListUncheckedUpdateManyWithoutUpdatedByInput>
+  }
+
+  export type Verification624ListScalarWhereInput = {
+    AND?: Verification624ListScalarWhereInput | Verification624ListScalarWhereInput[]
+    OR?: Verification624ListScalarWhereInput[]
+    NOT?: Verification624ListScalarWhereInput | Verification624ListScalarWhereInput[]
+    facility?: StringFilter<"Verification624List"> | string
+    version?: IntFilter<"Verification624List"> | number
+    updatedById?: StringNullableFilter<"Verification624List"> | string | null
+    updatedAt?: DateTimeFilter<"Verification624List"> | Date | string
+  }
+
+  export type Verification624RecordUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: Verification624RecordWhereUniqueInput
+    update: XOR<Verification624RecordUpdateWithoutCreatedByInput, Verification624RecordUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<Verification624RecordCreateWithoutCreatedByInput, Verification624RecordUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type Verification624RecordUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: Verification624RecordWhereUniqueInput
+    data: XOR<Verification624RecordUpdateWithoutCreatedByInput, Verification624RecordUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type Verification624RecordUpdateManyWithWhereWithoutCreatedByInput = {
+    where: Verification624RecordScalarWhereInput
+    data: XOR<Verification624RecordUpdateManyMutationInput, Verification624RecordUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type Verification624RecordScalarWhereInput = {
+    AND?: Verification624RecordScalarWhereInput | Verification624RecordScalarWhereInput[]
+    OR?: Verification624RecordScalarWhereInput[]
+    NOT?: Verification624RecordScalarWhereInput | Verification624RecordScalarWhereInput[]
+    id?: StringFilter<"Verification624Record"> | string
+    facility?: StringFilter<"Verification624Record"> | string
+    period?: StringFilter<"Verification624Record"> | string
+    periodStart?: DateTimeFilter<"Verification624Record"> | Date | string
+    periodEnd?: DateTimeFilter<"Verification624Record"> | Date | string
+    status?: StringFilter<"Verification624Record"> | string
+    conductedBy?: StringFilter<"Verification624Record"> | string
+    initials?: StringFilter<"Verification624Record"> | string
+    items?: JsonFilter<"Verification624Record">
+    listVersion?: IntFilter<"Verification624Record"> | number
+    okCount?: IntFilter<"Verification624Record"> | number
+    failCount?: IntFilter<"Verification624Record"> | number
+    notInUseCount?: IntFilter<"Verification624Record"> | number
+    notes?: StringNullableFilter<"Verification624Record"> | string | null
+    lastEditedBy?: StringNullableFilter<"Verification624Record"> | string | null
+    lastEditedAt?: DateTimeNullableFilter<"Verification624Record"> | Date | string | null
+    createdById?: StringNullableFilter<"Verification624Record"> | string | null
+    submittedAt?: DateTimeNullableFilter<"Verification624Record"> | Date | string | null
+    submittedById?: StringNullableFilter<"Verification624Record"> | string | null
+    linkedInstanceId?: StringNullableFilter<"Verification624Record"> | string | null
+    createdAt?: DateTimeFilter<"Verification624Record"> | Date | string
+    updatedAt?: DateTimeFilter<"Verification624Record"> | Date | string
+  }
+
+  export type Verification624RecordUpsertWithWhereUniqueWithoutSubmittedByInput = {
+    where: Verification624RecordWhereUniqueInput
+    update: XOR<Verification624RecordUpdateWithoutSubmittedByInput, Verification624RecordUncheckedUpdateWithoutSubmittedByInput>
+    create: XOR<Verification624RecordCreateWithoutSubmittedByInput, Verification624RecordUncheckedCreateWithoutSubmittedByInput>
+  }
+
+  export type Verification624RecordUpdateWithWhereUniqueWithoutSubmittedByInput = {
+    where: Verification624RecordWhereUniqueInput
+    data: XOR<Verification624RecordUpdateWithoutSubmittedByInput, Verification624RecordUncheckedUpdateWithoutSubmittedByInput>
+  }
+
+  export type Verification624RecordUpdateManyWithWhereWithoutSubmittedByInput = {
+    where: Verification624RecordScalarWhereInput
+    data: XOR<Verification624RecordUpdateManyMutationInput, Verification624RecordUncheckedUpdateManyWithoutSubmittedByInput>
+  }
+
   export type UserCreateWithoutCreatedFormsInput = {
     id?: string
     name: string
@@ -100893,6 +106350,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFormsInput = {
@@ -100942,6 +106405,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFormsInput = {
@@ -101039,6 +106508,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFormsInput = {
@@ -101088,6 +106563,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutFormInput = {
@@ -101184,6 +106665,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -101233,6 +106720,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -101287,6 +106780,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSubmissionsInput = {
@@ -101336,6 +106835,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSubmissionsInput = {
@@ -101438,6 +106943,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -101487,6 +106998,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutApprovedSubmissionsInput = {
@@ -101547,6 +107064,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSubmissionsInput = {
@@ -101596,6 +107119,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutRecordsInput = {
@@ -101645,6 +107174,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRecordsInput = {
@@ -101694,6 +107229,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRecordsInput = {
@@ -101759,6 +107300,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecordsInput = {
@@ -101808,6 +107355,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutPreOpInspectionsInput = {
@@ -101857,6 +107410,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOpInspectionsInput = {
@@ -101906,6 +107465,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOpInspectionsInput = {
@@ -101971,6 +107536,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOpInspectionsInput = {
@@ -102020,6 +107591,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutPreOp624InspectionsInput = {
@@ -102069,6 +107646,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOp624InspectionsInput = {
@@ -102118,6 +107701,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOp624InspectionsInput = {
@@ -102183,6 +107772,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOp624InspectionsInput = {
@@ -102232,6 +107827,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutDailyClean624RecordsInput = {
@@ -102281,6 +107882,12 @@ export namespace Prisma {
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyClean624RecordsInput = {
@@ -102330,6 +107937,12 @@ export namespace Prisma {
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyClean624RecordsInput = {
@@ -102395,6 +108008,12 @@ export namespace Prisma {
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyClean624RecordsInput = {
@@ -102444,6 +108063,12 @@ export namespace Prisma {
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutCreatedBatchTemplatesInput = {
@@ -102493,6 +108118,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBatchTemplatesInput = {
@@ -102542,6 +108173,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
@@ -102732,6 +108369,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBatchTemplatesInput = {
@@ -102781,6 +108424,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductUpsertWithoutTemplatesInput = {
@@ -102970,6 +108619,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchSheetSubmissionsInput = {
@@ -103019,6 +108674,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
@@ -103234,6 +108895,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchSheetSubmissionsInput = {
@@ -103283,6 +108950,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductUpsertWithoutSubmissionsInput = {
@@ -103405,6 +109078,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyCleaningChecklistsInput = {
@@ -103454,6 +109133,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyCleaningChecklistsInput = {
@@ -103519,6 +109204,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyCleaningChecklistsInput = {
@@ -103568,6 +109259,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -103617,6 +109314,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -103666,6 +109369,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput = {
@@ -103731,6 +109440,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput = {
@@ -103780,6 +109495,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductCreateWithoutWipMaterialsInput = {
@@ -105786,6 +111507,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutFormTemplatesInput = {
@@ -105835,6 +111562,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutFormTemplatesInput = {
@@ -105945,6 +111678,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFormTemplatesInput = {
@@ -105994,6 +111733,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SupplierCreateWithoutDocumentsInput = {
@@ -107143,6 +112888,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductsInput = {
@@ -107192,6 +112943,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductsInput = {
@@ -107513,6 +113270,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductsInput = {
@@ -107562,6 +113325,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput = {
@@ -107756,6 +113525,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutPurchaseOrdersInput = {
@@ -107805,6 +113580,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutPurchaseOrdersInput = {
@@ -108045,6 +113826,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPurchaseOrdersInput = {
@@ -108094,6 +113881,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type PurchaseOrderItemUpsertWithWhereUniqueWithoutPoInput = {
@@ -108423,6 +114216,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutReceivingRecordsInput = {
@@ -108472,6 +114271,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutReceivingRecordsInput = {
@@ -108880,6 +114685,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -108929,6 +114740,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialUpsertWithoutReceivingRecordsInput = {
@@ -109380,6 +115197,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutResolvedQuarantineRecordsInput = {
@@ -109429,6 +115252,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutResolvedQuarantineRecordsInput = {
@@ -109571,6 +115400,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput = {
@@ -109620,6 +115455,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutInventoryLotsInput = {
@@ -110419,6 +116260,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutInventoryMovementsInput = {
@@ -110468,6 +116315,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutInventoryMovementsInput = {
@@ -110669,6 +116522,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -110718,6 +116577,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutCycleCountsInput = {
@@ -110891,6 +116756,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCycleCountsInput = {
@@ -110940,6 +116811,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCycleCountsInput = {
@@ -111141,6 +117018,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCycleCountsInput = {
@@ -111190,6 +117073,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutInitialStockEntriesInput = {
@@ -111418,6 +117307,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutInitialStockEntriesInput = {
@@ -111467,6 +117362,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutInitialStockEntriesInput = {
@@ -111729,6 +117630,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInitialStockEntriesInput = {
@@ -111778,6 +117685,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -111898,6 +117811,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -111947,6 +117866,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutStockAlertAcknowledgmentsInput = {
@@ -112089,6 +118014,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStockAlertAcknowledgmentsInput = {
@@ -112138,6 +118069,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutForecastExclusionsInput = {
@@ -112187,6 +118124,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutForecastExclusionsInput = {
@@ -112236,6 +118179,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutForecastExclusionsInput = {
@@ -112352,6 +118301,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForecastExclusionsInput = {
@@ -112401,6 +118356,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductUpsertWithoutForecastExclusionsInput = {
@@ -112647,6 +118608,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutAuditExclusionsInput = {
@@ -112696,6 +118663,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutAuditExclusionsInput = {
@@ -112913,6 +118886,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditExclusionsInput = {
@@ -112962,6 +118941,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ShipstationBundleComponentCreateWithoutBundleProductInput = {
@@ -113768,6 +119753,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdIngredientsInput = {
@@ -113817,6 +119808,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdIngredientsInput = {
@@ -113882,6 +119879,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdIngredientsInput = {
@@ -113931,6 +119934,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutRdProjectsInput = {
@@ -113980,6 +119989,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdProjectsInput = {
@@ -114029,6 +120044,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdProjectsInput = {
@@ -114166,6 +120187,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdProjectsInput = {
@@ -114215,6 +120242,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type RdIterationUpsertWithWhereUniqueWithoutProjectInput = {
@@ -114794,6 +120827,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdAttachmentsInput = {
@@ -114843,6 +120882,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdAttachmentsInput = {
@@ -114981,6 +121026,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdAttachmentsInput = {
@@ -115030,6 +121081,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutRdNutritionProfilesInput = {
@@ -115079,6 +121136,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdNutritionProfilesInput = {
@@ -115128,6 +121191,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdNutritionProfilesInput = {
@@ -115193,6 +121262,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdNutritionProfilesInput = {
@@ -115242,6 +121317,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutAuditAcknowledgmentsInput = {
@@ -115362,6 +121443,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutAuditAcknowledgmentsInput = {
@@ -115411,6 +121498,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutAuditAcknowledgmentsInput = {
@@ -115553,6 +121646,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditAcknowledgmentsInput = {
@@ -115602,6 +121701,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SopCertificationScopeCreateWithoutCertificationInput = {
@@ -115693,6 +121798,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSopDocumentsInput = {
@@ -115742,6 +121853,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSopDocumentsInput = {
@@ -115901,6 +122018,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSopDocumentsInput = {
@@ -115950,6 +122073,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SopCertificationScopeUpsertWithWhereUniqueWithoutSopInput = {
@@ -116428,6 +122557,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSopReviewLogsInput = {
@@ -116477,6 +122612,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSopReviewLogsInput = {
@@ -116591,6 +122732,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSopReviewLogsInput = {
@@ -116640,6 +122787,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SopDocumentCreateWithoutRemindersInput = {
@@ -116878,6 +123031,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutOwnedTaskRulesInput = {
@@ -116927,6 +123086,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutOwnedTaskRulesInput = {
@@ -117085,6 +123250,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedTaskRulesInput = {
@@ -117134,6 +123305,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type RuleInstanceUpsertWithWhereUniqueWithoutRuleInput = {
@@ -117252,6 +123429,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutDoneRuleInstancesInput = {
@@ -117301,6 +123484,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutDoneRuleInstancesInput = {
@@ -117355,6 +123544,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSkippedRuleInstancesInput = {
@@ -117404,6 +123599,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSkippedRuleInstancesInput = {
@@ -117458,6 +123659,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedRuleInstancesInput = {
@@ -117507,6 +123714,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedRuleInstancesInput = {
@@ -117561,6 +123774,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutMarkedMissedRuleInstancesInput = {
@@ -117610,6 +123829,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutMarkedMissedRuleInstancesInput = {
@@ -117760,6 +123985,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDoneRuleInstancesInput = {
@@ -117809,6 +124040,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutSkippedRuleInstancesInput = {
@@ -117869,6 +124106,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSkippedRuleInstancesInput = {
@@ -117918,6 +124161,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutAssignedRuleInstancesInput = {
@@ -117978,6 +124227,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedRuleInstancesInput = {
@@ -118027,6 +124282,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutMarkedMissedRuleInstancesInput = {
@@ -118087,6 +124348,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMarkedMissedRuleInstancesInput = {
@@ -118136,6 +124403,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type TaskInstanceAuditUpsertWithWhereUniqueWithoutInstanceInput = {
@@ -118260,6 +124533,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutTaskInstanceAuditLogsInput = {
@@ -118309,6 +124588,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutTaskInstanceAuditLogsInput = {
@@ -118439,6 +124724,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskInstanceAuditLogsInput = {
@@ -118488,6 +124779,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutMonthlyClean624SubmittedRecordsInput = {
@@ -118537,6 +124834,12 @@ export namespace Prisma {
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyClean624SubmittedRecordsInput = {
@@ -118586,6 +124889,12 @@ export namespace Prisma {
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyClean624SubmittedRecordsInput = {
@@ -118640,6 +124949,12 @@ export namespace Prisma {
     preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyClean624CreatedRecordsInput = {
@@ -118689,6 +125004,12 @@ export namespace Prisma {
     preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyClean624CreatedRecordsInput = {
@@ -118754,6 +125075,12 @@ export namespace Prisma {
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyClean624SubmittedRecordsInput = {
@@ -118803,6 +125130,12 @@ export namespace Prisma {
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutMonthlyClean624CreatedRecordsInput = {
@@ -118863,6 +125196,12 @@ export namespace Prisma {
     preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyClean624CreatedRecordsInput = {
@@ -118912,6 +125251,1428 @@ export namespace Prisma {
     preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserCreateWithoutVerification624EquipmentRetiredInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutVerification624EquipmentRetiredInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutVerification624EquipmentRetiredInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutVerification624EquipmentRetiredInput, UserUncheckedCreateWithoutVerification624EquipmentRetiredInput>
+  }
+
+  export type UserCreateWithoutVerification624EquipmentCreatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutVerification624EquipmentCreatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutVerification624EquipmentCreatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutVerification624EquipmentCreatedInput, UserUncheckedCreateWithoutVerification624EquipmentCreatedInput>
+  }
+
+  export type UserCreateWithoutVerification624EquipmentUpdatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutVerification624EquipmentUpdatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutVerification624EquipmentUpdatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutVerification624EquipmentUpdatedInput, UserUncheckedCreateWithoutVerification624EquipmentUpdatedInput>
+  }
+
+  export type UserUpsertWithoutVerification624EquipmentRetiredInput = {
+    update: XOR<UserUpdateWithoutVerification624EquipmentRetiredInput, UserUncheckedUpdateWithoutVerification624EquipmentRetiredInput>
+    create: XOR<UserCreateWithoutVerification624EquipmentRetiredInput, UserUncheckedCreateWithoutVerification624EquipmentRetiredInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutVerification624EquipmentRetiredInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutVerification624EquipmentRetiredInput, UserUncheckedUpdateWithoutVerification624EquipmentRetiredInput>
+  }
+
+  export type UserUpdateWithoutVerification624EquipmentRetiredInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutVerification624EquipmentRetiredInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUpsertWithoutVerification624EquipmentCreatedInput = {
+    update: XOR<UserUpdateWithoutVerification624EquipmentCreatedInput, UserUncheckedUpdateWithoutVerification624EquipmentCreatedInput>
+    create: XOR<UserCreateWithoutVerification624EquipmentCreatedInput, UserUncheckedCreateWithoutVerification624EquipmentCreatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutVerification624EquipmentCreatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutVerification624EquipmentCreatedInput, UserUncheckedUpdateWithoutVerification624EquipmentCreatedInput>
+  }
+
+  export type UserUpdateWithoutVerification624EquipmentCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutVerification624EquipmentCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUpsertWithoutVerification624EquipmentUpdatedInput = {
+    update: XOR<UserUpdateWithoutVerification624EquipmentUpdatedInput, UserUncheckedUpdateWithoutVerification624EquipmentUpdatedInput>
+    create: XOR<UserCreateWithoutVerification624EquipmentUpdatedInput, UserUncheckedCreateWithoutVerification624EquipmentUpdatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutVerification624EquipmentUpdatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutVerification624EquipmentUpdatedInput, UserUncheckedUpdateWithoutVerification624EquipmentUpdatedInput>
+  }
+
+  export type UserUpdateWithoutVerification624EquipmentUpdatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutVerification624EquipmentUpdatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserCreateWithoutVerification624ListsUpdatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutVerification624ListsUpdatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutVerification624ListsUpdatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutVerification624ListsUpdatedInput, UserUncheckedCreateWithoutVerification624ListsUpdatedInput>
+  }
+
+  export type UserUpsertWithoutVerification624ListsUpdatedInput = {
+    update: XOR<UserUpdateWithoutVerification624ListsUpdatedInput, UserUncheckedUpdateWithoutVerification624ListsUpdatedInput>
+    create: XOR<UserCreateWithoutVerification624ListsUpdatedInput, UserUncheckedCreateWithoutVerification624ListsUpdatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutVerification624ListsUpdatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutVerification624ListsUpdatedInput, UserUncheckedUpdateWithoutVerification624ListsUpdatedInput>
+  }
+
+  export type UserUpdateWithoutVerification624ListsUpdatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutVerification624ListsUpdatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserCreateWithoutVerification624RecordsCreatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutVerification624RecordsCreatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutVerification624RecordsCreatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutVerification624RecordsCreatedInput, UserUncheckedCreateWithoutVerification624RecordsCreatedInput>
+  }
+
+  export type UserCreateWithoutVerification624RecordsSubmittedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutVerification624RecordsSubmittedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutVerification624RecordsSubmittedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutVerification624RecordsSubmittedInput, UserUncheckedCreateWithoutVerification624RecordsSubmittedInput>
+  }
+
+  export type UserUpsertWithoutVerification624RecordsCreatedInput = {
+    update: XOR<UserUpdateWithoutVerification624RecordsCreatedInput, UserUncheckedUpdateWithoutVerification624RecordsCreatedInput>
+    create: XOR<UserCreateWithoutVerification624RecordsCreatedInput, UserUncheckedCreateWithoutVerification624RecordsCreatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutVerification624RecordsCreatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutVerification624RecordsCreatedInput, UserUncheckedUpdateWithoutVerification624RecordsCreatedInput>
+  }
+
+  export type UserUpdateWithoutVerification624RecordsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutVerification624RecordsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUpsertWithoutVerification624RecordsSubmittedInput = {
+    update: XOR<UserUpdateWithoutVerification624RecordsSubmittedInput, UserUncheckedUpdateWithoutVerification624RecordsSubmittedInput>
+    create: XOR<UserCreateWithoutVerification624RecordsSubmittedInput, UserUncheckedCreateWithoutVerification624RecordsSubmittedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutVerification624RecordsSubmittedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutVerification624RecordsSubmittedInput, UserUncheckedUpdateWithoutVerification624RecordsSubmittedInput>
+  }
+
+  export type UserUpdateWithoutVerification624RecordsSubmittedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutVerification624RecordsSubmittedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -118961,6 +126722,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -119010,6 +126777,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -119075,6 +126848,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -119124,6 +126903,12 @@ export namespace Prisma {
     dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
     monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type FormCreateManyCreatedByInput = {
@@ -119789,6 +127574,105 @@ export namespace Prisma {
     lastEditedAt?: Date | string | null
     submittedAt?: Date | string | null
     submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type Verification624EquipmentCreateManyCreatedByInput = {
+    id?: string
+    facility?: string
+    section: string
+    name: string
+    location?: string
+    inUse?: boolean
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type Verification624EquipmentCreateManyUpdatedByInput = {
+    id?: string
+    facility?: string
+    section: string
+    name: string
+    location?: string
+    inUse?: boolean
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type Verification624EquipmentCreateManyRetiredByInput = {
+    id?: string
+    facility?: string
+    section: string
+    name: string
+    location?: string
+    inUse?: boolean
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type Verification624ListCreateManyUpdatedByInput = {
+    facility: string
+    version?: number
+    updatedAt?: Date | string
+  }
+
+  export type Verification624RecordCreateManyCreatedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notInUseCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type Verification624RecordCreateManySubmittedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notInUseCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
     linkedInstanceId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -121839,6 +129723,303 @@ export namespace Prisma {
     lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624EquipmentUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    inUse?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    retiredBy?: UserUpdateOneWithoutVerification624EquipmentRetiredNestedInput
+    updatedBy?: UserUpdateOneWithoutVerification624EquipmentUpdatedNestedInput
+  }
+
+  export type Verification624EquipmentUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    inUse?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624EquipmentUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    inUse?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624EquipmentUpdateWithoutUpdatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    inUse?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    retiredBy?: UserUpdateOneWithoutVerification624EquipmentRetiredNestedInput
+    createdBy?: UserUpdateOneWithoutVerification624EquipmentCreatedNestedInput
+  }
+
+  export type Verification624EquipmentUncheckedUpdateWithoutUpdatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    inUse?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    inUse?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624EquipmentUpdateWithoutRetiredByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    inUse?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneWithoutVerification624EquipmentCreatedNestedInput
+    updatedBy?: UserUpdateOneWithoutVerification624EquipmentUpdatedNestedInput
+  }
+
+  export type Verification624EquipmentUncheckedUpdateWithoutRetiredByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    inUse?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624EquipmentUncheckedUpdateManyWithoutRetiredByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    inUse?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624ListUpdateWithoutUpdatedByInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624ListUncheckedUpdateWithoutUpdatedByInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624ListUncheckedUpdateManyWithoutUpdatedByInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624RecordUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notInUseCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedBy?: UserUpdateOneWithoutVerification624RecordsSubmittedNestedInput
+  }
+
+  export type Verification624RecordUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notInUseCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624RecordUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notInUseCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624RecordUpdateWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notInUseCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneWithoutVerification624RecordsCreatedNestedInput
+  }
+
+  export type Verification624RecordUncheckedUpdateWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notInUseCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type Verification624RecordUncheckedUpdateManyWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notInUseCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -125435,6 +133616,18 @@ export namespace Prisma {
      * @deprecated Use MonthlyClean624RecordDefaultArgs instead
      */
     export type MonthlyClean624RecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MonthlyClean624RecordDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use Verification624EquipmentDefaultArgs instead
+     */
+    export type Verification624EquipmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Verification624EquipmentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use Verification624ListDefaultArgs instead
+     */
+    export type Verification624ListArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Verification624ListDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use Verification624RecordDefaultArgs instead
+     */
+    export type Verification624RecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Verification624RecordDefaultArgs<ExtArgs>
     /**
      * @deprecated Use NotificationDefaultArgs instead
      */

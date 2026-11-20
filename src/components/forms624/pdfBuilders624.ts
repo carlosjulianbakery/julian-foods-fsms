@@ -1,3 +1,7 @@
+import {
+  INSTRUCTIONS, INSTRUCTIONS_VER_VERIFICATION, LABELS, SCALE_POINTS, SECTION_TITLES, periodLabel, splitStored,
+  type ItemSnapshot, type Section,
+} from "@/lib/verification-624";
 import type { DailyClean624Record, CleaningRowSnapshot, MonthlyClean624Record, MonthlyClean624LineSnapshot } from "./types";
 import { INSTRUCTIONS_TEXT_MONTHLY } from "@/app/(dashboard)/dashboard/supervisor/monthly-cleaning-624/config";
 
@@ -218,3 +222,88 @@ export function buildMonthlyPdfHtml624(r: MonthlyClean624Record): string {
   </p>
   </body></html>`;
 }
+
+// ── Scales & Thermometer Verification ──────────────────────────────────────────
+
+export interface VerificationPdfRecord {
+  period: string;
+  status: string;
+  conductedBy: string;
+  initials: string;
+  items: unknown;
+  listVersion: number;
+  okCount: number;
+  failCount: number;
+  notInUseCount: number;
+  notes: string | null;
+  submittedAt: string | Date | null;
+}
+
+const esc = (s: unknown) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const num = (n: number | null | undefined, d: number) => (typeof n === "number" ? n.toFixed(d) : "—");
+const resultCell = (r: string | null) =>
+  r === "OK" ? '<span style="color:#059669;font-weight:600">OK</span>'
+  : r === "NOT_OK" ? '<span style="color:#dc2626;font-weight:600">Not OK</span>'
+  : '<span style="color:#6b7280">—</span>';
+
+export function buildVerificationPdfHtml624(r: VerificationPdfRecord): string {
+  const { header, snapshots } = splitStored(r.items);
+  const isDraft = r.status !== "submitted";
+  const bySection = (section: Section) => snapshots.filter((i) => i.section === section).sort((a, b) => a.position - b.position);
+  const tail = (i: ItemSnapshot) => `<td>${esc(i.notes) || "—"}</td><td>${esc(i.correctiveAction) || "—"}</td>`;
+  const notInUse = (i: ItemSnapshot, span: number) =>
+    `<tr><td>#${i.position} ${esc(i.name)}</td><td colspan="${span}" style="color:#6b7280;font-style:italic">Not in use</td></tr>`;
+
+  const portable = bySection("portable_thermometer").map((i) =>
+    !i.inUse ? notInUse(i, 5)
+    : `<tr><td>#${i.position} ${esc(i.name)}</td><td class="n">${num(i.reading, 1)}</td><td class="n">${num(i.recheck, 1)}</td><td>${resultCell(i.result)}</td>${tail(i)}</tr>`).join("");
+  const fixed = bySection("fixed_thermometer").map((i) =>
+    !i.inUse ? notInUse(i, 6)
+    : `<tr><td>#${i.position} ${esc(i.name)}</td><td>${esc(i.referenceName) || "—"}</td><td class="n">${num(i.target, 1)}</td><td class="n">${num(i.fixedReading, 1)}</td><td>${resultCell(i.result)}</td>${tail(i)}</tr>`).join("");
+  const scales = bySection("scale").map((i) =>
+    !i.inUse ? notInUse(i, 8)
+    : `<tr><td>#${i.position} ${esc(i.name)}${i.location ? `<br/><span style="color:#6b7280;font-size:10px">${esc(i.location)}</span>` : ""}</td>${SCALE_POINTS.map((_, k) => {
+        const bad = i.pointResults?.[k] === "NOT_OK";
+        return `<td class="n" style="${bad ? "color:#dc2626;font-weight:600" : ""}">${num(i.points?.[k], 2)}</td>`;
+      }).join("")}<td>${resultCell(i.result)}</td>${tail(i)}</tr>`).join("");
+
+  const submittedPT = r.submittedAt ? new Date(r.submittedAt).toLocaleString("en-US", { timeZone: "America/Los_Angeles" }) : "—";
+  const dateLine = header ? `${formatMDY(header.date)} ${esc(header.time)}` : "—";
+
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"/>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 28px; color: #111; }
+    h1 { font-size: 18px; margin: 0 0 4px; }
+    h2 { font-size: 13px; margin: 18px 0 6px; }
+    p.sub { font-size: 12px; color: #6b7280; margin: 0 0 10px; }
+    p.instr { font-size: 10px; color: #374151; background: #fffbeb; border: 1px solid #fde68a; border-radius: 4px; padding: 6px 10px; margin: 0 0 6px; line-height: 1.45; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 5px 6px; font-size: 10px; color: #6b7280; text-transform: uppercase; border-bottom: 2px solid #e5e7eb; }
+    td { padding: 5px 6px; font-size: 11px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+    td.n { font-family: monospace; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: #fef3c7; color: #92400e; }
+    .footer { margin-top: 20px; font-size: 10px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 8px; }
+  </style></head><body>
+  <h1>Scales &amp; Thermometer Verification — 624${isDraft ? ' <span class="badge">DRAFT</span>' : ""}</h1>
+  <p class="sub">Period: ${esc(periodLabel(r.period))} &nbsp;|&nbsp; Facility: 624 &nbsp;|&nbsp; Date: ${dateLine} &nbsp;|&nbsp; Initials: ${esc(r.initials) || "—"} &nbsp;|&nbsp; ${r.okCount} OK · ${r.failCount} Not OK · ${r.notInUseCount} not in use</p>
+  <p class="instr"><b>Procedure for Scales:</b> ${esc(INSTRUCTIONS.scale)}</p>
+  <p class="instr"><b>Procedure for Portable Thermometer:</b> ${esc(INSTRUCTIONS.portable_thermometer)}</p>
+  <p class="instr"><b>Procedure for Non-Movable Thermometer:</b> ${esc(INSTRUCTIONS.fixed_thermometer)}</p>
+
+  <h2>${SECTION_TITLES.portable_thermometer.en} / ${SECTION_TITLES.portable_thermometer.es}</h2>
+  <table><thead><tr><th>Thermometer</th><th>${LABELS.iceWater.es}</th><th>Re-check</th><th>Result</th><th>${LABELS.conditions.es}</th><th>${LABELS.corrective.es}</th></tr></thead><tbody>${portable}</tbody></table>
+
+  <h2>${SECTION_TITLES.fixed_thermometer.en} / ${SECTION_TITLES.fixed_thermometer.es}</h2>
+  <table><thead><tr><th>Thermometer</th><th>Reference used</th><th>Target °F</th><th>Reading °F</th><th>Result (± 5 °F)</th><th>${LABELS.conditions.es}</th><th>${LABELS.corrective.es}</th></tr></thead><tbody>${fixed}</tbody></table>
+
+  <h2>${SECTION_TITLES.scale.en} / ${SECTION_TITLES.scale.es} — 500 g, 1.10 lb ± 0.1 lb</h2>
+  <table><thead><tr><th>Scale</th>${SCALE_POINTS.map((n, k) => `<th>${k + 1}. ${n}</th>`).join("")}<th>Result</th><th>${LABELS.conditions.es}</th><th>${LABELS.corrective.es}</th></tr></thead><tbody>${scales}</tbody></table>
+
+  <p class="footer">
+    ${isDraft ? "DRAFT — not yet submitted" : `Submitted: ${submittedPT} PT &nbsp;|&nbsp; By: ${esc(r.conductedBy) || "—"}${r.initials ? ` (${esc(r.initials)})` : ""}`}
+    ${r.notes ? ` &nbsp;|&nbsp; Notes: ${esc(r.notes)}` : ""}
+    &nbsp;|&nbsp; Instructions ${INSTRUCTIONS_VER_VERIFICATION} &nbsp;|&nbsp; Equipment list v${r.listVersion} &nbsp;|&nbsp; Julian Foods — 624 Facility
+  </p>
+  </body></html>`;
+}
+

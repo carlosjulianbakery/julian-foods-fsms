@@ -59,6 +59,17 @@ export function computeDueDates(rule: TaskRule, today: string, horizon: string):
   const every = rule.recurrenceEvery ?? 1;
   const dates: string[] = [];
 
+  // Twice a month: due on the 15th and on the last day of every month. Past periods are not backfilled.
+  if (unit === "half_month") {
+    let due = halfMonthDueOnOrAfter(startStr < today ? today : startStr);
+    let guard = 0;
+    while (due <= horizon && guard++ < 500) {
+      dates.push(due);
+      due = halfMonthDueOnOrAfter(addDaysToDateStr(due, 1));
+    }
+    return dates;
+  }
+
   // For endOfMonth rules, normalise cursor to the last day of the aligned month
   let cursor = startStr < today ? alignCursor(startStr, unit, every, today, endOfMonth) : startStr;
   if (endOfMonth && unit === "month") cursor = lastDayOfMonthFromDateStr(cursor);
@@ -70,6 +81,11 @@ export function computeDueDates(rule: TaskRule, today: string, horizon: string):
   }
 
   return dates;
+}
+
+/** The 15th if the date is on or before it, otherwise the last day of that month. */
+export function halfMonthDueOnOrAfter(dateStr: string): string {
+  return Number(dateStr.slice(8, 10)) <= 15 ? `${dateStr.slice(0, 8)}15` : lastDayOfMonthFromDateStr(dateStr);
 }
 
 function lastDayOfMonthFromDateStr(dateStr: string): string {

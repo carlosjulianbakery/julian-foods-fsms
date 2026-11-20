@@ -6,6 +6,8 @@ interface Props {
   taskId: string | null | undefined;
   formKey: string;
   facilityName: string;
+  /** Due date (YYYY-MM-DD) of the period this form is for, when the form has periods. */
+  dueDate?: string | null;
 }
 
 /**
@@ -14,7 +16,7 @@ interface Props {
  * Fire-and-forget: a network failure never throws or blocks the caller.
  * On success, dispatches "task-action" so the dashboard refreshes.
  */
-export function useMarkInProgress({ taskId, formKey, facilityName }: Props) {
+export function useMarkInProgress({ taskId, formKey, facilityName, dueDate }: Props) {
   const firedRef = useRef(false);
   const taskIdRef = useRef(taskId);
   const formKeyRef = useRef(formKey);
@@ -23,6 +25,8 @@ export function useMarkInProgress({ taskId, formKey, facilityName }: Props) {
   useEffect(() => { taskIdRef.current = taskId; }, [taskId]);
   useEffect(() => { formKeyRef.current = formKey; }, [formKey]);
   useEffect(() => { facilityNameRef.current = facilityName; }, [facilityName]);
+  const dueDateRef = useRef(dueDate);
+  useEffect(() => { dueDateRef.current = dueDate; }, [dueDate]);
 
   const markInProgress = useCallback(() => {
     if (firedRef.current) return;
@@ -41,7 +45,7 @@ export function useMarkInProgress({ taskId, formKey, facilityName }: Props) {
       : {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ formKey: fk, facilityName: fn }),
+          body: JSON.stringify({ formKey: fk, facilityName: fn, ...(dueDateRef.current ? { dueDate: dueDateRef.current } : {}) }),
         };
 
     fetch(url, opts)

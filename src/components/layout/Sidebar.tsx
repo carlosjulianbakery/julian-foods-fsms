@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import {
   LayoutDashboard,
   CalendarCheck,
+  Gauge,
   Users,
   Settings,
   ChevronRight,
@@ -100,6 +101,13 @@ const formsNav = [
     label: "Monthly Cleaning — 624",
     href: "/dashboard/supervisor/monthly-cleaning-624",
     icon: CalendarCheck,
+    roles: ["SUPERVISOR", "ADMIN"],
+    exact: false,
+  },
+  {
+    label: "Scales & Thermometers — 624",
+    href: "/dashboard/supervisor/verification-624",
+    icon: Gauge,
     roles: ["SUPERVISOR", "ADMIN"],
     exact: false,
   },

@@ -26,6 +26,10 @@ export function computeWindowStart(rule: WindowRuleSpec, dueDate: string): strin
     if (unit === "month") {
       return dueDate.slice(0, 7) + "-01";
     }
+    // Twice a month: the first half opens on the 1st, the second half on the 16th
+    if (unit === "half_month") {
+      return dueDate.slice(0, 7) + (Number(dueDate.slice(8, 10)) <= 15 ? "-01" : "-16");
+    }
     if (unit === "week") {
       const d = new Date(dueDate + "T12:00:00Z");
       const dow = d.getUTCDay(); // 0=Sun
