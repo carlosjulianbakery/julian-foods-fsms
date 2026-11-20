@@ -481,6 +481,48 @@ export function periodLabel(key: string): string {
   return `${month} · ${Number(p.start.slice(8))}–${Number(p.end.slice(8))}`;
 }
 
+/** The period that follows: A → B of the same month, B → A of the next month (December B → January A). */
+export function nextPeriod(key: string): Period | null {
+  const p = parsePeriod(key);
+  if (!p) return null;
+  if (p.half === "A") return periodForDate(`${p.start.slice(0, 8)}16`);
+  const [y, m] = p.start.split("-").map(Number);
+  return periodForDate(m === 12 ? `${y + 1}-01-01` : `${y}-${pad(m + 1)}-01`);
+}
+
+const utcNoon = (dateStr: string) => new Date(`${dateStr}T12:00:00Z`);
+
+/** A period's dates in a sentence: "November 16–30, 2026". */
+export function periodDates(key: string): string {
+  const p = parsePeriod(key);
+  if (!p) return key;
+  const month = utcNoon(p.start).toLocaleDateString("en-US", { month: "long", timeZone: "UTC" });
+  return `${month} ${Number(p.start.slice(8))}–${Number(p.end.slice(8))}, ${p.start.slice(0, 4)}`;
+}
+
+export interface SubmittedPeriodInfo { period: string; submittedAt: string | Date | null; submittedBy: string | null }
+
+/**
+ * What to say when a period's form is already submitted: who submitted it and when (Pacific date),
+ * and when the next period's form opens (its first day, Pacific time).
+ */
+export function submittedPeriodMessage(info: SubmittedPeriodInfo): { submitted: string; next: string; nextOpens: string | null } {
+  const on = info.submittedAt
+    ? new Date(info.submittedAt).toLocaleDateString("en-US", { timeZone: "America/Los_Angeles", month: "2-digit", day: "2-digit", year: "numeric" })
+    : null;
+  const submitted = `The ${periodDates(info.period)} verification was submitted${on ? ` on ${on}` : ""}${info.submittedBy?.trim() ? ` by ${info.submittedBy.trim()}` : ""}.`;
+  const following = nextPeriod(info.period);
+  if (!following) return { submitted, next: "", nextOpens: null };
+  const opens = utcNoon(following.start).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+  return { submitted, next: `The next form, for ${periodDates(following.key)}, opens on ${opens} (Pacific time).`, nextOpens: following.start };
+}
+
+/** The submitted record of the period a Pacific date falls in, if there is one. */
+export function submittedForDate<T extends { period: string; status: string }>(rows: T[], pacificDate: string): T | null {
+  const key = periodForDate(pacificDate).key;
+  return rows.find((r) => r.period === key && r.status === "submitted") ?? null;
+}
+
 // ── Stored shape ────────────────────────────────────────────────────────────────
 
 /** Date and time shown in the form header. Kept inside the record's items JSON (no column exists for them). */

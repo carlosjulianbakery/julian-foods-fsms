@@ -2,10 +2,12 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AlertCircle, Download, Gauge, Trash2, X } from "lucide-react";
 import { Verification624Form } from "@/components/forms624/Verification624Form";
 import { VerificationRecordsTable624, type VerificationListRow } from "@/components/forms624/VerificationRecordsTable624";
+import { CurrentPeriodNotice624, OpenCurrentFormButton624 } from "@/components/forms624/VerificationSubmittedNotice624";
+import { getPacificToday } from "@/lib/pacific-time";
 import { exportFormPdf } from "@/components/forms624/pdfExport624";
 import { buildVerificationPdfHtml624, type VerificationPdfRecord } from "@/components/forms624/pdfBuilders624";
 import { instructionsVerOf, periodLabel, progressOf, splitStored, viewOfSnapshot } from "@/lib/verification-624";
@@ -16,6 +18,8 @@ export default function Verification624RecordsPage() {
   const { data: session } = useSession();
   const router = useRouter();
   const isAdmin = session?.user?.role === "ADMIN";
+  /** ?view=<record id>: the form route sends people here to see the record that closed the current period. */
+  const viewId = useSearchParams()?.get("view") ?? null;
 
   const [rows, setRows] = useState<VerificationListRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,6 +46,10 @@ export default function Verification624RecordsPage() {
     if (!res.ok) { setError("Could not load that record."); return null; }
     return ((await res.json()) as { record: FullRecord }).record;
   }
+  useEffect(() => {
+    if (!session?.user || !viewId) return;
+    void fetchRecord(viewId).then((r) => { if (r) setOpen(r); });
+  }, [session?.user?.id, viewId]); // eslint-disable-line react-hooks/exhaustive-deps
   async function view(row: VerificationListRow) {
     if (row.status === "draft") { router.push("/dashboard/supervisor/verification-624"); return; }
     setOpen(await fetchRecord(row.id));
@@ -73,8 +81,11 @@ export default function Verification624RecordsPage() {
             <p className="page-subtitle">Each record is the log entry for its period</p>
           </div>
         </div>
-        <button type="button" onClick={() => router.push("/dashboard/supervisor/verification-624")} className="btn-primary">Open current form</button>
+        {/* Disabled, with the reason shown below, once the current period is submitted: the form route has nothing to open then */}
+        {!loading && <OpenCurrentFormButton624 rows={rows} today={getPacificToday()} onOpen={() => router.push("/dashboard/supervisor/verification-624")} />}
       </div>
+
+      {!loading && <CurrentPeriodNotice624 rows={rows} today={getPacificToday()} onView={(row) => void view(row)} />}
 
       {error && <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-sm text-red-700"><AlertCircle className="w-4 h-4 shrink-0" /> {error}</div>}
       {loading ? <div className="card p-6 text-center text-sm text-gray-500">Loading…</div>

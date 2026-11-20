@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AlertCircle, Gauge } from "lucide-react";
 import { Verification624Form } from "@/components/forms624/Verification624Form";
+import { VerificationSubmittedView624 } from "@/components/forms624/VerificationSubmittedNotice624";
 import { EquipmentEditor624 } from "@/components/forms624/EquipmentEditor624";
 import { deriveInitials } from "@/components/forms624/initialsHelper";
 import { exportFormPdf } from "@/components/forms624/pdfExport624";
@@ -42,6 +43,8 @@ export default function Verification624Page() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [loadError, setLoadError] = useState("");
+  /** The current period's record when it is already submitted: there is no form to fill in until the next period. */
+  const [closed, setClosed] = useState<RecordRow | null>(null);
   const [saveText, setSaveText] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -75,7 +78,8 @@ export default function Verification624Page() {
       .then((r) => r.json())
       .then((data: Loaded) => {
         if (data.error || !data.record) { setLoadError(data.error ?? "Could not load the form."); return; }
-        if (data.record.status !== "draft") { router.replace(RECORDS); return; }
+        // Already submitted: say so here (who, when, when the next one opens) instead of bouncing back to Records
+        if (data.record.status !== "draft") { setClosed(data.record); return; }
         apply(data, deriveInitials(session.user.name, session.user.email));
       })
       .catch(() => setLoadError("Could not load the form. Try refreshing."));
@@ -208,6 +212,17 @@ export default function Verification624Page() {
     return (
       <div className="max-w-3xl">{header}
         <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-sm text-red-700"><AlertCircle className="w-4 h-4 shrink-0" /> {loadError}</div>
+      </div>
+    );
+  }
+  if (closed) {
+    return (
+      <div className="max-w-3xl space-y-5">{header}
+        <VerificationSubmittedView624
+          info={{ period: closed.period, submittedAt: closed.submittedAt, submittedBy: closed.conductedBy || null }}
+          onView={() => router.push(`${RECORDS}?view=${closed.id}`)}
+          onRecords={() => router.push(RECORDS)}
+        />
       </div>
     );
   }
