@@ -44,9 +44,11 @@ const monthly = (over: Partial<TaskInstance> = {}) =>
   inst({ id: "monthly", ruleTitle: "Monthly Cleaning", dueDate: "2026-11-30", windowStart: "2026-11-01", ...over });
 
 function renderWeek(instances: TaskInstance[]): string {
-  return renderToStaticMarkup(
+  const html = renderToStaticMarkup(
     <TaskCalendar initialInstances={instances} initialWeekStart={WEEK} today={TODAY} role="ADMIN" userId="admin-1" viewMode="everyone" selectedOwnerId="" />,
   );
+  // The legend under the calendar has its own colour swatches; these tests count the lines in the grid only
+  return html.slice(0, html.indexOf("data-period-legend"));
 }
 const count = (html: string, needle: string) => html.split(needle).length - 1;
 
@@ -69,7 +71,8 @@ describe("TaskCalendar week view — band in a week containing neither window st
     expect(html).not.toContain("bg-gray-300");
   });
 
-  it.each(["DONE", "SKIPPED", "MISSED"])("draws nothing once the task is %s", (status) => {
+  // A DONE period task now draws a green line: see TaskCalendar.doneLines.test.tsx
+  it.each(["SKIPPED", "MISSED"])("draws nothing once the task is %s", (status) => {
     expect(renderWeek([monthly({ status })])).not.toContain('title="Monthly Cleaning"');
   });
 

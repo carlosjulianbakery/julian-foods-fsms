@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 import { computeWindowStart, windowOverlapsRange } from "@/lib/window-tasks";
+import { doneTaskBelongsInRange, doneWindowCandidatesWhere } from "@/lib/calendar-window";
 import { sortTasks } from "@/lib/task-order";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -76,7 +77,7 @@ export async function GET(req: NextRequest) {
   };
   const orderBy: Prisma.RuleInstanceOrderByWithRelationInput[] = [{ dueDate: "asc" }, { createdAt: "asc" }];
 
-  const [dueInRange, dueLater] = await Promise.all([
+  const [dueInRange, dueLater, doneElsewhere] = await Promise.all([
     prisma.ruleInstance.findMany({
       where: {
         AND: [
@@ -108,6 +109,13 @@ export async function GET(req: NextRequest) {
       include,
       orderBy,
     }),
+    // Done window tasks not due in the range: kept only if their window reaches into it (green line)
+    // or they were completed on a day inside it (their chip sits on the completion day)
+    prisma.ruleInstance.findMany({
+      where: { AND: [visibilityFilter, ownerFilter, doneWindowCandidatesWhere(from, to)] },
+      include,
+      orderBy,
+    }),
   ]);
 
   const windowStartOf = (inst: (typeof dueInRange)[number]) =>
@@ -124,6 +132,13 @@ export async function GET(req: NextRequest) {
     ...dueInRange,
     ...dueLater.filter((inst) =>
       windowOverlapsRange(windowStartOf(inst), inst.dueDate.toISOString().slice(0, 10), from, to),
+    ),
+    ...doneElsewhere.filter((inst) =>
+      doneTaskBelongsInRange(
+        { status: inst.status, dueDate: inst.dueDate.toISOString().slice(0, 10), windowStart: windowStartOf(inst), doneAt: inst.doneAt?.toISOString() ?? null },
+        from,
+        to,
+      ),
     ),
   ];
 

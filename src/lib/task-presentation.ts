@@ -36,6 +36,8 @@ export interface TaskPresentation {
   chipBorder: string;
   /** Calendar month-view dot color */
   dotColor: string;
+  /** Calendar: the faint line of a period (window) task — green done, blue in progress, gray otherwise */
+  lineColor: string;
 }
 
 /**
@@ -77,6 +79,7 @@ export function getTaskPresentation(
         bgColor: "bg-green-50/30",
         chipBg: "bg-green-100", chipText: "text-green-700", chipBorder: "border-green-200",
         dotColor: "bg-green-500",
+        lineColor: "bg-green-400",
       };
 
     case "IN_PROGRESS":
@@ -88,6 +91,7 @@ export function getTaskPresentation(
         bgColor: "bg-blue-50/30",
         chipBg: "bg-blue-100", chipText: "text-blue-700", chipBorder: "border-blue-200",
         dotColor: "bg-blue-500",
+        lineColor: "bg-blue-400",
       };
 
     case "DUE_TODAY":
@@ -99,6 +103,7 @@ export function getTaskPresentation(
         bgColor: "bg-amber-50/40",
         chipBg: "bg-amber-100", chipText: "text-amber-700", chipBorder: "border-amber-200",
         dotColor: "bg-amber-500",
+        lineColor: "bg-gray-300",
       };
 
     case "OVERDUE":
@@ -110,6 +115,7 @@ export function getTaskPresentation(
         bgColor: "bg-red-50/40",
         chipBg: "bg-red-100", chipText: "text-red-700", chipBorder: "border-red-200",
         dotColor: "bg-red-500",
+        lineColor: "bg-gray-300",
       };
 
     case "MISSED":
@@ -121,6 +127,7 @@ export function getTaskPresentation(
         bgColor: "bg-red-50/40",
         chipBg: "bg-red-100", chipText: "text-red-700", chipBorder: "border-red-200",
         dotColor: "bg-red-500",
+        lineColor: "bg-gray-300",
       };
 
     case "SKIPPED":
@@ -132,6 +139,7 @@ export function getTaskPresentation(
         bgColor: "bg-white",
         chipBg: "bg-gray-100", chipText: "text-gray-400", chipBorder: "border-gray-200",
         dotColor: "bg-gray-400",
+        lineColor: "bg-gray-300",
       };
 
     default: // UPCOMING (future)
@@ -143,6 +151,7 @@ export function getTaskPresentation(
         bgColor: "bg-white",
         chipBg: "bg-gray-50", chipText: "text-gray-500", chipBorder: "border-gray-200",
         dotColor: "bg-gray-400",
+        lineColor: "bg-gray-300",
       };
   }
 }

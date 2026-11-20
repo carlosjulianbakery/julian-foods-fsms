@@ -56,6 +56,9 @@ async function getRange(from: string, to: string) {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  // The route also asks for done window tasks (third query, see range-done-window.test.ts): none here
+  findMany.mockReset();
+  findMany.mockResolvedValue([]);
   (getServerSession as unknown as MockFn).mockResolvedValue({ user: { id: "admin-1", role: "ADMIN" } });
 });
 
@@ -78,7 +81,7 @@ describe("GET /api/task-instances/range — window tasks overlapping the range",
     findMany.mockResolvedValue([]);
     await getRange("2026-11-16", "2026-11-22");
 
-    expect(findMany).toHaveBeenCalledTimes(2);
+    expect(findMany).toHaveBeenCalledTimes(3);
     const and = findMany.mock.calls[1][0].where.AND as Record<string, unknown>[];
     expect(and).toContainEqual({ rule: { windowMode: { not: "NONE" } } });
     expect(and).toContainEqual({ dueDate: { gt: new Date("2026-11-22T23:59:59Z") } });

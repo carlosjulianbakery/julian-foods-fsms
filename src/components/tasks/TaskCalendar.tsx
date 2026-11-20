@@ -14,6 +14,7 @@ import { FacilityTag } from "@/components/tasks/FacilityTag";
 import { getTaskPresentation, getEffectiveStatus, TASK_SORT_PRIORITY } from "@/lib/task-presentation";
 import { canSkipTask } from "@/lib/task-actions";
 import { sortTasks } from "@/lib/task-order";
+import { chipDayOf, doneDayOf, donePeriodTasksForDay, lineLabelDay, linesForDay } from "@/lib/calendar-window";
 import { RuleOrderList, type RuleGroup } from "./RuleOrderList";
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
@@ -108,6 +109,29 @@ function statusChipColors(status: string, dueDate: string, today: string): { bg:
 
 function dotColor(status: string, dueDate: string, today: string): string {
   return getTaskPresentation(status, dueDate, today).dotColor;
+}
+
+/** The faint line of a period task: green done, blue in progress, gray otherwise — from the shared presentation helper. */
+function lineColor(inst: TaskInstance, today: string): string {
+  return getTaskPresentation(inst.status, inst.dueDate, today).lineColor;
+}
+
+function formatDay(dateStr: string): string {
+  const [y, m, d] = dateStr.split("-");
+  return `${m}/${d}/${y}`;
+}
+
+/** Under the calendar: what the faint lines mean. Colours come from the same helper as the lines. */
+export function PeriodLineLegend({ today }: { today: string }) {
+  const swatch = (status: string) => <span className={`inline-block w-4 h-1 rounded-full opacity-50 align-middle ${getTaskPresentation(status, "9999-12-31", today).lineColor}`} />;
+  return (
+    <p className="mt-2 text-[10px] text-gray-400 flex flex-wrap items-center gap-x-1.5" data-period-legend>
+      <span>Faint line = period task (</span>
+      {swatch("UPCOMING")}<span>gray: not started, </span>
+      {swatch("IN_PROGRESS")}<span>blue: in progress, </span>
+      {swatch("DONE")}<span>green: done)</span>
+    </p>
+  );
 }
 
 // ─── Chip ─────────────────────────────────────────────────────────────────────
@@ -214,13 +238,13 @@ function DayCell({
           <span className="text-[9px] text-gray-400 italic block">No batch sheets</span>
         )}
       </div>
-      {/* Window bands */}
+      {/* Period lines: open tasks (gray, blue) and done ones (green). Not items — they never count as chips. */}
       {windowBands.length > 0 && (
         <div className="mt-1.5 space-y-0.5">
           {windowBands.slice(0, 3).map((inst, idx) => {
             const isStart = windowBandIsStart[idx] ?? false;
             const short = inst.ruleTitle.length > 18 ? inst.ruleTitle.slice(0, 16) + "…" : inst.ruleTitle;
-            const barCls = `h-1 rounded-full opacity-50 ${inst.status === "IN_PROGRESS" ? "bg-blue-400" : "bg-gray-300"}`;
+            const barCls = `h-1 rounded-full opacity-50 ${lineColor(inst, today)}`;
             return isStart ? (
               <div key={inst.id} title={inst.ruleTitle} className="flex items-center gap-0.5 overflow-hidden">
                 <span className="text-[8px] text-gray-400 truncate max-w-[70%] leading-none">{short}</span>
@@ -474,7 +498,7 @@ export function groupByRule(tasks: TaskInstance[]): { ruleId: string; title: str
 
 export function DayPanel({
   date, instances, today, role, userId,
-  productionItems, windowTasks = [], onClose, onRefresh, onReorderRules,
+  productionItems, windowTasks = [], donePeriodTasks = [], onClose, onRefresh, onReorderRules,
 }: {
   date: string;
   instances: TaskInstance[];
@@ -483,6 +507,8 @@ export function DayPanel({
   userId: string;
   productionItems?: ProductionItem[];
   windowTasks?: TaskInstance[];
+  /** Done period tasks whose window (start through due date) includes this day. */
+  donePeriodTasks?: TaskInstance[];
   onClose: () => void;
   onRefresh: () => void;
   /** Admin only: persist a new rule order (applies to every day). Resolves false if it could not be saved. */
@@ -682,6 +708,44 @@ export function DayPanel({
                 </div>
               </div>
             )}
+            {/* Period tasks already done — listed on every day of their window */}
+            {donePeriodTasks.length > 0 && (
+              <div className="mt-2 pt-2 border-t border-gray-100" data-done-period-tasks>
+                <p className="text-[10px] font-bold uppercase tracking-wide text-gray-400 mb-2">
+                  Period tasks done
+                </p>
+                <div className="space-y-2">
+                  {donePeriodTasks.map((inst) => {
+                    const p = getTaskPresentation(inst.status, inst.dueDate, today);
+                    const doneDay = doneDayOf(inst);
+                    const late = inst.completedLate && (inst.daysLate ?? 0) > 0;
+                    return (
+                      <div key={inst.id} className={`rounded-lg border px-3 py-2 ${p.bgColor} ${p.chipBorder}`} data-done-period-task={inst.id}>
+                        <div className="flex items-start gap-2">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-medium text-gray-800 truncate">{inst.ruleTitle}</p>
+                            <p className={`text-[11px] mt-0.5 font-medium ${p.chipText}`}>
+                              Period task, done {doneDay ? formatDay(doneDay) : "(date not recorded)"}
+                            </p>
+                            <p className="text-[11px] mt-0.5 text-gray-500">
+                              {inst.doneByName ? `Completed by ${inst.doneByName}` : "Completed"}
+                              {inst.doneAt ? ` · ${formatCompletedAt(inst.doneAt)}` : ""}
+                              {` · Due ${formatDay(inst.dueDate)}`}
+                            </p>
+                            <FacilityTag name={inst.facilityName} />
+                          </div>
+                          {late ? (
+                            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-700 shrink-0">Late {inst.daysLate}d</span>
+                          ) : (
+                            <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full shrink-0 ${p.badgeBg}`}>On time</span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -699,6 +763,8 @@ interface TaskCalendarProps {
   userId: string;
   viewMode: "my" | "everyone" | "byOwner";
   selectedOwnerId: string;
+  /** Which view to start in (week unless told otherwise). */
+  initialView?: "week" | "month";
 }
 
 export function TaskCalendar({
@@ -709,8 +775,9 @@ export function TaskCalendar({
   userId,
   viewMode,
   selectedOwnerId,
+  initialView = "week",
 }: TaskCalendarProps) {
-  const [view, setView] = useState<"week" | "month">("week");
+  const [view, setView] = useState<"week" | "month">(initialView);
   const [weekStart, setWeekStart] = useState(initialWeekStart);
   const [monthStart, setMonthStart] = useState(() => {
     const [y, m] = today.split("-");
@@ -826,7 +893,8 @@ export function TaskCalendar({
 
   // Get instances for a specific day
   // Every cell and the day panel list tasks in the saved work order, whatever their status
-  const dayInstances = (date: string) => sortTasks(instances.filter((i) => i.dueDate === date));
+  // A chip sits on the due date — except a done period task, shown once on the day it was completed
+  const dayInstances = (date: string) => sortTasks(instances.filter((i) => chipDayOf(i) === date));
 
   // Panel refresh — refetch current range
   const handleRefresh = useCallback(() => {
@@ -1023,17 +1091,9 @@ export function TaskCalendar({
             {/* Day cells */}
             <div className="gap-1" style={{ display: "grid", gridTemplateColumns: `repeat(${visibleWeekDays.length}, minmax(0, 1fr))` }}>
               {visibleWeekDays.map((day) => {
-                const windowBandsForDay = instances.filter((inst) =>
-                  inst.windowStart != null &&
-                  inst.windowStart <= day &&
-                  day < inst.dueDate &&
-                  !["DONE", "SKIPPED", "MISSED"].includes(inst.status)
-                );
-                const windowBandIsStart = windowBandsForDay.map((inst) =>
-                  inst.windowStart! >= weekStart
-                    ? inst.windowStart! === day
-                    : day === weekStart
-                );
+                const windowBandsForDay = linesForDay(instances, day);
+                // The label goes on the first visible day the line passes through
+                const windowBandIsStart = windowBandsForDay.map((inst) => lineLabelDay(inst, visibleWeekDays) === day);
                 return (
                   <DayCell
                     key={day}
@@ -1109,24 +1169,25 @@ export function TaskCalendar({
                         )}
                       </div>
                     )}
-                    {/* Window bands (month view, no labels) */}
+                    {/* Period lines (month view): labelled once, on the first visible day of the grid they pass through */}
                     {(() => {
-                      const bands = instances.filter((inst) =>
-                        inst.windowStart != null &&
-                        inst.windowStart <= day &&
-                        day < inst.dueDate &&
-                        !["DONE", "SKIPPED", "MISSED"].includes(inst.status)
-                      );
+                      const bands = linesForDay(instances, day);
                       if (bands.length === 0) return null;
                       return (
                         <div className="mt-1 space-y-0.5">
-                          {bands.slice(0, 3).map((inst) => (
-                            <div
-                              key={inst.id}
-                              title={inst.ruleTitle}
-                              className={`h-0.5 w-full rounded-full opacity-40 ${inst.status === "IN_PROGRESS" ? "bg-blue-400" : "bg-gray-400"}`}
-                            />
-                          ))}
+                          {bands.slice(0, 3).map((inst) => {
+                            // Not started keeps the slightly darker gray this small view always used
+                            const tone = inst.status === "DONE" || inst.status === "IN_PROGRESS" ? lineColor(inst, today) : "bg-gray-400";
+                            const bar = `h-0.5 rounded-full opacity-40 ${tone}`;
+                            return lineLabelDay(inst, visibleMonthDays) === day ? (
+                              <div key={inst.id} title={inst.ruleTitle} className="flex items-center gap-0.5 overflow-hidden">
+                                <span className="text-[7px] text-gray-400 truncate max-w-[75%] leading-none">{inst.ruleTitle}</span>
+                                <div className={`${bar} flex-1`} />
+                              </div>
+                            ) : (
+                              <div key={inst.id} title={inst.ruleTitle} className={`${bar} w-full`} />
+                            );
+                          })}
                           {bands.length > 3 && (
                             <span className="text-[8px] text-gray-400">+{bands.length - 3}</span>
                           )}
@@ -1141,6 +1202,8 @@ export function TaskCalendar({
         </div>
       )}
 
+      <PeriodLineLegend today={today} />
+
       {/* Day panel */}
       {selectedDay && (
         <DayPanel
@@ -1150,12 +1213,9 @@ export function TaskCalendar({
           role={role}
           userId={userId}
           productionItems={productionDataRef.current.get(selectedDay)}
-          windowTasks={instances.filter((inst) =>
-            inst.windowStart != null &&
-            inst.windowStart <= selectedDay &&
-            selectedDay < inst.dueDate &&
-            !["DONE", "SKIPPED", "MISSED"].includes(inst.status)
-          )}
+          // "Open this period" in the panel: open tasks only, exactly as before
+          windowTasks={linesForDay(instances, selectedDay).filter((inst) => inst.status !== "DONE")}
+          donePeriodTasks={donePeriodTasksForDay(instances, selectedDay)}
           onClose={() => setSelectedDay(null)}
           onRefresh={handleRefresh}
           onReorderRules={role === "ADMIN" ? reorderRules : undefined}

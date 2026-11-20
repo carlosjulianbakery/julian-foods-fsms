@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@/generated/prisma";
 import { getPacificToday, addDaysToDateStr } from "@/lib/pacific-time";
 import { computeWindowStart, isInWindow, windowOverlapsRange } from "@/lib/window-tasks";
+import { doneTaskBelongsInRange, doneWindowCandidatesWhere } from "@/lib/calendar-window";
 import { sortTasks } from "@/lib/task-order";
 import { fetchTaskProgress } from "@/lib/task-progress";
 import { MyTasksClient, type TaskInstance } from "./MyTasksClient";
@@ -92,7 +93,7 @@ export async function MyTasksBlock() {
         }
       : {};
 
-  const [instances, skippedInstances, calendarInstances, rawWindowInstances] = await Promise.all([
+  const [instances, skippedInstances, calendarInstances, rawWindowInstances, calendarDoneCandidates] = await Promise.all([
     prisma.ruleInstance.findMany({
       where:
         role !== "ADMIN"
@@ -142,6 +143,13 @@ export async function MyTasksBlock() {
       include: instanceInclude,
       orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
     }),
+    // Calendar only — done window tasks not due this week (green line, or their chip on the completion day).
+    // Never used for "Open this period".
+    prisma.ruleInstance.findMany({
+      where: { AND: [calendarVisibilityFilter, doneWindowCandidatesWhere(calendarWeekStart, calendarWeekEnd)] },
+      include: instanceInclude,
+      orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
+    }),
   ]);
 
   function windowStartOf(inst: (typeof rawWindowInstances)[number]): string | null {
@@ -165,6 +173,15 @@ export async function MyTasksBlock() {
     const dueStr = inst.dueDate.toISOString().slice(0, 10);
     return dueStr > calendarWeekEnd && windowOverlapsRange(windowStartOf(inst), dueStr, calendarWeekStart, calendarWeekEnd);
   });
+
+  // Done window tasks whose window reaches into this week, or that were completed during it
+  const calendarDoneExtras = calendarDoneCandidates.filter((inst) =>
+    doneTaskBelongsInRange(
+      { status: inst.status, dueDate: inst.dueDate.toISOString().slice(0, 10), windowStart: windowStartOf(inst), doneAt: inst.doneAt?.toISOString() ?? null },
+      calendarWeekStart,
+      calendarWeekEnd,
+    ),
+  );
 
   // Progress for "Open this period" cards, for any form that registers a provider
   const progressByInstanceId = await fetchTaskProgress(openWindowInstances, prisma);
@@ -208,6 +225,7 @@ export async function MyTasksBlock() {
   const serializedCalendar: TaskInstance[] = sortTasks([
     ...(calendarInstances as typeof instances),
     ...calendarWindowExtras,
+    ...calendarDoneExtras,
   ].map(serializeInst));
 
   function serializeWindowInst(inst: typeof openWindowInstances[number]): TaskInstance {
