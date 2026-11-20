@@ -1476,6 +1476,10 @@ model Verification624Equipment {
   location    String    @default("")
   inUse       Boolean   @default(true)
   sortOrder   Int       @default(0)
+  // Scales: test weight and its unit ('g' | 'lb' | 'oz'). Tolerance: ± around the target, for scales and thermometers.
+  testWeight  Float?
+  weightUnit  String?
+  tolerance   Float?
   retiredAt   DateTime?
   retiredById String?
   createdById String?

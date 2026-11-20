@@ -8,7 +8,7 @@ import { Verification624Form } from "@/components/forms624/Verification624Form";
 import { VerificationRecordsTable624, type VerificationListRow } from "@/components/forms624/VerificationRecordsTable624";
 import { exportFormPdf } from "@/components/forms624/pdfExport624";
 import { buildVerificationPdfHtml624, type VerificationPdfRecord } from "@/components/forms624/pdfBuilders624";
-import { periodLabel, progressOf, splitStored, viewOfSnapshot } from "@/lib/verification-624";
+import { instructionsVerOf, periodLabel, progressOf, splitStored, viewOfSnapshot } from "@/lib/verification-624";
 
 type FullRecord = VerificationPdfRecord & { id: string };
 
@@ -93,7 +93,7 @@ export default function Verification624RecordsPage() {
               </div>
             </div>
             <Verification624Form
-              readOnly periodLabel={periodLabel(open.period)}
+              readOnly periodLabel={periodLabel(open.period)} instructionsVer={stored ? instructionsVerOf(stored) : undefined}
               date={stored?.header?.date ?? "—"} time={stored?.header?.time ?? "—"} initials={open.initials}
               equipment={snapshotView.equipment} values={snapshotView.values} progress={progressOf(snapshotView.equipment, snapshotView.values)}
             />

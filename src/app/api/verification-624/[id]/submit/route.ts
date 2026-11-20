@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { completeRuleInstanceForSubmission } from "@/lib/task-completion";
-import { VERIFICATION_FACILITY, VERIFICATION_FORM_KEY, buildSnapshot, splitStored, submitProblems, valuesForLiveList } from "@/lib/verification-624";
+import { INSTRUCTIONS_VER_VERIFICATION, VERIFICATION_FACILITY, VERIFICATION_FORM_KEY, buildSnapshot, splitStored, submitProblems, valuesForLiveList } from "@/lib/verification-624";
 import { canUseVerification, loadLiveEquipment, loadListVersion } from "@/lib/verification-624-server";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +26,8 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const problems = submitProblems(equipment, values, record.initials);
   if (problems.length > 0) return NextResponse.json({ error: "The form is not complete.", problems }, { status: 422 });
 
-  // Full copy of names, locations, readings and results: later list edits never change this record
+  // Full copy of names, locations, limits (unit, test weight, tolerance), readings and results:
+  // later list edits never change this record
   const snapshot = buildSnapshot(equipment, values);
   const now = new Date();
   const taskId = body.taskId ?? record.linkedInstanceId ?? null;
@@ -34,7 +35,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     where: { id: params.id, status: "draft", updatedAt: record.updatedAt },
     data: {
       status: "submitted",
-      items: [...snapshot.items, ...(stored.header ? [stored.header] : [])] as never,
+      items: [...snapshot.items, ...(stored.header ? [{ ...stored.header, instructionsVer: INSTRUCTIONS_VER_VERIFICATION }] : [])] as never,
       okCount: snapshot.okCount,
       failCount: snapshot.failCount,
       notInUseCount: snapshot.notInUseCount,

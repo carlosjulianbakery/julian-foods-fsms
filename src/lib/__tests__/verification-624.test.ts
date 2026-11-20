@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   buildSnapshot, fixedResult, iceWaterResult, itemResult, parsePeriod, periodForDate, periodLabel, portablePassed, positionOf, progressOf,
   referenceOptions, scalePointResult, scaleResult, splitStored, submitProblems, toHundredths, toTenths, valuesForLiveList, viewOfSnapshot, withCheckedAt,
-  INSTRUCTIONS, type Equipment, type ItemValues,
+  INSTRUCTIONS, INSTRUCTIONS_BY_VERSION, type Equipment, type ItemValues,
 } from "@/lib/verification-624";
 
 const eq = (id: string, section: Equipment["section"], name: string, sortOrder: number, over: Partial<Equipment> = {}): Equipment =>
@@ -20,8 +20,8 @@ const GOOD_SCALE = [1.1, 1.1, 1.1, 1.1, 1.1];
 
 describe("ranges at the exact boundaries", () => {
   it("portable: 31.0 and 33.0 pass, 30.9 and 33.1 fail", () => {
-    expect([31.0, 32, 33.0].map(iceWaterResult)).toEqual(["OK", "OK", "OK"]);
-    expect([30.9, 33.1, 0, -5].map(iceWaterResult)).toEqual(["NOT_OK", "NOT_OK", "NOT_OK", "NOT_OK"]);
+    expect([31.0, 32, 33.0].map((n) => iceWaterResult(n))).toEqual(["OK", "OK", "OK"]);
+    expect([30.9, 33.1, 0, -5].map((n) => iceWaterResult(n))).toEqual(["NOT_OK", "NOT_OK", "NOT_OK", "NOT_OK"]);
     expect(iceWaterResult(null)).toBeNull();
     expect(iceWaterResult(undefined)).toBeNull();
   });
@@ -36,8 +36,8 @@ describe("ranges at the exact boundaries", () => {
   });
 
   it("scale point: 1.00 and 1.20 pass, 0.99 and 1.21 fail", () => {
-    expect([1.0, 1.1, 1.2].map(scalePointResult)).toEqual(["OK", "OK", "OK"]);
-    expect([0.99, 1.21].map(scalePointResult)).toEqual(["NOT_OK", "NOT_OK"]);
+    expect([1.0, 1.1, 1.2].map((n) => scalePointResult(n))).toEqual(["OK", "OK", "OK"]);
+    expect([0.99, 1.21].map((n) => scalePointResult(n))).toEqual(["NOT_OK", "NOT_OK"]);
   });
 
   it("integer comparison: values that are inexact in floating point still land on the right side", () => {
@@ -221,7 +221,8 @@ describe("periods", () => {
 
 describe("instructions are the verbatim text", () => {
   it("scales, portable and non-movable procedures", () => {
-    expect(INSTRUCTIONS.scale).toBe("Place the scale on a flat surface, away from any air flow or vibration for best results. Place the 500 gram weight over the points seen in the image in each corner and center. The margin is 1.10 lb ± 0.1 lb. Report any irregularity, e.g.: broken parts, sanitation, low battery, unusual noises, among others.");
+    // v1.0, kept for the records that were submitted with it (the current wording is tested in verification-624-limits.test.ts)
+    expect(INSTRUCTIONS_BY_VERSION["v1.0"].scale).toBe("Place the scale on a flat surface, away from any air flow or vibration for best results. Place the 500 gram weight over the points seen in the image in each corner and center. The margin is 1.10 lb ± 0.1 lb. Report any irregularity, e.g.: broken parts, sanitation, low battery, unusual noises, among others.");
     expect(INSTRUCTIONS.portable_thermometer).toBe("Place a container with water and ice in equal parts, place the thermometer 1 cm deep in the ice water, for 2 minutes until reaching 32°F (0°C), Report any irregularities, e.g. parts broken or missing, sanitation, low battery.");
     expect(INSTRUCTIONS.fixed_thermometer).toBe("Use a portable thermometer that has been recently verified for accuracy, and use its reading as the target value. Compare the reading of the non-movable thermometer to the target reading. Report any irregularities.");
   });

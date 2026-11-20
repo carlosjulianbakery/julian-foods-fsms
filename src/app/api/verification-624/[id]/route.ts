@@ -46,10 +46,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   const stored = splitStored(record.items);
   const previous = valuesForLiveList(equipment, stored.entries);
   const header: HeaderEntry | null =
-    body.date && body.time ? { kind: "header", date: body.date, time: body.time } : stored.header;
+    body.date && body.time ? { ...(stored.header ?? {}), kind: "header", date: body.date, time: body.time } : stored.header;
   const incoming = valuesForLiveList(equipment, body.values);
   const now = new Date();
-  const values = equipment.flatMap((e) => (incoming[e.id] ? [withCheckedAt(e.section, previous[e.id], incoming[e.id], now.toISOString())] : []));
+  const values = equipment.flatMap((e) => (incoming[e.id] ? [withCheckedAt(e, previous[e.id], incoming[e.id], now.toISOString())] : []));
   const progress = progressOf(equipment, Object.fromEntries(values.map((v) => [v.equipmentId, v])));
 
   const saved = await prisma.verification624Record.updateMany({

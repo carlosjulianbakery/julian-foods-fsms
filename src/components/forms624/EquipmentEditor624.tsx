@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import { ChevronDown, ChevronUp, Plus } from "lucide-react";
-import { SECTIONS, SECTION_TITLES, sortEquipment, type Equipment, type Section } from "@/lib/verification-624";
+import {
+  MAX_THERMOMETER_TOLERANCE_F, SECTIONS, SECTION_TITLES, WEIGHT_UNITS, defaultSpec, marginText, scaleSpecOf, sortEquipment, specProblem, thermometerToleranceOf,
+  type Equipment, type Section, type SpecInput, type WeightUnit,
+} from "@/lib/verification-624";
 
 export interface EquipmentEditor624Props {
   equipment: Equipment[];
@@ -14,6 +17,60 @@ export interface EquipmentEditor624Props {
   onInUse: (id: string, inUse: boolean) => void;
   onRetire: (id: string) => void;
   onMove: (id: string, direction: "up" | "down") => void;
+  /** Save an item's limits: test weight, unit and tolerance for a scale; tolerance for a thermometer. */
+  onLimits: (id: string, limits: SpecInput) => void;
+}
+
+const toNumber = (text: string) => (text.trim() === "" ? NaN : Number(text));
+
+/**
+ * The limits of one item. Nothing is saved until "Save limits" is pressed, because a scale's test weight,
+ * unit and tolerance only make sense together. What cannot be saved is said in plain words.
+ */
+export function ItemLimits624({ item, busy, onSave }: { item: Equipment; busy?: boolean; onSave: (limits: SpecInput) => void }) {
+  const isScale = item.section === "scale";
+  const saved = isScale ? scaleSpecOf(item) : null;
+  const savedTolerance = saved ? saved.tolerance : thermometerToleranceOf(item.section, item);
+  const [weight, setWeight] = useState(saved ? String(saved.testWeight) : "");
+  const [unit, setUnit] = useState<WeightUnit>(saved?.unit ?? "g");
+  const [tolerance, setTolerance] = useState(String(savedTolerance));
+
+  const next: SpecInput = isScale ? { testWeight: toNumber(weight), weightUnit: unit, tolerance: toNumber(tolerance) } : { tolerance: toNumber(tolerance) };
+  const dirty = isScale
+    ? toNumber(weight) !== saved!.testWeight || unit !== saved!.unit || toNumber(tolerance) !== saved!.tolerance
+    : toNumber(tolerance) !== savedTolerance;
+  const problem = specProblem(item.section, next);
+  const preview = problem ? null : marginText({ section: item.section, ...(next as { testWeight?: number; weightUnit?: string; tolerance?: number }) });
+
+  return (
+    <div className="basis-full flex flex-wrap items-end gap-2 pl-8" data-limits={item.id}>
+      {isScale && (
+        <>
+          <label className="block">
+            <span className="block text-[11px] font-medium text-gray-500 mb-0.5">Test weight</span>
+            <input type="number" inputMode="decimal" min="0" step="any" aria-label={`Test weight of ${item.name}`} disabled={busy} className="input text-sm w-24 font-mono" value={weight} onChange={(e) => setWeight(e.target.value)} />
+          </label>
+          <label className="block">
+            <span className="block text-[11px] font-medium text-gray-500 mb-0.5">Unit</span>
+            <select aria-label={`Unit of ${item.name}`} disabled={busy} className="input text-sm" value={unit} onChange={(e) => setUnit(e.target.value as WeightUnit)}>
+              {WEIGHT_UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
+            </select>
+          </label>
+        </>
+      )}
+      <label className="block">
+        <span className="block text-[11px] font-medium text-gray-500 mb-0.5">{isScale ? `Tolerance ± (${unit})` : `Tolerance ± (°F, up to ${MAX_THERMOMETER_TOLERANCE_F})`}</span>
+        <input type="number" inputMode="decimal" min="0" step="any" aria-label={`Tolerance of ${item.name}`} disabled={busy} className="input text-sm w-24 font-mono" value={tolerance} onChange={(e) => setTolerance(e.target.value)} />
+      </label>
+      {dirty && (
+        <button type="button" disabled={busy || !!problem} onClick={() => onSave(next)} className="btn-primary text-xs disabled:opacity-50">Save limits</button>
+      )}
+      <p className={`basis-full text-[11px] ${dirty && problem ? "text-red-700 font-medium" : "text-gray-500"}`}>
+        {dirty && problem ? problem : preview}
+        {dirty && !problem ? " — not saved yet" : ""}
+      </p>
+    </div>
+  );
 }
 
 /** Edit the equipment list. Every change is saved at once and applies to all future forms. */
@@ -26,6 +83,7 @@ export function EquipmentEditor624(p: EquipmentEditor624Props) {
       <div>
         <p className="text-sm font-semibold text-gray-900">Edit equipment</p>
         <p className="text-xs text-gray-500">Changes are saved immediately and stay for all future forms. Retired items stay in old records.</p>
+        <p className="text-xs text-gray-500">Each scale has its own test weight, unit and tolerance; each thermometer its own tolerance. The 32.0 °F ice water target is fixed.</p>
       </div>
       {p.error && <p className="text-xs text-red-700 bg-red-50 border border-red-200 rounded px-2 py-1">{p.error}</p>}
 
@@ -59,6 +117,10 @@ export function EquipmentEditor624(p: EquipmentEditor624Props) {
                 <button type="button" disabled={p.busy} onClick={() => p.onRetire(e.id)} className="text-xs font-medium text-red-600 hover:underline disabled:opacity-40">
                   Retire
                 </button>
+                <ItemLimits624
+                  key={`${e.id}:${e.testWeight ?? ""}:${e.weightUnit ?? ""}:${e.tolerance ?? ""}`}
+                  item={e} busy={p.busy} onSave={(limits) => p.onLimits(e.id, limits)}
+                />
               </div>
             ))}
           </div>
@@ -88,6 +150,9 @@ export function EquipmentEditor624(p: EquipmentEditor624Props) {
         >
           <Plus className="w-4 h-4" /> Add item
         </button>
+        <p className="basis-full text-[11px] text-gray-500">
+          A new item starts with: {marginText({ section: draft.section, ...defaultSpec(draft.section) })}. Change it above after adding.
+        </p>
       </div>
     </div>
   );

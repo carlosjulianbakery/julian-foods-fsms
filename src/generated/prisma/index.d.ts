@@ -72300,10 +72300,14 @@ export namespace Prisma {
 
   export type Verification624EquipmentAvgAggregateOutputType = {
     sortOrder: number | null
+    testWeight: number | null
+    tolerance: number | null
   }
 
   export type Verification624EquipmentSumAggregateOutputType = {
     sortOrder: number | null
+    testWeight: number | null
+    tolerance: number | null
   }
 
   export type Verification624EquipmentMinAggregateOutputType = {
@@ -72314,6 +72318,9 @@ export namespace Prisma {
     location: string | null
     inUse: boolean | null
     sortOrder: number | null
+    testWeight: number | null
+    weightUnit: string | null
+    tolerance: number | null
     retiredAt: Date | null
     retiredById: string | null
     createdById: string | null
@@ -72330,6 +72337,9 @@ export namespace Prisma {
     location: string | null
     inUse: boolean | null
     sortOrder: number | null
+    testWeight: number | null
+    weightUnit: string | null
+    tolerance: number | null
     retiredAt: Date | null
     retiredById: string | null
     createdById: string | null
@@ -72346,6 +72356,9 @@ export namespace Prisma {
     location: number
     inUse: number
     sortOrder: number
+    testWeight: number
+    weightUnit: number
+    tolerance: number
     retiredAt: number
     retiredById: number
     createdById: number
@@ -72358,10 +72371,14 @@ export namespace Prisma {
 
   export type Verification624EquipmentAvgAggregateInputType = {
     sortOrder?: true
+    testWeight?: true
+    tolerance?: true
   }
 
   export type Verification624EquipmentSumAggregateInputType = {
     sortOrder?: true
+    testWeight?: true
+    tolerance?: true
   }
 
   export type Verification624EquipmentMinAggregateInputType = {
@@ -72372,6 +72389,9 @@ export namespace Prisma {
     location?: true
     inUse?: true
     sortOrder?: true
+    testWeight?: true
+    weightUnit?: true
+    tolerance?: true
     retiredAt?: true
     retiredById?: true
     createdById?: true
@@ -72388,6 +72408,9 @@ export namespace Prisma {
     location?: true
     inUse?: true
     sortOrder?: true
+    testWeight?: true
+    weightUnit?: true
+    tolerance?: true
     retiredAt?: true
     retiredById?: true
     createdById?: true
@@ -72404,6 +72427,9 @@ export namespace Prisma {
     location?: true
     inUse?: true
     sortOrder?: true
+    testWeight?: true
+    weightUnit?: true
+    tolerance?: true
     retiredAt?: true
     retiredById?: true
     createdById?: true
@@ -72507,6 +72533,9 @@ export namespace Prisma {
     location: string
     inUse: boolean
     sortOrder: number
+    testWeight: number | null
+    weightUnit: string | null
+    tolerance: number | null
     retiredAt: Date | null
     retiredById: string | null
     createdById: string | null
@@ -72542,6 +72571,9 @@ export namespace Prisma {
     location?: boolean
     inUse?: boolean
     sortOrder?: boolean
+    testWeight?: boolean
+    weightUnit?: boolean
+    tolerance?: boolean
     retiredAt?: boolean
     retiredById?: boolean
     createdById?: boolean
@@ -72561,6 +72593,9 @@ export namespace Prisma {
     location?: boolean
     inUse?: boolean
     sortOrder?: boolean
+    testWeight?: boolean
+    weightUnit?: boolean
+    tolerance?: boolean
     retiredAt?: boolean
     retiredById?: boolean
     createdById?: boolean
@@ -72580,6 +72615,9 @@ export namespace Prisma {
     location?: boolean
     inUse?: boolean
     sortOrder?: boolean
+    testWeight?: boolean
+    weightUnit?: boolean
+    tolerance?: boolean
     retiredAt?: boolean
     retiredById?: boolean
     createdById?: boolean
@@ -72614,6 +72652,9 @@ export namespace Prisma {
       location: string
       inUse: boolean
       sortOrder: number
+      testWeight: number | null
+      weightUnit: string | null
+      tolerance: number | null
       retiredAt: Date | null
       retiredById: string | null
       createdById: string | null
@@ -73023,6 +73064,9 @@ export namespace Prisma {
     readonly location: FieldRef<"Verification624Equipment", 'String'>
     readonly inUse: FieldRef<"Verification624Equipment", 'Boolean'>
     readonly sortOrder: FieldRef<"Verification624Equipment", 'Int'>
+    readonly testWeight: FieldRef<"Verification624Equipment", 'Float'>
+    readonly weightUnit: FieldRef<"Verification624Equipment", 'String'>
+    readonly tolerance: FieldRef<"Verification624Equipment", 'Float'>
     readonly retiredAt: FieldRef<"Verification624Equipment", 'DateTime'>
     readonly retiredById: FieldRef<"Verification624Equipment", 'String'>
     readonly createdById: FieldRef<"Verification624Equipment", 'String'>
@@ -77707,6 +77751,9 @@ export namespace Prisma {
     location: 'location',
     inUse: 'inUse',
     sortOrder: 'sortOrder',
+    testWeight: 'testWeight',
+    weightUnit: 'weightUnit',
+    tolerance: 'tolerance',
     retiredAt: 'retiredAt',
     retiredById: 'retiredById',
     createdById: 'createdById',
@@ -84148,6 +84195,9 @@ export namespace Prisma {
     location?: StringFilter<"Verification624Equipment"> | string
     inUse?: BoolFilter<"Verification624Equipment"> | boolean
     sortOrder?: IntFilter<"Verification624Equipment"> | number
+    testWeight?: FloatNullableFilter<"Verification624Equipment"> | number | null
+    weightUnit?: StringNullableFilter<"Verification624Equipment"> | string | null
+    tolerance?: FloatNullableFilter<"Verification624Equipment"> | number | null
     retiredAt?: DateTimeNullableFilter<"Verification624Equipment"> | Date | string | null
     retiredById?: StringNullableFilter<"Verification624Equipment"> | string | null
     createdById?: StringNullableFilter<"Verification624Equipment"> | string | null
@@ -84167,6 +84217,9 @@ export namespace Prisma {
     location?: SortOrder
     inUse?: SortOrder
     sortOrder?: SortOrder
+    testWeight?: SortOrderInput | SortOrder
+    weightUnit?: SortOrderInput | SortOrder
+    tolerance?: SortOrderInput | SortOrder
     retiredAt?: SortOrderInput | SortOrder
     retiredById?: SortOrderInput | SortOrder
     createdById?: SortOrderInput | SortOrder
@@ -84189,6 +84242,9 @@ export namespace Prisma {
     location?: StringFilter<"Verification624Equipment"> | string
     inUse?: BoolFilter<"Verification624Equipment"> | boolean
     sortOrder?: IntFilter<"Verification624Equipment"> | number
+    testWeight?: FloatNullableFilter<"Verification624Equipment"> | number | null
+    weightUnit?: StringNullableFilter<"Verification624Equipment"> | string | null
+    tolerance?: FloatNullableFilter<"Verification624Equipment"> | number | null
     retiredAt?: DateTimeNullableFilter<"Verification624Equipment"> | Date | string | null
     retiredById?: StringNullableFilter<"Verification624Equipment"> | string | null
     createdById?: StringNullableFilter<"Verification624Equipment"> | string | null
@@ -84208,6 +84264,9 @@ export namespace Prisma {
     location?: SortOrder
     inUse?: SortOrder
     sortOrder?: SortOrder
+    testWeight?: SortOrderInput | SortOrder
+    weightUnit?: SortOrderInput | SortOrder
+    tolerance?: SortOrderInput | SortOrder
     retiredAt?: SortOrderInput | SortOrder
     retiredById?: SortOrderInput | SortOrder
     createdById?: SortOrderInput | SortOrder
@@ -84232,6 +84291,9 @@ export namespace Prisma {
     location?: StringWithAggregatesFilter<"Verification624Equipment"> | string
     inUse?: BoolWithAggregatesFilter<"Verification624Equipment"> | boolean
     sortOrder?: IntWithAggregatesFilter<"Verification624Equipment"> | number
+    testWeight?: FloatNullableWithAggregatesFilter<"Verification624Equipment"> | number | null
+    weightUnit?: StringNullableWithAggregatesFilter<"Verification624Equipment"> | string | null
+    tolerance?: FloatNullableWithAggregatesFilter<"Verification624Equipment"> | number | null
     retiredAt?: DateTimeNullableWithAggregatesFilter<"Verification624Equipment"> | Date | string | null
     retiredById?: StringNullableWithAggregatesFilter<"Verification624Equipment"> | string | null
     createdById?: StringNullableWithAggregatesFilter<"Verification624Equipment"> | string | null
@@ -91385,6 +91447,9 @@ export namespace Prisma {
     location?: string
     inUse?: boolean
     sortOrder?: number
+    testWeight?: number | null
+    weightUnit?: string | null
+    tolerance?: number | null
     retiredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -91401,6 +91466,9 @@ export namespace Prisma {
     location?: string
     inUse?: boolean
     sortOrder?: number
+    testWeight?: number | null
+    weightUnit?: string | null
+    tolerance?: number | null
     retiredAt?: Date | string | null
     retiredById?: string | null
     createdById?: string | null
@@ -91417,6 +91485,9 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     inUse?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    testWeight?: NullableFloatFieldUpdateOperationsInput | number | null
+    weightUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    tolerance?: NullableFloatFieldUpdateOperationsInput | number | null
     retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -91433,6 +91504,9 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     inUse?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    testWeight?: NullableFloatFieldUpdateOperationsInput | number | null
+    weightUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    tolerance?: NullableFloatFieldUpdateOperationsInput | number | null
     retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     retiredById?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -91449,6 +91523,9 @@ export namespace Prisma {
     location?: string
     inUse?: boolean
     sortOrder?: number
+    testWeight?: number | null
+    weightUnit?: string | null
+    tolerance?: number | null
     retiredAt?: Date | string | null
     retiredById?: string | null
     createdById?: string | null
@@ -91465,6 +91542,9 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     inUse?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    testWeight?: NullableFloatFieldUpdateOperationsInput | number | null
+    weightUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    tolerance?: NullableFloatFieldUpdateOperationsInput | number | null
     retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -91478,6 +91558,9 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     inUse?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    testWeight?: NullableFloatFieldUpdateOperationsInput | number | null
+    weightUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    tolerance?: NullableFloatFieldUpdateOperationsInput | number | null
     retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     retiredById?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -96236,6 +96319,9 @@ export namespace Prisma {
     location?: SortOrder
     inUse?: SortOrder
     sortOrder?: SortOrder
+    testWeight?: SortOrder
+    weightUnit?: SortOrder
+    tolerance?: SortOrder
     retiredAt?: SortOrder
     retiredById?: SortOrder
     createdById?: SortOrder
@@ -96246,6 +96332,8 @@ export namespace Prisma {
 
   export type Verification624EquipmentAvgOrderByAggregateInput = {
     sortOrder?: SortOrder
+    testWeight?: SortOrder
+    tolerance?: SortOrder
   }
 
   export type Verification624EquipmentMaxOrderByAggregateInput = {
@@ -96256,6 +96344,9 @@ export namespace Prisma {
     location?: SortOrder
     inUse?: SortOrder
     sortOrder?: SortOrder
+    testWeight?: SortOrder
+    weightUnit?: SortOrder
+    tolerance?: SortOrder
     retiredAt?: SortOrder
     retiredById?: SortOrder
     createdById?: SortOrder
@@ -96272,6 +96363,9 @@ export namespace Prisma {
     location?: SortOrder
     inUse?: SortOrder
     sortOrder?: SortOrder
+    testWeight?: SortOrder
+    weightUnit?: SortOrder
+    tolerance?: SortOrder
     retiredAt?: SortOrder
     retiredById?: SortOrder
     createdById?: SortOrder
@@ -96282,6 +96376,8 @@ export namespace Prisma {
 
   export type Verification624EquipmentSumOrderByAggregateInput = {
     sortOrder?: SortOrder
+    testWeight?: SortOrder
+    tolerance?: SortOrder
   }
 
   export type Verification624ListCountOrderByAggregateInput = {
@@ -104604,6 +104700,9 @@ export namespace Prisma {
     location?: string
     inUse?: boolean
     sortOrder?: number
+    testWeight?: number | null
+    weightUnit?: string | null
+    tolerance?: number | null
     retiredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -104619,6 +104718,9 @@ export namespace Prisma {
     location?: string
     inUse?: boolean
     sortOrder?: number
+    testWeight?: number | null
+    weightUnit?: string | null
+    tolerance?: number | null
     retiredAt?: Date | string | null
     retiredById?: string | null
     updatedById?: string | null
@@ -104644,6 +104746,9 @@ export namespace Prisma {
     location?: string
     inUse?: boolean
     sortOrder?: number
+    testWeight?: number | null
+    weightUnit?: string | null
+    tolerance?: number | null
     retiredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -104659,6 +104764,9 @@ export namespace Prisma {
     location?: string
     inUse?: boolean
     sortOrder?: number
+    testWeight?: number | null
+    weightUnit?: string | null
+    tolerance?: number | null
     retiredAt?: Date | string | null
     retiredById?: string | null
     createdById?: string | null
@@ -104684,6 +104792,9 @@ export namespace Prisma {
     location?: string
     inUse?: boolean
     sortOrder?: number
+    testWeight?: number | null
+    weightUnit?: string | null
+    tolerance?: number | null
     retiredAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -104699,6 +104810,9 @@ export namespace Prisma {
     location?: string
     inUse?: boolean
     sortOrder?: number
+    testWeight?: number | null
+    weightUnit?: string | null
+    tolerance?: number | null
     retiredAt?: Date | string | null
     createdById?: string | null
     updatedById?: string | null
@@ -106177,6 +106291,9 @@ export namespace Prisma {
     location?: StringFilter<"Verification624Equipment"> | string
     inUse?: BoolFilter<"Verification624Equipment"> | boolean
     sortOrder?: IntFilter<"Verification624Equipment"> | number
+    testWeight?: FloatNullableFilter<"Verification624Equipment"> | number | null
+    weightUnit?: StringNullableFilter<"Verification624Equipment"> | string | null
+    tolerance?: FloatNullableFilter<"Verification624Equipment"> | number | null
     retiredAt?: DateTimeNullableFilter<"Verification624Equipment"> | Date | string | null
     retiredById?: StringNullableFilter<"Verification624Equipment"> | string | null
     createdById?: StringNullableFilter<"Verification624Equipment"> | string | null
@@ -127587,6 +127704,9 @@ export namespace Prisma {
     location?: string
     inUse?: boolean
     sortOrder?: number
+    testWeight?: number | null
+    weightUnit?: string | null
+    tolerance?: number | null
     retiredAt?: Date | string | null
     retiredById?: string | null
     updatedById?: string | null
@@ -127602,6 +127722,9 @@ export namespace Prisma {
     location?: string
     inUse?: boolean
     sortOrder?: number
+    testWeight?: number | null
+    weightUnit?: string | null
+    tolerance?: number | null
     retiredAt?: Date | string | null
     retiredById?: string | null
     createdById?: string | null
@@ -127617,6 +127740,9 @@ export namespace Prisma {
     location?: string
     inUse?: boolean
     sortOrder?: number
+    testWeight?: number | null
+    weightUnit?: string | null
+    tolerance?: number | null
     retiredAt?: Date | string | null
     createdById?: string | null
     updatedById?: string | null
@@ -129736,6 +129862,9 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     inUse?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    testWeight?: NullableFloatFieldUpdateOperationsInput | number | null
+    weightUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    tolerance?: NullableFloatFieldUpdateOperationsInput | number | null
     retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -129751,6 +129880,9 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     inUse?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    testWeight?: NullableFloatFieldUpdateOperationsInput | number | null
+    weightUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    tolerance?: NullableFloatFieldUpdateOperationsInput | number | null
     retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     retiredById?: NullableStringFieldUpdateOperationsInput | string | null
     updatedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129766,6 +129898,9 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     inUse?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    testWeight?: NullableFloatFieldUpdateOperationsInput | number | null
+    weightUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    tolerance?: NullableFloatFieldUpdateOperationsInput | number | null
     retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     retiredById?: NullableStringFieldUpdateOperationsInput | string | null
     updatedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129781,6 +129916,9 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     inUse?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    testWeight?: NullableFloatFieldUpdateOperationsInput | number | null
+    weightUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    tolerance?: NullableFloatFieldUpdateOperationsInput | number | null
     retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -129796,6 +129934,9 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     inUse?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    testWeight?: NullableFloatFieldUpdateOperationsInput | number | null
+    weightUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    tolerance?: NullableFloatFieldUpdateOperationsInput | number | null
     retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     retiredById?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129811,6 +129952,9 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     inUse?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    testWeight?: NullableFloatFieldUpdateOperationsInput | number | null
+    weightUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    tolerance?: NullableFloatFieldUpdateOperationsInput | number | null
     retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     retiredById?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129826,6 +129970,9 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     inUse?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    testWeight?: NullableFloatFieldUpdateOperationsInput | number | null
+    weightUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    tolerance?: NullableFloatFieldUpdateOperationsInput | number | null
     retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -129841,6 +129988,9 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     inUse?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    testWeight?: NullableFloatFieldUpdateOperationsInput | number | null
+    weightUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    tolerance?: NullableFloatFieldUpdateOperationsInput | number | null
     retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     updatedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129856,6 +130006,9 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     inUse?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
+    testWeight?: NullableFloatFieldUpdateOperationsInput | number | null
+    weightUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    tolerance?: NullableFloatFieldUpdateOperationsInput | number | null
     retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     updatedById?: NullableStringFieldUpdateOperationsInput | string | null

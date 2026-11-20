@@ -7,7 +7,7 @@ type Db = PrismaClient | Prisma.TransactionClient;
 export async function loadLiveEquipment(db: Db): Promise<Equipment[]> {
   const rows = await db.verification624Equipment.findMany({
     where: { facility: VERIFICATION_FACILITY, retiredAt: null },
-    select: { id: true, section: true, name: true, location: true, inUse: true, sortOrder: true },
+    select: { id: true, section: true, name: true, location: true, inUse: true, sortOrder: true, testWeight: true, weightUnit: true, tolerance: true },
   });
   return sortEquipment(rows.filter((r) => (SECTIONS as string[]).includes(r.section)).map((r) => ({ ...r, section: r.section as Section })));
 }

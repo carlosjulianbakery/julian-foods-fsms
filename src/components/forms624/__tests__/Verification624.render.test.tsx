@@ -47,7 +47,7 @@ describe("the form (real component)", () => {
 
   it("instructions: versioned, collapsible, verbatim, with the five-point diagram", () => {
     expect(html).toContain("<details");
-    expect(html).toContain("(v1.0)");
+    expect(html).toContain("(v1.1)");
     expect(html).toContain(INSTRUCTIONS.scale.replace(/&/g, "&amp;"));
     expect(html).toContain("until reaching 32°F (0°C)");
     expect(html).toContain("Use a portable thermometer that has been recently verified for accuracy");
@@ -131,7 +131,7 @@ describe("the form (real component)", () => {
 
 describe("equipment editor (real component)", () => {
   const html = renderToStaticMarkup(
-    <EquipmentEditor624 equipment={LIST} onAdd={() => {}} onRename={() => {}} onLocation={() => {}} onInUse={() => {}} onRetire={() => {}} onMove={() => {}} />,
+    <EquipmentEditor624 equipment={LIST} onAdd={() => {}} onRename={() => {}} onLocation={() => {}} onInUse={() => {}} onRetire={() => {}} onMove={() => {}} onLimits={() => {}} />,
   );
   it("every item can be renamed, switched in or out of use, moved and retired — never deleted", () => {
     expect(count(html, 'aria-label="Name of ')).toBe(5);
@@ -187,9 +187,9 @@ describe("records list and PDF", () => {
     for (const text of [
       "Scales &amp; Thermometer Verification — 624", "Period: November 2026 · 16–30", "Initials: HGA", "11/20/2026 10:05",
       "Portable Thermometers / Termómetros Portátiles", "Non-Movable Thermometers / Termómetros Fijos", "Scales / Básculas",
-      "Agua c/ Hielo 32 °F ± 1 °F", "Condiciones de la Inspección", "Acciones Correctivas",
+      "Agua c/ Hielo (°F)", "Condiciones de la Inspección", "Acciones Correctivas",
       "32.0", "36.0", "32.2", "38.0", "39.5", "1.25", "Recalibrated the dial", "Dial was loose", "Levelled the scale",
-      "Dial Probe Thermometer", "Not in use", "Instructions v1.0", "Equipment list v3", "By: Hugo Ayala (HGA)", "2 OK · 2 Not OK · 1 not in use",
+      "Dial Probe Thermometer", "Not in use", "Instructions v1.1", "Equipment list v3", "By: Hugo Ayala (HGA)", "2 OK · 2 Not OK · 1 not in use",
     ]) expect(html, text).toContain(text);
     expect(html).not.toContain("DRAFT");
     expect(html).not.toContain("Verificación Por");
@@ -207,7 +207,7 @@ describe("records list and PDF", () => {
 describe("no escape sequences in titles or labels", () => {
   it("the new files contain real characters, never \\u escapes", () => {
     const files = [
-      "../Verification624Form.tsx", "../EquipmentEditor624.tsx", "../VerificationRecordsTable624.tsx", "../../../lib/verification-624.ts",
+      "../Verification624Form.tsx", "../EquipmentEditor624.tsx", "./fixtures/verification-old-record.ts", "../VerificationRecordsTable624.tsx", "../../../lib/verification-624.ts",
       "../../../app/(dashboard)/dashboard/supervisor/verification-624/page.tsx", "../../../app/(dashboard)/dashboard/supervisor/verification-624/records/page.tsx",
     ];
     for (const f of files) expect(readFileSync(resolve(__dirname, f), "utf8"), f).not.toMatch(/\\u[0-9a-fA-F]{4}/);

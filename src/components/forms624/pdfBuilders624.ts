@@ -1,5 +1,5 @@
 import {
-  INSTRUCTIONS, INSTRUCTIONS_VER_VERIFICATION, LABELS, SCALE_POINTS, SECTION_TITLES, periodLabel, splitStored,
+  LABELS, SCALE_POINTS, SECTION_TITLES, hasSpec, instructionsFor, instructionsVerOf, marginText, periodLabel, scaleSpecOf, splitStored, unitDecimals,
   type ItemSnapshot, type Section,
 } from "@/lib/verification-624";
 import type { DailyClean624Record, CleaningRowSnapshot, MonthlyClean624Record, MonthlyClean624LineSnapshot } from "./types";
@@ -249,22 +249,31 @@ const resultCell = (r: string | null) =>
 export function buildVerificationPdfHtml624(r: VerificationPdfRecord): string {
   const { header, snapshots } = splitStored(r.items);
   const isDraft = r.status !== "submitted";
+  // The record's own instructions version and its own limits. A record stored before each item had its
+  // own limits ("legacy") is printed exactly as it always was.
+  const instructionsVer = instructionsVerOf({ header, snapshots });
+  const INSTRUCTIONS = instructionsFor(instructionsVer);
+  const legacy = snapshots.length > 0 && !snapshots.some((i) => hasSpec(i));
+  const marginCell = (i: ItemSnapshot) => (legacy ? "" : `<td>${esc(marginText(i)) || "—"}</td>`);
+  const marginHead = legacy ? "" : "<th>Target and margin</th>";
+  const extra = legacy ? 0 : 1;
   const bySection = (section: Section) => snapshots.filter((i) => i.section === section).sort((a, b) => a.position - b.position);
   const tail = (i: ItemSnapshot) => `<td>${esc(i.notes) || "—"}</td><td>${esc(i.correctiveAction) || "—"}</td>`;
   const notInUse = (i: ItemSnapshot, span: number) =>
     `<tr><td>#${i.position} ${esc(i.name)}</td><td colspan="${span}" style="color:#6b7280;font-style:italic">Not in use</td></tr>`;
 
   const portable = bySection("portable_thermometer").map((i) =>
-    !i.inUse ? notInUse(i, 5)
-    : `<tr><td>#${i.position} ${esc(i.name)}</td><td class="n">${num(i.reading, 1)}</td><td class="n">${num(i.recheck, 1)}</td><td>${resultCell(i.result)}</td>${tail(i)}</tr>`).join("");
+    !i.inUse ? notInUse(i, 5 + extra)
+    : `<tr><td>#${i.position} ${esc(i.name)}</td>${marginCell(i)}<td class="n">${num(i.reading, 1)}</td><td class="n">${num(i.recheck, 1)}</td><td>${resultCell(i.result)}</td>${tail(i)}</tr>`).join("");
   const fixed = bySection("fixed_thermometer").map((i) =>
-    !i.inUse ? notInUse(i, 6)
-    : `<tr><td>#${i.position} ${esc(i.name)}</td><td>${esc(i.referenceName) || "—"}</td><td class="n">${num(i.target, 1)}</td><td class="n">${num(i.fixedReading, 1)}</td><td>${resultCell(i.result)}</td>${tail(i)}</tr>`).join("");
+    !i.inUse ? notInUse(i, 6 + extra)
+    : `<tr><td>#${i.position} ${esc(i.name)}</td>${marginCell(i)}<td>${esc(i.referenceName) || "—"}</td><td class="n">${num(i.target, 1)}</td><td class="n">${num(i.fixedReading, 1)}</td><td>${resultCell(i.result)}</td>${tail(i)}</tr>`).join("");
   const scales = bySection("scale").map((i) =>
-    !i.inUse ? notInUse(i, 8)
-    : `<tr><td>#${i.position} ${esc(i.name)}${i.location ? `<br/><span style="color:#6b7280;font-size:10px">${esc(i.location)}</span>` : ""}</td>${SCALE_POINTS.map((_, k) => {
+    !i.inUse ? notInUse(i, 8 + extra)
+    : `<tr><td>#${i.position} ${esc(i.name)}${i.location ? `<br/><span style="color:#6b7280;font-size:10px">${esc(i.location)}</span>` : ""}</td>${marginCell(i)}${SCALE_POINTS.map((_, k) => {
         const bad = i.pointResults?.[k] === "NOT_OK";
-        return `<td class="n" style="${bad ? "color:#dc2626;font-weight:600" : ""}">${num(i.points?.[k], 2)}</td>`;
+        const unit = scaleSpecOf(i).unit;
+        return `<td class="n" style="${bad ? "color:#dc2626;font-weight:600" : ""}">${num(i.points?.[k], unitDecimals(unit))}${legacy || typeof i.points?.[k] !== "number" ? "" : ` ${unit}`}</td>`;
       }).join("")}<td>${resultCell(i.result)}</td>${tail(i)}</tr>`).join("");
 
   const submittedPT = r.submittedAt ? new Date(r.submittedAt).toLocaleString("en-US", { timeZone: "America/Los_Angeles" }) : "—";
@@ -291,18 +300,18 @@ export function buildVerificationPdfHtml624(r: VerificationPdfRecord): string {
   <p class="instr"><b>Procedure for Non-Movable Thermometer:</b> ${esc(INSTRUCTIONS.fixed_thermometer)}</p>
 
   <h2>${SECTION_TITLES.portable_thermometer.en} / ${SECTION_TITLES.portable_thermometer.es}</h2>
-  <table><thead><tr><th>Thermometer</th><th>${LABELS.iceWater.es}</th><th>Re-check</th><th>Result</th><th>${LABELS.conditions.es}</th><th>${LABELS.corrective.es}</th></tr></thead><tbody>${portable}</tbody></table>
+  <table><thead><tr><th>Thermometer</th>${marginHead}<th>${legacy ? LABELS.iceWater.es : "Agua c/ Hielo (°F)"}</th><th>Re-check</th><th>Result</th><th>${LABELS.conditions.es}</th><th>${LABELS.corrective.es}</th></tr></thead><tbody>${portable}</tbody></table>
 
   <h2>${SECTION_TITLES.fixed_thermometer.en} / ${SECTION_TITLES.fixed_thermometer.es}</h2>
-  <table><thead><tr><th>Thermometer</th><th>Reference used</th><th>Target °F</th><th>Reading °F</th><th>Result (± 5 °F)</th><th>${LABELS.conditions.es}</th><th>${LABELS.corrective.es}</th></tr></thead><tbody>${fixed}</tbody></table>
+  <table><thead><tr><th>Thermometer</th>${marginHead}<th>Reference used</th><th>Target °F</th><th>Reading °F</th><th>${legacy ? "Result (± 5 °F)" : "Result"}</th><th>${LABELS.conditions.es}</th><th>${LABELS.corrective.es}</th></tr></thead><tbody>${fixed}</tbody></table>
 
-  <h2>${SECTION_TITLES.scale.en} / ${SECTION_TITLES.scale.es} — 500 g, 1.10 lb ± 0.1 lb</h2>
-  <table><thead><tr><th>Scale</th>${SCALE_POINTS.map((n, k) => `<th>${k + 1}. ${n}</th>`).join("")}<th>Result</th><th>${LABELS.conditions.es}</th><th>${LABELS.corrective.es}</th></tr></thead><tbody>${scales}</tbody></table>
+  <h2>${SECTION_TITLES.scale.en} / ${SECTION_TITLES.scale.es}${legacy ? " — 500 g, 1.10 lb ± 0.1 lb" : ""}</h2>
+  <table><thead><tr><th>Scale</th>${marginHead}${SCALE_POINTS.map((n, k) => `<th>${k + 1}. ${n}</th>`).join("")}<th>Result</th><th>${LABELS.conditions.es}</th><th>${LABELS.corrective.es}</th></tr></thead><tbody>${scales}</tbody></table>
 
   <p class="footer">
     ${isDraft ? "DRAFT — not yet submitted" : `Submitted: ${submittedPT} PT &nbsp;|&nbsp; By: ${esc(r.conductedBy) || "—"}${r.initials ? ` (${esc(r.initials)})` : ""}`}
     ${r.notes ? ` &nbsp;|&nbsp; Notes: ${esc(r.notes)}` : ""}
-    &nbsp;|&nbsp; Instructions ${INSTRUCTIONS_VER_VERIFICATION} &nbsp;|&nbsp; Equipment list v${r.listVersion} &nbsp;|&nbsp; Julian Foods — 624 Facility
+    &nbsp;|&nbsp; Instructions ${instructionsVer} &nbsp;|&nbsp; Equipment list v${r.listVersion} &nbsp;|&nbsp; Julian Foods — 624 Facility
   </p>
   </body></html>`;
 }

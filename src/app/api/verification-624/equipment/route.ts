@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { SECTIONS, VERIFICATION_FACILITY, type Section } from "@/lib/verification-624";
+import { SECTIONS, VERIFICATION_FACILITY, defaultSpec, type Section } from "@/lib/verification-624";
 import { bumpListVersion, canUseVerification, loadLiveEquipment, loadListVersion } from "@/lib/verification-624-server";
 
 export const dynamic = "force-dynamic";
@@ -34,6 +34,8 @@ export async function POST(req: NextRequest) {
         facility: VERIFICATION_FACILITY, section, name,
         location: section === "scale" ? body?.location?.trim() ?? "" : "",
         sortOrder: (last._max.sortOrder ?? 0) + 10,
+        // New items start with the standard limits; they are changed in "Edit equipment"
+        ...defaultSpec(section),
         createdById: session.user.id, updatedById: session.user.id,
       },
     });

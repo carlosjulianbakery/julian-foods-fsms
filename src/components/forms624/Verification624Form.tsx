@@ -3,8 +3,9 @@
 import type { ReactNode } from "react";
 import { FormHeader624 } from "@/components/forms624/FormHeader624";
 import {
-  INSTRUCTIONS, INSTRUCTIONS_VER_VERIFICATION, LABELS, SCALE_POINTS, SECTIONS, SECTION_TITLES,
-  fixedResult, iceWaterResult, itemResult, positionOf, referenceOptions, scaleResult, sortEquipment, toTenths,
+  INSTRUCTIONS_VER_VERIFICATION, LABELS, SCALE_POINTS, SECTIONS, SECTION_TITLES,
+  fixedResult, formatReading, formatWeight, hasSpec, iceWaterResult, instructionsFor, itemResult, marginText, positionOf, referenceOptions,
+  scalePointPatch, scaleResult, scaleSpecOf, sortEquipment, thermometerToleranceOf, toTenths, unitDecimals,
   type Equipment, type ItemValues, type Progress, type Result, type Section,
 } from "@/lib/verification-624";
 
@@ -69,6 +70,8 @@ export interface Verification624FormProps {
   readOnly?: boolean;
   saveText?: string;
   submitting?: boolean;
+  /** The instructions the record was filled with; the current ones when omitted. */
+  instructionsVer?: string;
   onDateChange?: (v: string) => void;
   onTimeChange?: (v: string) => void;
   onInitialsChange?: (v: string) => void;
@@ -87,6 +90,8 @@ export function Verification624Form(p: Verification624FormProps) {
   const references = referenceOptions(equipment, p.values);
   const pct = p.progress.total > 0 ? Math.round((p.progress.verified / p.progress.total) * 100) : 0;
   const problems = p.problems ?? [];
+  const instructionsVer = p.instructionsVer ?? INSTRUCTIONS_VER_VERIFICATION;
+  const instructions = instructionsFor(instructionsVer);
 
   return (
     <div className="space-y-5">
@@ -97,15 +102,15 @@ export function Verification624Form(p: Verification624FormProps) {
 
       <details className="card p-4" open={!p.readOnly}>
         <summary className="cursor-pointer text-sm font-semibold text-gray-800">
-          Instructions <span className="text-xs font-normal text-gray-400">({INSTRUCTIONS_VER_VERIFICATION})</span>
+          Instructions <span className="text-xs font-normal text-gray-400">({instructionsVer})</span>
         </summary>
         <div className="mt-3 space-y-3 text-sm text-gray-700">
           <div className="flex gap-3 items-start">
             <ScaleDiagram624 className="w-28 shrink-0" />
-            <p><span className="font-semibold">Procedure for Scales:</span> {INSTRUCTIONS.scale}</p>
+            <p><span className="font-semibold">Procedure for Scales:</span> {instructions.scale}</p>
           </div>
-          <p><span className="font-semibold">Procedure for Portable Thermometer:</span> {INSTRUCTIONS.portable_thermometer}</p>
-          <p><span className="font-semibold">Procedure for Non-Movable Thermometer:</span> {INSTRUCTIONS.fixed_thermometer}</p>
+          <p><span className="font-semibold">Procedure for Portable Thermometer:</span> {instructions.portable_thermometer}</p>
+          <p><span className="font-semibold">Procedure for Non-Movable Thermometer:</span> {instructions.fixed_thermometer}</p>
         </div>
       </details>
 
@@ -190,8 +195,16 @@ function ItemCard({
     );
   }
 
-  const result = itemResult(section, v);
-  const scale = scaleResult(v?.points);
+  // Each item is checked against its own limits; one stored before they existed keeps the original ones
+  const result = itemResult(item, v);
+  const spec = scaleSpecOf(item);
+  const tolerance = thermometerToleranceOf(section, item);
+  const own = hasSpec(item);
+  const margin = marginText(item);
+  const scale = scaleResult(v?.points, spec);
+  const pointsLine = scale.perPoint.map((r, i) => `${i + 1}: ${r === "OK" ? "OK" : r === "NOT_OK" ? "Not OK" : "—"}`).join(" · ");
+  const iceLabelEs = own ? `Agua c/ Hielo 32 °F ± ${tolerance.toFixed(1)} °F` : LABELS.iceWater.es;
+  const setAside = section === "scale" && result === null && (v?.previousPoints ?? []).some((x) => x != null);
   const diffTenths = v?.target != null && v?.fixedReading != null ? Math.abs(toTenths(v.target) - toTenths(v.fixedReading)) : null;
   const referenceName = v?.referenceId ? equipment.find((x) => x.id === v.referenceId)?.name ?? (v as { referenceName?: string }).referenceName ?? "—" : "—";
 
@@ -201,12 +214,13 @@ function ItemCard({
         {title}
         <ResultBadge624 result={result} />
       </div>
+      {margin && <p className="text-xs font-medium text-indigo-700" data-margin>{margin}</p>}
 
       {section === "portable_thermometer" && (
         <div className="grid grid-cols-2 gap-3">
-          <NumberCheckInput624 label={`${LABELS.iceWater.en} / ${LABELS.iceWater.es}`} value={v?.reading} decimals={1} result={iceWaterResult(v?.reading)} readOnly={readOnly} onChange={(n) => onChange({ reading: n })} />
+          <NumberCheckInput624 label={`${LABELS.iceWater.en} / ${iceLabelEs}`} value={v?.reading} decimals={1} result={iceWaterResult(v?.reading, tolerance)} readOnly={readOnly} onChange={(n) => onChange({ reading: n })} />
           {(result === "NOT_OK" || v?.recheck != null) && (
-            <NumberCheckInput624 label="Re-check reading (°F), after the corrective action" value={v?.recheck} decimals={1} result={iceWaterResult(v?.recheck)} readOnly={readOnly} onChange={(n) => onChange({ recheck: n })} />
+            <NumberCheckInput624 label="Re-check reading (°F), after the corrective action" value={v?.recheck} decimals={1} result={iceWaterResult(v?.recheck, tolerance)} readOnly={readOnly} onChange={(n) => onChange({ recheck: n })} />
           )}
         </div>
       )}
@@ -226,26 +240,41 @@ function ItemCard({
           </label>
           <div className="grid grid-cols-2 gap-3">
             <NumberCheckInput624 label="Target value (reference reading at that spot, °F)" value={v?.target} decimals={1} result={null} readOnly={readOnly} onChange={(n) => onChange({ target: n })} />
-            <NumberCheckInput624 label="Non-movable thermometer reading (°F)" value={v?.fixedReading} decimals={1} result={fixedResult(v?.target, v?.fixedReading)} readOnly={readOnly} onChange={(n) => onChange({ fixedReading: n })} />
+            <NumberCheckInput624 label="Non-movable thermometer reading (°F)" value={v?.fixedReading} decimals={1} result={fixedResult(v?.target, v?.fixedReading, tolerance)} readOnly={readOnly} onChange={(n) => onChange({ fixedReading: n })} />
           </div>
-          {diffTenths != null && <p className="text-xs text-gray-500">Difference: {(diffTenths / 10).toFixed(1)} °F (allowed ± 5.0 °F)</p>}
+          {diffTenths != null && <p className="text-xs text-gray-500">Difference: {(diffTenths / 10).toFixed(1)} °F (allowed ± {tolerance.toFixed(1)} °F)</p>}
         </div>
       )}
 
       {section === "scale" && (
         <div className="space-y-2">
+          {setAside && (
+            <div className="text-xs text-amber-900 bg-amber-50 border border-amber-300 rounded-lg px-3 py-2" data-reenter>
+              <p className="font-semibold">Weigh this scale again and enter the five readings in {spec.unit}.</p>
+              <p>
+                This scale is now checked with a {formatWeight(spec.testWeight, spec.unit)} {spec.unit} test weight. The readings entered before
+                ({(v?.previousPoints ?? []).map((x) => (x == null ? "—" : formatReading(x, v?.previousUnit === "g" ? "g" : v?.previousUnit === "oz" ? "oz" : "lb"))).join(", ")} {v?.previousUnit ?? "lb"})
+                were in another unit or for another test weight. They were not converted and do not count.
+              </p>
+            </div>
+          )}
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
             {SCALE_POINTS.map((name, i) => (
               <NumberCheckInput624
-                key={name} label={`${i + 1}. ${name} (lb)`} value={v?.points?.[i]} decimals={2} result={scale.perPoint[i]} readOnly={readOnly}
-                onChange={(n) => onChange({ points: SCALE_POINTS.map((_, j) => (j === i ? n : v?.points?.[j] ?? null)) })}
+                key={name} label={`${i + 1}. ${name} (${spec.unit})`} value={v?.points?.[i]} decimals={unitDecimals(spec.unit)} result={scale.perPoint[i]} readOnly={readOnly}
+                onChange={(n) => onChange(scalePointPatch(item, v, i, n))}
               />
             ))}
           </div>
-          <p className="text-xs text-gray-500">
-            500 g weight · each point must read 1.00 to 1.20 lb ·{" "}
-            {scale.perPoint.map((r, i) => `${i + 1}: ${r === "OK" ? "OK" : r === "NOT_OK" ? "Not OK" : "—"}`).join(" · ")}
-          </p>
+          {own ? (
+            <p className="text-xs text-gray-500">{pointsLine}</p>
+          ) : (
+            // A record from before each scale had its own test weight: shown as it was then
+            <p className="text-xs text-gray-500">
+              500 g weight · each point must read 1.00 to 1.20 lb ·{" "}
+              {pointsLine}
+            </p>
+          )}
         </div>
       )}
 

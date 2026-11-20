@@ -12,8 +12,8 @@ import { buildVerificationPdfHtml624 } from "@/components/forms624/pdfBuilders62
 import { navigateAfterSubmit } from "@/lib/afterSubmit";
 import { useMarkInProgress } from "@/hooks/useMarkInProgress";
 import {
-  VERIFICATION_FACILITY, VERIFICATION_FORM_KEY, buildSnapshot, itemResult, periodLabel, progressOf, splitStored, submitProblems,
-  valuesForLiveList, type Equipment, type ItemValues, type Section,
+  VERIFICATION_FACILITY, VERIFICATION_FORM_KEY, buildSnapshot, clearScaleReadings, itemResult, periodLabel, progressOf, specChangeClearsReadings, splitStored, submitProblems,
+  valuesForLiveList, type Equipment, type ItemValues, type Section, type SpecInput,
 } from "@/lib/verification-624";
 
 interface RecordRow {
@@ -116,29 +116,38 @@ export default function Verification624Page() {
   function onItemChange(equipmentId: string, patch: Partial<ItemValues>) {
     markInProgress();
     setValues((prev) => {
-      const section = equipment.find((e) => e.id === equipmentId)?.section;
+      const item = equipment.find((e) => e.id === equipmentId);
       const next: ItemValues = { ...(prev[equipmentId] ?? { equipmentId }), ...patch };
       // Stamp the moment the item first gets a result (the server does the same on save)
-      if (section && itemResult(section, next) !== null && !next.checkedAt) next.checkedAt = new Date().toISOString();
+      if (item && itemResult(item, next) !== null && !next.checkedAt) next.checkedAt = new Date().toISOString();
       return valuesForLiveList(equipment, { ...prev, [equipmentId]: next });
     });
     queueSave();
   }
 
   // ── Equipment list edits: saved at once, the open draft follows the live list ──
-  async function editList(url: string, method: "POST" | "PATCH", body: Record<string, unknown>) {
+  async function editList(url: string, method: "POST" | "PATCH", body: Record<string, unknown>, clearReadingsOf?: string) {
     setEditBusy(true); setEditError("");
     try {
       const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const data = (await res.json().catch(() => ({}))) as { equipment?: Equipment[]; error?: string };
       if (!res.ok || !data.equipment) { setEditError(data.error ?? "Could not save the change."); return; }
       setEquipment(data.equipment);
-      setValues((prev) => valuesForLiveList(data.equipment!, prev));
+      // clearReadingsOf: the one scale whose unit or test weight was changed after the supervisor confirmed
+      setValues((prev) => valuesForLiveList(data.equipment!, clearReadingsOf ? clearScaleReadings(prev, clearReadingsOf) : prev));
       queueSave();
     } catch { setEditError("Could not save the change."); }
     finally { setEditBusy(false); }
   }
   const patchItem = (id: string, body: Record<string, unknown>) => editList(`/api/verification-624/equipment/${id}`, "PATCH", body);
+  /** A new unit or test weight makes the readings already entered for THAT scale meaningless: ask first. A tolerance-only change keeps them. */
+  function changeLimits(id: string, limits: SpecInput) {
+    const item = equipment.find((e) => e.id === id);
+    if (!item) return;
+    const clears = specChangeClearsReadings(item, limits, values[id]);
+    if (clears && !window.confirm(`Change the unit or test weight of "${item.name}"? The readings already entered for this scale in this form will be cleared, and it will need to be weighed again. No other item is affected.`)) return;
+    void editList(`/api/verification-624/equipment/${id}`, "PATCH", { ...limits }, clears ? id : undefined);
+  }
   function retire(id: string) {
     const item = equipment.find((e) => e.id === id);
     const v = values[id];
@@ -228,6 +237,7 @@ export default function Verification624Page() {
             onInUse={(id, inUse) => void patchItem(id, { inUse })}
             onRetire={retire}
             onMove={(id, move) => void patchItem(id, { move })}
+            onLimits={changeLimits}
           />
         )}
       </Verification624Form>

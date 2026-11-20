@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 
 // ── In-memory database ────────────────────────────────────────────────────────
 const mem = vi.hoisted(() => {
-  type Eq = { id: string; facility: string; section: string; name: string; location: string; inUse: boolean; sortOrder: number; retiredAt: Date | null };
+  type Eq = { id: string; facility: string; section: string; name: string; location: string; inUse: boolean; sortOrder: number; retiredAt: Date | null; testWeight?: number | null; weightUnit?: string | null; tolerance?: number | null };
   type Rec = Record<string, unknown> & { id: string; period: string; status: string; items: unknown[]; updatedAt: Date; initials: string; linkedInstanceId: string | null; periodEnd: Date };
   const state = { equipment: [] as Eq[], records: [] as Rec[], version: 1, seq: 0 };
   return { state };
@@ -275,7 +275,7 @@ describe("submit", () => {
     ]);
     expect(snapshots[3]).toMatchObject({ referenceId: "p1", referenceName: "Dial Probe Thermometer", target: 38, fixedReading: 39.5 });
     expect(snapshots[1].checkedAt).toBe("2026-11-20T18:00:01.000Z");
-    expect(header).toEqual({ kind: "header", date: "2026-11-20", time: "10:05" });
+    expect(header).toEqual({ kind: "header", date: "2026-11-20", time: "10:05", instructionsVer: "v1.1" });
     expect(complete.mock.calls[0][0]).toMatchObject({ formKey: "verification_624", facilityName: "624", submissionId: id, submissionDate: "2026-11-30", taskId: "task-nov-b", userId: "hugo" });
   });
 
@@ -329,5 +329,170 @@ describe("records list and delete", () => {
   it("the list returns the records", async () => {
     await openDraft();
     expect(await (await LIST()).json()).toHaveLength(1);
+  });
+});
+
+// ── Per-item limits: test weight, unit and tolerance ────────────────────────────
+describe("per-item limits", () => {
+  const G500 = { testWeight: 500, weightUnit: "g", tolerance: 45 };
+  const find = (id: string) => mem.state.equipment.find((e) => e.id === id)!;
+  const edit = (id: string, body: Record<string, unknown>) => EDIT(req("PATCH", body), { params: { id } });
+  const grams = (n: number, weight: number) => ({ points: [n, n, n, n, n], pointsUnit: "g", pointsWeight: weight });
+  /** The list as it is in production: every item has its own limits. */
+  function withLimits() {
+    Object.assign(find("p1"), { tolerance: 1 }); Object.assign(find("p2"), { tolerance: 1 }); Object.assign(find("p3"), { tolerance: 1 });
+    Object.assign(find("f1"), { tolerance: 5 }); Object.assign(find("s1"), G500);
+    mem.state.equipment.push({ id: "k1", facility: "624", section: "scale", name: "Kitchen Scale 1", location: "624 Garrison", inUse: true, sortOrder: 20, retiredAt: null, testWeight: 50, weightUnit: "g", tolerance: 1 });
+  }
+  const FILLED: ItemValues[] = [
+    { equipmentId: "p1", reading: 32 }, { equipmentId: "p2", reading: 32.5 },
+    { equipmentId: "f1", referenceId: "p1", target: 38, fixedReading: 39.5 },
+    { equipmentId: "s1", ...grams(520, 500) }, { equipmentId: "k1", ...grams(50, 50) },
+  ];
+
+  it("a new item starts with the standard limits: scale 500 g ± 45, portable ± 1.0 °F, non-movable ± 5.0 °F", async () => {
+    const list = (await (await ADD(req("POST", { section: "scale", name: "Floor Scale", location: "Dock" }))).json()).equipment;
+    expect(list.at(-1)).toMatchObject({ name: "Floor Scale", testWeight: 500, weightUnit: "g", tolerance: 45 });
+    await ADD(req("POST", { section: "portable_thermometer", name: "Infrared" }));
+    await ADD(req("POST", { section: "fixed_thermometer", name: "Walk-in" }));
+    expect(mem.state.equipment.find((e) => e.name === "Infrared")).toMatchObject({ tolerance: 1, testWeight: null, weightUnit: null });
+    expect(mem.state.equipment.find((e) => e.name === "Walk-in")).toMatchObject({ tolerance: 5, testWeight: null, weightUnit: null });
+  });
+
+  it.each(["ADMIN", "SUPERVISOR"])("%s may change a scale's test weight, unit and tolerance and a thermometer's tolerance; each change bumps the list version", async (role) => {
+    withLimits(); as(role);
+    const res = await edit("k1", { testWeight: 100, weightUnit: "g", tolerance: 2 });
+    const body = await res.json();
+    expect(res.status).toBe(200);
+    expect(body.listVersion).toBe(2);
+    expect(body.equipment.find((e: { id: string }) => e.id === "k1")).toMatchObject({ testWeight: 100, weightUnit: "g", tolerance: 2 });
+
+    expect((await edit("s1", { testWeight: 1.1, weightUnit: "lb", tolerance: 0.1 })).status).toBe(200);
+    expect(find("s1")).toMatchObject({ testWeight: 1.1, weightUnit: "lb", tolerance: 0.1 });
+    expect((await edit("s1", { tolerance: 0.05 })).status).toBe(200); // tolerance alone: weight and unit stay
+    expect(find("s1")).toMatchObject({ testWeight: 1.1, weightUnit: "lb", tolerance: 0.05 });
+
+    expect((await edit("p1", { tolerance: 0.5 })).status).toBe(200);
+    expect((await edit("f1", { tolerance: 3 })).status).toBe(200);
+    expect(find("p1").tolerance).toBe(0.5);
+    expect(find("f1").tolerance).toBe(3);
+    expect(mem.state.version).toBe(6);
+  });
+
+  it("anyone else is refused and no limit changes", async () => {
+    withLimits();
+    as(null);
+    expect((await edit("k1", { testWeight: 100, weightUnit: "g", tolerance: 2 })).status).toBe(401);
+    as("VIEWER");
+    expect((await edit("k1", { testWeight: 100, weightUnit: "g", tolerance: 2 })).status).toBe(403);
+    expect((await edit("p1", { tolerance: 9 })).status).toBe(403);
+    expect(find("k1")).toMatchObject({ testWeight: 50, tolerance: 1 });
+    expect(find("p1").tolerance).toBe(1);
+    expect(mem.state.version).toBe(1);
+  });
+
+  it("limits that make no sense are refused with a clear message and nothing is saved", async () => {
+    withLimits();
+    const refuse = async (id: string, body: Record<string, unknown>) => { const r = await edit(id, body); return [r.status, (await r.json()).error]; };
+    expect(await refuse("k1", { testWeight: 0 })).toEqual([400, "The test weight must be a number greater than 0."]);
+    expect(await refuse("k1", { testWeight: -50 })).toEqual([400, "The test weight must be a number greater than 0."]);
+    expect(await refuse("k1", { testWeight: "abc" })).toEqual([400, "The test weight must be a number greater than 0."]);
+    expect(await refuse("k1", { tolerance: 0 })).toEqual([400, "The tolerance must be a number greater than 0."]);
+    expect(await refuse("k1", { tolerance: 50 })).toEqual([400, "The tolerance must be smaller than the test weight."]);
+    expect(await refuse("k1", { testWeight: 0.5 })).toEqual([400, "The tolerance must be smaller than the test weight."]); // against the tolerance it already has
+    expect(await refuse("k1", { weightUnit: "kg" })).toEqual([400, "Choose a unit: g, lb or oz."]);
+    expect(await refuse("k1", { testWeight: 50.25 })).toEqual([400, "Test weight: Use at most 1 decimal for grams."]);
+    expect(await refuse("p1", { tolerance: 10.5 })).toEqual([400, "The tolerance cannot be more than 10 °F."]);
+    expect(await refuse("f1", { tolerance: 11 })).toEqual([400, "The tolerance cannot be more than 10 °F."]);
+    expect(await refuse("f1", { tolerance: -1 })).toEqual([400, "The tolerance must be a number greater than 0."]);
+    expect(await refuse("p1", { tolerance: null })).toEqual([400, "The tolerance must be a number greater than 0."]);
+    expect(find("k1")).toMatchObject({ testWeight: 50, weightUnit: "g", tolerance: 1 });
+    expect(mem.state.version).toBe(1);
+  });
+
+  it("a thermometer never gets a test weight or a unit; the ice water target is not editable", async () => {
+    withLimits();
+    expect((await edit("p1", { testWeight: 40, weightUnit: "g", target: 40, tolerance: 2 })).status).toBe(200);
+    expect(find("p1")).toMatchObject({ tolerance: 2, testWeight: null, weightUnit: null });
+    expect(find("p1")).not.toHaveProperty("target");
+    expect((await edit("p1", { testWeight: 40 })).status).toBe(200); // ignored, nothing to validate
+    expect(find("p1").tolerance).toBe(2);
+  });
+
+  it("changing ONLY a tolerance keeps the readings of the open draft and re-evaluates the result", async () => {
+    withLimits();
+    const draft = await openDraft();
+    tick();
+    const first = await (await save(draft.id, { values: FILLED, initials: "HA", date: "2026-11-20", time: "10:05", expectedUpdatedAt: draft.updatedAt })).json();
+    expect(first.progress).toMatchObject({ ok: 5, notOk: 0 }); // 520 g is inside 500 ± 45
+
+    await edit("s1", { tolerance: 10 });
+    tick();
+    const second = await (await save(draft.id, { values: FILLED, expectedUpdatedAt: first.updatedAt })).json();
+    const s1 = second.values.find((v: ItemValues) => v.equipmentId === "s1");
+    expect(s1.points).toEqual([520, 520, 520, 520, 520]); // kept
+    expect(s1.previousPoints).toBeUndefined();
+    expect(second.progress).toMatchObject({ ok: 4, notOk: 1 }); // 520 g is outside 500 ± 10
+
+    await edit("p2", { tolerance: 0.4 });
+    tick();
+    const third = await (await save(draft.id, { values: FILLED, expectedUpdatedAt: second.updatedAt })).json();
+    expect(third.values.find((v: ItemValues) => v.equipmentId === "p2").reading).toBe(32.5);
+    expect(third.progress).toMatchObject({ ok: 3, notOk: 2 });
+  });
+
+  it("changing a scale's unit: its readings in the draft are set aside unconverted, only for that scale, and submit waits for new ones", async () => {
+    withLimits();
+    const draft = await openDraft();
+    tick();
+    const first = await (await save(draft.id, { values: FILLED, initials: "HA", date: "2026-11-20", time: "10:05", expectedUpdatedAt: draft.updatedAt })).json();
+
+    await edit("s1", { testWeight: 1.1, weightUnit: "lb", tolerance: 0.1 });
+    tick();
+    const second = await (await save(draft.id, { values: FILLED, expectedUpdatedAt: first.updatedAt })).json();
+    const s1 = second.values.find((v: ItemValues) => v.equipmentId === "s1");
+    expect(s1.points).toBeUndefined();
+    expect(s1).toMatchObject({ previousPoints: [520, 520, 520, 520, 520], previousUnit: "g", previousWeight: 500, checkedAt: null });
+    expect(second.values.find((v: ItemValues) => v.equipmentId === "k1").points).toEqual([50, 50, 50, 50, 50]); // the other scale is untouched
+    expect(second.progress).toMatchObject({ verified: 4, ok: 4 });
+
+    tick();
+    const blocked = await SUBMIT(req("POST", {}), { params: { id: draft.id } });
+    expect(blocked.status).toBe(422);
+    expect((await blocked.json()).problems).toEqual(["Digital Scale needs its five weight readings entered again in lb (the earlier g readings were not converted)."]);
+  });
+
+  it("the draft that was open when the scales moved to grams: lb readings kept aside, then re-entered in grams and submitted with its limits", async () => {
+    const draft = await openDraft();
+    tick();
+    // saved while every scale was still read in lb (no limits on the list, no unit recorded with the readings)
+    const before = await (await save(draft.id, { values: COMPLETE, initials: "HA", date: "2026-11-20", time: "11:10", expectedUpdatedAt: draft.updatedAt })).json();
+    expect(before.progress).toMatchObject({ ok: 3, notOk: 1 });
+
+    withLimits();
+    find("k1").inUse = false;
+    const reopened = await (await READ(req("GET"), { params: { id: draft.id } })).json();
+    expect(reopened.equipment.find((e: { id: string }) => e.id === "s1")).toMatchObject(G500);
+    expect(splitStored(reopened.record.items).entries.find((v) => v.equipmentId === "s1")!.points).toEqual([1.1, 1.1, 1.1, 1.1, 1.1]); // the stored draft itself was not touched
+
+    tick();
+    const reentered = COMPLETE.map((v) => (v.equipmentId === "s1" ? { equipmentId: "s1", ...grams(500, 500) } : v));
+    const after = await (await save(draft.id, { values: reentered, expectedUpdatedAt: before.updatedAt })).json();
+    expect(after.progress).toMatchObject({ ok: 3, notOk: 1, notInUse: 2 });
+
+    tick();
+    expect((await SUBMIT(req("POST", {}), { params: { id: draft.id } })).status).toBe(200);
+    const { snapshots, header } = splitStored(mem.state.records[0].items);
+    expect(snapshots.find((s: ItemSnapshot) => s.equipmentId === "s1")).toMatchObject({ weightUnit: "g", testWeight: 500, tolerance: 45, points: [500, 500, 500, 500, 500], result: "OK" });
+    expect(snapshots.find((s: ItemSnapshot) => s.equipmentId === "p1")).toMatchObject({ tolerance: 1, reading: 32 });
+    expect(snapshots.find((s: ItemSnapshot) => s.equipmentId === "f1")).toMatchObject({ tolerance: 5 });
+    expect(snapshots.find((s: ItemSnapshot) => s.equipmentId === "k1")).toMatchObject({ inUse: false, weightUnit: "g", testWeight: 50, tolerance: 1 });
+    expect(header).toMatchObject({ instructionsVer: "v1.1" });
+
+    // a later change of limits does not alter the submitted record
+    const frozen = JSON.stringify(mem.state.records[0].items);
+    await edit("s1", { testWeight: 1.1, weightUnit: "lb", tolerance: 0.1 });
+    await edit("p1", { tolerance: 0.2 });
+    expect(JSON.stringify(mem.state.records[0].items)).toBe(frozen);
   });
 });
