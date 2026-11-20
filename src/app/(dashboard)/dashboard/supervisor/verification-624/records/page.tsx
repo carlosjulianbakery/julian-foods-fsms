@@ -81,7 +81,7 @@ export default function Verification624RecordsPage() {
             <p className="page-subtitle">Each record is the log entry for its period</p>
           </div>
         </div>
-        {/* Disabled, with the reason shown below, once the current period is submitted: the form route has nothing to open then */}
+        {/* No button once the current period is submitted (the notice below says why): the form route has nothing to open then */}
         {!loading && <OpenCurrentFormButton624 rows={rows} today={getPacificToday()} onOpen={() => router.push("/dashboard/supervisor/verification-624")} />}
       </div>
 

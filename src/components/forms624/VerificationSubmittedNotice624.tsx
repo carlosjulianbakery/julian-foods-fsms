@@ -32,16 +32,10 @@ interface CurrentProps {
 
 /**
  * The records page's way into the form. While the current period is open it is a plain button;
- * once that period is submitted it is disabled (the notice below the header says why).
+ * once that period is submitted there is no button at all (the notice below the header says why).
  */
 export function OpenCurrentFormButton624({ rows, today, onOpen }: CurrentProps & { onOpen: () => void }) {
-  if (submittedForDate(rows, today)) {
-    return (
-      <button type="button" disabled title="This period's verification was already submitted" className="btn-primary opacity-50 cursor-not-allowed">
-        Current form submitted
-      </button>
-    );
-  }
+  if (submittedForDate(rows, today)) return null;
   return <button type="button" onClick={onOpen} className="btn-primary">Open current form</button>;
 }
 

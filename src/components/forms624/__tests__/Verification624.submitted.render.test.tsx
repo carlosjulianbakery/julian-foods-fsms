@@ -1,4 +1,5 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+import type { ReactElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import {
   CurrentPeriodNotice624, OpenCurrentFormButton624, VerificationSubmittedNotice624, VerificationSubmittedView624,
@@ -78,10 +79,14 @@ describe("the message for a submitted period", () => {
 describe("records page (real components): the way into the form", () => {
   const SUBMITTED = [row("2026-11-B", "submitted"), row("2026-11-A", "submitted", { submittedAt: "2026-11-14T22:30:00Z" })];
 
-  it("current period already submitted: the button is disabled and the page says why, with a link to that record and the next opening date", () => {
+  it("current period already submitted: no button at all, and the page says why, with a link to that record and the next opening date", () => {
     const html = recordsPage(SUBMITTED, "2026-11-20");
-    expect(html).toMatch(/<button[^>]*disabled=""[^>]*>Current form submitted<\/button>/);
+    expect(OpenCurrentFormButton624({ rows: SUBMITTED, today: "2026-11-20", onOpen: () => {} })).toBeNull();
+    expect(renderToStaticMarkup(<OpenCurrentFormButton624 rows={SUBMITTED} today="2026-11-20" onOpen={() => {}} />)).toBe("");
     expect(html).not.toContain("Open current form");
+    expect(html).not.toContain("Current form submitted");
+    expect(html).not.toContain("disabled");
+    expect(html.split("<button").length - 1).toBe(1); // the only button left is the notice's "View that record" link
     expect(html).toContain('data-period-submitted="2026-11-B"');
     expect(html).toContain("The November 16–30, 2026 verification was submitted on 11/20/2026 by Hugo Ayala.");
     expect(html).toContain(">View that record</button>");
@@ -89,7 +94,9 @@ describe("records page (real components): the way into the form", () => {
   });
 
   it("it stays that way through the last day of the period, and opens again on the next period's first day", () => {
-    expect(recordsPage(SUBMITTED, "2026-11-30")).toContain("Current form submitted");
+    const lastDay = recordsPage(SUBMITTED, "2026-11-30");
+    expect(lastDay).not.toContain("Open current form");
+    expect(lastDay).toContain('data-period-submitted="2026-11-B"');
     const dec1 = recordsPage(SUBMITTED, "2026-12-01");
     expect(dec1).toContain(">Open current form</button>");
     expect(dec1).not.toContain("disabled");
@@ -103,6 +110,16 @@ describe("records page (real components): the way into the form", () => {
       expect(html).not.toContain("disabled");
       expect(html).not.toContain("was submitted");
     }
+  });
+
+  it("the button, when shown, opens the form", () => {
+    const onOpen = vi.fn();
+    const button = OpenCurrentFormButton624({ rows: [row("2026-11-B", "draft")], today: "2026-11-20", onOpen }) as ReactElement<{ onClick: () => void; disabled?: boolean; children: string }>;
+    expect(button.type).toBe("button");
+    expect(button.props.children).toBe("Open current form");
+    expect(button.props.disabled).toBeUndefined();
+    button.props.onClick();
+    expect(onOpen).toHaveBeenCalledTimes(1);
   });
 
   it("only the period today falls in counts", () => {
