@@ -188,14 +188,29 @@ describe("crowded weeks", () => {
     expect(tuesday).not.toContain("</span><div class=\"h-1");
   });
 
-  it("the existing limit of three lines per day with +n still applies, counting done lines like the others", () => {
-    const five = ["A", "B", "C", "D", "E"].map((n, k) =>
-      inst({ id: n, ruleTitle: `Window ${n}`, dueDate: "2026-11-30", windowStart: "2026-11-01", ...(k % 2 === 0 ? { status: "DONE", doneAt: "2026-11-10T20:00:00Z" } : {}) }));
-    const html = grid(calendar(five));
-    expect(count(html, line("Window A"))).toBe(4);
-    expect(count(html, line("Window C"))).toBe(4);
-    expect(html).not.toContain(line("Window D"));
-    expect(count(html, ">+2</span>")).toBe(4);
+  const windows = (names: string[]) => names.map((n, k) =>
+    inst({ id: n, ruleTitle: `Window ${n}`, dueDate: "2026-11-30", windowStart: "2026-11-01", ...(k % 2 === 0 ? { status: "DONE", doneAt: "2026-11-10T20:00:00Z" } : {}) }));
+
+  it("up to five lines per day are all drawn, done lines counting like the others; no +n at five", () => {
+    const html = grid(calendar(windows(["A", "B", "C", "D", "E"])));
+    for (const n of ["A", "B", "C", "D", "E"]) expect(count(html, line(`Window ${n}`)), n).toBe(4);
+    expect(html).not.toMatch(/>\+\d+<\/span>/);
+    const monday = cell(html, "11/23", "11/24");
+    expect(count(monday, "h-1 rounded-full opacity-50")).toBe(5);
+  });
+
+  it("a sixth line is summed up as +1 (week and month view)", () => {
+    const six = windows(["A", "B", "C", "D", "E", "F"]);
+    const html = grid(calendar(six));
+    expect(count(html, line("Window E"))).toBe(4);
+    expect(html).not.toContain(line("Window F"));
+    expect(count(html, ">+1</span>")).toBe(4);
+    expect(html).not.toContain(">+2</span>");
+
+    const month = grid(calendar(six, { view: "month" }));
+    expect(month).toContain(line("Window E"));
+    expect(month).not.toContain(line("Window F"));
+    expect(cell(month, "11/24", "11/25")).toContain(">+1</span>");
   });
 
   it("lines are not items: a day's chips are all shown and unchanged, however many lines pass through it", () => {
@@ -264,8 +279,8 @@ describe("day panel (real component)", () => {
     );
   const task = weeklyDone();
 
-  it("lists the done period task on EVERY day of its window, labelled with the day it was done and the usual details", () => {
-    for (const day of ["2026-11-23", "2026-11-24", "2026-11-25", "2026-11-26"]) {
+  it("lists the done period task on every OTHER day of its window, labelled with the day it was done and the usual details", () => {
+    for (const day of ["2026-11-23", "2026-11-25", "2026-11-26"]) {
       const html = panel(day, [task]);
       expect(html, day).toContain("Period tasks done");
       expect(html, day).toContain('data-done-period-task="weekly"');
@@ -290,12 +305,31 @@ describe("day panel (real component)", () => {
     expect(panel("2026-11-28", [late])).not.toContain("Period tasks done"); // the completion day is outside the window: chip only
   });
 
-  it("on the completion day the task also appears as its usual done card", () => {
+  it("on the completion day it shows ONLY as its normal done card — not a second time in the period list", () => {
     const html = panel("2026-11-24", [task], [task]);
-    expect(html).toContain("Period tasks done");
-    expect(html).toContain("11/24/2026, 10:00 AM PT");
-    expect(html.indexOf("Facilities Checklist")).toBeLessThan(html.indexOf("Period tasks done")); // the card first, then the period list
+    expect(html).not.toContain("Period tasks done");
+    expect(html).not.toContain("data-done-period-task");
+    expect(html).not.toContain("Period task, done");
+    expect(count(html, "Facilities Checklist")).toBe(1); // exactly once: the card
+    expect(html).toContain("11/24/2026, 10:00 AM PT"); // the usual done details on the card
     expect(html).not.toContain("No tasks on this day.");
+  });
+
+  it("another period task done on a different day is still listed on that day", () => {
+    const other = monthlyDone(); // window 11/01–11/30, done 11/18
+    const html = panel("2026-11-24", [task, other], [task]);
+    expect(html).toContain("Period tasks done");
+    expect(html).toContain('data-done-period-task="monthly"');
+    expect(html).not.toContain('data-done-period-task="weekly"');
+    expect(html).toContain("Period task, done 11/18/2026");
+  });
+
+  it("the completion day is the Pacific day: done at 11:30 PM Tuesday, Tuesday has the card only and Wednesday has the list", () => {
+    const night = weeklyDone({ doneAt: "2026-11-25T07:30:00Z" }); // Tue 11/24, 11:30 PM Pacific = Wed in UTC
+    expect(panel("2026-11-24", [night], [night])).not.toContain("Period tasks done");
+    const wednesday = panel("2026-11-25", [night]);
+    expect(wednesday).toContain("Period task, done 11/24/2026");
+    expect(wednesday).toContain("11/24/2026, 11:30 PM PT");
   });
 
   it("open period tasks and tasks without a window are not listed there", () => {

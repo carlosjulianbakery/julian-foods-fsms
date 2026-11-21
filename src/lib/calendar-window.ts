@@ -58,9 +58,70 @@ export function lineLabelDay(t: CalendarTask, visibleDays: string[]): string | n
   return visibleDays.find((d) => lineCoversDay(t, d)) ?? null;
 }
 
-/** Done period tasks listed in the day panel: every day of the window, start through due date. */
+/** At most this many period lines are drawn in one day cell; the rest are summed up as "+n". */
+export const MAX_LINES_PER_DAY = 5;
+
+/**
+ * Done period tasks listed in the day panel's "Period tasks done" section: every day of the window,
+ * start through due date — except the day the task was completed, where it already shows as its
+ * normal done card and is not listed a second time.
+ */
 export function donePeriodTasksForDay<T extends CalendarTask>(tasks: T[], day: string): T[] {
-  return tasks.filter((t) => isDonePeriodTask(t) && lineCoversDay(t, day));
+  return tasks.filter((t) => isDonePeriodTask(t) && lineCoversDay(t, day) && chipDayOf(t) !== day);
+}
+
+// ── Friday–Sunday columns ───────────────────────────────────────────────────────
+
+/** The user's own choice for the Fri–Sun columns; null = no choice made, the calendar decides. */
+export type WeekendPref = "show" | "hide" | null;
+export const WEEKEND_PREF_KEY = "taskCalendar.weekendColumns";
+
+/**
+ * A real task on a day: a chip that sits there (a due chip, or the done chip of a period task on its
+ * completion day), in any status except skipped and missed. Period lines are never tasks on a day.
+ */
+export function realTasksOn<T extends CalendarTask>(tasks: T[], days: string[]): T[] {
+  return tasks.filter((t) => !CLOSED_WITHOUT_LINE.includes(t.status) && days.includes(chipDayOf(t)));
+}
+
+/**
+ * Whether the hideable days are shown. The user's choice always wins; with no choice they are shown
+ * only when a real task falls on one of them.
+ */
+export function weekendVisible(pref: WeekendPref, realTaskCount: number): boolean {
+  if (pref === "show") return true;
+  if (pref === "hide") return false;
+  return realTaskCount > 0;
+}
+
+/** What pressing the toggle chooses: the opposite of what is on screen now. */
+export const toggledWeekendPref = (visibleNow: boolean): Exclude<WeekendPref, null> => (visibleNow ? "hide" : "show");
+
+/** "1 task on Fri-Sun" — shown while the days are hidden and real tasks fall on them; null otherwise. */
+export function hiddenTasksNote(visible: boolean, realTaskCount: number, daysLabel: string): string | null {
+  if (visible || realTaskCount === 0) return null;
+  return `${realTaskCount} ${realTaskCount === 1 ? "task" : "tasks"} on ${daysLabel}`;
+}
+
+type PrefStorage = Pick<Storage, "getItem" | "setItem">;
+
+/** The saved choice; null when nothing is saved or the browser's storage cannot be read. */
+export function readWeekendPref(storage: PrefStorage | null | undefined): WeekendPref {
+  try {
+    const v = storage?.getItem(WEEKEND_PREF_KEY);
+    return v === "show" || v === "hide" ? v : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Saves the choice; a browser that refuses storage is ignored (the choice still holds for this visit). */
+export function writeWeekendPref(storage: PrefStorage | null | undefined, pref: Exclude<WeekendPref, null>): void {
+  try {
+    storage?.setItem(WEEKEND_PREF_KEY, pref);
+  } catch {
+    // private mode or storage disabled
+  }
 }
 
 /**

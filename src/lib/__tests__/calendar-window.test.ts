@@ -93,9 +93,13 @@ describe("line colours come from the shared presentation helper", () => {
 });
 
 describe("day panel: done period tasks", () => {
-  it("are listed on every day of the window, start through due date, and on no other day", () => {
+  it("are listed on every day of the window, start through due date — except the completion day — and on no other day", () => {
     const list = [DONE, t({ id: "open" }), t({ id: "skipped", status: "SKIPPED" }), t({ id: "daily-done", status: "DONE", windowStart: null, doneAt: "2026-11-24T18:00:00Z" })];
-    for (const d of ["2026-11-23", "2026-11-24", "2026-11-25", "2026-11-26"]) expect(donePeriodTasksForDay(list, d).map((x) => x.id), d).toEqual(["t"]);
+    for (const d of ["2026-11-23", "2026-11-25", "2026-11-26"]) expect(donePeriodTasksForDay(list, d).map((x) => x.id), d).toEqual(["t"]);
+    expect(donePeriodTasksForDay(list, "2026-11-24")).toEqual([]); // completed that day: its normal done card is enough
+    expect(donePeriodTasksForDay([t({ status: "DONE", doneAt: "2026-11-25T07:30:00Z" })], "2026-11-24")).toEqual([]); // 11:30 PM Pacific is still the 24th
+    expect(donePeriodTasksForDay([t({ status: "DONE", doneAt: "2026-11-25T07:30:00Z" })], "2026-11-25")).toHaveLength(1);
+    expect(donePeriodTasksForDay([t({ status: "DONE", doneAt: null })], "2026-11-26")).toEqual([]); // no completion time: the chip is on the due date
     for (const d of ["2026-11-22", "2026-11-27"]) expect(donePeriodTasksForDay(list, d), d).toEqual([]);
     expect(isDonePeriodTask(list[3])).toBe(false);
   });

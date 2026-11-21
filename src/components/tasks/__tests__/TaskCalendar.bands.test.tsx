@@ -88,13 +88,18 @@ describe("TaskCalendar week view — band in a week containing neither window st
     expect(count(withBand, 'title="Sanitizer check"')).toBe(0);
   });
 
-  it("stacks at most three bands per day and shows +n for the rest", () => {
+  it("stacks at most five bands per day and shows +n only beyond five", () => {
     const five = ["A", "B", "C", "D", "E"].map((n) => monthly({ id: n, ruleTitle: `Window ${n}` }));
-    const html = renderWeek(five);
+    const exactlyFive = renderWeek(five);
+    for (const n of ["A", "C", "E"]) expect(count(exactlyFive, `title="Window ${n}"`)).toBe(4);
+    expect(exactlyFive).not.toMatch(/>\+\d+<\/span>/); // five fit: no "+n"
 
-    expect(count(html, 'title="Window A"')).toBe(4);
-    expect(count(html, 'title="Window C"')).toBe(4);
-    expect(html).not.toContain('title="Window D"');
-    expect(count(html, ">+2</span>")).toBe(4);
+    const six = renderWeek([...five, monthly({ id: "F", ruleTitle: "Window F" })]);
+    expect(count(six, 'title="Window E"')).toBe(4);
+    expect(six).not.toContain('title="Window F"');
+    expect(count(six, ">+1</span>")).toBe(4);
+
+    const eight = renderWeek([...five, ...["F", "G", "H"].map((n) => monthly({ id: n, ruleTitle: `Window ${n}` }))]);
+    expect(count(eight, ">+3</span>")).toBe(4);
   });
 });

@@ -14,7 +14,10 @@ import { FacilityTag } from "@/components/tasks/FacilityTag";
 import { getTaskPresentation, getEffectiveStatus, TASK_SORT_PRIORITY } from "@/lib/task-presentation";
 import { canSkipTask } from "@/lib/task-actions";
 import { sortTasks } from "@/lib/task-order";
-import { chipDayOf, doneDayOf, donePeriodTasksForDay, lineLabelDay, linesForDay } from "@/lib/calendar-window";
+import {
+  MAX_LINES_PER_DAY, chipDayOf, doneDayOf, donePeriodTasksForDay, hiddenTasksNote, lineLabelDay, linesForDay, readWeekendPref, realTasksOn,
+  toggledWeekendPref, weekendVisible, writeWeekendPref, type WeekendPref,
+} from "@/lib/calendar-window";
 import { RuleOrderList, type RuleGroup } from "./RuleOrderList";
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
@@ -241,7 +244,7 @@ function DayCell({
       {/* Period lines: open tasks (gray, blue) and done ones (green). Not items — they never count as chips. */}
       {windowBands.length > 0 && (
         <div className="mt-1.5 space-y-0.5">
-          {windowBands.slice(0, 3).map((inst, idx) => {
+          {windowBands.slice(0, MAX_LINES_PER_DAY).map((inst, idx) => {
             const isStart = windowBandIsStart[idx] ?? false;
             const short = inst.ruleTitle.length > 18 ? inst.ruleTitle.slice(0, 16) + "…" : inst.ruleTitle;
             const barCls = `h-1 rounded-full opacity-50 ${lineColor(inst, today)}`;
@@ -254,8 +257,8 @@ function DayCell({
               <div key={inst.id} title={inst.ruleTitle} className={`${barCls} w-full`} />
             );
           })}
-          {windowBands.length > 3 && (
-            <span className="text-[9px] text-gray-400">+{windowBands.length - 3}</span>
+          {windowBands.length > MAX_LINES_PER_DAY && (
+            <span className="text-[9px] text-gray-400">+{windowBands.length - MAX_LINES_PER_DAY}</span>
           )}
         </div>
       )}
@@ -765,6 +768,8 @@ interface TaskCalendarProps {
   selectedOwnerId: string;
   /** Which view to start in (week unless told otherwise). */
   initialView?: "week" | "month";
+  /** The Fri–Sun choice to start with; the saved choice (localStorage) replaces it once the page has loaded. */
+  initialWeekendPref?: WeekendPref;
 }
 
 export function TaskCalendar({
@@ -776,6 +781,7 @@ export function TaskCalendar({
   viewMode,
   selectedOwnerId,
   initialView = "week",
+  initialWeekendPref = null,
 }: TaskCalendarProps) {
   const [view, setView] = useState<"week" | "month">(initialView);
   const [weekStart, setWeekStart] = useState(initialWeekStart);
@@ -786,7 +792,16 @@ export function TaskCalendar({
   const [instances, setInstances] = useState<TaskInstance[]>(initialInstances);
   const [loading, setLoading] = useState(false);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
-  const [showWeekend, setShowWeekend] = useState(false);
+  // The user's own choice for the Fri–Sun columns. null = no choice: shown only when a real task falls there.
+  const [weekendPref, setWeekendPref] = useState<WeekendPref>(initialWeekendPref);
+  useEffect(() => {
+    const saved = readWeekendPref(typeof window === "undefined" ? null : window.localStorage);
+    if (saved) setWeekendPref(saved);
+  }, []);
+  const chooseWeekend = (pref: Exclude<WeekendPref, null>) => {
+    setWeekendPref(pref);
+    writeWeekendPref(typeof window === "undefined" ? null : window.localStorage, pref);
+  };
   const selectedOwnerIdRef = useRef(selectedOwnerId);
   selectedOwnerIdRef.current = selectedOwnerId;
   const [outOfSyncNote, setOutOfSyncNote] = useState<"this" | "next" | null>(null);
@@ -972,18 +987,18 @@ export function TaskCalendar({
   // ── Week view ──────────────────────────────────────────────────────────────
   const weekDays = getWeekDays(weekStart);
   const isCurrentWeek = weekStart === getMondayOf(today);
-  const weekendDaysWithTasks = weekDays.slice(4).filter(d => dayInstances(d).length > 0);
-  const showWeekendCols = showWeekend || weekendDaysWithTasks.length > 0;
+  // Only real tasks (chips) on Fri–Sun count — period lines crossing those days never do — and the user's choice always wins
+  const weekendRealTasks = realTasksOn(instances, weekDays.slice(4)).length;
+  const showWeekendCols = weekendVisible(weekendPref, weekendRealTasks);
   const visibleWeekDays = showWeekendCols ? weekDays : weekDays.slice(0, 4);
 
   // ── Month view ─────────────────────────────────────────────────────────────
   const { days: monthDays } = getMonthBounds(monthStart);
   const isCurrentMonth = monthStart === `${today.slice(0, 7)}-01`;
-  const monthHasWeekendTasks = monthDays.some(d => {
-    const dow = new Date(d + "T12:00:00Z").getUTCDay();
-    return (dow === 0 || dow === 6) && dayInstances(d).length > 0;
-  });
-  const showMonthWeekend = showWeekend || monthHasWeekendTasks;
+  const isSatSun = (d: string) => { const dow = new Date(d + "T12:00:00Z").getUTCDay(); return dow === 0 || dow === 6; };
+  // The month view hides Saturday and Sunday only
+  const monthWeekendRealTasks = realTasksOn(instances, monthDays.filter(isSatSun)).length;
+  const showMonthWeekend = weekendVisible(weekendPref, monthWeekendRealTasks);
   const visibleMonthDays = showMonthWeekend ? monthDays : monthDays.filter(d => {
     const dow = new Date(d + "T12:00:00Z").getUTCDay();
     return dow !== 0 && dow !== 6;
@@ -1030,20 +1045,37 @@ export function TaskCalendar({
           {loading && (
             <span className="text-xs text-gray-400">Loading…</span>
           )}
-          {/* Weekend toggle */}
-          <button
-            onClick={() => setShowWeekend(v => !v)}
-            className={`px-2 py-1 text-[10px] font-medium rounded-lg border transition-colors ${
-              showWeekend
-                ? "bg-[#C41E3A] text-white border-[#C41E3A]"
-                : (view === "week" ? showWeekendCols : showMonthWeekend) && !showWeekend
-                ? "border-gray-300 text-gray-500 bg-gray-50"
-                : "border-gray-200 text-gray-400 hover:bg-gray-50"
-            }`}
-            title={showWeekend ? "Hide Fri–Sun" : "Show Fri–Sun"}
-          >
-            {showWeekend ? "Hide Fri–Sun" : "+ Fri–Sun"}
-          </button>
+          {/* Fri–Sun toggle: the user's choice always wins, and it is remembered */}
+          {(() => {
+            const visible = view === "week" ? showWeekendCols : showMonthWeekend;
+            const note = view === "week"
+              ? hiddenTasksNote(visible, weekendRealTasks, "Fri-Sun")
+              : hiddenTasksNote(visible, monthWeekendRealTasks, "Sat-Sun");
+            return (
+              <>
+                {note && (
+                  <button
+                    onClick={() => chooseWeekend("show")}
+                    data-hidden-weekend-tasks
+                    title="Show those days"
+                    className="px-2 py-1 text-[10px] font-semibold rounded-lg border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 transition-colors"
+                  >
+                    {note}
+                  </button>
+                )}
+                <button
+                  onClick={() => chooseWeekend(toggledWeekendPref(visible))}
+                  data-weekend-toggle={visible ? "shown" : "hidden"}
+                  className={`px-2 py-1 text-[10px] font-medium rounded-lg border transition-colors ${
+                    visible ? "bg-[#C41E3A] text-white border-[#C41E3A]" : "border-gray-200 text-gray-400 hover:bg-gray-50"
+                  }`}
+                  title={visible ? "Hide Fri–Sun" : "Show Fri–Sun"}
+                >
+                  {visible ? "Hide Fri–Sun" : "+ Fri–Sun"}
+                </button>
+              </>
+            );
+          })()}
           {/* Week/Month toggle */}
           <div className="flex rounded-lg border border-gray-200 overflow-hidden text-xs">
             <button
@@ -1175,7 +1207,7 @@ export function TaskCalendar({
                       if (bands.length === 0) return null;
                       return (
                         <div className="mt-1 space-y-0.5">
-                          {bands.slice(0, 3).map((inst) => {
+                          {bands.slice(0, MAX_LINES_PER_DAY).map((inst) => {
                             // Not started keeps the slightly darker gray this small view always used
                             const tone = inst.status === "DONE" || inst.status === "IN_PROGRESS" ? lineColor(inst, today) : "bg-gray-400";
                             const bar = `h-0.5 rounded-full opacity-40 ${tone}`;
@@ -1188,8 +1220,8 @@ export function TaskCalendar({
                               <div key={inst.id} title={inst.ruleTitle} className={`${bar} w-full`} />
                             );
                           })}
-                          {bands.length > 3 && (
-                            <span className="text-[8px] text-gray-400">+{bands.length - 3}</span>
+                          {bands.length > MAX_LINES_PER_DAY && (
+                            <span className="text-[8px] text-gray-400">+{bands.length - MAX_LINES_PER_DAY}</span>
                           )}
                         </div>
                       );
