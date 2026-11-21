@@ -50,6 +50,10 @@ export const TASK_FORM_REGISTRY: Record<string, TaskFormEntry> = {
     label: "Facilities Checklist (624)",
     href: () => "/dashboard/supervisor/facilities-checklist-624",
   },
+  foreign_matter_624: {
+    label: "Foreign Matter Inspection (624)",
+    href: () => "/dashboard/supervisor/foreign-matter-624",
+  },
   manual: {
     label: "Manual Task",
     href: () => null,

@@ -1,4 +1,5 @@
 import type { PrismaClient } from "@/generated/prisma";
+import { FOREIGN_MATTER_FACILITY, FOREIGN_MATTER_FORM_KEY, splitStored as splitForeignMatterStored, resultOf as foreignMatterResultOf } from "@/lib/foreign-matter-624";
 import { VERIFICATION_FACILITY, VERIFICATION_FORM_KEY } from "@/lib/verification-624";
 import { FACILITIES_FACILITY, FACILITIES_FORM_KEY, splitStored as splitFacilitiesStored, resultOf as facilitiesResultOf } from "@/lib/facilities-checklist-624";
 
@@ -74,6 +75,33 @@ export const PROGRESS_PROVIDERS: Record<string, Provider> = {
       if (!r || liveIds.size === 0) continue;
       // Checked = live checks that already have OK or Not OK in the draft
       const done = splitFacilitiesStored(r.items).entries.filter((v) => liveIds.has(v.itemId) && facilitiesResultOf(v) !== null).length;
+      if (done > 0) out.set(t.id, { done: Math.min(done, liveIds.size), total: liveIds.size });
+    }
+    return out;
+  },
+
+  // Twice a month: the task is due on the period's last day, so a draft is matched by the task it is
+  // linked to, or else by its periodEnd being the task's due date.
+  [FOREIGN_MATTER_FORM_KEY]: async (tasks, prismaClient) => {
+    const [records, live] = await Promise.all([
+      prismaClient.foreignMatterRecord.findMany({
+        where: {
+          facility: FOREIGN_MATTER_FACILITY,
+          status: "draft",
+          OR: [{ linkedInstanceId: { in: tasks.map((t) => t.id) } }, { periodEnd: { in: tasks.map((t) => t.dueDate) } }],
+        },
+        select: { linkedInstanceId: true, periodEnd: true, items: true },
+      }),
+      prismaClient.foreignMatterItem.findMany({ where: { facility: FOREIGN_MATTER_FACILITY, retiredAt: null }, select: { id: true } }),
+    ]);
+    const liveIds = new Set(live.map((i) => i.id));
+    const out = new Map<string, TaskProgress>();
+    for (const t of tasks) {
+      const due = t.dueDate.toISOString().slice(0, 10);
+      const r = records.find((x) => x.linkedInstanceId === t.id) ?? records.find((x) => x.periodEnd.toISOString().slice(0, 10) === due);
+      if (!r || liveIds.size === 0) continue;
+      // Checked = live items that already have OK or Not OK in the draft
+      const done = splitForeignMatterStored(r.items).entries.filter((v) => liveIds.has(v.itemId) && foreignMatterResultOf(v) !== null).length;
       if (done > 0) out.set(t.id, { done: Math.min(done, liveIds.size), total: liveIds.size });
     }
     return out;

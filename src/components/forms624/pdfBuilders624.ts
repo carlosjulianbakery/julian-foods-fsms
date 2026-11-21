@@ -2,6 +2,7 @@ import {
   LABELS, SCALE_POINTS, SECTION_TITLES, hasSpec, instructionsFor, instructionsVerOf, marginText, periodLabel, scaleSpecOf, splitStored, unitDecimals,
   type ItemSnapshot, type Section,
 } from "@/lib/verification-624";
+import { SECTIONS as FM_SECTIONS, SECTION_TITLES as FM_SECTION_TITLES, periodDates as foreignMatterPeriodDates, splitStored as splitForeignMatterStored, type ItemSnapshot as FmSnapshot } from "@/lib/foreign-matter-624";
 import { periodDates as facilitiesPeriodDates, periodLabel as facilitiesPeriodLabel, splitStored as splitFacilitiesStored } from "@/lib/facilities-checklist-624";
 import type { DailyClean624Record, CleaningRowSnapshot, MonthlyClean624Record, MonthlyClean624LineSnapshot } from "./types";
 import { INSTRUCTIONS_TEXT_MONTHLY } from "@/app/(dashboard)/dashboard/supervisor/monthly-cleaning-624/config";
@@ -381,5 +382,155 @@ export function buildFacilitiesPdfHtml624(r: FacilitiesPdfRecord): string {
     ${r.notes ? ` &nbsp;|&nbsp; Notes: ${esc(r.notes)}` : ""}
     &nbsp;|&nbsp; Checklist v${r.listVersion} &nbsp;|&nbsp; Julian Foods — 624 Facility
   </p>
+  </body></html>`;
+}
+
+// ── Foreign Matter Inspection (twice a month) ───────────────────────────────────
+
+export interface ForeignMatterPdfRecord {
+  period: string;
+  status: string;
+  conductedBy: string;
+  initials: string;
+  items: unknown;
+  listVersion: number;
+  okCount: number;
+  failCount: number;
+  notes: string | null;
+  submittedAt: string | Date | null;
+}
+
+/*
+ * pdfExport624 turns the HTML into one tall picture and cuts it every A4 page height, so a row that
+ * happens to lie on a cut would be split in two. To make that impossible this builder lays the record
+ * out as explicit pages: every page is a block exactly one A4 page tall, and rows are dealt into pages
+ * by a deliberately generous estimate of their height. A row is never placed across two pages.
+ */
+export const FM_PDF = {
+  /** One A4 page at the 794px width the exporter renders at (794 × 297 / 210). */
+  pageHeight: 1122.5,
+  padding: 28,
+  /** Height kept for the title block on the first page, and for the footer on every page. */
+  titleHeight: 64,
+  footerHeight: 34,
+  sectionHeight: 30,
+  areaHeight: 46, // the area title plus the column headings
+  rowPadding: 12,
+  lineHeight: 15,
+  /** Characters assumed per line — fewer than really fit, so a row is never taller than estimated. */
+  nameChars: 26,
+  commentChars: 30,
+};
+
+/** Estimated height of one item row, in px. Deliberately on the high side. */
+export function fmPdfRowHeight(i: Pick<FmSnapshot, "name" | "comment">): number {
+  const lines = Math.max(1, Math.ceil(i.name.length / FM_PDF.nameChars), Math.ceil((i.comment ?? "").length / FM_PDF.commentChars));
+  return FM_PDF.rowPadding + lines * FM_PDF.lineHeight;
+}
+
+type FmBlock = { kind: "section"; title: string } | { kind: "area"; title: string; continued: boolean; rows: FmSnapshot[] };
+
+/** Deals the items into pages. Exported so the page-fitting rule can be tested. */
+export function paginateForeignMatter(snapshots: FmSnapshot[]): { blocks: FmBlock[]; used: number; capacity: number }[] {
+  const ordered = [...snapshots].sort((a, b) => a.position - b.position);
+  const capacityOf = (first: boolean) => FM_PDF.pageHeight - 2 * FM_PDF.padding - FM_PDF.footerHeight - (first ? FM_PDF.titleHeight : 0);
+  const pages: { blocks: FmBlock[]; used: number; capacity: number }[] = [{ blocks: [], used: 0, capacity: capacityOf(true) }];
+  const page = () => pages[pages.length - 1];
+  const newPage = () => { pages.push({ blocks: [], used: 0, capacity: capacityOf(false) }); };
+
+  let section: string | null = null;
+  let areaKey: string | null = null;
+  for (const item of ordered) {
+    const row = fmPdfRowHeight(item);
+    const startsSection = item.section !== section;
+    const startsArea = startsSection || `${item.section}|${item.areaName}` !== areaKey;
+    // What must fit together with this row: a section or area heading is never left alone at the foot of a page
+    const needed = row + (startsSection ? FM_PDF.sectionHeight : 0) + (startsArea ? FM_PDF.areaHeight : 0);
+    let current = page().blocks[page().blocks.length - 1];
+    let continued = false;
+    if (page().used + needed > page().capacity && page().blocks.length > 0) {
+      newPage();
+      continued = !startsArea; // the area goes on from the previous page: repeat its heading
+      current = undefined as never;
+    }
+    if (startsSection) {
+      page().blocks.push({ kind: "section", title: FM_SECTION_TITLES[item.section] ?? item.section });
+      page().used += FM_PDF.sectionHeight;
+    }
+    if (startsArea || continued) {
+      const block: FmBlock = { kind: "area", title: item.areaName, continued, rows: [] };
+      page().blocks.push(block);
+      page().used += FM_PDF.areaHeight;
+      current = block;
+    }
+    if (current && current.kind === "area") current.rows.push(item);
+    page().used += row;
+    section = item.section;
+    areaKey = `${item.section}|${item.areaName}`;
+  }
+  return pages;
+}
+
+export function buildForeignMatterPdfHtml624(r: ForeignMatterPdfRecord): string {
+  const { header, snapshots } = splitForeignMatterStored(r.items);
+  const isDraft = r.status !== "submitted";
+  const pt = (iso: string | null | undefined) =>
+    iso ? new Date(iso).toLocaleString("en-US", { timeZone: "America/Los_Angeles", month: "2-digit", day: "2-digit", year: "numeric", hour: "numeric", minute: "2-digit" }) : "—";
+  const submittedPT = r.submittedAt ? new Date(r.submittedAt).toLocaleString("en-US", { timeZone: "America/Los_Angeles" }) : "—";
+  const dateLine = header ? `${formatMDY(header.date)} ${esc(header.time)}` : "—";
+  const pages = paginateForeignMatter(snapshots);
+  const sectionCounts = FM_SECTIONS.map((s) => `${FM_SECTION_TITLES[s]}: ${snapshots.filter((i) => i.section === s).length}`).join(" · ");
+
+  const rowHtml = (i: FmSnapshot) => `<tr data-row="${i.position}" style="height:${fmPdfRowHeight(i)}px">
+        <td class="n">${i.position}</td>
+        <td><b>${esc(i.name)}</b></td>
+        <td class="n">${i.expectedQuantity}</td>
+        <td>${resultCell(i.result)}</td>
+        <td class="n">${i.result === "NOT_OK" && typeof i.foundQuantity === "number" ? i.foundQuantity : "—"}</td>
+        <td>${esc(i.comment) || "—"}</td>
+        <td class="n s">${pt(i.checkedAt)}</td>
+      </tr>`;
+  const blockHtml = (b: FmBlock) =>
+    b.kind === "section"
+      ? `<h2 style="height:${FM_PDF.sectionHeight}px">${esc(b.title)}</h2>`
+      : `<h3 style="height:18px">${esc(b.title)}${b.continued ? " (continued)" : ""}</h3>
+      <table><thead><tr style="height:${FM_PDF.areaHeight - 18}px"><th style="width:5%">#</th><th style="width:27%">Item</th><th style="width:9%">Expected</th><th style="width:9%">Result</th><th style="width:8%">Found</th><th style="width:28%">Comment</th><th style="width:14%">Checked (PT)</th></tr></thead><tbody>
+      ${b.rows.map(rowHtml).join("")}
+      </tbody></table>`;
+
+  const body = pages.map((p, n) => `
+  <div class="page" data-page="${n + 1}">
+    ${n === 0 ? `<div class="title">
+      <h1>Foreign Matter Inspection — 624${isDraft ? ' <span class="badge">DRAFT</span>' : ""}</h1>
+      <p class="sub">Period: ${esc(foreignMatterPeriodDates(r.period))} &nbsp;|&nbsp; Facility: 624 &nbsp;|&nbsp; Date: ${dateLine} &nbsp;|&nbsp; Initials: ${esc(r.initials) || "—"} &nbsp;|&nbsp; ${r.okCount} OK · ${r.failCount} Not OK</p>
+      <p class="sub">${esc(sectionCounts)}</p>
+    </div>` : ""}
+    ${p.blocks.map(blockHtml).join("") || '<p class="sub">No items recorded.</p>'}
+    <p class="footer">
+      ${isDraft ? "DRAFT — not yet submitted" : `Submitted: ${submittedPT} PT &nbsp;|&nbsp; By: ${esc(r.conductedBy) || "—"}${r.initials ? ` (${esc(r.initials)})` : ""}`}
+      ${r.notes ? ` &nbsp;|&nbsp; Notes: ${esc(r.notes)}` : ""}
+      &nbsp;|&nbsp; List v${r.listVersion} &nbsp;|&nbsp; Julian Foods — 624 Facility &nbsp;|&nbsp; Page ${n + 1} of ${pages.length}
+    </p>
+  </div>`).join("");
+
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"/>
+  <style>
+    html, body { margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; color: #111; }
+    .page { position: relative; box-sizing: border-box; width: 794px; height: ${FM_PDF.pageHeight}px; padding: ${FM_PDF.padding}px; overflow: hidden; page-break-after: always; }
+    .title { height: ${FM_PDF.titleHeight}px; overflow: hidden; }
+    h1 { font-size: 18px; margin: 0 0 4px; }
+    h2 { font-size: 14px; margin: 0; padding-top: 8px; box-sizing: border-box; text-transform: uppercase; letter-spacing: .03em; }
+    h3 { font-size: 12px; margin: 0; padding-top: 4px; box-sizing: border-box; color: #374151; }
+    p.sub { font-size: 11px; color: #6b7280; margin: 0 0 3px; }
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    tr { page-break-inside: avoid; break-inside: avoid; }
+    th { text-align: left; padding: 3px 5px; font-size: 9px; color: #6b7280; text-transform: uppercase; border-bottom: 2px solid #e5e7eb; vertical-align: bottom; }
+    td { padding: 0 5px; font-size: 11px; line-height: ${FM_PDF.lineHeight}px; border-bottom: 1px solid #e5e7eb; vertical-align: middle; word-break: break-word; }
+    td.n { font-family: monospace; }
+    td.s { font-size: 9px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: #fef3c7; color: #92400e; }
+    .footer { position: absolute; left: ${FM_PDF.padding}px; right: ${FM_PDF.padding}px; bottom: ${FM_PDF.padding}px; margin: 0; font-size: 9px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 6px; }
+  </style></head><body>${body}
   </body></html>`;
 }

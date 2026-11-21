@@ -1155,6 +1155,53 @@ exports.Prisma.FacilitiesChecklistRecordScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ForeignMatterItemScalarFieldEnum = {
+  id: 'id',
+  facility: 'facility',
+  section: 'section',
+  areaName: 'areaName',
+  name: 'name',
+  expectedQuantity: 'expectedQuantity',
+  sortOrder: 'sortOrder',
+  retiredAt: 'retiredAt',
+  retiredById: 'retiredById',
+  createdById: 'createdById',
+  updatedById: 'updatedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ForeignMatterListScalarFieldEnum = {
+  facility: 'facility',
+  version: 'version',
+  updatedById: 'updatedById',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ForeignMatterRecordScalarFieldEnum = {
+  id: 'id',
+  facility: 'facility',
+  period: 'period',
+  periodStart: 'periodStart',
+  periodEnd: 'periodEnd',
+  status: 'status',
+  conductedBy: 'conductedBy',
+  initials: 'initials',
+  items: 'items',
+  listVersion: 'listVersion',
+  okCount: 'okCount',
+  failCount: 'failCount',
+  notes: 'notes',
+  lastEditedBy: 'lastEditedBy',
+  lastEditedAt: 'lastEditedAt',
+  createdById: 'createdById',
+  submittedAt: 'submittedAt',
+  submittedById: 'submittedById',
+  linkedInstanceId: 'linkedInstanceId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.NotificationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -1350,6 +1397,9 @@ exports.Prisma.ModelName = {
   FacilitiesChecklistItem: 'FacilitiesChecklistItem',
   FacilitiesChecklistList: 'FacilitiesChecklistList',
   FacilitiesChecklistRecord: 'FacilitiesChecklistRecord',
+  ForeignMatterItem: 'ForeignMatterItem',
+  ForeignMatterList: 'ForeignMatterList',
+  ForeignMatterRecord: 'ForeignMatterRecord',
   Notification: 'Notification'
 };
 

@@ -119,6 +119,13 @@ const formsNav = [
     exact: false,
   },
   {
+    label: "Foreign Matter Inspection - 624",
+    href: "/dashboard/supervisor/foreign-matter-624",
+    icon: ScanSearch,
+    roles: ["SUPERVISOR", "ADMIN"],
+    exact: false,
+  },
+  {
     label: "Batch Sheet",
     href: "/dashboard/supervisor/batch-sheet",
     icon: ScrollText,

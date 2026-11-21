@@ -339,6 +339,21 @@ export type FacilitiesChecklistList = $Result.DefaultSelection<Prisma.$Facilitie
  */
 export type FacilitiesChecklistRecord = $Result.DefaultSelection<Prisma.$FacilitiesChecklistRecordPayload>
 /**
+ * Model ForeignMatterItem
+ * 
+ */
+export type ForeignMatterItem = $Result.DefaultSelection<Prisma.$ForeignMatterItemPayload>
+/**
+ * Model ForeignMatterList
+ * 
+ */
+export type ForeignMatterList = $Result.DefaultSelection<Prisma.$ForeignMatterListPayload>
+/**
+ * Model ForeignMatterRecord
+ * 
+ */
+export type ForeignMatterRecord = $Result.DefaultSelection<Prisma.$ForeignMatterRecordPayload>
+/**
  * Model Notification
  * 
  */
@@ -1302,6 +1317,36 @@ export class PrismaClient<
   get facilitiesChecklistRecord(): Prisma.FacilitiesChecklistRecordDelegate<ExtArgs>;
 
   /**
+   * `prisma.foreignMatterItem`: Exposes CRUD operations for the **ForeignMatterItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ForeignMatterItems
+    * const foreignMatterItems = await prisma.foreignMatterItem.findMany()
+    * ```
+    */
+  get foreignMatterItem(): Prisma.ForeignMatterItemDelegate<ExtArgs>;
+
+  /**
+   * `prisma.foreignMatterList`: Exposes CRUD operations for the **ForeignMatterList** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ForeignMatterLists
+    * const foreignMatterLists = await prisma.foreignMatterList.findMany()
+    * ```
+    */
+  get foreignMatterList(): Prisma.ForeignMatterListDelegate<ExtArgs>;
+
+  /**
+   * `prisma.foreignMatterRecord`: Exposes CRUD operations for the **ForeignMatterRecord** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ForeignMatterRecords
+    * const foreignMatterRecords = await prisma.foreignMatterRecord.findMany()
+    * ```
+    */
+  get foreignMatterRecord(): Prisma.ForeignMatterRecordDelegate<ExtArgs>;
+
+  /**
    * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
     * Example usage:
     * ```ts
@@ -1816,6 +1861,9 @@ export namespace Prisma {
     FacilitiesChecklistItem: 'FacilitiesChecklistItem',
     FacilitiesChecklistList: 'FacilitiesChecklistList',
     FacilitiesChecklistRecord: 'FacilitiesChecklistRecord',
+    ForeignMatterItem: 'ForeignMatterItem',
+    ForeignMatterList: 'ForeignMatterList',
+    ForeignMatterRecord: 'ForeignMatterRecord',
     Notification: 'Notification'
   };
 
@@ -1832,7 +1880,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "record" | "preOpInspection" | "preOp624Inspection" | "dailyClean624Record" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "monthlyClean624Record" | "verification624Equipment" | "verification624List" | "verification624Record" | "facilitiesChecklistItem" | "facilitiesChecklistList" | "facilitiesChecklistRecord" | "notification"
+      modelProps: "user" | "form" | "formSubmission" | "record" | "preOpInspection" | "preOp624Inspection" | "dailyClean624Record" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "monthlyClean624Record" | "verification624Equipment" | "verification624List" | "verification624Record" | "facilitiesChecklistItem" | "facilitiesChecklistList" | "facilitiesChecklistRecord" | "foreignMatterItem" | "foreignMatterList" | "foreignMatterRecord" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6386,6 +6434,216 @@ export namespace Prisma {
           }
         }
       }
+      ForeignMatterItem: {
+        payload: Prisma.$ForeignMatterItemPayload<ExtArgs>
+        fields: Prisma.ForeignMatterItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ForeignMatterItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ForeignMatterItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterItemPayload>
+          }
+          findFirst: {
+            args: Prisma.ForeignMatterItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ForeignMatterItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterItemPayload>
+          }
+          findMany: {
+            args: Prisma.ForeignMatterItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterItemPayload>[]
+          }
+          create: {
+            args: Prisma.ForeignMatterItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterItemPayload>
+          }
+          createMany: {
+            args: Prisma.ForeignMatterItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ForeignMatterItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterItemPayload>[]
+          }
+          delete: {
+            args: Prisma.ForeignMatterItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterItemPayload>
+          }
+          update: {
+            args: Prisma.ForeignMatterItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.ForeignMatterItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ForeignMatterItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ForeignMatterItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterItemPayload>
+          }
+          aggregate: {
+            args: Prisma.ForeignMatterItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateForeignMatterItem>
+          }
+          groupBy: {
+            args: Prisma.ForeignMatterItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ForeignMatterItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ForeignMatterItemCountArgs<ExtArgs>
+            result: $Utils.Optional<ForeignMatterItemCountAggregateOutputType> | number
+          }
+        }
+      }
+      ForeignMatterList: {
+        payload: Prisma.$ForeignMatterListPayload<ExtArgs>
+        fields: Prisma.ForeignMatterListFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ForeignMatterListFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterListPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ForeignMatterListFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterListPayload>
+          }
+          findFirst: {
+            args: Prisma.ForeignMatterListFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterListPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ForeignMatterListFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterListPayload>
+          }
+          findMany: {
+            args: Prisma.ForeignMatterListFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterListPayload>[]
+          }
+          create: {
+            args: Prisma.ForeignMatterListCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterListPayload>
+          }
+          createMany: {
+            args: Prisma.ForeignMatterListCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ForeignMatterListCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterListPayload>[]
+          }
+          delete: {
+            args: Prisma.ForeignMatterListDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterListPayload>
+          }
+          update: {
+            args: Prisma.ForeignMatterListUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterListPayload>
+          }
+          deleteMany: {
+            args: Prisma.ForeignMatterListDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ForeignMatterListUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ForeignMatterListUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterListPayload>
+          }
+          aggregate: {
+            args: Prisma.ForeignMatterListAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateForeignMatterList>
+          }
+          groupBy: {
+            args: Prisma.ForeignMatterListGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ForeignMatterListGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ForeignMatterListCountArgs<ExtArgs>
+            result: $Utils.Optional<ForeignMatterListCountAggregateOutputType> | number
+          }
+        }
+      }
+      ForeignMatterRecord: {
+        payload: Prisma.$ForeignMatterRecordPayload<ExtArgs>
+        fields: Prisma.ForeignMatterRecordFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ForeignMatterRecordFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterRecordPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ForeignMatterRecordFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterRecordPayload>
+          }
+          findFirst: {
+            args: Prisma.ForeignMatterRecordFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterRecordPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ForeignMatterRecordFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterRecordPayload>
+          }
+          findMany: {
+            args: Prisma.ForeignMatterRecordFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterRecordPayload>[]
+          }
+          create: {
+            args: Prisma.ForeignMatterRecordCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterRecordPayload>
+          }
+          createMany: {
+            args: Prisma.ForeignMatterRecordCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ForeignMatterRecordCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterRecordPayload>[]
+          }
+          delete: {
+            args: Prisma.ForeignMatterRecordDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterRecordPayload>
+          }
+          update: {
+            args: Prisma.ForeignMatterRecordUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterRecordPayload>
+          }
+          deleteMany: {
+            args: Prisma.ForeignMatterRecordDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ForeignMatterRecordUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ForeignMatterRecordUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ForeignMatterRecordPayload>
+          }
+          aggregate: {
+            args: Prisma.ForeignMatterRecordAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateForeignMatterRecord>
+          }
+          groupBy: {
+            args: Prisma.ForeignMatterRecordGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ForeignMatterRecordGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ForeignMatterRecordCountArgs<ExtArgs>
+            result: $Utils.Optional<ForeignMatterRecordCountAggregateOutputType> | number
+          }
+        }
+      }
       Notification: {
         payload: Prisma.$NotificationPayload<ExtArgs>
         fields: Prisma.NotificationFieldRefs
@@ -6667,6 +6925,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated: number
     facilitiesChecklistRecordsCreated: number
     facilitiesChecklistRecordsSubmitted: number
+    foreignMatterItemsCreated: number
+    foreignMatterItemsUpdated: number
+    foreignMatterItemsRetired: number
+    foreignMatterListsUpdated: number
+    foreignMatterRecordsCreated: number
+    foreignMatterRecordsSubmitted: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6720,6 +6984,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: boolean | UserCountOutputTypeCountFacilitiesChecklistListsUpdatedArgs
     facilitiesChecklistRecordsCreated?: boolean | UserCountOutputTypeCountFacilitiesChecklistRecordsCreatedArgs
     facilitiesChecklistRecordsSubmitted?: boolean | UserCountOutputTypeCountFacilitiesChecklistRecordsSubmittedArgs
+    foreignMatterItemsCreated?: boolean | UserCountOutputTypeCountForeignMatterItemsCreatedArgs
+    foreignMatterItemsUpdated?: boolean | UserCountOutputTypeCountForeignMatterItemsUpdatedArgs
+    foreignMatterItemsRetired?: boolean | UserCountOutputTypeCountForeignMatterItemsRetiredArgs
+    foreignMatterListsUpdated?: boolean | UserCountOutputTypeCountForeignMatterListsUpdatedArgs
+    foreignMatterRecordsCreated?: boolean | UserCountOutputTypeCountForeignMatterRecordsCreatedArgs
+    foreignMatterRecordsSubmitted?: boolean | UserCountOutputTypeCountForeignMatterRecordsSubmittedArgs
   }
 
   // Custom InputTypes
@@ -7081,6 +7351,48 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountFacilitiesChecklistRecordsSubmittedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FacilitiesChecklistRecordWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountForeignMatterItemsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ForeignMatterItemWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountForeignMatterItemsUpdatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ForeignMatterItemWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountForeignMatterItemsRetiredArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ForeignMatterItemWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountForeignMatterListsUpdatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ForeignMatterListWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountForeignMatterRecordsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ForeignMatterRecordWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountForeignMatterRecordsSubmittedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ForeignMatterRecordWhereInput
   }
 
 
@@ -8251,6 +8563,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: boolean | User$facilitiesChecklistListsUpdatedArgs<ExtArgs>
     facilitiesChecklistRecordsCreated?: boolean | User$facilitiesChecklistRecordsCreatedArgs<ExtArgs>
     facilitiesChecklistRecordsSubmitted?: boolean | User$facilitiesChecklistRecordsSubmittedArgs<ExtArgs>
+    foreignMatterItemsCreated?: boolean | User$foreignMatterItemsCreatedArgs<ExtArgs>
+    foreignMatterItemsUpdated?: boolean | User$foreignMatterItemsUpdatedArgs<ExtArgs>
+    foreignMatterItemsRetired?: boolean | User$foreignMatterItemsRetiredArgs<ExtArgs>
+    foreignMatterListsUpdated?: boolean | User$foreignMatterListsUpdatedArgs<ExtArgs>
+    foreignMatterRecordsCreated?: boolean | User$foreignMatterRecordsCreatedArgs<ExtArgs>
+    foreignMatterRecordsSubmitted?: boolean | User$foreignMatterRecordsSubmittedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -8329,6 +8647,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: boolean | User$facilitiesChecklistListsUpdatedArgs<ExtArgs>
     facilitiesChecklistRecordsCreated?: boolean | User$facilitiesChecklistRecordsCreatedArgs<ExtArgs>
     facilitiesChecklistRecordsSubmitted?: boolean | User$facilitiesChecklistRecordsSubmittedArgs<ExtArgs>
+    foreignMatterItemsCreated?: boolean | User$foreignMatterItemsCreatedArgs<ExtArgs>
+    foreignMatterItemsUpdated?: boolean | User$foreignMatterItemsUpdatedArgs<ExtArgs>
+    foreignMatterItemsRetired?: boolean | User$foreignMatterItemsRetiredArgs<ExtArgs>
+    foreignMatterListsUpdated?: boolean | User$foreignMatterListsUpdatedArgs<ExtArgs>
+    foreignMatterRecordsCreated?: boolean | User$foreignMatterRecordsCreatedArgs<ExtArgs>
+    foreignMatterRecordsSubmitted?: boolean | User$foreignMatterRecordsSubmittedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8386,6 +8710,12 @@ export namespace Prisma {
       facilitiesChecklistListsUpdated: Prisma.$FacilitiesChecklistListPayload<ExtArgs>[]
       facilitiesChecklistRecordsCreated: Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>[]
       facilitiesChecklistRecordsSubmitted: Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>[]
+      foreignMatterItemsCreated: Prisma.$ForeignMatterItemPayload<ExtArgs>[]
+      foreignMatterItemsUpdated: Prisma.$ForeignMatterItemPayload<ExtArgs>[]
+      foreignMatterItemsRetired: Prisma.$ForeignMatterItemPayload<ExtArgs>[]
+      foreignMatterListsUpdated: Prisma.$ForeignMatterListPayload<ExtArgs>[]
+      foreignMatterRecordsCreated: Prisma.$ForeignMatterRecordPayload<ExtArgs>[]
+      foreignMatterRecordsSubmitted: Prisma.$ForeignMatterRecordPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8811,6 +9141,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated<T extends User$facilitiesChecklistListsUpdatedArgs<ExtArgs> = {}>(args?: Subset<T, User$facilitiesChecklistListsUpdatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilitiesChecklistListPayload<ExtArgs>, T, "findMany"> | Null>
     facilitiesChecklistRecordsCreated<T extends User$facilitiesChecklistRecordsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$facilitiesChecklistRecordsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>, T, "findMany"> | Null>
     facilitiesChecklistRecordsSubmitted<T extends User$facilitiesChecklistRecordsSubmittedArgs<ExtArgs> = {}>(args?: Subset<T, User$facilitiesChecklistRecordsSubmittedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FacilitiesChecklistRecordPayload<ExtArgs>, T, "findMany"> | Null>
+    foreignMatterItemsCreated<T extends User$foreignMatterItemsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$foreignMatterItemsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForeignMatterItemPayload<ExtArgs>, T, "findMany"> | Null>
+    foreignMatterItemsUpdated<T extends User$foreignMatterItemsUpdatedArgs<ExtArgs> = {}>(args?: Subset<T, User$foreignMatterItemsUpdatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForeignMatterItemPayload<ExtArgs>, T, "findMany"> | Null>
+    foreignMatterItemsRetired<T extends User$foreignMatterItemsRetiredArgs<ExtArgs> = {}>(args?: Subset<T, User$foreignMatterItemsRetiredArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForeignMatterItemPayload<ExtArgs>, T, "findMany"> | Null>
+    foreignMatterListsUpdated<T extends User$foreignMatterListsUpdatedArgs<ExtArgs> = {}>(args?: Subset<T, User$foreignMatterListsUpdatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForeignMatterListPayload<ExtArgs>, T, "findMany"> | Null>
+    foreignMatterRecordsCreated<T extends User$foreignMatterRecordsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$foreignMatterRecordsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForeignMatterRecordPayload<ExtArgs>, T, "findMany"> | Null>
+    foreignMatterRecordsSubmitted<T extends User$foreignMatterRecordsSubmittedArgs<ExtArgs> = {}>(args?: Subset<T, User$foreignMatterRecordsSubmittedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForeignMatterRecordPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10160,6 +10496,126 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FacilitiesChecklistRecordScalarFieldEnum | FacilitiesChecklistRecordScalarFieldEnum[]
+  }
+
+  /**
+   * User.foreignMatterItemsCreated
+   */
+  export type User$foreignMatterItemsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterItem
+     */
+    select?: ForeignMatterItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterItemInclude<ExtArgs> | null
+    where?: ForeignMatterItemWhereInput
+    orderBy?: ForeignMatterItemOrderByWithRelationInput | ForeignMatterItemOrderByWithRelationInput[]
+    cursor?: ForeignMatterItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ForeignMatterItemScalarFieldEnum | ForeignMatterItemScalarFieldEnum[]
+  }
+
+  /**
+   * User.foreignMatterItemsUpdated
+   */
+  export type User$foreignMatterItemsUpdatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterItem
+     */
+    select?: ForeignMatterItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterItemInclude<ExtArgs> | null
+    where?: ForeignMatterItemWhereInput
+    orderBy?: ForeignMatterItemOrderByWithRelationInput | ForeignMatterItemOrderByWithRelationInput[]
+    cursor?: ForeignMatterItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ForeignMatterItemScalarFieldEnum | ForeignMatterItemScalarFieldEnum[]
+  }
+
+  /**
+   * User.foreignMatterItemsRetired
+   */
+  export type User$foreignMatterItemsRetiredArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterItem
+     */
+    select?: ForeignMatterItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterItemInclude<ExtArgs> | null
+    where?: ForeignMatterItemWhereInput
+    orderBy?: ForeignMatterItemOrderByWithRelationInput | ForeignMatterItemOrderByWithRelationInput[]
+    cursor?: ForeignMatterItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ForeignMatterItemScalarFieldEnum | ForeignMatterItemScalarFieldEnum[]
+  }
+
+  /**
+   * User.foreignMatterListsUpdated
+   */
+  export type User$foreignMatterListsUpdatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterList
+     */
+    select?: ForeignMatterListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterListInclude<ExtArgs> | null
+    where?: ForeignMatterListWhereInput
+    orderBy?: ForeignMatterListOrderByWithRelationInput | ForeignMatterListOrderByWithRelationInput[]
+    cursor?: ForeignMatterListWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ForeignMatterListScalarFieldEnum | ForeignMatterListScalarFieldEnum[]
+  }
+
+  /**
+   * User.foreignMatterRecordsCreated
+   */
+  export type User$foreignMatterRecordsCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterRecord
+     */
+    select?: ForeignMatterRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterRecordInclude<ExtArgs> | null
+    where?: ForeignMatterRecordWhereInput
+    orderBy?: ForeignMatterRecordOrderByWithRelationInput | ForeignMatterRecordOrderByWithRelationInput[]
+    cursor?: ForeignMatterRecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ForeignMatterRecordScalarFieldEnum | ForeignMatterRecordScalarFieldEnum[]
+  }
+
+  /**
+   * User.foreignMatterRecordsSubmitted
+   */
+  export type User$foreignMatterRecordsSubmittedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterRecord
+     */
+    select?: ForeignMatterRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterRecordInclude<ExtArgs> | null
+    where?: ForeignMatterRecordWhereInput
+    orderBy?: ForeignMatterRecordOrderByWithRelationInput | ForeignMatterRecordOrderByWithRelationInput[]
+    cursor?: ForeignMatterRecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ForeignMatterRecordScalarFieldEnum | ForeignMatterRecordScalarFieldEnum[]
   }
 
   /**
@@ -79369,6 +79825,3299 @@ export namespace Prisma {
 
 
   /**
+   * Model ForeignMatterItem
+   */
+
+  export type AggregateForeignMatterItem = {
+    _count: ForeignMatterItemCountAggregateOutputType | null
+    _avg: ForeignMatterItemAvgAggregateOutputType | null
+    _sum: ForeignMatterItemSumAggregateOutputType | null
+    _min: ForeignMatterItemMinAggregateOutputType | null
+    _max: ForeignMatterItemMaxAggregateOutputType | null
+  }
+
+  export type ForeignMatterItemAvgAggregateOutputType = {
+    expectedQuantity: number | null
+    sortOrder: number | null
+  }
+
+  export type ForeignMatterItemSumAggregateOutputType = {
+    expectedQuantity: number | null
+    sortOrder: number | null
+  }
+
+  export type ForeignMatterItemMinAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    section: string | null
+    areaName: string | null
+    name: string | null
+    expectedQuantity: number | null
+    sortOrder: number | null
+    retiredAt: Date | null
+    retiredById: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ForeignMatterItemMaxAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    section: string | null
+    areaName: string | null
+    name: string | null
+    expectedQuantity: number | null
+    sortOrder: number | null
+    retiredAt: Date | null
+    retiredById: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ForeignMatterItemCountAggregateOutputType = {
+    id: number
+    facility: number
+    section: number
+    areaName: number
+    name: number
+    expectedQuantity: number
+    sortOrder: number
+    retiredAt: number
+    retiredById: number
+    createdById: number
+    updatedById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ForeignMatterItemAvgAggregateInputType = {
+    expectedQuantity?: true
+    sortOrder?: true
+  }
+
+  export type ForeignMatterItemSumAggregateInputType = {
+    expectedQuantity?: true
+    sortOrder?: true
+  }
+
+  export type ForeignMatterItemMinAggregateInputType = {
+    id?: true
+    facility?: true
+    section?: true
+    areaName?: true
+    name?: true
+    expectedQuantity?: true
+    sortOrder?: true
+    retiredAt?: true
+    retiredById?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ForeignMatterItemMaxAggregateInputType = {
+    id?: true
+    facility?: true
+    section?: true
+    areaName?: true
+    name?: true
+    expectedQuantity?: true
+    sortOrder?: true
+    retiredAt?: true
+    retiredById?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ForeignMatterItemCountAggregateInputType = {
+    id?: true
+    facility?: true
+    section?: true
+    areaName?: true
+    name?: true
+    expectedQuantity?: true
+    sortOrder?: true
+    retiredAt?: true
+    retiredById?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ForeignMatterItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ForeignMatterItem to aggregate.
+     */
+    where?: ForeignMatterItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForeignMatterItems to fetch.
+     */
+    orderBy?: ForeignMatterItemOrderByWithRelationInput | ForeignMatterItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ForeignMatterItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForeignMatterItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForeignMatterItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ForeignMatterItems
+    **/
+    _count?: true | ForeignMatterItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ForeignMatterItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ForeignMatterItemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ForeignMatterItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ForeignMatterItemMaxAggregateInputType
+  }
+
+  export type GetForeignMatterItemAggregateType<T extends ForeignMatterItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateForeignMatterItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateForeignMatterItem[P]>
+      : GetScalarType<T[P], AggregateForeignMatterItem[P]>
+  }
+
+
+
+
+  export type ForeignMatterItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ForeignMatterItemWhereInput
+    orderBy?: ForeignMatterItemOrderByWithAggregationInput | ForeignMatterItemOrderByWithAggregationInput[]
+    by: ForeignMatterItemScalarFieldEnum[] | ForeignMatterItemScalarFieldEnum
+    having?: ForeignMatterItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ForeignMatterItemCountAggregateInputType | true
+    _avg?: ForeignMatterItemAvgAggregateInputType
+    _sum?: ForeignMatterItemSumAggregateInputType
+    _min?: ForeignMatterItemMinAggregateInputType
+    _max?: ForeignMatterItemMaxAggregateInputType
+  }
+
+  export type ForeignMatterItemGroupByOutputType = {
+    id: string
+    facility: string
+    section: string
+    areaName: string
+    name: string
+    expectedQuantity: number
+    sortOrder: number
+    retiredAt: Date | null
+    retiredById: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ForeignMatterItemCountAggregateOutputType | null
+    _avg: ForeignMatterItemAvgAggregateOutputType | null
+    _sum: ForeignMatterItemSumAggregateOutputType | null
+    _min: ForeignMatterItemMinAggregateOutputType | null
+    _max: ForeignMatterItemMaxAggregateOutputType | null
+  }
+
+  type GetForeignMatterItemGroupByPayload<T extends ForeignMatterItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ForeignMatterItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ForeignMatterItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ForeignMatterItemGroupByOutputType[P]>
+            : GetScalarType<T[P], ForeignMatterItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ForeignMatterItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    section?: boolean
+    areaName?: boolean
+    name?: boolean
+    expectedQuantity?: boolean
+    sortOrder?: boolean
+    retiredAt?: boolean
+    retiredById?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    retiredBy?: boolean | ForeignMatterItem$retiredByArgs<ExtArgs>
+    createdBy?: boolean | ForeignMatterItem$createdByArgs<ExtArgs>
+    updatedBy?: boolean | ForeignMatterItem$updatedByArgs<ExtArgs>
+  }, ExtArgs["result"]["foreignMatterItem"]>
+
+  export type ForeignMatterItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    section?: boolean
+    areaName?: boolean
+    name?: boolean
+    expectedQuantity?: boolean
+    sortOrder?: boolean
+    retiredAt?: boolean
+    retiredById?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    retiredBy?: boolean | ForeignMatterItem$retiredByArgs<ExtArgs>
+    createdBy?: boolean | ForeignMatterItem$createdByArgs<ExtArgs>
+    updatedBy?: boolean | ForeignMatterItem$updatedByArgs<ExtArgs>
+  }, ExtArgs["result"]["foreignMatterItem"]>
+
+  export type ForeignMatterItemSelectScalar = {
+    id?: boolean
+    facility?: boolean
+    section?: boolean
+    areaName?: boolean
+    name?: boolean
+    expectedQuantity?: boolean
+    sortOrder?: boolean
+    retiredAt?: boolean
+    retiredById?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ForeignMatterItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    retiredBy?: boolean | ForeignMatterItem$retiredByArgs<ExtArgs>
+    createdBy?: boolean | ForeignMatterItem$createdByArgs<ExtArgs>
+    updatedBy?: boolean | ForeignMatterItem$updatedByArgs<ExtArgs>
+  }
+  export type ForeignMatterItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    retiredBy?: boolean | ForeignMatterItem$retiredByArgs<ExtArgs>
+    createdBy?: boolean | ForeignMatterItem$createdByArgs<ExtArgs>
+    updatedBy?: boolean | ForeignMatterItem$updatedByArgs<ExtArgs>
+  }
+
+  export type $ForeignMatterItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ForeignMatterItem"
+    objects: {
+      retiredBy: Prisma.$UserPayload<ExtArgs> | null
+      createdBy: Prisma.$UserPayload<ExtArgs> | null
+      updatedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      facility: string
+      section: string
+      areaName: string
+      name: string
+      expectedQuantity: number
+      sortOrder: number
+      retiredAt: Date | null
+      retiredById: string | null
+      createdById: string | null
+      updatedById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["foreignMatterItem"]>
+    composites: {}
+  }
+
+  type ForeignMatterItemGetPayload<S extends boolean | null | undefined | ForeignMatterItemDefaultArgs> = $Result.GetResult<Prisma.$ForeignMatterItemPayload, S>
+
+  type ForeignMatterItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ForeignMatterItemFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ForeignMatterItemCountAggregateInputType | true
+    }
+
+  export interface ForeignMatterItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ForeignMatterItem'], meta: { name: 'ForeignMatterItem' } }
+    /**
+     * Find zero or one ForeignMatterItem that matches the filter.
+     * @param {ForeignMatterItemFindUniqueArgs} args - Arguments to find a ForeignMatterItem
+     * @example
+     * // Get one ForeignMatterItem
+     * const foreignMatterItem = await prisma.foreignMatterItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ForeignMatterItemFindUniqueArgs>(args: SelectSubset<T, ForeignMatterItemFindUniqueArgs<ExtArgs>>): Prisma__ForeignMatterItemClient<$Result.GetResult<Prisma.$ForeignMatterItemPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ForeignMatterItem that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ForeignMatterItemFindUniqueOrThrowArgs} args - Arguments to find a ForeignMatterItem
+     * @example
+     * // Get one ForeignMatterItem
+     * const foreignMatterItem = await prisma.foreignMatterItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ForeignMatterItemFindUniqueOrThrowArgs>(args: SelectSubset<T, ForeignMatterItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ForeignMatterItemClient<$Result.GetResult<Prisma.$ForeignMatterItemPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ForeignMatterItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterItemFindFirstArgs} args - Arguments to find a ForeignMatterItem
+     * @example
+     * // Get one ForeignMatterItem
+     * const foreignMatterItem = await prisma.foreignMatterItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ForeignMatterItemFindFirstArgs>(args?: SelectSubset<T, ForeignMatterItemFindFirstArgs<ExtArgs>>): Prisma__ForeignMatterItemClient<$Result.GetResult<Prisma.$ForeignMatterItemPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ForeignMatterItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterItemFindFirstOrThrowArgs} args - Arguments to find a ForeignMatterItem
+     * @example
+     * // Get one ForeignMatterItem
+     * const foreignMatterItem = await prisma.foreignMatterItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ForeignMatterItemFindFirstOrThrowArgs>(args?: SelectSubset<T, ForeignMatterItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__ForeignMatterItemClient<$Result.GetResult<Prisma.$ForeignMatterItemPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ForeignMatterItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ForeignMatterItems
+     * const foreignMatterItems = await prisma.foreignMatterItem.findMany()
+     * 
+     * // Get first 10 ForeignMatterItems
+     * const foreignMatterItems = await prisma.foreignMatterItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const foreignMatterItemWithIdOnly = await prisma.foreignMatterItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ForeignMatterItemFindManyArgs>(args?: SelectSubset<T, ForeignMatterItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForeignMatterItemPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ForeignMatterItem.
+     * @param {ForeignMatterItemCreateArgs} args - Arguments to create a ForeignMatterItem.
+     * @example
+     * // Create one ForeignMatterItem
+     * const ForeignMatterItem = await prisma.foreignMatterItem.create({
+     *   data: {
+     *     // ... data to create a ForeignMatterItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends ForeignMatterItemCreateArgs>(args: SelectSubset<T, ForeignMatterItemCreateArgs<ExtArgs>>): Prisma__ForeignMatterItemClient<$Result.GetResult<Prisma.$ForeignMatterItemPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ForeignMatterItems.
+     * @param {ForeignMatterItemCreateManyArgs} args - Arguments to create many ForeignMatterItems.
+     * @example
+     * // Create many ForeignMatterItems
+     * const foreignMatterItem = await prisma.foreignMatterItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ForeignMatterItemCreateManyArgs>(args?: SelectSubset<T, ForeignMatterItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ForeignMatterItems and returns the data saved in the database.
+     * @param {ForeignMatterItemCreateManyAndReturnArgs} args - Arguments to create many ForeignMatterItems.
+     * @example
+     * // Create many ForeignMatterItems
+     * const foreignMatterItem = await prisma.foreignMatterItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ForeignMatterItems and only return the `id`
+     * const foreignMatterItemWithIdOnly = await prisma.foreignMatterItem.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ForeignMatterItemCreateManyAndReturnArgs>(args?: SelectSubset<T, ForeignMatterItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForeignMatterItemPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ForeignMatterItem.
+     * @param {ForeignMatterItemDeleteArgs} args - Arguments to delete one ForeignMatterItem.
+     * @example
+     * // Delete one ForeignMatterItem
+     * const ForeignMatterItem = await prisma.foreignMatterItem.delete({
+     *   where: {
+     *     // ... filter to delete one ForeignMatterItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ForeignMatterItemDeleteArgs>(args: SelectSubset<T, ForeignMatterItemDeleteArgs<ExtArgs>>): Prisma__ForeignMatterItemClient<$Result.GetResult<Prisma.$ForeignMatterItemPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ForeignMatterItem.
+     * @param {ForeignMatterItemUpdateArgs} args - Arguments to update one ForeignMatterItem.
+     * @example
+     * // Update one ForeignMatterItem
+     * const foreignMatterItem = await prisma.foreignMatterItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ForeignMatterItemUpdateArgs>(args: SelectSubset<T, ForeignMatterItemUpdateArgs<ExtArgs>>): Prisma__ForeignMatterItemClient<$Result.GetResult<Prisma.$ForeignMatterItemPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ForeignMatterItems.
+     * @param {ForeignMatterItemDeleteManyArgs} args - Arguments to filter ForeignMatterItems to delete.
+     * @example
+     * // Delete a few ForeignMatterItems
+     * const { count } = await prisma.foreignMatterItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ForeignMatterItemDeleteManyArgs>(args?: SelectSubset<T, ForeignMatterItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ForeignMatterItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ForeignMatterItems
+     * const foreignMatterItem = await prisma.foreignMatterItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ForeignMatterItemUpdateManyArgs>(args: SelectSubset<T, ForeignMatterItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ForeignMatterItem.
+     * @param {ForeignMatterItemUpsertArgs} args - Arguments to update or create a ForeignMatterItem.
+     * @example
+     * // Update or create a ForeignMatterItem
+     * const foreignMatterItem = await prisma.foreignMatterItem.upsert({
+     *   create: {
+     *     // ... data to create a ForeignMatterItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ForeignMatterItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ForeignMatterItemUpsertArgs>(args: SelectSubset<T, ForeignMatterItemUpsertArgs<ExtArgs>>): Prisma__ForeignMatterItemClient<$Result.GetResult<Prisma.$ForeignMatterItemPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ForeignMatterItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterItemCountArgs} args - Arguments to filter ForeignMatterItems to count.
+     * @example
+     * // Count the number of ForeignMatterItems
+     * const count = await prisma.foreignMatterItem.count({
+     *   where: {
+     *     // ... the filter for the ForeignMatterItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends ForeignMatterItemCountArgs>(
+      args?: Subset<T, ForeignMatterItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ForeignMatterItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ForeignMatterItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ForeignMatterItemAggregateArgs>(args: Subset<T, ForeignMatterItemAggregateArgs>): Prisma.PrismaPromise<GetForeignMatterItemAggregateType<T>>
+
+    /**
+     * Group by ForeignMatterItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ForeignMatterItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ForeignMatterItemGroupByArgs['orderBy'] }
+        : { orderBy?: ForeignMatterItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ForeignMatterItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetForeignMatterItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ForeignMatterItem model
+   */
+  readonly fields: ForeignMatterItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ForeignMatterItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ForeignMatterItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    retiredBy<T extends ForeignMatterItem$retiredByArgs<ExtArgs> = {}>(args?: Subset<T, ForeignMatterItem$retiredByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    createdBy<T extends ForeignMatterItem$createdByArgs<ExtArgs> = {}>(args?: Subset<T, ForeignMatterItem$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    updatedBy<T extends ForeignMatterItem$updatedByArgs<ExtArgs> = {}>(args?: Subset<T, ForeignMatterItem$updatedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ForeignMatterItem model
+   */ 
+  interface ForeignMatterItemFieldRefs {
+    readonly id: FieldRef<"ForeignMatterItem", 'String'>
+    readonly facility: FieldRef<"ForeignMatterItem", 'String'>
+    readonly section: FieldRef<"ForeignMatterItem", 'String'>
+    readonly areaName: FieldRef<"ForeignMatterItem", 'String'>
+    readonly name: FieldRef<"ForeignMatterItem", 'String'>
+    readonly expectedQuantity: FieldRef<"ForeignMatterItem", 'Int'>
+    readonly sortOrder: FieldRef<"ForeignMatterItem", 'Int'>
+    readonly retiredAt: FieldRef<"ForeignMatterItem", 'DateTime'>
+    readonly retiredById: FieldRef<"ForeignMatterItem", 'String'>
+    readonly createdById: FieldRef<"ForeignMatterItem", 'String'>
+    readonly updatedById: FieldRef<"ForeignMatterItem", 'String'>
+    readonly createdAt: FieldRef<"ForeignMatterItem", 'DateTime'>
+    readonly updatedAt: FieldRef<"ForeignMatterItem", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ForeignMatterItem findUnique
+   */
+  export type ForeignMatterItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterItem
+     */
+    select?: ForeignMatterItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ForeignMatterItem to fetch.
+     */
+    where: ForeignMatterItemWhereUniqueInput
+  }
+
+  /**
+   * ForeignMatterItem findUniqueOrThrow
+   */
+  export type ForeignMatterItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterItem
+     */
+    select?: ForeignMatterItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ForeignMatterItem to fetch.
+     */
+    where: ForeignMatterItemWhereUniqueInput
+  }
+
+  /**
+   * ForeignMatterItem findFirst
+   */
+  export type ForeignMatterItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterItem
+     */
+    select?: ForeignMatterItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ForeignMatterItem to fetch.
+     */
+    where?: ForeignMatterItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForeignMatterItems to fetch.
+     */
+    orderBy?: ForeignMatterItemOrderByWithRelationInput | ForeignMatterItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ForeignMatterItems.
+     */
+    cursor?: ForeignMatterItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForeignMatterItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForeignMatterItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ForeignMatterItems.
+     */
+    distinct?: ForeignMatterItemScalarFieldEnum | ForeignMatterItemScalarFieldEnum[]
+  }
+
+  /**
+   * ForeignMatterItem findFirstOrThrow
+   */
+  export type ForeignMatterItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterItem
+     */
+    select?: ForeignMatterItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ForeignMatterItem to fetch.
+     */
+    where?: ForeignMatterItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForeignMatterItems to fetch.
+     */
+    orderBy?: ForeignMatterItemOrderByWithRelationInput | ForeignMatterItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ForeignMatterItems.
+     */
+    cursor?: ForeignMatterItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForeignMatterItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForeignMatterItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ForeignMatterItems.
+     */
+    distinct?: ForeignMatterItemScalarFieldEnum | ForeignMatterItemScalarFieldEnum[]
+  }
+
+  /**
+   * ForeignMatterItem findMany
+   */
+  export type ForeignMatterItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterItem
+     */
+    select?: ForeignMatterItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ForeignMatterItems to fetch.
+     */
+    where?: ForeignMatterItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForeignMatterItems to fetch.
+     */
+    orderBy?: ForeignMatterItemOrderByWithRelationInput | ForeignMatterItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ForeignMatterItems.
+     */
+    cursor?: ForeignMatterItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForeignMatterItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForeignMatterItems.
+     */
+    skip?: number
+    distinct?: ForeignMatterItemScalarFieldEnum | ForeignMatterItemScalarFieldEnum[]
+  }
+
+  /**
+   * ForeignMatterItem create
+   */
+  export type ForeignMatterItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterItem
+     */
+    select?: ForeignMatterItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ForeignMatterItem.
+     */
+    data: XOR<ForeignMatterItemCreateInput, ForeignMatterItemUncheckedCreateInput>
+  }
+
+  /**
+   * ForeignMatterItem createMany
+   */
+  export type ForeignMatterItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ForeignMatterItems.
+     */
+    data: ForeignMatterItemCreateManyInput | ForeignMatterItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ForeignMatterItem createManyAndReturn
+   */
+  export type ForeignMatterItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterItem
+     */
+    select?: ForeignMatterItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ForeignMatterItems.
+     */
+    data: ForeignMatterItemCreateManyInput | ForeignMatterItemCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterItemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ForeignMatterItem update
+   */
+  export type ForeignMatterItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterItem
+     */
+    select?: ForeignMatterItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ForeignMatterItem.
+     */
+    data: XOR<ForeignMatterItemUpdateInput, ForeignMatterItemUncheckedUpdateInput>
+    /**
+     * Choose, which ForeignMatterItem to update.
+     */
+    where: ForeignMatterItemWhereUniqueInput
+  }
+
+  /**
+   * ForeignMatterItem updateMany
+   */
+  export type ForeignMatterItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ForeignMatterItems.
+     */
+    data: XOR<ForeignMatterItemUpdateManyMutationInput, ForeignMatterItemUncheckedUpdateManyInput>
+    /**
+     * Filter which ForeignMatterItems to update
+     */
+    where?: ForeignMatterItemWhereInput
+  }
+
+  /**
+   * ForeignMatterItem upsert
+   */
+  export type ForeignMatterItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterItem
+     */
+    select?: ForeignMatterItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ForeignMatterItem to update in case it exists.
+     */
+    where: ForeignMatterItemWhereUniqueInput
+    /**
+     * In case the ForeignMatterItem found by the `where` argument doesn't exist, create a new ForeignMatterItem with this data.
+     */
+    create: XOR<ForeignMatterItemCreateInput, ForeignMatterItemUncheckedCreateInput>
+    /**
+     * In case the ForeignMatterItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ForeignMatterItemUpdateInput, ForeignMatterItemUncheckedUpdateInput>
+  }
+
+  /**
+   * ForeignMatterItem delete
+   */
+  export type ForeignMatterItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterItem
+     */
+    select?: ForeignMatterItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterItemInclude<ExtArgs> | null
+    /**
+     * Filter which ForeignMatterItem to delete.
+     */
+    where: ForeignMatterItemWhereUniqueInput
+  }
+
+  /**
+   * ForeignMatterItem deleteMany
+   */
+  export type ForeignMatterItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ForeignMatterItems to delete
+     */
+    where?: ForeignMatterItemWhereInput
+  }
+
+  /**
+   * ForeignMatterItem.retiredBy
+   */
+  export type ForeignMatterItem$retiredByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * ForeignMatterItem.createdBy
+   */
+  export type ForeignMatterItem$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * ForeignMatterItem.updatedBy
+   */
+  export type ForeignMatterItem$updatedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * ForeignMatterItem without action
+   */
+  export type ForeignMatterItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterItem
+     */
+    select?: ForeignMatterItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterItemInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ForeignMatterList
+   */
+
+  export type AggregateForeignMatterList = {
+    _count: ForeignMatterListCountAggregateOutputType | null
+    _avg: ForeignMatterListAvgAggregateOutputType | null
+    _sum: ForeignMatterListSumAggregateOutputType | null
+    _min: ForeignMatterListMinAggregateOutputType | null
+    _max: ForeignMatterListMaxAggregateOutputType | null
+  }
+
+  export type ForeignMatterListAvgAggregateOutputType = {
+    version: number | null
+  }
+
+  export type ForeignMatterListSumAggregateOutputType = {
+    version: number | null
+  }
+
+  export type ForeignMatterListMinAggregateOutputType = {
+    facility: string | null
+    version: number | null
+    updatedById: string | null
+    updatedAt: Date | null
+  }
+
+  export type ForeignMatterListMaxAggregateOutputType = {
+    facility: string | null
+    version: number | null
+    updatedById: string | null
+    updatedAt: Date | null
+  }
+
+  export type ForeignMatterListCountAggregateOutputType = {
+    facility: number
+    version: number
+    updatedById: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ForeignMatterListAvgAggregateInputType = {
+    version?: true
+  }
+
+  export type ForeignMatterListSumAggregateInputType = {
+    version?: true
+  }
+
+  export type ForeignMatterListMinAggregateInputType = {
+    facility?: true
+    version?: true
+    updatedById?: true
+    updatedAt?: true
+  }
+
+  export type ForeignMatterListMaxAggregateInputType = {
+    facility?: true
+    version?: true
+    updatedById?: true
+    updatedAt?: true
+  }
+
+  export type ForeignMatterListCountAggregateInputType = {
+    facility?: true
+    version?: true
+    updatedById?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ForeignMatterListAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ForeignMatterList to aggregate.
+     */
+    where?: ForeignMatterListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForeignMatterLists to fetch.
+     */
+    orderBy?: ForeignMatterListOrderByWithRelationInput | ForeignMatterListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ForeignMatterListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForeignMatterLists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForeignMatterLists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ForeignMatterLists
+    **/
+    _count?: true | ForeignMatterListCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ForeignMatterListAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ForeignMatterListSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ForeignMatterListMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ForeignMatterListMaxAggregateInputType
+  }
+
+  export type GetForeignMatterListAggregateType<T extends ForeignMatterListAggregateArgs> = {
+        [P in keyof T & keyof AggregateForeignMatterList]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateForeignMatterList[P]>
+      : GetScalarType<T[P], AggregateForeignMatterList[P]>
+  }
+
+
+
+
+  export type ForeignMatterListGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ForeignMatterListWhereInput
+    orderBy?: ForeignMatterListOrderByWithAggregationInput | ForeignMatterListOrderByWithAggregationInput[]
+    by: ForeignMatterListScalarFieldEnum[] | ForeignMatterListScalarFieldEnum
+    having?: ForeignMatterListScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ForeignMatterListCountAggregateInputType | true
+    _avg?: ForeignMatterListAvgAggregateInputType
+    _sum?: ForeignMatterListSumAggregateInputType
+    _min?: ForeignMatterListMinAggregateInputType
+    _max?: ForeignMatterListMaxAggregateInputType
+  }
+
+  export type ForeignMatterListGroupByOutputType = {
+    facility: string
+    version: number
+    updatedById: string | null
+    updatedAt: Date
+    _count: ForeignMatterListCountAggregateOutputType | null
+    _avg: ForeignMatterListAvgAggregateOutputType | null
+    _sum: ForeignMatterListSumAggregateOutputType | null
+    _min: ForeignMatterListMinAggregateOutputType | null
+    _max: ForeignMatterListMaxAggregateOutputType | null
+  }
+
+  type GetForeignMatterListGroupByPayload<T extends ForeignMatterListGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ForeignMatterListGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ForeignMatterListGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ForeignMatterListGroupByOutputType[P]>
+            : GetScalarType<T[P], ForeignMatterListGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ForeignMatterListSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    facility?: boolean
+    version?: boolean
+    updatedById?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean | ForeignMatterList$updatedByArgs<ExtArgs>
+  }, ExtArgs["result"]["foreignMatterList"]>
+
+  export type ForeignMatterListSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    facility?: boolean
+    version?: boolean
+    updatedById?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean | ForeignMatterList$updatedByArgs<ExtArgs>
+  }, ExtArgs["result"]["foreignMatterList"]>
+
+  export type ForeignMatterListSelectScalar = {
+    facility?: boolean
+    version?: boolean
+    updatedById?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ForeignMatterListInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    updatedBy?: boolean | ForeignMatterList$updatedByArgs<ExtArgs>
+  }
+  export type ForeignMatterListIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    updatedBy?: boolean | ForeignMatterList$updatedByArgs<ExtArgs>
+  }
+
+  export type $ForeignMatterListPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ForeignMatterList"
+    objects: {
+      updatedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      facility: string
+      version: number
+      updatedById: string | null
+      updatedAt: Date
+    }, ExtArgs["result"]["foreignMatterList"]>
+    composites: {}
+  }
+
+  type ForeignMatterListGetPayload<S extends boolean | null | undefined | ForeignMatterListDefaultArgs> = $Result.GetResult<Prisma.$ForeignMatterListPayload, S>
+
+  type ForeignMatterListCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ForeignMatterListFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ForeignMatterListCountAggregateInputType | true
+    }
+
+  export interface ForeignMatterListDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ForeignMatterList'], meta: { name: 'ForeignMatterList' } }
+    /**
+     * Find zero or one ForeignMatterList that matches the filter.
+     * @param {ForeignMatterListFindUniqueArgs} args - Arguments to find a ForeignMatterList
+     * @example
+     * // Get one ForeignMatterList
+     * const foreignMatterList = await prisma.foreignMatterList.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ForeignMatterListFindUniqueArgs>(args: SelectSubset<T, ForeignMatterListFindUniqueArgs<ExtArgs>>): Prisma__ForeignMatterListClient<$Result.GetResult<Prisma.$ForeignMatterListPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ForeignMatterList that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ForeignMatterListFindUniqueOrThrowArgs} args - Arguments to find a ForeignMatterList
+     * @example
+     * // Get one ForeignMatterList
+     * const foreignMatterList = await prisma.foreignMatterList.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ForeignMatterListFindUniqueOrThrowArgs>(args: SelectSubset<T, ForeignMatterListFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ForeignMatterListClient<$Result.GetResult<Prisma.$ForeignMatterListPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ForeignMatterList that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterListFindFirstArgs} args - Arguments to find a ForeignMatterList
+     * @example
+     * // Get one ForeignMatterList
+     * const foreignMatterList = await prisma.foreignMatterList.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ForeignMatterListFindFirstArgs>(args?: SelectSubset<T, ForeignMatterListFindFirstArgs<ExtArgs>>): Prisma__ForeignMatterListClient<$Result.GetResult<Prisma.$ForeignMatterListPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ForeignMatterList that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterListFindFirstOrThrowArgs} args - Arguments to find a ForeignMatterList
+     * @example
+     * // Get one ForeignMatterList
+     * const foreignMatterList = await prisma.foreignMatterList.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ForeignMatterListFindFirstOrThrowArgs>(args?: SelectSubset<T, ForeignMatterListFindFirstOrThrowArgs<ExtArgs>>): Prisma__ForeignMatterListClient<$Result.GetResult<Prisma.$ForeignMatterListPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ForeignMatterLists that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterListFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ForeignMatterLists
+     * const foreignMatterLists = await prisma.foreignMatterList.findMany()
+     * 
+     * // Get first 10 ForeignMatterLists
+     * const foreignMatterLists = await prisma.foreignMatterList.findMany({ take: 10 })
+     * 
+     * // Only select the `facility`
+     * const foreignMatterListWithFacilityOnly = await prisma.foreignMatterList.findMany({ select: { facility: true } })
+     * 
+     */
+    findMany<T extends ForeignMatterListFindManyArgs>(args?: SelectSubset<T, ForeignMatterListFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForeignMatterListPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ForeignMatterList.
+     * @param {ForeignMatterListCreateArgs} args - Arguments to create a ForeignMatterList.
+     * @example
+     * // Create one ForeignMatterList
+     * const ForeignMatterList = await prisma.foreignMatterList.create({
+     *   data: {
+     *     // ... data to create a ForeignMatterList
+     *   }
+     * })
+     * 
+     */
+    create<T extends ForeignMatterListCreateArgs>(args: SelectSubset<T, ForeignMatterListCreateArgs<ExtArgs>>): Prisma__ForeignMatterListClient<$Result.GetResult<Prisma.$ForeignMatterListPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ForeignMatterLists.
+     * @param {ForeignMatterListCreateManyArgs} args - Arguments to create many ForeignMatterLists.
+     * @example
+     * // Create many ForeignMatterLists
+     * const foreignMatterList = await prisma.foreignMatterList.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ForeignMatterListCreateManyArgs>(args?: SelectSubset<T, ForeignMatterListCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ForeignMatterLists and returns the data saved in the database.
+     * @param {ForeignMatterListCreateManyAndReturnArgs} args - Arguments to create many ForeignMatterLists.
+     * @example
+     * // Create many ForeignMatterLists
+     * const foreignMatterList = await prisma.foreignMatterList.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ForeignMatterLists and only return the `facility`
+     * const foreignMatterListWithFacilityOnly = await prisma.foreignMatterList.createManyAndReturn({ 
+     *   select: { facility: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ForeignMatterListCreateManyAndReturnArgs>(args?: SelectSubset<T, ForeignMatterListCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForeignMatterListPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ForeignMatterList.
+     * @param {ForeignMatterListDeleteArgs} args - Arguments to delete one ForeignMatterList.
+     * @example
+     * // Delete one ForeignMatterList
+     * const ForeignMatterList = await prisma.foreignMatterList.delete({
+     *   where: {
+     *     // ... filter to delete one ForeignMatterList
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ForeignMatterListDeleteArgs>(args: SelectSubset<T, ForeignMatterListDeleteArgs<ExtArgs>>): Prisma__ForeignMatterListClient<$Result.GetResult<Prisma.$ForeignMatterListPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ForeignMatterList.
+     * @param {ForeignMatterListUpdateArgs} args - Arguments to update one ForeignMatterList.
+     * @example
+     * // Update one ForeignMatterList
+     * const foreignMatterList = await prisma.foreignMatterList.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ForeignMatterListUpdateArgs>(args: SelectSubset<T, ForeignMatterListUpdateArgs<ExtArgs>>): Prisma__ForeignMatterListClient<$Result.GetResult<Prisma.$ForeignMatterListPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ForeignMatterLists.
+     * @param {ForeignMatterListDeleteManyArgs} args - Arguments to filter ForeignMatterLists to delete.
+     * @example
+     * // Delete a few ForeignMatterLists
+     * const { count } = await prisma.foreignMatterList.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ForeignMatterListDeleteManyArgs>(args?: SelectSubset<T, ForeignMatterListDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ForeignMatterLists.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterListUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ForeignMatterLists
+     * const foreignMatterList = await prisma.foreignMatterList.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ForeignMatterListUpdateManyArgs>(args: SelectSubset<T, ForeignMatterListUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ForeignMatterList.
+     * @param {ForeignMatterListUpsertArgs} args - Arguments to update or create a ForeignMatterList.
+     * @example
+     * // Update or create a ForeignMatterList
+     * const foreignMatterList = await prisma.foreignMatterList.upsert({
+     *   create: {
+     *     // ... data to create a ForeignMatterList
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ForeignMatterList we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ForeignMatterListUpsertArgs>(args: SelectSubset<T, ForeignMatterListUpsertArgs<ExtArgs>>): Prisma__ForeignMatterListClient<$Result.GetResult<Prisma.$ForeignMatterListPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ForeignMatterLists.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterListCountArgs} args - Arguments to filter ForeignMatterLists to count.
+     * @example
+     * // Count the number of ForeignMatterLists
+     * const count = await prisma.foreignMatterList.count({
+     *   where: {
+     *     // ... the filter for the ForeignMatterLists we want to count
+     *   }
+     * })
+    **/
+    count<T extends ForeignMatterListCountArgs>(
+      args?: Subset<T, ForeignMatterListCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ForeignMatterListCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ForeignMatterList.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterListAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ForeignMatterListAggregateArgs>(args: Subset<T, ForeignMatterListAggregateArgs>): Prisma.PrismaPromise<GetForeignMatterListAggregateType<T>>
+
+    /**
+     * Group by ForeignMatterList.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterListGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ForeignMatterListGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ForeignMatterListGroupByArgs['orderBy'] }
+        : { orderBy?: ForeignMatterListGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ForeignMatterListGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetForeignMatterListGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ForeignMatterList model
+   */
+  readonly fields: ForeignMatterListFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ForeignMatterList.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ForeignMatterListClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    updatedBy<T extends ForeignMatterList$updatedByArgs<ExtArgs> = {}>(args?: Subset<T, ForeignMatterList$updatedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ForeignMatterList model
+   */ 
+  interface ForeignMatterListFieldRefs {
+    readonly facility: FieldRef<"ForeignMatterList", 'String'>
+    readonly version: FieldRef<"ForeignMatterList", 'Int'>
+    readonly updatedById: FieldRef<"ForeignMatterList", 'String'>
+    readonly updatedAt: FieldRef<"ForeignMatterList", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ForeignMatterList findUnique
+   */
+  export type ForeignMatterListFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterList
+     */
+    select?: ForeignMatterListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterListInclude<ExtArgs> | null
+    /**
+     * Filter, which ForeignMatterList to fetch.
+     */
+    where: ForeignMatterListWhereUniqueInput
+  }
+
+  /**
+   * ForeignMatterList findUniqueOrThrow
+   */
+  export type ForeignMatterListFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterList
+     */
+    select?: ForeignMatterListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterListInclude<ExtArgs> | null
+    /**
+     * Filter, which ForeignMatterList to fetch.
+     */
+    where: ForeignMatterListWhereUniqueInput
+  }
+
+  /**
+   * ForeignMatterList findFirst
+   */
+  export type ForeignMatterListFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterList
+     */
+    select?: ForeignMatterListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterListInclude<ExtArgs> | null
+    /**
+     * Filter, which ForeignMatterList to fetch.
+     */
+    where?: ForeignMatterListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForeignMatterLists to fetch.
+     */
+    orderBy?: ForeignMatterListOrderByWithRelationInput | ForeignMatterListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ForeignMatterLists.
+     */
+    cursor?: ForeignMatterListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForeignMatterLists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForeignMatterLists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ForeignMatterLists.
+     */
+    distinct?: ForeignMatterListScalarFieldEnum | ForeignMatterListScalarFieldEnum[]
+  }
+
+  /**
+   * ForeignMatterList findFirstOrThrow
+   */
+  export type ForeignMatterListFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterList
+     */
+    select?: ForeignMatterListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterListInclude<ExtArgs> | null
+    /**
+     * Filter, which ForeignMatterList to fetch.
+     */
+    where?: ForeignMatterListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForeignMatterLists to fetch.
+     */
+    orderBy?: ForeignMatterListOrderByWithRelationInput | ForeignMatterListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ForeignMatterLists.
+     */
+    cursor?: ForeignMatterListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForeignMatterLists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForeignMatterLists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ForeignMatterLists.
+     */
+    distinct?: ForeignMatterListScalarFieldEnum | ForeignMatterListScalarFieldEnum[]
+  }
+
+  /**
+   * ForeignMatterList findMany
+   */
+  export type ForeignMatterListFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterList
+     */
+    select?: ForeignMatterListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterListInclude<ExtArgs> | null
+    /**
+     * Filter, which ForeignMatterLists to fetch.
+     */
+    where?: ForeignMatterListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForeignMatterLists to fetch.
+     */
+    orderBy?: ForeignMatterListOrderByWithRelationInput | ForeignMatterListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ForeignMatterLists.
+     */
+    cursor?: ForeignMatterListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForeignMatterLists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForeignMatterLists.
+     */
+    skip?: number
+    distinct?: ForeignMatterListScalarFieldEnum | ForeignMatterListScalarFieldEnum[]
+  }
+
+  /**
+   * ForeignMatterList create
+   */
+  export type ForeignMatterListCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterList
+     */
+    select?: ForeignMatterListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterListInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ForeignMatterList.
+     */
+    data: XOR<ForeignMatterListCreateInput, ForeignMatterListUncheckedCreateInput>
+  }
+
+  /**
+   * ForeignMatterList createMany
+   */
+  export type ForeignMatterListCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ForeignMatterLists.
+     */
+    data: ForeignMatterListCreateManyInput | ForeignMatterListCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ForeignMatterList createManyAndReturn
+   */
+  export type ForeignMatterListCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterList
+     */
+    select?: ForeignMatterListSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ForeignMatterLists.
+     */
+    data: ForeignMatterListCreateManyInput | ForeignMatterListCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterListIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ForeignMatterList update
+   */
+  export type ForeignMatterListUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterList
+     */
+    select?: ForeignMatterListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterListInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ForeignMatterList.
+     */
+    data: XOR<ForeignMatterListUpdateInput, ForeignMatterListUncheckedUpdateInput>
+    /**
+     * Choose, which ForeignMatterList to update.
+     */
+    where: ForeignMatterListWhereUniqueInput
+  }
+
+  /**
+   * ForeignMatterList updateMany
+   */
+  export type ForeignMatterListUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ForeignMatterLists.
+     */
+    data: XOR<ForeignMatterListUpdateManyMutationInput, ForeignMatterListUncheckedUpdateManyInput>
+    /**
+     * Filter which ForeignMatterLists to update
+     */
+    where?: ForeignMatterListWhereInput
+  }
+
+  /**
+   * ForeignMatterList upsert
+   */
+  export type ForeignMatterListUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterList
+     */
+    select?: ForeignMatterListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterListInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ForeignMatterList to update in case it exists.
+     */
+    where: ForeignMatterListWhereUniqueInput
+    /**
+     * In case the ForeignMatterList found by the `where` argument doesn't exist, create a new ForeignMatterList with this data.
+     */
+    create: XOR<ForeignMatterListCreateInput, ForeignMatterListUncheckedCreateInput>
+    /**
+     * In case the ForeignMatterList was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ForeignMatterListUpdateInput, ForeignMatterListUncheckedUpdateInput>
+  }
+
+  /**
+   * ForeignMatterList delete
+   */
+  export type ForeignMatterListDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterList
+     */
+    select?: ForeignMatterListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterListInclude<ExtArgs> | null
+    /**
+     * Filter which ForeignMatterList to delete.
+     */
+    where: ForeignMatterListWhereUniqueInput
+  }
+
+  /**
+   * ForeignMatterList deleteMany
+   */
+  export type ForeignMatterListDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ForeignMatterLists to delete
+     */
+    where?: ForeignMatterListWhereInput
+  }
+
+  /**
+   * ForeignMatterList.updatedBy
+   */
+  export type ForeignMatterList$updatedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * ForeignMatterList without action
+   */
+  export type ForeignMatterListDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterList
+     */
+    select?: ForeignMatterListSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterListInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ForeignMatterRecord
+   */
+
+  export type AggregateForeignMatterRecord = {
+    _count: ForeignMatterRecordCountAggregateOutputType | null
+    _avg: ForeignMatterRecordAvgAggregateOutputType | null
+    _sum: ForeignMatterRecordSumAggregateOutputType | null
+    _min: ForeignMatterRecordMinAggregateOutputType | null
+    _max: ForeignMatterRecordMaxAggregateOutputType | null
+  }
+
+  export type ForeignMatterRecordAvgAggregateOutputType = {
+    listVersion: number | null
+    okCount: number | null
+    failCount: number | null
+  }
+
+  export type ForeignMatterRecordSumAggregateOutputType = {
+    listVersion: number | null
+    okCount: number | null
+    failCount: number | null
+  }
+
+  export type ForeignMatterRecordMinAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    period: string | null
+    periodStart: Date | null
+    periodEnd: Date | null
+    status: string | null
+    conductedBy: string | null
+    initials: string | null
+    listVersion: number | null
+    okCount: number | null
+    failCount: number | null
+    notes: string | null
+    lastEditedBy: string | null
+    lastEditedAt: Date | null
+    createdById: string | null
+    submittedAt: Date | null
+    submittedById: string | null
+    linkedInstanceId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ForeignMatterRecordMaxAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    period: string | null
+    periodStart: Date | null
+    periodEnd: Date | null
+    status: string | null
+    conductedBy: string | null
+    initials: string | null
+    listVersion: number | null
+    okCount: number | null
+    failCount: number | null
+    notes: string | null
+    lastEditedBy: string | null
+    lastEditedAt: Date | null
+    createdById: string | null
+    submittedAt: Date | null
+    submittedById: string | null
+    linkedInstanceId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ForeignMatterRecordCountAggregateOutputType = {
+    id: number
+    facility: number
+    period: number
+    periodStart: number
+    periodEnd: number
+    status: number
+    conductedBy: number
+    initials: number
+    items: number
+    listVersion: number
+    okCount: number
+    failCount: number
+    notes: number
+    lastEditedBy: number
+    lastEditedAt: number
+    createdById: number
+    submittedAt: number
+    submittedById: number
+    linkedInstanceId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ForeignMatterRecordAvgAggregateInputType = {
+    listVersion?: true
+    okCount?: true
+    failCount?: true
+  }
+
+  export type ForeignMatterRecordSumAggregateInputType = {
+    listVersion?: true
+    okCount?: true
+    failCount?: true
+  }
+
+  export type ForeignMatterRecordMinAggregateInputType = {
+    id?: true
+    facility?: true
+    period?: true
+    periodStart?: true
+    periodEnd?: true
+    status?: true
+    conductedBy?: true
+    initials?: true
+    listVersion?: true
+    okCount?: true
+    failCount?: true
+    notes?: true
+    lastEditedBy?: true
+    lastEditedAt?: true
+    createdById?: true
+    submittedAt?: true
+    submittedById?: true
+    linkedInstanceId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ForeignMatterRecordMaxAggregateInputType = {
+    id?: true
+    facility?: true
+    period?: true
+    periodStart?: true
+    periodEnd?: true
+    status?: true
+    conductedBy?: true
+    initials?: true
+    listVersion?: true
+    okCount?: true
+    failCount?: true
+    notes?: true
+    lastEditedBy?: true
+    lastEditedAt?: true
+    createdById?: true
+    submittedAt?: true
+    submittedById?: true
+    linkedInstanceId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ForeignMatterRecordCountAggregateInputType = {
+    id?: true
+    facility?: true
+    period?: true
+    periodStart?: true
+    periodEnd?: true
+    status?: true
+    conductedBy?: true
+    initials?: true
+    items?: true
+    listVersion?: true
+    okCount?: true
+    failCount?: true
+    notes?: true
+    lastEditedBy?: true
+    lastEditedAt?: true
+    createdById?: true
+    submittedAt?: true
+    submittedById?: true
+    linkedInstanceId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ForeignMatterRecordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ForeignMatterRecord to aggregate.
+     */
+    where?: ForeignMatterRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForeignMatterRecords to fetch.
+     */
+    orderBy?: ForeignMatterRecordOrderByWithRelationInput | ForeignMatterRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ForeignMatterRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForeignMatterRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForeignMatterRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ForeignMatterRecords
+    **/
+    _count?: true | ForeignMatterRecordCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ForeignMatterRecordAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ForeignMatterRecordSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ForeignMatterRecordMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ForeignMatterRecordMaxAggregateInputType
+  }
+
+  export type GetForeignMatterRecordAggregateType<T extends ForeignMatterRecordAggregateArgs> = {
+        [P in keyof T & keyof AggregateForeignMatterRecord]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateForeignMatterRecord[P]>
+      : GetScalarType<T[P], AggregateForeignMatterRecord[P]>
+  }
+
+
+
+
+  export type ForeignMatterRecordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ForeignMatterRecordWhereInput
+    orderBy?: ForeignMatterRecordOrderByWithAggregationInput | ForeignMatterRecordOrderByWithAggregationInput[]
+    by: ForeignMatterRecordScalarFieldEnum[] | ForeignMatterRecordScalarFieldEnum
+    having?: ForeignMatterRecordScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ForeignMatterRecordCountAggregateInputType | true
+    _avg?: ForeignMatterRecordAvgAggregateInputType
+    _sum?: ForeignMatterRecordSumAggregateInputType
+    _min?: ForeignMatterRecordMinAggregateInputType
+    _max?: ForeignMatterRecordMaxAggregateInputType
+  }
+
+  export type ForeignMatterRecordGroupByOutputType = {
+    id: string
+    facility: string
+    period: string
+    periodStart: Date
+    periodEnd: Date
+    status: string
+    conductedBy: string
+    initials: string
+    items: JsonValue
+    listVersion: number
+    okCount: number
+    failCount: number
+    notes: string | null
+    lastEditedBy: string | null
+    lastEditedAt: Date | null
+    createdById: string | null
+    submittedAt: Date | null
+    submittedById: string | null
+    linkedInstanceId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ForeignMatterRecordCountAggregateOutputType | null
+    _avg: ForeignMatterRecordAvgAggregateOutputType | null
+    _sum: ForeignMatterRecordSumAggregateOutputType | null
+    _min: ForeignMatterRecordMinAggregateOutputType | null
+    _max: ForeignMatterRecordMaxAggregateOutputType | null
+  }
+
+  type GetForeignMatterRecordGroupByPayload<T extends ForeignMatterRecordGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ForeignMatterRecordGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ForeignMatterRecordGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ForeignMatterRecordGroupByOutputType[P]>
+            : GetScalarType<T[P], ForeignMatterRecordGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ForeignMatterRecordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    period?: boolean
+    periodStart?: boolean
+    periodEnd?: boolean
+    status?: boolean
+    conductedBy?: boolean
+    initials?: boolean
+    items?: boolean
+    listVersion?: boolean
+    okCount?: boolean
+    failCount?: boolean
+    notes?: boolean
+    lastEditedBy?: boolean
+    lastEditedAt?: boolean
+    createdById?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    linkedInstanceId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | ForeignMatterRecord$createdByArgs<ExtArgs>
+    submittedBy?: boolean | ForeignMatterRecord$submittedByArgs<ExtArgs>
+  }, ExtArgs["result"]["foreignMatterRecord"]>
+
+  export type ForeignMatterRecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    period?: boolean
+    periodStart?: boolean
+    periodEnd?: boolean
+    status?: boolean
+    conductedBy?: boolean
+    initials?: boolean
+    items?: boolean
+    listVersion?: boolean
+    okCount?: boolean
+    failCount?: boolean
+    notes?: boolean
+    lastEditedBy?: boolean
+    lastEditedAt?: boolean
+    createdById?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    linkedInstanceId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | ForeignMatterRecord$createdByArgs<ExtArgs>
+    submittedBy?: boolean | ForeignMatterRecord$submittedByArgs<ExtArgs>
+  }, ExtArgs["result"]["foreignMatterRecord"]>
+
+  export type ForeignMatterRecordSelectScalar = {
+    id?: boolean
+    facility?: boolean
+    period?: boolean
+    periodStart?: boolean
+    periodEnd?: boolean
+    status?: boolean
+    conductedBy?: boolean
+    initials?: boolean
+    items?: boolean
+    listVersion?: boolean
+    okCount?: boolean
+    failCount?: boolean
+    notes?: boolean
+    lastEditedBy?: boolean
+    lastEditedAt?: boolean
+    createdById?: boolean
+    submittedAt?: boolean
+    submittedById?: boolean
+    linkedInstanceId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ForeignMatterRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | ForeignMatterRecord$createdByArgs<ExtArgs>
+    submittedBy?: boolean | ForeignMatterRecord$submittedByArgs<ExtArgs>
+  }
+  export type ForeignMatterRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | ForeignMatterRecord$createdByArgs<ExtArgs>
+    submittedBy?: boolean | ForeignMatterRecord$submittedByArgs<ExtArgs>
+  }
+
+  export type $ForeignMatterRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ForeignMatterRecord"
+    objects: {
+      createdBy: Prisma.$UserPayload<ExtArgs> | null
+      submittedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      facility: string
+      period: string
+      periodStart: Date
+      periodEnd: Date
+      status: string
+      conductedBy: string
+      initials: string
+      items: Prisma.JsonValue
+      listVersion: number
+      okCount: number
+      failCount: number
+      notes: string | null
+      lastEditedBy: string | null
+      lastEditedAt: Date | null
+      createdById: string | null
+      submittedAt: Date | null
+      submittedById: string | null
+      linkedInstanceId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["foreignMatterRecord"]>
+    composites: {}
+  }
+
+  type ForeignMatterRecordGetPayload<S extends boolean | null | undefined | ForeignMatterRecordDefaultArgs> = $Result.GetResult<Prisma.$ForeignMatterRecordPayload, S>
+
+  type ForeignMatterRecordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ForeignMatterRecordFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ForeignMatterRecordCountAggregateInputType | true
+    }
+
+  export interface ForeignMatterRecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ForeignMatterRecord'], meta: { name: 'ForeignMatterRecord' } }
+    /**
+     * Find zero or one ForeignMatterRecord that matches the filter.
+     * @param {ForeignMatterRecordFindUniqueArgs} args - Arguments to find a ForeignMatterRecord
+     * @example
+     * // Get one ForeignMatterRecord
+     * const foreignMatterRecord = await prisma.foreignMatterRecord.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ForeignMatterRecordFindUniqueArgs>(args: SelectSubset<T, ForeignMatterRecordFindUniqueArgs<ExtArgs>>): Prisma__ForeignMatterRecordClient<$Result.GetResult<Prisma.$ForeignMatterRecordPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ForeignMatterRecord that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ForeignMatterRecordFindUniqueOrThrowArgs} args - Arguments to find a ForeignMatterRecord
+     * @example
+     * // Get one ForeignMatterRecord
+     * const foreignMatterRecord = await prisma.foreignMatterRecord.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ForeignMatterRecordFindUniqueOrThrowArgs>(args: SelectSubset<T, ForeignMatterRecordFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ForeignMatterRecordClient<$Result.GetResult<Prisma.$ForeignMatterRecordPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ForeignMatterRecord that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterRecordFindFirstArgs} args - Arguments to find a ForeignMatterRecord
+     * @example
+     * // Get one ForeignMatterRecord
+     * const foreignMatterRecord = await prisma.foreignMatterRecord.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ForeignMatterRecordFindFirstArgs>(args?: SelectSubset<T, ForeignMatterRecordFindFirstArgs<ExtArgs>>): Prisma__ForeignMatterRecordClient<$Result.GetResult<Prisma.$ForeignMatterRecordPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ForeignMatterRecord that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterRecordFindFirstOrThrowArgs} args - Arguments to find a ForeignMatterRecord
+     * @example
+     * // Get one ForeignMatterRecord
+     * const foreignMatterRecord = await prisma.foreignMatterRecord.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ForeignMatterRecordFindFirstOrThrowArgs>(args?: SelectSubset<T, ForeignMatterRecordFindFirstOrThrowArgs<ExtArgs>>): Prisma__ForeignMatterRecordClient<$Result.GetResult<Prisma.$ForeignMatterRecordPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ForeignMatterRecords that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterRecordFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ForeignMatterRecords
+     * const foreignMatterRecords = await prisma.foreignMatterRecord.findMany()
+     * 
+     * // Get first 10 ForeignMatterRecords
+     * const foreignMatterRecords = await prisma.foreignMatterRecord.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const foreignMatterRecordWithIdOnly = await prisma.foreignMatterRecord.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ForeignMatterRecordFindManyArgs>(args?: SelectSubset<T, ForeignMatterRecordFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForeignMatterRecordPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ForeignMatterRecord.
+     * @param {ForeignMatterRecordCreateArgs} args - Arguments to create a ForeignMatterRecord.
+     * @example
+     * // Create one ForeignMatterRecord
+     * const ForeignMatterRecord = await prisma.foreignMatterRecord.create({
+     *   data: {
+     *     // ... data to create a ForeignMatterRecord
+     *   }
+     * })
+     * 
+     */
+    create<T extends ForeignMatterRecordCreateArgs>(args: SelectSubset<T, ForeignMatterRecordCreateArgs<ExtArgs>>): Prisma__ForeignMatterRecordClient<$Result.GetResult<Prisma.$ForeignMatterRecordPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ForeignMatterRecords.
+     * @param {ForeignMatterRecordCreateManyArgs} args - Arguments to create many ForeignMatterRecords.
+     * @example
+     * // Create many ForeignMatterRecords
+     * const foreignMatterRecord = await prisma.foreignMatterRecord.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ForeignMatterRecordCreateManyArgs>(args?: SelectSubset<T, ForeignMatterRecordCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ForeignMatterRecords and returns the data saved in the database.
+     * @param {ForeignMatterRecordCreateManyAndReturnArgs} args - Arguments to create many ForeignMatterRecords.
+     * @example
+     * // Create many ForeignMatterRecords
+     * const foreignMatterRecord = await prisma.foreignMatterRecord.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ForeignMatterRecords and only return the `id`
+     * const foreignMatterRecordWithIdOnly = await prisma.foreignMatterRecord.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ForeignMatterRecordCreateManyAndReturnArgs>(args?: SelectSubset<T, ForeignMatterRecordCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ForeignMatterRecordPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ForeignMatterRecord.
+     * @param {ForeignMatterRecordDeleteArgs} args - Arguments to delete one ForeignMatterRecord.
+     * @example
+     * // Delete one ForeignMatterRecord
+     * const ForeignMatterRecord = await prisma.foreignMatterRecord.delete({
+     *   where: {
+     *     // ... filter to delete one ForeignMatterRecord
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ForeignMatterRecordDeleteArgs>(args: SelectSubset<T, ForeignMatterRecordDeleteArgs<ExtArgs>>): Prisma__ForeignMatterRecordClient<$Result.GetResult<Prisma.$ForeignMatterRecordPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ForeignMatterRecord.
+     * @param {ForeignMatterRecordUpdateArgs} args - Arguments to update one ForeignMatterRecord.
+     * @example
+     * // Update one ForeignMatterRecord
+     * const foreignMatterRecord = await prisma.foreignMatterRecord.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ForeignMatterRecordUpdateArgs>(args: SelectSubset<T, ForeignMatterRecordUpdateArgs<ExtArgs>>): Prisma__ForeignMatterRecordClient<$Result.GetResult<Prisma.$ForeignMatterRecordPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ForeignMatterRecords.
+     * @param {ForeignMatterRecordDeleteManyArgs} args - Arguments to filter ForeignMatterRecords to delete.
+     * @example
+     * // Delete a few ForeignMatterRecords
+     * const { count } = await prisma.foreignMatterRecord.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ForeignMatterRecordDeleteManyArgs>(args?: SelectSubset<T, ForeignMatterRecordDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ForeignMatterRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterRecordUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ForeignMatterRecords
+     * const foreignMatterRecord = await prisma.foreignMatterRecord.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ForeignMatterRecordUpdateManyArgs>(args: SelectSubset<T, ForeignMatterRecordUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ForeignMatterRecord.
+     * @param {ForeignMatterRecordUpsertArgs} args - Arguments to update or create a ForeignMatterRecord.
+     * @example
+     * // Update or create a ForeignMatterRecord
+     * const foreignMatterRecord = await prisma.foreignMatterRecord.upsert({
+     *   create: {
+     *     // ... data to create a ForeignMatterRecord
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ForeignMatterRecord we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ForeignMatterRecordUpsertArgs>(args: SelectSubset<T, ForeignMatterRecordUpsertArgs<ExtArgs>>): Prisma__ForeignMatterRecordClient<$Result.GetResult<Prisma.$ForeignMatterRecordPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ForeignMatterRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterRecordCountArgs} args - Arguments to filter ForeignMatterRecords to count.
+     * @example
+     * // Count the number of ForeignMatterRecords
+     * const count = await prisma.foreignMatterRecord.count({
+     *   where: {
+     *     // ... the filter for the ForeignMatterRecords we want to count
+     *   }
+     * })
+    **/
+    count<T extends ForeignMatterRecordCountArgs>(
+      args?: Subset<T, ForeignMatterRecordCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ForeignMatterRecordCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ForeignMatterRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterRecordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ForeignMatterRecordAggregateArgs>(args: Subset<T, ForeignMatterRecordAggregateArgs>): Prisma.PrismaPromise<GetForeignMatterRecordAggregateType<T>>
+
+    /**
+     * Group by ForeignMatterRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ForeignMatterRecordGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ForeignMatterRecordGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ForeignMatterRecordGroupByArgs['orderBy'] }
+        : { orderBy?: ForeignMatterRecordGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ForeignMatterRecordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetForeignMatterRecordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ForeignMatterRecord model
+   */
+  readonly fields: ForeignMatterRecordFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ForeignMatterRecord.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ForeignMatterRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    createdBy<T extends ForeignMatterRecord$createdByArgs<ExtArgs> = {}>(args?: Subset<T, ForeignMatterRecord$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    submittedBy<T extends ForeignMatterRecord$submittedByArgs<ExtArgs> = {}>(args?: Subset<T, ForeignMatterRecord$submittedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ForeignMatterRecord model
+   */ 
+  interface ForeignMatterRecordFieldRefs {
+    readonly id: FieldRef<"ForeignMatterRecord", 'String'>
+    readonly facility: FieldRef<"ForeignMatterRecord", 'String'>
+    readonly period: FieldRef<"ForeignMatterRecord", 'String'>
+    readonly periodStart: FieldRef<"ForeignMatterRecord", 'DateTime'>
+    readonly periodEnd: FieldRef<"ForeignMatterRecord", 'DateTime'>
+    readonly status: FieldRef<"ForeignMatterRecord", 'String'>
+    readonly conductedBy: FieldRef<"ForeignMatterRecord", 'String'>
+    readonly initials: FieldRef<"ForeignMatterRecord", 'String'>
+    readonly items: FieldRef<"ForeignMatterRecord", 'Json'>
+    readonly listVersion: FieldRef<"ForeignMatterRecord", 'Int'>
+    readonly okCount: FieldRef<"ForeignMatterRecord", 'Int'>
+    readonly failCount: FieldRef<"ForeignMatterRecord", 'Int'>
+    readonly notes: FieldRef<"ForeignMatterRecord", 'String'>
+    readonly lastEditedBy: FieldRef<"ForeignMatterRecord", 'String'>
+    readonly lastEditedAt: FieldRef<"ForeignMatterRecord", 'DateTime'>
+    readonly createdById: FieldRef<"ForeignMatterRecord", 'String'>
+    readonly submittedAt: FieldRef<"ForeignMatterRecord", 'DateTime'>
+    readonly submittedById: FieldRef<"ForeignMatterRecord", 'String'>
+    readonly linkedInstanceId: FieldRef<"ForeignMatterRecord", 'String'>
+    readonly createdAt: FieldRef<"ForeignMatterRecord", 'DateTime'>
+    readonly updatedAt: FieldRef<"ForeignMatterRecord", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ForeignMatterRecord findUnique
+   */
+  export type ForeignMatterRecordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterRecord
+     */
+    select?: ForeignMatterRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which ForeignMatterRecord to fetch.
+     */
+    where: ForeignMatterRecordWhereUniqueInput
+  }
+
+  /**
+   * ForeignMatterRecord findUniqueOrThrow
+   */
+  export type ForeignMatterRecordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterRecord
+     */
+    select?: ForeignMatterRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which ForeignMatterRecord to fetch.
+     */
+    where: ForeignMatterRecordWhereUniqueInput
+  }
+
+  /**
+   * ForeignMatterRecord findFirst
+   */
+  export type ForeignMatterRecordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterRecord
+     */
+    select?: ForeignMatterRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which ForeignMatterRecord to fetch.
+     */
+    where?: ForeignMatterRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForeignMatterRecords to fetch.
+     */
+    orderBy?: ForeignMatterRecordOrderByWithRelationInput | ForeignMatterRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ForeignMatterRecords.
+     */
+    cursor?: ForeignMatterRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForeignMatterRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForeignMatterRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ForeignMatterRecords.
+     */
+    distinct?: ForeignMatterRecordScalarFieldEnum | ForeignMatterRecordScalarFieldEnum[]
+  }
+
+  /**
+   * ForeignMatterRecord findFirstOrThrow
+   */
+  export type ForeignMatterRecordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterRecord
+     */
+    select?: ForeignMatterRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which ForeignMatterRecord to fetch.
+     */
+    where?: ForeignMatterRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForeignMatterRecords to fetch.
+     */
+    orderBy?: ForeignMatterRecordOrderByWithRelationInput | ForeignMatterRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ForeignMatterRecords.
+     */
+    cursor?: ForeignMatterRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForeignMatterRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForeignMatterRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ForeignMatterRecords.
+     */
+    distinct?: ForeignMatterRecordScalarFieldEnum | ForeignMatterRecordScalarFieldEnum[]
+  }
+
+  /**
+   * ForeignMatterRecord findMany
+   */
+  export type ForeignMatterRecordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterRecord
+     */
+    select?: ForeignMatterRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which ForeignMatterRecords to fetch.
+     */
+    where?: ForeignMatterRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ForeignMatterRecords to fetch.
+     */
+    orderBy?: ForeignMatterRecordOrderByWithRelationInput | ForeignMatterRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ForeignMatterRecords.
+     */
+    cursor?: ForeignMatterRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ForeignMatterRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ForeignMatterRecords.
+     */
+    skip?: number
+    distinct?: ForeignMatterRecordScalarFieldEnum | ForeignMatterRecordScalarFieldEnum[]
+  }
+
+  /**
+   * ForeignMatterRecord create
+   */
+  export type ForeignMatterRecordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterRecord
+     */
+    select?: ForeignMatterRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ForeignMatterRecord.
+     */
+    data: XOR<ForeignMatterRecordCreateInput, ForeignMatterRecordUncheckedCreateInput>
+  }
+
+  /**
+   * ForeignMatterRecord createMany
+   */
+  export type ForeignMatterRecordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ForeignMatterRecords.
+     */
+    data: ForeignMatterRecordCreateManyInput | ForeignMatterRecordCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ForeignMatterRecord createManyAndReturn
+   */
+  export type ForeignMatterRecordCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterRecord
+     */
+    select?: ForeignMatterRecordSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ForeignMatterRecords.
+     */
+    data: ForeignMatterRecordCreateManyInput | ForeignMatterRecordCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterRecordIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ForeignMatterRecord update
+   */
+  export type ForeignMatterRecordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterRecord
+     */
+    select?: ForeignMatterRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ForeignMatterRecord.
+     */
+    data: XOR<ForeignMatterRecordUpdateInput, ForeignMatterRecordUncheckedUpdateInput>
+    /**
+     * Choose, which ForeignMatterRecord to update.
+     */
+    where: ForeignMatterRecordWhereUniqueInput
+  }
+
+  /**
+   * ForeignMatterRecord updateMany
+   */
+  export type ForeignMatterRecordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ForeignMatterRecords.
+     */
+    data: XOR<ForeignMatterRecordUpdateManyMutationInput, ForeignMatterRecordUncheckedUpdateManyInput>
+    /**
+     * Filter which ForeignMatterRecords to update
+     */
+    where?: ForeignMatterRecordWhereInput
+  }
+
+  /**
+   * ForeignMatterRecord upsert
+   */
+  export type ForeignMatterRecordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterRecord
+     */
+    select?: ForeignMatterRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterRecordInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ForeignMatterRecord to update in case it exists.
+     */
+    where: ForeignMatterRecordWhereUniqueInput
+    /**
+     * In case the ForeignMatterRecord found by the `where` argument doesn't exist, create a new ForeignMatterRecord with this data.
+     */
+    create: XOR<ForeignMatterRecordCreateInput, ForeignMatterRecordUncheckedCreateInput>
+    /**
+     * In case the ForeignMatterRecord was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ForeignMatterRecordUpdateInput, ForeignMatterRecordUncheckedUpdateInput>
+  }
+
+  /**
+   * ForeignMatterRecord delete
+   */
+  export type ForeignMatterRecordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterRecord
+     */
+    select?: ForeignMatterRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterRecordInclude<ExtArgs> | null
+    /**
+     * Filter which ForeignMatterRecord to delete.
+     */
+    where: ForeignMatterRecordWhereUniqueInput
+  }
+
+  /**
+   * ForeignMatterRecord deleteMany
+   */
+  export type ForeignMatterRecordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ForeignMatterRecords to delete
+     */
+    where?: ForeignMatterRecordWhereInput
+  }
+
+  /**
+   * ForeignMatterRecord.createdBy
+   */
+  export type ForeignMatterRecord$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * ForeignMatterRecord.submittedBy
+   */
+  export type ForeignMatterRecord$submittedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * ForeignMatterRecord without action
+   */
+  export type ForeignMatterRecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ForeignMatterRecord
+     */
+    select?: ForeignMatterRecordSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ForeignMatterRecordInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Notification
    */
 
@@ -81591,6 +85340,62 @@ export namespace Prisma {
   export type FacilitiesChecklistRecordScalarFieldEnum = (typeof FacilitiesChecklistRecordScalarFieldEnum)[keyof typeof FacilitiesChecklistRecordScalarFieldEnum]
 
 
+  export const ForeignMatterItemScalarFieldEnum: {
+    id: 'id',
+    facility: 'facility',
+    section: 'section',
+    areaName: 'areaName',
+    name: 'name',
+    expectedQuantity: 'expectedQuantity',
+    sortOrder: 'sortOrder',
+    retiredAt: 'retiredAt',
+    retiredById: 'retiredById',
+    createdById: 'createdById',
+    updatedById: 'updatedById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ForeignMatterItemScalarFieldEnum = (typeof ForeignMatterItemScalarFieldEnum)[keyof typeof ForeignMatterItemScalarFieldEnum]
+
+
+  export const ForeignMatterListScalarFieldEnum: {
+    facility: 'facility',
+    version: 'version',
+    updatedById: 'updatedById',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ForeignMatterListScalarFieldEnum = (typeof ForeignMatterListScalarFieldEnum)[keyof typeof ForeignMatterListScalarFieldEnum]
+
+
+  export const ForeignMatterRecordScalarFieldEnum: {
+    id: 'id',
+    facility: 'facility',
+    period: 'period',
+    periodStart: 'periodStart',
+    periodEnd: 'periodEnd',
+    status: 'status',
+    conductedBy: 'conductedBy',
+    initials: 'initials',
+    items: 'items',
+    listVersion: 'listVersion',
+    okCount: 'okCount',
+    failCount: 'failCount',
+    notes: 'notes',
+    lastEditedBy: 'lastEditedBy',
+    lastEditedAt: 'lastEditedAt',
+    createdById: 'createdById',
+    submittedAt: 'submittedAt',
+    submittedById: 'submittedById',
+    linkedInstanceId: 'linkedInstanceId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ForeignMatterRecordScalarFieldEnum = (typeof ForeignMatterRecordScalarFieldEnum)[keyof typeof ForeignMatterRecordScalarFieldEnum]
+
+
   export const NotificationScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -81991,6 +85796,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListListRelationFilter
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordListRelationFilter
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordListRelationFilter
+    foreignMatterItemsCreated?: ForeignMatterItemListRelationFilter
+    foreignMatterItemsUpdated?: ForeignMatterItemListRelationFilter
+    foreignMatterItemsRetired?: ForeignMatterItemListRelationFilter
+    foreignMatterListsUpdated?: ForeignMatterListListRelationFilter
+    foreignMatterRecordsCreated?: ForeignMatterRecordListRelationFilter
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -82053,6 +85864,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListOrderByRelationAggregateInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordOrderByRelationAggregateInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordOrderByRelationAggregateInput
+    foreignMatterItemsCreated?: ForeignMatterItemOrderByRelationAggregateInput
+    foreignMatterItemsUpdated?: ForeignMatterItemOrderByRelationAggregateInput
+    foreignMatterItemsRetired?: ForeignMatterItemOrderByRelationAggregateInput
+    foreignMatterListsUpdated?: ForeignMatterListOrderByRelationAggregateInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordOrderByRelationAggregateInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -82118,6 +85935,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListListRelationFilter
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordListRelationFilter
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordListRelationFilter
+    foreignMatterItemsCreated?: ForeignMatterItemListRelationFilter
+    foreignMatterItemsUpdated?: ForeignMatterItemListRelationFilter
+    foreignMatterItemsRetired?: ForeignMatterItemListRelationFilter
+    foreignMatterListsUpdated?: ForeignMatterListListRelationFilter
+    foreignMatterRecordsCreated?: ForeignMatterRecordListRelationFilter
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -88597,6 +92420,302 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"FacilitiesChecklistRecord"> | Date | string
   }
 
+  export type ForeignMatterItemWhereInput = {
+    AND?: ForeignMatterItemWhereInput | ForeignMatterItemWhereInput[]
+    OR?: ForeignMatterItemWhereInput[]
+    NOT?: ForeignMatterItemWhereInput | ForeignMatterItemWhereInput[]
+    id?: StringFilter<"ForeignMatterItem"> | string
+    facility?: StringFilter<"ForeignMatterItem"> | string
+    section?: StringFilter<"ForeignMatterItem"> | string
+    areaName?: StringFilter<"ForeignMatterItem"> | string
+    name?: StringFilter<"ForeignMatterItem"> | string
+    expectedQuantity?: IntFilter<"ForeignMatterItem"> | number
+    sortOrder?: IntFilter<"ForeignMatterItem"> | number
+    retiredAt?: DateTimeNullableFilter<"ForeignMatterItem"> | Date | string | null
+    retiredById?: StringNullableFilter<"ForeignMatterItem"> | string | null
+    createdById?: StringNullableFilter<"ForeignMatterItem"> | string | null
+    updatedById?: StringNullableFilter<"ForeignMatterItem"> | string | null
+    createdAt?: DateTimeFilter<"ForeignMatterItem"> | Date | string
+    updatedAt?: DateTimeFilter<"ForeignMatterItem"> | Date | string
+    retiredBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    createdBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    updatedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }
+
+  export type ForeignMatterItemOrderByWithRelationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    section?: SortOrder
+    areaName?: SortOrder
+    name?: SortOrder
+    expectedQuantity?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrderInput | SortOrder
+    retiredById?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    retiredBy?: UserOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+    updatedBy?: UserOrderByWithRelationInput
+  }
+
+  export type ForeignMatterItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ForeignMatterItemWhereInput | ForeignMatterItemWhereInput[]
+    OR?: ForeignMatterItemWhereInput[]
+    NOT?: ForeignMatterItemWhereInput | ForeignMatterItemWhereInput[]
+    facility?: StringFilter<"ForeignMatterItem"> | string
+    section?: StringFilter<"ForeignMatterItem"> | string
+    areaName?: StringFilter<"ForeignMatterItem"> | string
+    name?: StringFilter<"ForeignMatterItem"> | string
+    expectedQuantity?: IntFilter<"ForeignMatterItem"> | number
+    sortOrder?: IntFilter<"ForeignMatterItem"> | number
+    retiredAt?: DateTimeNullableFilter<"ForeignMatterItem"> | Date | string | null
+    retiredById?: StringNullableFilter<"ForeignMatterItem"> | string | null
+    createdById?: StringNullableFilter<"ForeignMatterItem"> | string | null
+    updatedById?: StringNullableFilter<"ForeignMatterItem"> | string | null
+    createdAt?: DateTimeFilter<"ForeignMatterItem"> | Date | string
+    updatedAt?: DateTimeFilter<"ForeignMatterItem"> | Date | string
+    retiredBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    createdBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    updatedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type ForeignMatterItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    section?: SortOrder
+    areaName?: SortOrder
+    name?: SortOrder
+    expectedQuantity?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrderInput | SortOrder
+    retiredById?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ForeignMatterItemCountOrderByAggregateInput
+    _avg?: ForeignMatterItemAvgOrderByAggregateInput
+    _max?: ForeignMatterItemMaxOrderByAggregateInput
+    _min?: ForeignMatterItemMinOrderByAggregateInput
+    _sum?: ForeignMatterItemSumOrderByAggregateInput
+  }
+
+  export type ForeignMatterItemScalarWhereWithAggregatesInput = {
+    AND?: ForeignMatterItemScalarWhereWithAggregatesInput | ForeignMatterItemScalarWhereWithAggregatesInput[]
+    OR?: ForeignMatterItemScalarWhereWithAggregatesInput[]
+    NOT?: ForeignMatterItemScalarWhereWithAggregatesInput | ForeignMatterItemScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ForeignMatterItem"> | string
+    facility?: StringWithAggregatesFilter<"ForeignMatterItem"> | string
+    section?: StringWithAggregatesFilter<"ForeignMatterItem"> | string
+    areaName?: StringWithAggregatesFilter<"ForeignMatterItem"> | string
+    name?: StringWithAggregatesFilter<"ForeignMatterItem"> | string
+    expectedQuantity?: IntWithAggregatesFilter<"ForeignMatterItem"> | number
+    sortOrder?: IntWithAggregatesFilter<"ForeignMatterItem"> | number
+    retiredAt?: DateTimeNullableWithAggregatesFilter<"ForeignMatterItem"> | Date | string | null
+    retiredById?: StringNullableWithAggregatesFilter<"ForeignMatterItem"> | string | null
+    createdById?: StringNullableWithAggregatesFilter<"ForeignMatterItem"> | string | null
+    updatedById?: StringNullableWithAggregatesFilter<"ForeignMatterItem"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ForeignMatterItem"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ForeignMatterItem"> | Date | string
+  }
+
+  export type ForeignMatterListWhereInput = {
+    AND?: ForeignMatterListWhereInput | ForeignMatterListWhereInput[]
+    OR?: ForeignMatterListWhereInput[]
+    NOT?: ForeignMatterListWhereInput | ForeignMatterListWhereInput[]
+    facility?: StringFilter<"ForeignMatterList"> | string
+    version?: IntFilter<"ForeignMatterList"> | number
+    updatedById?: StringNullableFilter<"ForeignMatterList"> | string | null
+    updatedAt?: DateTimeFilter<"ForeignMatterList"> | Date | string
+    updatedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }
+
+  export type ForeignMatterListOrderByWithRelationInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: UserOrderByWithRelationInput
+  }
+
+  export type ForeignMatterListWhereUniqueInput = Prisma.AtLeast<{
+    facility?: string
+    AND?: ForeignMatterListWhereInput | ForeignMatterListWhereInput[]
+    OR?: ForeignMatterListWhereInput[]
+    NOT?: ForeignMatterListWhereInput | ForeignMatterListWhereInput[]
+    version?: IntFilter<"ForeignMatterList"> | number
+    updatedById?: StringNullableFilter<"ForeignMatterList"> | string | null
+    updatedAt?: DateTimeFilter<"ForeignMatterList"> | Date | string
+    updatedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }, "facility">
+
+  export type ForeignMatterListOrderByWithAggregationInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    _count?: ForeignMatterListCountOrderByAggregateInput
+    _avg?: ForeignMatterListAvgOrderByAggregateInput
+    _max?: ForeignMatterListMaxOrderByAggregateInput
+    _min?: ForeignMatterListMinOrderByAggregateInput
+    _sum?: ForeignMatterListSumOrderByAggregateInput
+  }
+
+  export type ForeignMatterListScalarWhereWithAggregatesInput = {
+    AND?: ForeignMatterListScalarWhereWithAggregatesInput | ForeignMatterListScalarWhereWithAggregatesInput[]
+    OR?: ForeignMatterListScalarWhereWithAggregatesInput[]
+    NOT?: ForeignMatterListScalarWhereWithAggregatesInput | ForeignMatterListScalarWhereWithAggregatesInput[]
+    facility?: StringWithAggregatesFilter<"ForeignMatterList"> | string
+    version?: IntWithAggregatesFilter<"ForeignMatterList"> | number
+    updatedById?: StringNullableWithAggregatesFilter<"ForeignMatterList"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"ForeignMatterList"> | Date | string
+  }
+
+  export type ForeignMatterRecordWhereInput = {
+    AND?: ForeignMatterRecordWhereInput | ForeignMatterRecordWhereInput[]
+    OR?: ForeignMatterRecordWhereInput[]
+    NOT?: ForeignMatterRecordWhereInput | ForeignMatterRecordWhereInput[]
+    id?: StringFilter<"ForeignMatterRecord"> | string
+    facility?: StringFilter<"ForeignMatterRecord"> | string
+    period?: StringFilter<"ForeignMatterRecord"> | string
+    periodStart?: DateTimeFilter<"ForeignMatterRecord"> | Date | string
+    periodEnd?: DateTimeFilter<"ForeignMatterRecord"> | Date | string
+    status?: StringFilter<"ForeignMatterRecord"> | string
+    conductedBy?: StringFilter<"ForeignMatterRecord"> | string
+    initials?: StringFilter<"ForeignMatterRecord"> | string
+    items?: JsonFilter<"ForeignMatterRecord">
+    listVersion?: IntFilter<"ForeignMatterRecord"> | number
+    okCount?: IntFilter<"ForeignMatterRecord"> | number
+    failCount?: IntFilter<"ForeignMatterRecord"> | number
+    notes?: StringNullableFilter<"ForeignMatterRecord"> | string | null
+    lastEditedBy?: StringNullableFilter<"ForeignMatterRecord"> | string | null
+    lastEditedAt?: DateTimeNullableFilter<"ForeignMatterRecord"> | Date | string | null
+    createdById?: StringNullableFilter<"ForeignMatterRecord"> | string | null
+    submittedAt?: DateTimeNullableFilter<"ForeignMatterRecord"> | Date | string | null
+    submittedById?: StringNullableFilter<"ForeignMatterRecord"> | string | null
+    linkedInstanceId?: StringNullableFilter<"ForeignMatterRecord"> | string | null
+    createdAt?: DateTimeFilter<"ForeignMatterRecord"> | Date | string
+    updatedAt?: DateTimeFilter<"ForeignMatterRecord"> | Date | string
+    createdBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    submittedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }
+
+  export type ForeignMatterRecordOrderByWithRelationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    items?: SortOrder
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    lastEditedBy?: SortOrderInput | SortOrder
+    lastEditedAt?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    submittedById?: SortOrderInput | SortOrder
+    linkedInstanceId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: UserOrderByWithRelationInput
+    submittedBy?: UserOrderByWithRelationInput
+  }
+
+  export type ForeignMatterRecordWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    facility_period?: ForeignMatterRecordFacilityPeriodCompoundUniqueInput
+    AND?: ForeignMatterRecordWhereInput | ForeignMatterRecordWhereInput[]
+    OR?: ForeignMatterRecordWhereInput[]
+    NOT?: ForeignMatterRecordWhereInput | ForeignMatterRecordWhereInput[]
+    facility?: StringFilter<"ForeignMatterRecord"> | string
+    period?: StringFilter<"ForeignMatterRecord"> | string
+    periodStart?: DateTimeFilter<"ForeignMatterRecord"> | Date | string
+    periodEnd?: DateTimeFilter<"ForeignMatterRecord"> | Date | string
+    status?: StringFilter<"ForeignMatterRecord"> | string
+    conductedBy?: StringFilter<"ForeignMatterRecord"> | string
+    initials?: StringFilter<"ForeignMatterRecord"> | string
+    items?: JsonFilter<"ForeignMatterRecord">
+    listVersion?: IntFilter<"ForeignMatterRecord"> | number
+    okCount?: IntFilter<"ForeignMatterRecord"> | number
+    failCount?: IntFilter<"ForeignMatterRecord"> | number
+    notes?: StringNullableFilter<"ForeignMatterRecord"> | string | null
+    lastEditedBy?: StringNullableFilter<"ForeignMatterRecord"> | string | null
+    lastEditedAt?: DateTimeNullableFilter<"ForeignMatterRecord"> | Date | string | null
+    createdById?: StringNullableFilter<"ForeignMatterRecord"> | string | null
+    submittedAt?: DateTimeNullableFilter<"ForeignMatterRecord"> | Date | string | null
+    submittedById?: StringNullableFilter<"ForeignMatterRecord"> | string | null
+    linkedInstanceId?: StringNullableFilter<"ForeignMatterRecord"> | string | null
+    createdAt?: DateTimeFilter<"ForeignMatterRecord"> | Date | string
+    updatedAt?: DateTimeFilter<"ForeignMatterRecord"> | Date | string
+    createdBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    submittedBy?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }, "id" | "facility_period">
+
+  export type ForeignMatterRecordOrderByWithAggregationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    items?: SortOrder
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    lastEditedBy?: SortOrderInput | SortOrder
+    lastEditedAt?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    submittedById?: SortOrderInput | SortOrder
+    linkedInstanceId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ForeignMatterRecordCountOrderByAggregateInput
+    _avg?: ForeignMatterRecordAvgOrderByAggregateInput
+    _max?: ForeignMatterRecordMaxOrderByAggregateInput
+    _min?: ForeignMatterRecordMinOrderByAggregateInput
+    _sum?: ForeignMatterRecordSumOrderByAggregateInput
+  }
+
+  export type ForeignMatterRecordScalarWhereWithAggregatesInput = {
+    AND?: ForeignMatterRecordScalarWhereWithAggregatesInput | ForeignMatterRecordScalarWhereWithAggregatesInput[]
+    OR?: ForeignMatterRecordScalarWhereWithAggregatesInput[]
+    NOT?: ForeignMatterRecordScalarWhereWithAggregatesInput | ForeignMatterRecordScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ForeignMatterRecord"> | string
+    facility?: StringWithAggregatesFilter<"ForeignMatterRecord"> | string
+    period?: StringWithAggregatesFilter<"ForeignMatterRecord"> | string
+    periodStart?: DateTimeWithAggregatesFilter<"ForeignMatterRecord"> | Date | string
+    periodEnd?: DateTimeWithAggregatesFilter<"ForeignMatterRecord"> | Date | string
+    status?: StringWithAggregatesFilter<"ForeignMatterRecord"> | string
+    conductedBy?: StringWithAggregatesFilter<"ForeignMatterRecord"> | string
+    initials?: StringWithAggregatesFilter<"ForeignMatterRecord"> | string
+    items?: JsonWithAggregatesFilter<"ForeignMatterRecord">
+    listVersion?: IntWithAggregatesFilter<"ForeignMatterRecord"> | number
+    okCount?: IntWithAggregatesFilter<"ForeignMatterRecord"> | number
+    failCount?: IntWithAggregatesFilter<"ForeignMatterRecord"> | number
+    notes?: StringNullableWithAggregatesFilter<"ForeignMatterRecord"> | string | null
+    lastEditedBy?: StringNullableWithAggregatesFilter<"ForeignMatterRecord"> | string | null
+    lastEditedAt?: DateTimeNullableWithAggregatesFilter<"ForeignMatterRecord"> | Date | string | null
+    createdById?: StringNullableWithAggregatesFilter<"ForeignMatterRecord"> | string | null
+    submittedAt?: DateTimeNullableWithAggregatesFilter<"ForeignMatterRecord"> | Date | string | null
+    submittedById?: StringNullableWithAggregatesFilter<"ForeignMatterRecord"> | string | null
+    linkedInstanceId?: StringNullableWithAggregatesFilter<"ForeignMatterRecord"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ForeignMatterRecord"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ForeignMatterRecord"> | Date | string
+  }
+
   export type NotificationWhereInput = {
     AND?: NotificationWhereInput | NotificationWhereInput[]
     OR?: NotificationWhereInput[]
@@ -88732,6 +92851,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -88794,6 +92919,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUpdateInput = {
@@ -88856,6 +92987,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -88918,6 +93055,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -96227,6 +100370,329 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ForeignMatterItemCreateInput = {
+    id?: string
+    facility?: string
+    section: string
+    areaName: string
+    name: string
+    expectedQuantity?: number
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    retiredBy?: UserCreateNestedOneWithoutForeignMatterItemsRetiredInput
+    createdBy?: UserCreateNestedOneWithoutForeignMatterItemsCreatedInput
+    updatedBy?: UserCreateNestedOneWithoutForeignMatterItemsUpdatedInput
+  }
+
+  export type ForeignMatterItemUncheckedCreateInput = {
+    id?: string
+    facility?: string
+    section: string
+    areaName: string
+    name: string
+    expectedQuantity?: number
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    areaName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: IntFieldUpdateOperationsInput | number
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    retiredBy?: UserUpdateOneWithoutForeignMatterItemsRetiredNestedInput
+    createdBy?: UserUpdateOneWithoutForeignMatterItemsCreatedNestedInput
+    updatedBy?: UserUpdateOneWithoutForeignMatterItemsUpdatedNestedInput
+  }
+
+  export type ForeignMatterItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    areaName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: IntFieldUpdateOperationsInput | number
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterItemCreateManyInput = {
+    id?: string
+    facility?: string
+    section: string
+    areaName: string
+    name: string
+    expectedQuantity?: number
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    areaName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: IntFieldUpdateOperationsInput | number
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    areaName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: IntFieldUpdateOperationsInput | number
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterListCreateInput = {
+    facility: string
+    version?: number
+    updatedAt?: Date | string
+    updatedBy?: UserCreateNestedOneWithoutForeignMatterListsUpdatedInput
+  }
+
+  export type ForeignMatterListUncheckedCreateInput = {
+    facility: string
+    version?: number
+    updatedById?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterListUpdateInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: UserUpdateOneWithoutForeignMatterListsUpdatedNestedInput
+  }
+
+  export type ForeignMatterListUncheckedUpdateInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterListCreateManyInput = {
+    facility: string
+    version?: number
+    updatedById?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterListUpdateManyMutationInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterListUncheckedUpdateManyInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterRecordCreateInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: UserCreateNestedOneWithoutForeignMatterRecordsCreatedInput
+    submittedBy?: UserCreateNestedOneWithoutForeignMatterRecordsSubmittedInput
+  }
+
+  export type ForeignMatterRecordUncheckedCreateInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterRecordUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneWithoutForeignMatterRecordsCreatedNestedInput
+    submittedBy?: UserUpdateOneWithoutForeignMatterRecordsSubmittedNestedInput
+  }
+
+  export type ForeignMatterRecordUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterRecordCreateManyInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterRecordUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterRecordUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type NotificationCreateInput = {
     id?: string
     type: $Enums.NotificationType
@@ -96597,6 +101063,24 @@ export namespace Prisma {
     none?: FacilitiesChecklistRecordWhereInput
   }
 
+  export type ForeignMatterItemListRelationFilter = {
+    every?: ForeignMatterItemWhereInput
+    some?: ForeignMatterItemWhereInput
+    none?: ForeignMatterItemWhereInput
+  }
+
+  export type ForeignMatterListListRelationFilter = {
+    every?: ForeignMatterListWhereInput
+    some?: ForeignMatterListWhereInput
+    none?: ForeignMatterListWhereInput
+  }
+
+  export type ForeignMatterRecordListRelationFilter = {
+    every?: ForeignMatterRecordWhereInput
+    some?: ForeignMatterRecordWhereInput
+    none?: ForeignMatterRecordWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -96755,6 +101239,18 @@ export namespace Prisma {
   }
 
   export type FacilitiesChecklistRecordOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ForeignMatterItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ForeignMatterListOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ForeignMatterRecordOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -101137,6 +105633,180 @@ export namespace Prisma {
     failCount?: SortOrder
   }
 
+  export type ForeignMatterItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    section?: SortOrder
+    areaName?: SortOrder
+    name?: SortOrder
+    expectedQuantity?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrder
+    retiredById?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ForeignMatterItemAvgOrderByAggregateInput = {
+    expectedQuantity?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type ForeignMatterItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    section?: SortOrder
+    areaName?: SortOrder
+    name?: SortOrder
+    expectedQuantity?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrder
+    retiredById?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ForeignMatterItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    section?: SortOrder
+    areaName?: SortOrder
+    name?: SortOrder
+    expectedQuantity?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrder
+    retiredById?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ForeignMatterItemSumOrderByAggregateInput = {
+    expectedQuantity?: SortOrder
+    sortOrder?: SortOrder
+  }
+
+  export type ForeignMatterListCountOrderByAggregateInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ForeignMatterListAvgOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type ForeignMatterListMaxOrderByAggregateInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ForeignMatterListMinOrderByAggregateInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ForeignMatterListSumOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type ForeignMatterRecordFacilityPeriodCompoundUniqueInput = {
+    facility: string
+    period: string
+  }
+
+  export type ForeignMatterRecordCountOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    items?: SortOrder
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notes?: SortOrder
+    lastEditedBy?: SortOrder
+    lastEditedAt?: SortOrder
+    createdById?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ForeignMatterRecordAvgOrderByAggregateInput = {
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+  }
+
+  export type ForeignMatterRecordMaxOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notes?: SortOrder
+    lastEditedBy?: SortOrder
+    lastEditedAt?: SortOrder
+    createdById?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ForeignMatterRecordMinOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    periodStart?: SortOrder
+    periodEnd?: SortOrder
+    status?: SortOrder
+    conductedBy?: SortOrder
+    initials?: SortOrder
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+    notes?: SortOrder
+    lastEditedBy?: SortOrder
+    lastEditedAt?: SortOrder
+    createdById?: SortOrder
+    submittedAt?: SortOrder
+    submittedById?: SortOrder
+    linkedInstanceId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ForeignMatterRecordSumOrderByAggregateInput = {
+    listVersion?: SortOrder
+    okCount?: SortOrder
+    failCount?: SortOrder
+  }
+
   export type EnumNotificationTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
     in?: $Enums.NotificationType[] | ListEnumNotificationTypeFieldRefInput<$PrismaModel>
@@ -101540,6 +106210,48 @@ export namespace Prisma {
     connect?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
   }
 
+  export type ForeignMatterItemCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<ForeignMatterItemCreateWithoutCreatedByInput, ForeignMatterItemUncheckedCreateWithoutCreatedByInput> | ForeignMatterItemCreateWithoutCreatedByInput[] | ForeignMatterItemUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ForeignMatterItemCreateOrConnectWithoutCreatedByInput | ForeignMatterItemCreateOrConnectWithoutCreatedByInput[]
+    createMany?: ForeignMatterItemCreateManyCreatedByInputEnvelope
+    connect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+  }
+
+  export type ForeignMatterItemCreateNestedManyWithoutUpdatedByInput = {
+    create?: XOR<ForeignMatterItemCreateWithoutUpdatedByInput, ForeignMatterItemUncheckedCreateWithoutUpdatedByInput> | ForeignMatterItemCreateWithoutUpdatedByInput[] | ForeignMatterItemUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: ForeignMatterItemCreateOrConnectWithoutUpdatedByInput | ForeignMatterItemCreateOrConnectWithoutUpdatedByInput[]
+    createMany?: ForeignMatterItemCreateManyUpdatedByInputEnvelope
+    connect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+  }
+
+  export type ForeignMatterItemCreateNestedManyWithoutRetiredByInput = {
+    create?: XOR<ForeignMatterItemCreateWithoutRetiredByInput, ForeignMatterItemUncheckedCreateWithoutRetiredByInput> | ForeignMatterItemCreateWithoutRetiredByInput[] | ForeignMatterItemUncheckedCreateWithoutRetiredByInput[]
+    connectOrCreate?: ForeignMatterItemCreateOrConnectWithoutRetiredByInput | ForeignMatterItemCreateOrConnectWithoutRetiredByInput[]
+    createMany?: ForeignMatterItemCreateManyRetiredByInputEnvelope
+    connect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+  }
+
+  export type ForeignMatterListCreateNestedManyWithoutUpdatedByInput = {
+    create?: XOR<ForeignMatterListCreateWithoutUpdatedByInput, ForeignMatterListUncheckedCreateWithoutUpdatedByInput> | ForeignMatterListCreateWithoutUpdatedByInput[] | ForeignMatterListUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: ForeignMatterListCreateOrConnectWithoutUpdatedByInput | ForeignMatterListCreateOrConnectWithoutUpdatedByInput[]
+    createMany?: ForeignMatterListCreateManyUpdatedByInputEnvelope
+    connect?: ForeignMatterListWhereUniqueInput | ForeignMatterListWhereUniqueInput[]
+  }
+
+  export type ForeignMatterRecordCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<ForeignMatterRecordCreateWithoutCreatedByInput, ForeignMatterRecordUncheckedCreateWithoutCreatedByInput> | ForeignMatterRecordCreateWithoutCreatedByInput[] | ForeignMatterRecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ForeignMatterRecordCreateOrConnectWithoutCreatedByInput | ForeignMatterRecordCreateOrConnectWithoutCreatedByInput[]
+    createMany?: ForeignMatterRecordCreateManyCreatedByInputEnvelope
+    connect?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+  }
+
+  export type ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput = {
+    create?: XOR<ForeignMatterRecordCreateWithoutSubmittedByInput, ForeignMatterRecordUncheckedCreateWithoutSubmittedByInput> | ForeignMatterRecordCreateWithoutSubmittedByInput[] | ForeignMatterRecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: ForeignMatterRecordCreateOrConnectWithoutSubmittedByInput | ForeignMatterRecordCreateOrConnectWithoutSubmittedByInput[]
+    createMany?: ForeignMatterRecordCreateManySubmittedByInputEnvelope
+    connect?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+  }
+
   export type FormUncheckedCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -101888,6 +106600,48 @@ export namespace Prisma {
     connectOrCreate?: FacilitiesChecklistRecordCreateOrConnectWithoutSubmittedByInput | FacilitiesChecklistRecordCreateOrConnectWithoutSubmittedByInput[]
     createMany?: FacilitiesChecklistRecordCreateManySubmittedByInputEnvelope
     connect?: FacilitiesChecklistRecordWhereUniqueInput | FacilitiesChecklistRecordWhereUniqueInput[]
+  }
+
+  export type ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<ForeignMatterItemCreateWithoutCreatedByInput, ForeignMatterItemUncheckedCreateWithoutCreatedByInput> | ForeignMatterItemCreateWithoutCreatedByInput[] | ForeignMatterItemUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ForeignMatterItemCreateOrConnectWithoutCreatedByInput | ForeignMatterItemCreateOrConnectWithoutCreatedByInput[]
+    createMany?: ForeignMatterItemCreateManyCreatedByInputEnvelope
+    connect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+  }
+
+  export type ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput = {
+    create?: XOR<ForeignMatterItemCreateWithoutUpdatedByInput, ForeignMatterItemUncheckedCreateWithoutUpdatedByInput> | ForeignMatterItemCreateWithoutUpdatedByInput[] | ForeignMatterItemUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: ForeignMatterItemCreateOrConnectWithoutUpdatedByInput | ForeignMatterItemCreateOrConnectWithoutUpdatedByInput[]
+    createMany?: ForeignMatterItemCreateManyUpdatedByInputEnvelope
+    connect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+  }
+
+  export type ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput = {
+    create?: XOR<ForeignMatterItemCreateWithoutRetiredByInput, ForeignMatterItemUncheckedCreateWithoutRetiredByInput> | ForeignMatterItemCreateWithoutRetiredByInput[] | ForeignMatterItemUncheckedCreateWithoutRetiredByInput[]
+    connectOrCreate?: ForeignMatterItemCreateOrConnectWithoutRetiredByInput | ForeignMatterItemCreateOrConnectWithoutRetiredByInput[]
+    createMany?: ForeignMatterItemCreateManyRetiredByInputEnvelope
+    connect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+  }
+
+  export type ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput = {
+    create?: XOR<ForeignMatterListCreateWithoutUpdatedByInput, ForeignMatterListUncheckedCreateWithoutUpdatedByInput> | ForeignMatterListCreateWithoutUpdatedByInput[] | ForeignMatterListUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: ForeignMatterListCreateOrConnectWithoutUpdatedByInput | ForeignMatterListCreateOrConnectWithoutUpdatedByInput[]
+    createMany?: ForeignMatterListCreateManyUpdatedByInputEnvelope
+    connect?: ForeignMatterListWhereUniqueInput | ForeignMatterListWhereUniqueInput[]
+  }
+
+  export type ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<ForeignMatterRecordCreateWithoutCreatedByInput, ForeignMatterRecordUncheckedCreateWithoutCreatedByInput> | ForeignMatterRecordCreateWithoutCreatedByInput[] | ForeignMatterRecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ForeignMatterRecordCreateOrConnectWithoutCreatedByInput | ForeignMatterRecordCreateOrConnectWithoutCreatedByInput[]
+    createMany?: ForeignMatterRecordCreateManyCreatedByInputEnvelope
+    connect?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+  }
+
+  export type ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput = {
+    create?: XOR<ForeignMatterRecordCreateWithoutSubmittedByInput, ForeignMatterRecordUncheckedCreateWithoutSubmittedByInput> | ForeignMatterRecordCreateWithoutSubmittedByInput[] | ForeignMatterRecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: ForeignMatterRecordCreateOrConnectWithoutSubmittedByInput | ForeignMatterRecordCreateOrConnectWithoutSubmittedByInput[]
+    createMany?: ForeignMatterRecordCreateManySubmittedByInputEnvelope
+    connect?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -102610,6 +107364,90 @@ export namespace Prisma {
     deleteMany?: FacilitiesChecklistRecordScalarWhereInput | FacilitiesChecklistRecordScalarWhereInput[]
   }
 
+  export type ForeignMatterItemUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<ForeignMatterItemCreateWithoutCreatedByInput, ForeignMatterItemUncheckedCreateWithoutCreatedByInput> | ForeignMatterItemCreateWithoutCreatedByInput[] | ForeignMatterItemUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ForeignMatterItemCreateOrConnectWithoutCreatedByInput | ForeignMatterItemCreateOrConnectWithoutCreatedByInput[]
+    upsert?: ForeignMatterItemUpsertWithWhereUniqueWithoutCreatedByInput | ForeignMatterItemUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: ForeignMatterItemCreateManyCreatedByInputEnvelope
+    set?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    disconnect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    delete?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    connect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    update?: ForeignMatterItemUpdateWithWhereUniqueWithoutCreatedByInput | ForeignMatterItemUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: ForeignMatterItemUpdateManyWithWhereWithoutCreatedByInput | ForeignMatterItemUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: ForeignMatterItemScalarWhereInput | ForeignMatterItemScalarWhereInput[]
+  }
+
+  export type ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput = {
+    create?: XOR<ForeignMatterItemCreateWithoutUpdatedByInput, ForeignMatterItemUncheckedCreateWithoutUpdatedByInput> | ForeignMatterItemCreateWithoutUpdatedByInput[] | ForeignMatterItemUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: ForeignMatterItemCreateOrConnectWithoutUpdatedByInput | ForeignMatterItemCreateOrConnectWithoutUpdatedByInput[]
+    upsert?: ForeignMatterItemUpsertWithWhereUniqueWithoutUpdatedByInput | ForeignMatterItemUpsertWithWhereUniqueWithoutUpdatedByInput[]
+    createMany?: ForeignMatterItemCreateManyUpdatedByInputEnvelope
+    set?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    disconnect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    delete?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    connect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    update?: ForeignMatterItemUpdateWithWhereUniqueWithoutUpdatedByInput | ForeignMatterItemUpdateWithWhereUniqueWithoutUpdatedByInput[]
+    updateMany?: ForeignMatterItemUpdateManyWithWhereWithoutUpdatedByInput | ForeignMatterItemUpdateManyWithWhereWithoutUpdatedByInput[]
+    deleteMany?: ForeignMatterItemScalarWhereInput | ForeignMatterItemScalarWhereInput[]
+  }
+
+  export type ForeignMatterItemUpdateManyWithoutRetiredByNestedInput = {
+    create?: XOR<ForeignMatterItemCreateWithoutRetiredByInput, ForeignMatterItemUncheckedCreateWithoutRetiredByInput> | ForeignMatterItemCreateWithoutRetiredByInput[] | ForeignMatterItemUncheckedCreateWithoutRetiredByInput[]
+    connectOrCreate?: ForeignMatterItemCreateOrConnectWithoutRetiredByInput | ForeignMatterItemCreateOrConnectWithoutRetiredByInput[]
+    upsert?: ForeignMatterItemUpsertWithWhereUniqueWithoutRetiredByInput | ForeignMatterItemUpsertWithWhereUniqueWithoutRetiredByInput[]
+    createMany?: ForeignMatterItemCreateManyRetiredByInputEnvelope
+    set?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    disconnect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    delete?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    connect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    update?: ForeignMatterItemUpdateWithWhereUniqueWithoutRetiredByInput | ForeignMatterItemUpdateWithWhereUniqueWithoutRetiredByInput[]
+    updateMany?: ForeignMatterItemUpdateManyWithWhereWithoutRetiredByInput | ForeignMatterItemUpdateManyWithWhereWithoutRetiredByInput[]
+    deleteMany?: ForeignMatterItemScalarWhereInput | ForeignMatterItemScalarWhereInput[]
+  }
+
+  export type ForeignMatterListUpdateManyWithoutUpdatedByNestedInput = {
+    create?: XOR<ForeignMatterListCreateWithoutUpdatedByInput, ForeignMatterListUncheckedCreateWithoutUpdatedByInput> | ForeignMatterListCreateWithoutUpdatedByInput[] | ForeignMatterListUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: ForeignMatterListCreateOrConnectWithoutUpdatedByInput | ForeignMatterListCreateOrConnectWithoutUpdatedByInput[]
+    upsert?: ForeignMatterListUpsertWithWhereUniqueWithoutUpdatedByInput | ForeignMatterListUpsertWithWhereUniqueWithoutUpdatedByInput[]
+    createMany?: ForeignMatterListCreateManyUpdatedByInputEnvelope
+    set?: ForeignMatterListWhereUniqueInput | ForeignMatterListWhereUniqueInput[]
+    disconnect?: ForeignMatterListWhereUniqueInput | ForeignMatterListWhereUniqueInput[]
+    delete?: ForeignMatterListWhereUniqueInput | ForeignMatterListWhereUniqueInput[]
+    connect?: ForeignMatterListWhereUniqueInput | ForeignMatterListWhereUniqueInput[]
+    update?: ForeignMatterListUpdateWithWhereUniqueWithoutUpdatedByInput | ForeignMatterListUpdateWithWhereUniqueWithoutUpdatedByInput[]
+    updateMany?: ForeignMatterListUpdateManyWithWhereWithoutUpdatedByInput | ForeignMatterListUpdateManyWithWhereWithoutUpdatedByInput[]
+    deleteMany?: ForeignMatterListScalarWhereInput | ForeignMatterListScalarWhereInput[]
+  }
+
+  export type ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<ForeignMatterRecordCreateWithoutCreatedByInput, ForeignMatterRecordUncheckedCreateWithoutCreatedByInput> | ForeignMatterRecordCreateWithoutCreatedByInput[] | ForeignMatterRecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ForeignMatterRecordCreateOrConnectWithoutCreatedByInput | ForeignMatterRecordCreateOrConnectWithoutCreatedByInput[]
+    upsert?: ForeignMatterRecordUpsertWithWhereUniqueWithoutCreatedByInput | ForeignMatterRecordUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: ForeignMatterRecordCreateManyCreatedByInputEnvelope
+    set?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    disconnect?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    delete?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    connect?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    update?: ForeignMatterRecordUpdateWithWhereUniqueWithoutCreatedByInput | ForeignMatterRecordUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: ForeignMatterRecordUpdateManyWithWhereWithoutCreatedByInput | ForeignMatterRecordUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: ForeignMatterRecordScalarWhereInput | ForeignMatterRecordScalarWhereInput[]
+  }
+
+  export type ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput = {
+    create?: XOR<ForeignMatterRecordCreateWithoutSubmittedByInput, ForeignMatterRecordUncheckedCreateWithoutSubmittedByInput> | ForeignMatterRecordCreateWithoutSubmittedByInput[] | ForeignMatterRecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: ForeignMatterRecordCreateOrConnectWithoutSubmittedByInput | ForeignMatterRecordCreateOrConnectWithoutSubmittedByInput[]
+    upsert?: ForeignMatterRecordUpsertWithWhereUniqueWithoutSubmittedByInput | ForeignMatterRecordUpsertWithWhereUniqueWithoutSubmittedByInput[]
+    createMany?: ForeignMatterRecordCreateManySubmittedByInputEnvelope
+    set?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    disconnect?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    delete?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    connect?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    update?: ForeignMatterRecordUpdateWithWhereUniqueWithoutSubmittedByInput | ForeignMatterRecordUpdateWithWhereUniqueWithoutSubmittedByInput[]
+    updateMany?: ForeignMatterRecordUpdateManyWithWhereWithoutSubmittedByInput | ForeignMatterRecordUpdateManyWithWhereWithoutSubmittedByInput[]
+    deleteMany?: ForeignMatterRecordScalarWhereInput | ForeignMatterRecordScalarWhereInput[]
+  }
+
   export type FormUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<FormCreateWithoutCreatedByInput, FormUncheckedCreateWithoutCreatedByInput> | FormCreateWithoutCreatedByInput[] | FormUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: FormCreateOrConnectWithoutCreatedByInput | FormCreateOrConnectWithoutCreatedByInput[]
@@ -103308,6 +108146,90 @@ export namespace Prisma {
     update?: FacilitiesChecklistRecordUpdateWithWhereUniqueWithoutSubmittedByInput | FacilitiesChecklistRecordUpdateWithWhereUniqueWithoutSubmittedByInput[]
     updateMany?: FacilitiesChecklistRecordUpdateManyWithWhereWithoutSubmittedByInput | FacilitiesChecklistRecordUpdateManyWithWhereWithoutSubmittedByInput[]
     deleteMany?: FacilitiesChecklistRecordScalarWhereInput | FacilitiesChecklistRecordScalarWhereInput[]
+  }
+
+  export type ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<ForeignMatterItemCreateWithoutCreatedByInput, ForeignMatterItemUncheckedCreateWithoutCreatedByInput> | ForeignMatterItemCreateWithoutCreatedByInput[] | ForeignMatterItemUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ForeignMatterItemCreateOrConnectWithoutCreatedByInput | ForeignMatterItemCreateOrConnectWithoutCreatedByInput[]
+    upsert?: ForeignMatterItemUpsertWithWhereUniqueWithoutCreatedByInput | ForeignMatterItemUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: ForeignMatterItemCreateManyCreatedByInputEnvelope
+    set?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    disconnect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    delete?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    connect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    update?: ForeignMatterItemUpdateWithWhereUniqueWithoutCreatedByInput | ForeignMatterItemUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: ForeignMatterItemUpdateManyWithWhereWithoutCreatedByInput | ForeignMatterItemUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: ForeignMatterItemScalarWhereInput | ForeignMatterItemScalarWhereInput[]
+  }
+
+  export type ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput = {
+    create?: XOR<ForeignMatterItemCreateWithoutUpdatedByInput, ForeignMatterItemUncheckedCreateWithoutUpdatedByInput> | ForeignMatterItemCreateWithoutUpdatedByInput[] | ForeignMatterItemUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: ForeignMatterItemCreateOrConnectWithoutUpdatedByInput | ForeignMatterItemCreateOrConnectWithoutUpdatedByInput[]
+    upsert?: ForeignMatterItemUpsertWithWhereUniqueWithoutUpdatedByInput | ForeignMatterItemUpsertWithWhereUniqueWithoutUpdatedByInput[]
+    createMany?: ForeignMatterItemCreateManyUpdatedByInputEnvelope
+    set?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    disconnect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    delete?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    connect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    update?: ForeignMatterItemUpdateWithWhereUniqueWithoutUpdatedByInput | ForeignMatterItemUpdateWithWhereUniqueWithoutUpdatedByInput[]
+    updateMany?: ForeignMatterItemUpdateManyWithWhereWithoutUpdatedByInput | ForeignMatterItemUpdateManyWithWhereWithoutUpdatedByInput[]
+    deleteMany?: ForeignMatterItemScalarWhereInput | ForeignMatterItemScalarWhereInput[]
+  }
+
+  export type ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput = {
+    create?: XOR<ForeignMatterItemCreateWithoutRetiredByInput, ForeignMatterItemUncheckedCreateWithoutRetiredByInput> | ForeignMatterItemCreateWithoutRetiredByInput[] | ForeignMatterItemUncheckedCreateWithoutRetiredByInput[]
+    connectOrCreate?: ForeignMatterItemCreateOrConnectWithoutRetiredByInput | ForeignMatterItemCreateOrConnectWithoutRetiredByInput[]
+    upsert?: ForeignMatterItemUpsertWithWhereUniqueWithoutRetiredByInput | ForeignMatterItemUpsertWithWhereUniqueWithoutRetiredByInput[]
+    createMany?: ForeignMatterItemCreateManyRetiredByInputEnvelope
+    set?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    disconnect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    delete?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    connect?: ForeignMatterItemWhereUniqueInput | ForeignMatterItemWhereUniqueInput[]
+    update?: ForeignMatterItemUpdateWithWhereUniqueWithoutRetiredByInput | ForeignMatterItemUpdateWithWhereUniqueWithoutRetiredByInput[]
+    updateMany?: ForeignMatterItemUpdateManyWithWhereWithoutRetiredByInput | ForeignMatterItemUpdateManyWithWhereWithoutRetiredByInput[]
+    deleteMany?: ForeignMatterItemScalarWhereInput | ForeignMatterItemScalarWhereInput[]
+  }
+
+  export type ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput = {
+    create?: XOR<ForeignMatterListCreateWithoutUpdatedByInput, ForeignMatterListUncheckedCreateWithoutUpdatedByInput> | ForeignMatterListCreateWithoutUpdatedByInput[] | ForeignMatterListUncheckedCreateWithoutUpdatedByInput[]
+    connectOrCreate?: ForeignMatterListCreateOrConnectWithoutUpdatedByInput | ForeignMatterListCreateOrConnectWithoutUpdatedByInput[]
+    upsert?: ForeignMatterListUpsertWithWhereUniqueWithoutUpdatedByInput | ForeignMatterListUpsertWithWhereUniqueWithoutUpdatedByInput[]
+    createMany?: ForeignMatterListCreateManyUpdatedByInputEnvelope
+    set?: ForeignMatterListWhereUniqueInput | ForeignMatterListWhereUniqueInput[]
+    disconnect?: ForeignMatterListWhereUniqueInput | ForeignMatterListWhereUniqueInput[]
+    delete?: ForeignMatterListWhereUniqueInput | ForeignMatterListWhereUniqueInput[]
+    connect?: ForeignMatterListWhereUniqueInput | ForeignMatterListWhereUniqueInput[]
+    update?: ForeignMatterListUpdateWithWhereUniqueWithoutUpdatedByInput | ForeignMatterListUpdateWithWhereUniqueWithoutUpdatedByInput[]
+    updateMany?: ForeignMatterListUpdateManyWithWhereWithoutUpdatedByInput | ForeignMatterListUpdateManyWithWhereWithoutUpdatedByInput[]
+    deleteMany?: ForeignMatterListScalarWhereInput | ForeignMatterListScalarWhereInput[]
+  }
+
+  export type ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<ForeignMatterRecordCreateWithoutCreatedByInput, ForeignMatterRecordUncheckedCreateWithoutCreatedByInput> | ForeignMatterRecordCreateWithoutCreatedByInput[] | ForeignMatterRecordUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: ForeignMatterRecordCreateOrConnectWithoutCreatedByInput | ForeignMatterRecordCreateOrConnectWithoutCreatedByInput[]
+    upsert?: ForeignMatterRecordUpsertWithWhereUniqueWithoutCreatedByInput | ForeignMatterRecordUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: ForeignMatterRecordCreateManyCreatedByInputEnvelope
+    set?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    disconnect?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    delete?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    connect?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    update?: ForeignMatterRecordUpdateWithWhereUniqueWithoutCreatedByInput | ForeignMatterRecordUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: ForeignMatterRecordUpdateManyWithWhereWithoutCreatedByInput | ForeignMatterRecordUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: ForeignMatterRecordScalarWhereInput | ForeignMatterRecordScalarWhereInput[]
+  }
+
+  export type ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput = {
+    create?: XOR<ForeignMatterRecordCreateWithoutSubmittedByInput, ForeignMatterRecordUncheckedCreateWithoutSubmittedByInput> | ForeignMatterRecordCreateWithoutSubmittedByInput[] | ForeignMatterRecordUncheckedCreateWithoutSubmittedByInput[]
+    connectOrCreate?: ForeignMatterRecordCreateOrConnectWithoutSubmittedByInput | ForeignMatterRecordCreateOrConnectWithoutSubmittedByInput[]
+    upsert?: ForeignMatterRecordUpsertWithWhereUniqueWithoutSubmittedByInput | ForeignMatterRecordUpsertWithWhereUniqueWithoutSubmittedByInput[]
+    createMany?: ForeignMatterRecordCreateManySubmittedByInputEnvelope
+    set?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    disconnect?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    delete?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    connect?: ForeignMatterRecordWhereUniqueInput | ForeignMatterRecordWhereUniqueInput[]
+    update?: ForeignMatterRecordUpdateWithWhereUniqueWithoutSubmittedByInput | ForeignMatterRecordUpdateWithWhereUniqueWithoutSubmittedByInput[]
+    updateMany?: ForeignMatterRecordUpdateManyWithWhereWithoutSubmittedByInput | ForeignMatterRecordUpdateManyWithWhereWithoutSubmittedByInput[]
+    deleteMany?: ForeignMatterRecordScalarWhereInput | ForeignMatterRecordScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCreatedFormsInput = {
@@ -107331,6 +112253,102 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFacilitiesChecklistRecordsSubmittedInput, UserUpdateWithoutFacilitiesChecklistRecordsSubmittedInput>, UserUncheckedUpdateWithoutFacilitiesChecklistRecordsSubmittedInput>
   }
 
+  export type UserCreateNestedOneWithoutForeignMatterItemsRetiredInput = {
+    create?: XOR<UserCreateWithoutForeignMatterItemsRetiredInput, UserUncheckedCreateWithoutForeignMatterItemsRetiredInput>
+    connectOrCreate?: UserCreateOrConnectWithoutForeignMatterItemsRetiredInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutForeignMatterItemsCreatedInput = {
+    create?: XOR<UserCreateWithoutForeignMatterItemsCreatedInput, UserUncheckedCreateWithoutForeignMatterItemsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutForeignMatterItemsCreatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutForeignMatterItemsUpdatedInput = {
+    create?: XOR<UserCreateWithoutForeignMatterItemsUpdatedInput, UserUncheckedCreateWithoutForeignMatterItemsUpdatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutForeignMatterItemsUpdatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutForeignMatterItemsRetiredNestedInput = {
+    create?: XOR<UserCreateWithoutForeignMatterItemsRetiredInput, UserUncheckedCreateWithoutForeignMatterItemsRetiredInput>
+    connectOrCreate?: UserCreateOrConnectWithoutForeignMatterItemsRetiredInput
+    upsert?: UserUpsertWithoutForeignMatterItemsRetiredInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutForeignMatterItemsRetiredInput, UserUpdateWithoutForeignMatterItemsRetiredInput>, UserUncheckedUpdateWithoutForeignMatterItemsRetiredInput>
+  }
+
+  export type UserUpdateOneWithoutForeignMatterItemsCreatedNestedInput = {
+    create?: XOR<UserCreateWithoutForeignMatterItemsCreatedInput, UserUncheckedCreateWithoutForeignMatterItemsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutForeignMatterItemsCreatedInput
+    upsert?: UserUpsertWithoutForeignMatterItemsCreatedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutForeignMatterItemsCreatedInput, UserUpdateWithoutForeignMatterItemsCreatedInput>, UserUncheckedUpdateWithoutForeignMatterItemsCreatedInput>
+  }
+
+  export type UserUpdateOneWithoutForeignMatterItemsUpdatedNestedInput = {
+    create?: XOR<UserCreateWithoutForeignMatterItemsUpdatedInput, UserUncheckedCreateWithoutForeignMatterItemsUpdatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutForeignMatterItemsUpdatedInput
+    upsert?: UserUpsertWithoutForeignMatterItemsUpdatedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutForeignMatterItemsUpdatedInput, UserUpdateWithoutForeignMatterItemsUpdatedInput>, UserUncheckedUpdateWithoutForeignMatterItemsUpdatedInput>
+  }
+
+  export type UserCreateNestedOneWithoutForeignMatterListsUpdatedInput = {
+    create?: XOR<UserCreateWithoutForeignMatterListsUpdatedInput, UserUncheckedCreateWithoutForeignMatterListsUpdatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutForeignMatterListsUpdatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutForeignMatterListsUpdatedNestedInput = {
+    create?: XOR<UserCreateWithoutForeignMatterListsUpdatedInput, UserUncheckedCreateWithoutForeignMatterListsUpdatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutForeignMatterListsUpdatedInput
+    upsert?: UserUpsertWithoutForeignMatterListsUpdatedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutForeignMatterListsUpdatedInput, UserUpdateWithoutForeignMatterListsUpdatedInput>, UserUncheckedUpdateWithoutForeignMatterListsUpdatedInput>
+  }
+
+  export type UserCreateNestedOneWithoutForeignMatterRecordsCreatedInput = {
+    create?: XOR<UserCreateWithoutForeignMatterRecordsCreatedInput, UserUncheckedCreateWithoutForeignMatterRecordsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutForeignMatterRecordsCreatedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutForeignMatterRecordsSubmittedInput = {
+    create?: XOR<UserCreateWithoutForeignMatterRecordsSubmittedInput, UserUncheckedCreateWithoutForeignMatterRecordsSubmittedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutForeignMatterRecordsSubmittedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutForeignMatterRecordsCreatedNestedInput = {
+    create?: XOR<UserCreateWithoutForeignMatterRecordsCreatedInput, UserUncheckedCreateWithoutForeignMatterRecordsCreatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutForeignMatterRecordsCreatedInput
+    upsert?: UserUpsertWithoutForeignMatterRecordsCreatedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutForeignMatterRecordsCreatedInput, UserUpdateWithoutForeignMatterRecordsCreatedInput>, UserUncheckedUpdateWithoutForeignMatterRecordsCreatedInput>
+  }
+
+  export type UserUpdateOneWithoutForeignMatterRecordsSubmittedNestedInput = {
+    create?: XOR<UserCreateWithoutForeignMatterRecordsSubmittedInput, UserUncheckedCreateWithoutForeignMatterRecordsSubmittedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutForeignMatterRecordsSubmittedInput
+    upsert?: UserUpsertWithoutForeignMatterRecordsSubmittedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutForeignMatterRecordsSubmittedInput, UserUpdateWithoutForeignMatterRecordsSubmittedInput>, UserUncheckedUpdateWithoutForeignMatterRecordsSubmittedInput>
+  }
+
   export type UserCreateNestedOneWithoutNotificationsInput = {
     create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
@@ -110200,6 +115218,260 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ForeignMatterItemCreateWithoutCreatedByInput = {
+    id?: string
+    facility?: string
+    section: string
+    areaName: string
+    name: string
+    expectedQuantity?: number
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    retiredBy?: UserCreateNestedOneWithoutForeignMatterItemsRetiredInput
+    updatedBy?: UserCreateNestedOneWithoutForeignMatterItemsUpdatedInput
+  }
+
+  export type ForeignMatterItemUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    facility?: string
+    section: string
+    areaName: string
+    name: string
+    expectedQuantity?: number
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterItemCreateOrConnectWithoutCreatedByInput = {
+    where: ForeignMatterItemWhereUniqueInput
+    create: XOR<ForeignMatterItemCreateWithoutCreatedByInput, ForeignMatterItemUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type ForeignMatterItemCreateManyCreatedByInputEnvelope = {
+    data: ForeignMatterItemCreateManyCreatedByInput | ForeignMatterItemCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ForeignMatterItemCreateWithoutUpdatedByInput = {
+    id?: string
+    facility?: string
+    section: string
+    areaName: string
+    name: string
+    expectedQuantity?: number
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    retiredBy?: UserCreateNestedOneWithoutForeignMatterItemsRetiredInput
+    createdBy?: UserCreateNestedOneWithoutForeignMatterItemsCreatedInput
+  }
+
+  export type ForeignMatterItemUncheckedCreateWithoutUpdatedByInput = {
+    id?: string
+    facility?: string
+    section: string
+    areaName: string
+    name: string
+    expectedQuantity?: number
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterItemCreateOrConnectWithoutUpdatedByInput = {
+    where: ForeignMatterItemWhereUniqueInput
+    create: XOR<ForeignMatterItemCreateWithoutUpdatedByInput, ForeignMatterItemUncheckedCreateWithoutUpdatedByInput>
+  }
+
+  export type ForeignMatterItemCreateManyUpdatedByInputEnvelope = {
+    data: ForeignMatterItemCreateManyUpdatedByInput | ForeignMatterItemCreateManyUpdatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ForeignMatterItemCreateWithoutRetiredByInput = {
+    id?: string
+    facility?: string
+    section: string
+    areaName: string
+    name: string
+    expectedQuantity?: number
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: UserCreateNestedOneWithoutForeignMatterItemsCreatedInput
+    updatedBy?: UserCreateNestedOneWithoutForeignMatterItemsUpdatedInput
+  }
+
+  export type ForeignMatterItemUncheckedCreateWithoutRetiredByInput = {
+    id?: string
+    facility?: string
+    section: string
+    areaName: string
+    name: string
+    expectedQuantity?: number
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterItemCreateOrConnectWithoutRetiredByInput = {
+    where: ForeignMatterItemWhereUniqueInput
+    create: XOR<ForeignMatterItemCreateWithoutRetiredByInput, ForeignMatterItemUncheckedCreateWithoutRetiredByInput>
+  }
+
+  export type ForeignMatterItemCreateManyRetiredByInputEnvelope = {
+    data: ForeignMatterItemCreateManyRetiredByInput | ForeignMatterItemCreateManyRetiredByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ForeignMatterListCreateWithoutUpdatedByInput = {
+    facility: string
+    version?: number
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterListUncheckedCreateWithoutUpdatedByInput = {
+    facility: string
+    version?: number
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterListCreateOrConnectWithoutUpdatedByInput = {
+    where: ForeignMatterListWhereUniqueInput
+    create: XOR<ForeignMatterListCreateWithoutUpdatedByInput, ForeignMatterListUncheckedCreateWithoutUpdatedByInput>
+  }
+
+  export type ForeignMatterListCreateManyUpdatedByInputEnvelope = {
+    data: ForeignMatterListCreateManyUpdatedByInput | ForeignMatterListCreateManyUpdatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ForeignMatterRecordCreateWithoutCreatedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    submittedBy?: UserCreateNestedOneWithoutForeignMatterRecordsSubmittedInput
+  }
+
+  export type ForeignMatterRecordUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterRecordCreateOrConnectWithoutCreatedByInput = {
+    where: ForeignMatterRecordWhereUniqueInput
+    create: XOR<ForeignMatterRecordCreateWithoutCreatedByInput, ForeignMatterRecordUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type ForeignMatterRecordCreateManyCreatedByInputEnvelope = {
+    data: ForeignMatterRecordCreateManyCreatedByInput | ForeignMatterRecordCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ForeignMatterRecordCreateWithoutSubmittedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: UserCreateNestedOneWithoutForeignMatterRecordsCreatedInput
+  }
+
+  export type ForeignMatterRecordUncheckedCreateWithoutSubmittedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterRecordCreateOrConnectWithoutSubmittedByInput = {
+    where: ForeignMatterRecordWhereUniqueInput
+    create: XOR<ForeignMatterRecordCreateWithoutSubmittedByInput, ForeignMatterRecordUncheckedCreateWithoutSubmittedByInput>
+  }
+
+  export type ForeignMatterRecordCreateManySubmittedByInputEnvelope = {
+    data: ForeignMatterRecordCreateManySubmittedByInput | ForeignMatterRecordCreateManySubmittedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FormUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: FormWhereUniqueInput
     update: XOR<FormUpdateWithoutCreatedByInput, FormUncheckedUpdateWithoutCreatedByInput>
@@ -111803,6 +117075,158 @@ export namespace Prisma {
     data: XOR<FacilitiesChecklistRecordUpdateManyMutationInput, FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByInput>
   }
 
+  export type ForeignMatterItemUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: ForeignMatterItemWhereUniqueInput
+    update: XOR<ForeignMatterItemUpdateWithoutCreatedByInput, ForeignMatterItemUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<ForeignMatterItemCreateWithoutCreatedByInput, ForeignMatterItemUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type ForeignMatterItemUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: ForeignMatterItemWhereUniqueInput
+    data: XOR<ForeignMatterItemUpdateWithoutCreatedByInput, ForeignMatterItemUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type ForeignMatterItemUpdateManyWithWhereWithoutCreatedByInput = {
+    where: ForeignMatterItemScalarWhereInput
+    data: XOR<ForeignMatterItemUpdateManyMutationInput, ForeignMatterItemUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type ForeignMatterItemScalarWhereInput = {
+    AND?: ForeignMatterItemScalarWhereInput | ForeignMatterItemScalarWhereInput[]
+    OR?: ForeignMatterItemScalarWhereInput[]
+    NOT?: ForeignMatterItemScalarWhereInput | ForeignMatterItemScalarWhereInput[]
+    id?: StringFilter<"ForeignMatterItem"> | string
+    facility?: StringFilter<"ForeignMatterItem"> | string
+    section?: StringFilter<"ForeignMatterItem"> | string
+    areaName?: StringFilter<"ForeignMatterItem"> | string
+    name?: StringFilter<"ForeignMatterItem"> | string
+    expectedQuantity?: IntFilter<"ForeignMatterItem"> | number
+    sortOrder?: IntFilter<"ForeignMatterItem"> | number
+    retiredAt?: DateTimeNullableFilter<"ForeignMatterItem"> | Date | string | null
+    retiredById?: StringNullableFilter<"ForeignMatterItem"> | string | null
+    createdById?: StringNullableFilter<"ForeignMatterItem"> | string | null
+    updatedById?: StringNullableFilter<"ForeignMatterItem"> | string | null
+    createdAt?: DateTimeFilter<"ForeignMatterItem"> | Date | string
+    updatedAt?: DateTimeFilter<"ForeignMatterItem"> | Date | string
+  }
+
+  export type ForeignMatterItemUpsertWithWhereUniqueWithoutUpdatedByInput = {
+    where: ForeignMatterItemWhereUniqueInput
+    update: XOR<ForeignMatterItemUpdateWithoutUpdatedByInput, ForeignMatterItemUncheckedUpdateWithoutUpdatedByInput>
+    create: XOR<ForeignMatterItemCreateWithoutUpdatedByInput, ForeignMatterItemUncheckedCreateWithoutUpdatedByInput>
+  }
+
+  export type ForeignMatterItemUpdateWithWhereUniqueWithoutUpdatedByInput = {
+    where: ForeignMatterItemWhereUniqueInput
+    data: XOR<ForeignMatterItemUpdateWithoutUpdatedByInput, ForeignMatterItemUncheckedUpdateWithoutUpdatedByInput>
+  }
+
+  export type ForeignMatterItemUpdateManyWithWhereWithoutUpdatedByInput = {
+    where: ForeignMatterItemScalarWhereInput
+    data: XOR<ForeignMatterItemUpdateManyMutationInput, ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByInput>
+  }
+
+  export type ForeignMatterItemUpsertWithWhereUniqueWithoutRetiredByInput = {
+    where: ForeignMatterItemWhereUniqueInput
+    update: XOR<ForeignMatterItemUpdateWithoutRetiredByInput, ForeignMatterItemUncheckedUpdateWithoutRetiredByInput>
+    create: XOR<ForeignMatterItemCreateWithoutRetiredByInput, ForeignMatterItemUncheckedCreateWithoutRetiredByInput>
+  }
+
+  export type ForeignMatterItemUpdateWithWhereUniqueWithoutRetiredByInput = {
+    where: ForeignMatterItemWhereUniqueInput
+    data: XOR<ForeignMatterItemUpdateWithoutRetiredByInput, ForeignMatterItemUncheckedUpdateWithoutRetiredByInput>
+  }
+
+  export type ForeignMatterItemUpdateManyWithWhereWithoutRetiredByInput = {
+    where: ForeignMatterItemScalarWhereInput
+    data: XOR<ForeignMatterItemUpdateManyMutationInput, ForeignMatterItemUncheckedUpdateManyWithoutRetiredByInput>
+  }
+
+  export type ForeignMatterListUpsertWithWhereUniqueWithoutUpdatedByInput = {
+    where: ForeignMatterListWhereUniqueInput
+    update: XOR<ForeignMatterListUpdateWithoutUpdatedByInput, ForeignMatterListUncheckedUpdateWithoutUpdatedByInput>
+    create: XOR<ForeignMatterListCreateWithoutUpdatedByInput, ForeignMatterListUncheckedCreateWithoutUpdatedByInput>
+  }
+
+  export type ForeignMatterListUpdateWithWhereUniqueWithoutUpdatedByInput = {
+    where: ForeignMatterListWhereUniqueInput
+    data: XOR<ForeignMatterListUpdateWithoutUpdatedByInput, ForeignMatterListUncheckedUpdateWithoutUpdatedByInput>
+  }
+
+  export type ForeignMatterListUpdateManyWithWhereWithoutUpdatedByInput = {
+    where: ForeignMatterListScalarWhereInput
+    data: XOR<ForeignMatterListUpdateManyMutationInput, ForeignMatterListUncheckedUpdateManyWithoutUpdatedByInput>
+  }
+
+  export type ForeignMatterListScalarWhereInput = {
+    AND?: ForeignMatterListScalarWhereInput | ForeignMatterListScalarWhereInput[]
+    OR?: ForeignMatterListScalarWhereInput[]
+    NOT?: ForeignMatterListScalarWhereInput | ForeignMatterListScalarWhereInput[]
+    facility?: StringFilter<"ForeignMatterList"> | string
+    version?: IntFilter<"ForeignMatterList"> | number
+    updatedById?: StringNullableFilter<"ForeignMatterList"> | string | null
+    updatedAt?: DateTimeFilter<"ForeignMatterList"> | Date | string
+  }
+
+  export type ForeignMatterRecordUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: ForeignMatterRecordWhereUniqueInput
+    update: XOR<ForeignMatterRecordUpdateWithoutCreatedByInput, ForeignMatterRecordUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<ForeignMatterRecordCreateWithoutCreatedByInput, ForeignMatterRecordUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type ForeignMatterRecordUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: ForeignMatterRecordWhereUniqueInput
+    data: XOR<ForeignMatterRecordUpdateWithoutCreatedByInput, ForeignMatterRecordUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type ForeignMatterRecordUpdateManyWithWhereWithoutCreatedByInput = {
+    where: ForeignMatterRecordScalarWhereInput
+    data: XOR<ForeignMatterRecordUpdateManyMutationInput, ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type ForeignMatterRecordScalarWhereInput = {
+    AND?: ForeignMatterRecordScalarWhereInput | ForeignMatterRecordScalarWhereInput[]
+    OR?: ForeignMatterRecordScalarWhereInput[]
+    NOT?: ForeignMatterRecordScalarWhereInput | ForeignMatterRecordScalarWhereInput[]
+    id?: StringFilter<"ForeignMatterRecord"> | string
+    facility?: StringFilter<"ForeignMatterRecord"> | string
+    period?: StringFilter<"ForeignMatterRecord"> | string
+    periodStart?: DateTimeFilter<"ForeignMatterRecord"> | Date | string
+    periodEnd?: DateTimeFilter<"ForeignMatterRecord"> | Date | string
+    status?: StringFilter<"ForeignMatterRecord"> | string
+    conductedBy?: StringFilter<"ForeignMatterRecord"> | string
+    initials?: StringFilter<"ForeignMatterRecord"> | string
+    items?: JsonFilter<"ForeignMatterRecord">
+    listVersion?: IntFilter<"ForeignMatterRecord"> | number
+    okCount?: IntFilter<"ForeignMatterRecord"> | number
+    failCount?: IntFilter<"ForeignMatterRecord"> | number
+    notes?: StringNullableFilter<"ForeignMatterRecord"> | string | null
+    lastEditedBy?: StringNullableFilter<"ForeignMatterRecord"> | string | null
+    lastEditedAt?: DateTimeNullableFilter<"ForeignMatterRecord"> | Date | string | null
+    createdById?: StringNullableFilter<"ForeignMatterRecord"> | string | null
+    submittedAt?: DateTimeNullableFilter<"ForeignMatterRecord"> | Date | string | null
+    submittedById?: StringNullableFilter<"ForeignMatterRecord"> | string | null
+    linkedInstanceId?: StringNullableFilter<"ForeignMatterRecord"> | string | null
+    createdAt?: DateTimeFilter<"ForeignMatterRecord"> | Date | string
+    updatedAt?: DateTimeFilter<"ForeignMatterRecord"> | Date | string
+  }
+
+  export type ForeignMatterRecordUpsertWithWhereUniqueWithoutSubmittedByInput = {
+    where: ForeignMatterRecordWhereUniqueInput
+    update: XOR<ForeignMatterRecordUpdateWithoutSubmittedByInput, ForeignMatterRecordUncheckedUpdateWithoutSubmittedByInput>
+    create: XOR<ForeignMatterRecordCreateWithoutSubmittedByInput, ForeignMatterRecordUncheckedCreateWithoutSubmittedByInput>
+  }
+
+  export type ForeignMatterRecordUpdateWithWhereUniqueWithoutSubmittedByInput = {
+    where: ForeignMatterRecordWhereUniqueInput
+    data: XOR<ForeignMatterRecordUpdateWithoutSubmittedByInput, ForeignMatterRecordUncheckedUpdateWithoutSubmittedByInput>
+  }
+
+  export type ForeignMatterRecordUpdateManyWithWhereWithoutSubmittedByInput = {
+    where: ForeignMatterRecordScalarWhereInput
+    data: XOR<ForeignMatterRecordUpdateManyMutationInput, ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByInput>
+  }
+
   export type UserCreateWithoutCreatedFormsInput = {
     id?: string
     name: string
@@ -111862,6 +117286,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedFormsInput = {
@@ -111923,6 +117353,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedFormsInput = {
@@ -112032,6 +117468,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedFormsInput = {
@@ -112093,6 +117535,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type FormSubmissionUpsertWithWhereUniqueWithoutFormInput = {
@@ -112201,6 +117649,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -112262,6 +117716,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -112328,6 +117788,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedSubmissionsInput = {
@@ -112389,6 +117855,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedSubmissionsInput = {
@@ -112503,6 +117975,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -112564,6 +118042,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutApprovedSubmissionsInput = {
@@ -112636,6 +118120,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedSubmissionsInput = {
@@ -112697,6 +118187,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutRecordsInput = {
@@ -112758,6 +118254,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRecordsInput = {
@@ -112819,6 +118321,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRecordsInput = {
@@ -112896,6 +118404,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRecordsInput = {
@@ -112957,6 +118471,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutPreOpInspectionsInput = {
@@ -113018,6 +118538,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOpInspectionsInput = {
@@ -113079,6 +118605,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOpInspectionsInput = {
@@ -113156,6 +118688,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOpInspectionsInput = {
@@ -113217,6 +118755,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutPreOp624InspectionsInput = {
@@ -113278,6 +118822,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutPreOp624InspectionsInput = {
@@ -113339,6 +118889,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutPreOp624InspectionsInput = {
@@ -113416,6 +118972,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPreOp624InspectionsInput = {
@@ -113477,6 +119039,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutDailyClean624RecordsInput = {
@@ -113538,6 +119106,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyClean624RecordsInput = {
@@ -113599,6 +119173,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyClean624RecordsInput = {
@@ -113676,6 +119256,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyClean624RecordsInput = {
@@ -113737,6 +119323,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutCreatedBatchTemplatesInput = {
@@ -113798,6 +119390,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedBatchTemplatesInput = {
@@ -113859,6 +119457,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedBatchTemplatesInput = {
@@ -114061,6 +119665,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedBatchTemplatesInput = {
@@ -114122,6 +119732,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductUpsertWithoutTemplatesInput = {
@@ -114323,6 +119939,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutBatchSheetSubmissionsInput = {
@@ -114384,6 +120006,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutBatchSheetSubmissionsInput = {
@@ -114611,6 +120239,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatchSheetSubmissionsInput = {
@@ -114672,6 +120306,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductUpsertWithoutSubmissionsInput = {
@@ -114806,6 +120446,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutDailyCleaningChecklistsInput = {
@@ -114867,6 +120513,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutDailyCleaningChecklistsInput = {
@@ -114944,6 +120596,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDailyCleaningChecklistsInput = {
@@ -115005,6 +120663,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -115066,6 +120730,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyCleaningChecklistsInput = {
@@ -115127,6 +120797,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyCleaningChecklistsInput = {
@@ -115204,6 +120880,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyCleaningChecklistsInput = {
@@ -115265,6 +120947,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductCreateWithoutWipMaterialsInput = {
@@ -117283,6 +122971,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutFormTemplatesInput = {
@@ -117344,6 +123038,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutFormTemplatesInput = {
@@ -117466,6 +123166,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFormTemplatesInput = {
@@ -117527,6 +123233,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SupplierCreateWithoutDocumentsInput = {
@@ -118688,6 +124400,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedProductsInput = {
@@ -118749,6 +124467,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedProductsInput = {
@@ -119082,6 +124806,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedProductsInput = {
@@ -119143,6 +124873,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type BatchSheetTemplateUpsertWithWhereUniqueWithoutProductInput = {
@@ -119349,6 +125085,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutPurchaseOrdersInput = {
@@ -119410,6 +125152,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutPurchaseOrdersInput = {
@@ -119662,6 +125410,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPurchaseOrdersInput = {
@@ -119723,6 +125477,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type PurchaseOrderItemUpsertWithWhereUniqueWithoutPoInput = {
@@ -120064,6 +125824,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutReceivingRecordsInput = {
@@ -120125,6 +125891,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutReceivingRecordsInput = {
@@ -120545,6 +126317,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivingRecordsInput = {
@@ -120606,6 +126384,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialUpsertWithoutReceivingRecordsInput = {
@@ -121069,6 +126853,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutResolvedQuarantineRecordsInput = {
@@ -121130,6 +126920,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutResolvedQuarantineRecordsInput = {
@@ -121284,6 +127080,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutResolvedQuarantineRecordsInput = {
@@ -121345,6 +127147,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutInventoryLotsInput = {
@@ -122156,6 +127964,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutInventoryMovementsInput = {
@@ -122217,6 +128031,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutInventoryMovementsInput = {
@@ -122430,6 +128250,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -122491,6 +128317,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutCycleCountsInput = {
@@ -122676,6 +128508,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutCycleCountsInput = {
@@ -122737,6 +128575,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutCycleCountsInput = {
@@ -122950,6 +128794,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCycleCountsInput = {
@@ -123011,6 +128861,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutInitialStockEntriesInput = {
@@ -123251,6 +129107,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutInitialStockEntriesInput = {
@@ -123312,6 +129174,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutInitialStockEntriesInput = {
@@ -123586,6 +129454,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInitialStockEntriesInput = {
@@ -123647,6 +129521,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -123779,6 +129659,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutStockAlertAcknowledgmentsInput = {
@@ -123840,6 +129726,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutStockAlertAcknowledgmentsInput = {
@@ -123994,6 +129886,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStockAlertAcknowledgmentsInput = {
@@ -124055,6 +129953,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutForecastExclusionsInput = {
@@ -124116,6 +130020,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutForecastExclusionsInput = {
@@ -124177,6 +130087,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutForecastExclusionsInput = {
@@ -124305,6 +130221,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutForecastExclusionsInput = {
@@ -124366,6 +130288,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ProductUpsertWithoutForecastExclusionsInput = {
@@ -124624,6 +130552,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutAuditExclusionsInput = {
@@ -124685,6 +130619,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutAuditExclusionsInput = {
@@ -124914,6 +130854,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditExclusionsInput = {
@@ -124975,6 +130921,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type ShipstationBundleComponentCreateWithoutBundleProductInput = {
@@ -125793,6 +131745,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdIngredientsInput = {
@@ -125854,6 +131812,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdIngredientsInput = {
@@ -125931,6 +131895,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdIngredientsInput = {
@@ -125992,6 +131962,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutRdProjectsInput = {
@@ -126053,6 +132029,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdProjectsInput = {
@@ -126114,6 +132096,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdProjectsInput = {
@@ -126263,6 +132251,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdProjectsInput = {
@@ -126324,6 +132318,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type RdIterationUpsertWithWhereUniqueWithoutProjectInput = {
@@ -126915,6 +132915,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdAttachmentsInput = {
@@ -126976,6 +132982,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdAttachmentsInput = {
@@ -127126,6 +133138,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdAttachmentsInput = {
@@ -127187,6 +133205,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutRdNutritionProfilesInput = {
@@ -127248,6 +133272,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutRdNutritionProfilesInput = {
@@ -127309,6 +133339,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutRdNutritionProfilesInput = {
@@ -127386,6 +133422,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRdNutritionProfilesInput = {
@@ -127447,6 +133489,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type MaterialCreateWithoutAuditAcknowledgmentsInput = {
@@ -127579,6 +133627,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutAuditAcknowledgmentsInput = {
@@ -127640,6 +133694,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutAuditAcknowledgmentsInput = {
@@ -127794,6 +133854,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditAcknowledgmentsInput = {
@@ -127855,6 +133921,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SopCertificationScopeCreateWithoutCertificationInput = {
@@ -127958,6 +134030,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSopDocumentsInput = {
@@ -128019,6 +134097,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSopDocumentsInput = {
@@ -128190,6 +134274,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSopDocumentsInput = {
@@ -128251,6 +134341,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SopCertificationScopeUpsertWithWhereUniqueWithoutSopInput = {
@@ -128741,6 +134837,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSopReviewLogsInput = {
@@ -128802,6 +134904,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSopReviewLogsInput = {
@@ -128928,6 +135036,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSopReviewLogsInput = {
@@ -128989,6 +135103,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type SopDocumentCreateWithoutRemindersInput = {
@@ -129239,6 +135359,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutOwnedTaskRulesInput = {
@@ -129300,6 +135426,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutOwnedTaskRulesInput = {
@@ -129470,6 +135602,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedTaskRulesInput = {
@@ -129531,6 +135669,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type RuleInstanceUpsertWithWhereUniqueWithoutRuleInput = {
@@ -129661,6 +135805,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutDoneRuleInstancesInput = {
@@ -129722,6 +135872,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutDoneRuleInstancesInput = {
@@ -129788,6 +135944,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutSkippedRuleInstancesInput = {
@@ -129849,6 +136011,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutSkippedRuleInstancesInput = {
@@ -129915,6 +136083,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedRuleInstancesInput = {
@@ -129976,6 +136150,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedRuleInstancesInput = {
@@ -130042,6 +136222,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutMarkedMissedRuleInstancesInput = {
@@ -130103,6 +136289,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutMarkedMissedRuleInstancesInput = {
@@ -130265,6 +136457,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDoneRuleInstancesInput = {
@@ -130326,6 +136524,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutSkippedRuleInstancesInput = {
@@ -130398,6 +136602,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSkippedRuleInstancesInput = {
@@ -130459,6 +136669,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutAssignedRuleInstancesInput = {
@@ -130531,6 +136747,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedRuleInstancesInput = {
@@ -130592,6 +136814,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutMarkedMissedRuleInstancesInput = {
@@ -130664,6 +136892,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMarkedMissedRuleInstancesInput = {
@@ -130725,6 +136959,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type TaskInstanceAuditUpsertWithWhereUniqueWithoutInstanceInput = {
@@ -130861,6 +137101,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutTaskInstanceAuditLogsInput = {
@@ -130922,6 +137168,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutTaskInstanceAuditLogsInput = {
@@ -131064,6 +137316,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskInstanceAuditLogsInput = {
@@ -131125,6 +137383,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutMonthlyClean624SubmittedRecordsInput = {
@@ -131186,6 +137450,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyClean624SubmittedRecordsInput = {
@@ -131247,6 +137517,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyClean624SubmittedRecordsInput = {
@@ -131313,6 +137589,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutMonthlyClean624CreatedRecordsInput = {
@@ -131374,6 +137656,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutMonthlyClean624CreatedRecordsInput = {
@@ -131451,6 +137739,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyClean624SubmittedRecordsInput = {
@@ -131512,6 +137806,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutMonthlyClean624CreatedRecordsInput = {
@@ -131584,6 +137884,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMonthlyClean624CreatedRecordsInput = {
@@ -131645,6 +137951,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutVerification624EquipmentRetiredInput = {
@@ -131706,6 +138018,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutVerification624EquipmentRetiredInput = {
@@ -131767,6 +138085,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutVerification624EquipmentRetiredInput = {
@@ -131833,6 +138157,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutVerification624EquipmentCreatedInput = {
@@ -131894,6 +138224,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutVerification624EquipmentCreatedInput = {
@@ -131960,6 +138296,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutVerification624EquipmentUpdatedInput = {
@@ -132021,6 +138363,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutVerification624EquipmentUpdatedInput = {
@@ -132098,6 +138446,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerification624EquipmentRetiredInput = {
@@ -132159,6 +138513,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutVerification624EquipmentCreatedInput = {
@@ -132231,6 +138591,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerification624EquipmentCreatedInput = {
@@ -132292,6 +138658,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutVerification624EquipmentUpdatedInput = {
@@ -132364,6 +138736,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerification624EquipmentUpdatedInput = {
@@ -132425,6 +138803,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutVerification624ListsUpdatedInput = {
@@ -132486,6 +138870,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutVerification624ListsUpdatedInput = {
@@ -132547,6 +138937,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutVerification624ListsUpdatedInput = {
@@ -132624,6 +139020,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerification624ListsUpdatedInput = {
@@ -132685,6 +139087,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutVerification624RecordsCreatedInput = {
@@ -132746,6 +139154,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutVerification624RecordsCreatedInput = {
@@ -132807,6 +139221,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutVerification624RecordsCreatedInput = {
@@ -132873,6 +139293,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutVerification624RecordsSubmittedInput = {
@@ -132934,6 +139360,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutVerification624RecordsSubmittedInput = {
@@ -133011,6 +139443,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerification624RecordsCreatedInput = {
@@ -133072,6 +139510,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutVerification624RecordsSubmittedInput = {
@@ -133144,6 +139588,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerification624RecordsSubmittedInput = {
@@ -133205,6 +139655,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutFacilitiesChecklistItemsRetiredInput = {
@@ -133266,6 +139722,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutFacilitiesChecklistItemsRetiredInput = {
@@ -133327,6 +139789,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutFacilitiesChecklistItemsRetiredInput = {
@@ -133393,6 +139861,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutFacilitiesChecklistItemsCreatedInput = {
@@ -133454,6 +139928,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutFacilitiesChecklistItemsCreatedInput = {
@@ -133520,6 +140000,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutFacilitiesChecklistItemsUpdatedInput = {
@@ -133581,6 +140067,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutFacilitiesChecklistItemsUpdatedInput = {
@@ -133658,6 +140150,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFacilitiesChecklistItemsRetiredInput = {
@@ -133719,6 +140217,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutFacilitiesChecklistItemsCreatedInput = {
@@ -133791,6 +140295,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFacilitiesChecklistItemsCreatedInput = {
@@ -133852,6 +140362,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutFacilitiesChecklistItemsUpdatedInput = {
@@ -133924,6 +140440,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFacilitiesChecklistItemsUpdatedInput = {
@@ -133985,6 +140507,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutFacilitiesChecklistListsUpdatedInput = {
@@ -134046,6 +140574,12 @@ export namespace Prisma {
     facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutFacilitiesChecklistListsUpdatedInput = {
@@ -134107,6 +140641,12 @@ export namespace Prisma {
     facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutFacilitiesChecklistListsUpdatedInput = {
@@ -134184,6 +140724,12 @@ export namespace Prisma {
     facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFacilitiesChecklistListsUpdatedInput = {
@@ -134245,6 +140791,12 @@ export namespace Prisma {
     facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserCreateWithoutFacilitiesChecklistRecordsCreatedInput = {
@@ -134306,6 +140858,12 @@ export namespace Prisma {
     facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutFacilitiesChecklistRecordsCreatedInput = {
@@ -134367,6 +140925,12 @@ export namespace Prisma {
     facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutFacilitiesChecklistRecordsCreatedInput = {
@@ -134433,6 +140997,12 @@ export namespace Prisma {
     facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutFacilitiesChecklistRecordsSubmittedInput = {
@@ -134494,6 +141064,12 @@ export namespace Prisma {
     facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutFacilitiesChecklistRecordsSubmittedInput = {
@@ -134571,6 +141147,12 @@ export namespace Prisma {
     facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFacilitiesChecklistRecordsCreatedInput = {
@@ -134632,6 +141214,12 @@ export namespace Prisma {
     facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUpsertWithoutFacilitiesChecklistRecordsSubmittedInput = {
@@ -134704,6 +141292,12 @@ export namespace Prisma {
     facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFacilitiesChecklistRecordsSubmittedInput = {
@@ -134765,6 +141359,1716 @@ export namespace Prisma {
     facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserCreateWithoutForeignMatterItemsRetiredInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutForeignMatterItemsRetiredInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutForeignMatterItemsRetiredInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutForeignMatterItemsRetiredInput, UserUncheckedCreateWithoutForeignMatterItemsRetiredInput>
+  }
+
+  export type UserCreateWithoutForeignMatterItemsCreatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutForeignMatterItemsCreatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutForeignMatterItemsCreatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutForeignMatterItemsCreatedInput, UserUncheckedCreateWithoutForeignMatterItemsCreatedInput>
+  }
+
+  export type UserCreateWithoutForeignMatterItemsUpdatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutForeignMatterItemsUpdatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutForeignMatterItemsUpdatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutForeignMatterItemsUpdatedInput, UserUncheckedCreateWithoutForeignMatterItemsUpdatedInput>
+  }
+
+  export type UserUpsertWithoutForeignMatterItemsRetiredInput = {
+    update: XOR<UserUpdateWithoutForeignMatterItemsRetiredInput, UserUncheckedUpdateWithoutForeignMatterItemsRetiredInput>
+    create: XOR<UserCreateWithoutForeignMatterItemsRetiredInput, UserUncheckedCreateWithoutForeignMatterItemsRetiredInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutForeignMatterItemsRetiredInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutForeignMatterItemsRetiredInput, UserUncheckedUpdateWithoutForeignMatterItemsRetiredInput>
+  }
+
+  export type UserUpdateWithoutForeignMatterItemsRetiredInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutForeignMatterItemsRetiredInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUpsertWithoutForeignMatterItemsCreatedInput = {
+    update: XOR<UserUpdateWithoutForeignMatterItemsCreatedInput, UserUncheckedUpdateWithoutForeignMatterItemsCreatedInput>
+    create: XOR<UserCreateWithoutForeignMatterItemsCreatedInput, UserUncheckedCreateWithoutForeignMatterItemsCreatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutForeignMatterItemsCreatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutForeignMatterItemsCreatedInput, UserUncheckedUpdateWithoutForeignMatterItemsCreatedInput>
+  }
+
+  export type UserUpdateWithoutForeignMatterItemsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutForeignMatterItemsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUpsertWithoutForeignMatterItemsUpdatedInput = {
+    update: XOR<UserUpdateWithoutForeignMatterItemsUpdatedInput, UserUncheckedUpdateWithoutForeignMatterItemsUpdatedInput>
+    create: XOR<UserCreateWithoutForeignMatterItemsUpdatedInput, UserUncheckedCreateWithoutForeignMatterItemsUpdatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutForeignMatterItemsUpdatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutForeignMatterItemsUpdatedInput, UserUncheckedUpdateWithoutForeignMatterItemsUpdatedInput>
+  }
+
+  export type UserUpdateWithoutForeignMatterItemsUpdatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutForeignMatterItemsUpdatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserCreateWithoutForeignMatterListsUpdatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutForeignMatterListsUpdatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutForeignMatterListsUpdatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutForeignMatterListsUpdatedInput, UserUncheckedCreateWithoutForeignMatterListsUpdatedInput>
+  }
+
+  export type UserUpsertWithoutForeignMatterListsUpdatedInput = {
+    update: XOR<UserUpdateWithoutForeignMatterListsUpdatedInput, UserUncheckedUpdateWithoutForeignMatterListsUpdatedInput>
+    create: XOR<UserCreateWithoutForeignMatterListsUpdatedInput, UserUncheckedCreateWithoutForeignMatterListsUpdatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutForeignMatterListsUpdatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutForeignMatterListsUpdatedInput, UserUncheckedUpdateWithoutForeignMatterListsUpdatedInput>
+  }
+
+  export type UserUpdateWithoutForeignMatterListsUpdatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutForeignMatterListsUpdatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserCreateWithoutForeignMatterRecordsCreatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserUncheckedCreateWithoutForeignMatterRecordsCreatedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+  }
+
+  export type UserCreateOrConnectWithoutForeignMatterRecordsCreatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutForeignMatterRecordsCreatedInput, UserUncheckedCreateWithoutForeignMatterRecordsCreatedInput>
+  }
+
+  export type UserCreateWithoutForeignMatterRecordsSubmittedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionCreateNestedManyWithoutApprovedByInput
+    records?: RecordCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutForeignMatterRecordsSubmittedInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    role?: $Enums.Role
+    department?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdForms?: FormUncheckedCreateNestedManyWithoutCreatedByInput
+    submissions?: FormSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    approvedSubmissions?: FormSubmissionUncheckedCreateNestedManyWithoutApprovedByInput
+    records?: RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    preOpInspections?: PreOpInspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedCreateNestedManyWithoutSubmittedByInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedCreateNestedManyWithoutCreatedByInput
+    createdProducts?: ProductUncheckedCreateNestedManyWithoutCreatedByInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedCreateNestedManyWithoutSubmittedByInput
+    receivingRecords?: ReceivingRecordUncheckedCreateNestedManyWithoutReceivedByInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedCreateNestedManyWithoutResolvedByInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutPerformedByInput
+    cycleCounts?: CycleCountUncheckedCreateNestedManyWithoutPerformedByInput
+    formTemplates?: FormTemplateUncheckedCreateNestedManyWithoutUploadedByInput
+    initialStockEntries?: InitialStockEntryUncheckedCreateNestedManyWithoutEnteredByInput
+    forecastExclusions?: ForecastExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    auditExclusions?: InventoryAuditExclusionUncheckedCreateNestedManyWithoutExcludedByInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    purchaseOrders?: PurchaseOrderUncheckedCreateNestedManyWithoutCreatedByInput
+    rdIngredients?: RdIngredientUncheckedCreateNestedManyWithoutCreatedByInput
+    rdProjects?: RdProjectUncheckedCreateNestedManyWithoutCreatedByInput
+    rdAttachments?: RdAttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedCreateNestedManyWithoutCreatedByInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedCreateNestedManyWithoutAcknowledgedByInput
+    sopDocuments?: SopDocumentUncheckedCreateNestedManyWithoutOwnerInput
+    sopReviewLogs?: SopReviewLogUncheckedCreateNestedManyWithoutReviewedByInput
+    ownedTaskRules?: TaskRuleUncheckedCreateNestedManyWithoutOwnerInput
+    doneRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutDoneByInput
+    skippedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutSkippedByInput
+    assignedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutAssignedToInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedCreateNestedManyWithoutMarkedMissedByInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    preOp624Inspections?: PreOp624InspectionUncheckedCreateNestedManyWithoutSubmittedByInput
+    dailyClean624Records?: DailyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedCreateNestedManyWithoutRetiredByInput
+    verification624ListsUpdated?: Verification624ListUncheckedCreateNestedManyWithoutUpdatedByInput
+    verification624RecordsCreated?: Verification624RecordUncheckedCreateNestedManyWithoutCreatedByInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedCreateNestedManyWithoutRetiredByInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutForeignMatterRecordsSubmittedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutForeignMatterRecordsSubmittedInput, UserUncheckedCreateWithoutForeignMatterRecordsSubmittedInput>
+  }
+
+  export type UserUpsertWithoutForeignMatterRecordsCreatedInput = {
+    update: XOR<UserUpdateWithoutForeignMatterRecordsCreatedInput, UserUncheckedUpdateWithoutForeignMatterRecordsCreatedInput>
+    create: XOR<UserCreateWithoutForeignMatterRecordsCreatedInput, UserUncheckedCreateWithoutForeignMatterRecordsCreatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutForeignMatterRecordsCreatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutForeignMatterRecordsCreatedInput, UserUncheckedUpdateWithoutForeignMatterRecordsCreatedInput>
+  }
+
+  export type UserUpdateWithoutForeignMatterRecordsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutForeignMatterRecordsCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+  }
+
+  export type UserUpsertWithoutForeignMatterRecordsSubmittedInput = {
+    update: XOR<UserUpdateWithoutForeignMatterRecordsSubmittedInput, UserUncheckedUpdateWithoutForeignMatterRecordsSubmittedInput>
+    create: XOR<UserCreateWithoutForeignMatterRecordsSubmittedInput, UserUncheckedCreateWithoutForeignMatterRecordsSubmittedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutForeignMatterRecordsSubmittedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutForeignMatterRecordsSubmittedInput, UserUncheckedUpdateWithoutForeignMatterRecordsSubmittedInput>
+  }
+
+  export type UserUpdateWithoutForeignMatterRecordsSubmittedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutForeignMatterRecordsSubmittedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdForms?: FormUncheckedUpdateManyWithoutCreatedByNestedInput
+    submissions?: FormSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    approvedSubmissions?: FormSubmissionUncheckedUpdateManyWithoutApprovedByNestedInput
+    records?: RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    preOpInspections?: PreOpInspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    batchSheetSubmissions?: BatchSheetSubmissionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    createdBatchTemplates?: BatchSheetTemplateUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdProducts?: ProductUncheckedUpdateManyWithoutCreatedByNestedInput
+    dailyCleaningChecklists?: DailyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyCleaningChecklists?: MonthlyCleaningChecklistUncheckedUpdateManyWithoutSubmittedByNestedInput
+    receivingRecords?: ReceivingRecordUncheckedUpdateManyWithoutReceivedByNestedInput
+    resolvedQuarantineRecords?: QuarantineRecordUncheckedUpdateManyWithoutResolvedByNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutPerformedByNestedInput
+    cycleCounts?: CycleCountUncheckedUpdateManyWithoutPerformedByNestedInput
+    formTemplates?: FormTemplateUncheckedUpdateManyWithoutUploadedByNestedInput
+    initialStockEntries?: InitialStockEntryUncheckedUpdateManyWithoutEnteredByNestedInput
+    forecastExclusions?: ForecastExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    auditExclusions?: InventoryAuditExclusionUncheckedUpdateManyWithoutExcludedByNestedInput
+    stockAlertAcknowledgments?: StockAlertAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    purchaseOrders?: PurchaseOrderUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdIngredients?: RdIngredientUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdProjects?: RdProjectUncheckedUpdateManyWithoutCreatedByNestedInput
+    rdAttachments?: RdAttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+    rdNutritionProfiles?: RdNutritionProfileUncheckedUpdateManyWithoutCreatedByNestedInput
+    auditAcknowledgments?: InventoryAuditAcknowledgmentUncheckedUpdateManyWithoutAcknowledgedByNestedInput
+    sopDocuments?: SopDocumentUncheckedUpdateManyWithoutOwnerNestedInput
+    sopReviewLogs?: SopReviewLogUncheckedUpdateManyWithoutReviewedByNestedInput
+    ownedTaskRules?: TaskRuleUncheckedUpdateManyWithoutOwnerNestedInput
+    doneRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutDoneByNestedInput
+    skippedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutSkippedByNestedInput
+    assignedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutAssignedToNestedInput
+    markedMissedRuleInstances?: RuleInstanceUncheckedUpdateManyWithoutMarkedMissedByNestedInput
+    taskInstanceAuditLogs?: TaskInstanceAuditUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    preOp624Inspections?: PreOp624InspectionUncheckedUpdateManyWithoutSubmittedByNestedInput
+    dailyClean624Records?: DailyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624SubmittedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    monthlyClean624CreatedRecords?: MonthlyClean624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentCreated?: Verification624EquipmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624EquipmentUpdated?: Verification624EquipmentUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624EquipmentRetired?: Verification624EquipmentUncheckedUpdateManyWithoutRetiredByNestedInput
+    verification624ListsUpdated?: Verification624ListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    verification624RecordsCreated?: Verification624RecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    verification624RecordsSubmitted?: Verification624RecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    facilitiesChecklistItemsCreated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistItemsUpdated?: FacilitiesChecklistItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistItemsRetired?: FacilitiesChecklistItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -134826,6 +143130,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -134887,6 +143197,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedCreateNestedManyWithoutUpdatedByInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutCreatedByInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedCreateNestedManyWithoutSubmittedByInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedCreateNestedManyWithoutRetiredByInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedCreateNestedManyWithoutUpdatedByInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedCreateNestedManyWithoutCreatedByInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedCreateNestedManyWithoutSubmittedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -134964,6 +143280,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -135025,6 +143347,12 @@ export namespace Prisma {
     facilitiesChecklistListsUpdated?: FacilitiesChecklistListUncheckedUpdateManyWithoutUpdatedByNestedInput
     facilitiesChecklistRecordsCreated?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutCreatedByNestedInput
     facilitiesChecklistRecordsSubmitted?: FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
+    foreignMatterItemsCreated?: ForeignMatterItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterItemsUpdated?: ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterItemsRetired?: ForeignMatterItemUncheckedUpdateManyWithoutRetiredByNestedInput
+    foreignMatterListsUpdated?: ForeignMatterListUncheckedUpdateManyWithoutUpdatedByNestedInput
+    foreignMatterRecordsCreated?: ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByNestedInput
+    foreignMatterRecordsSubmitted?: ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByNestedInput
   }
 
   export type FormCreateManyCreatedByInput = {
@@ -135875,6 +144203,103 @@ export namespace Prisma {
   }
 
   export type FacilitiesChecklistRecordCreateManySubmittedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    createdById?: string | null
+    submittedAt?: Date | string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterItemCreateManyCreatedByInput = {
+    id?: string
+    facility?: string
+    section: string
+    areaName: string
+    name: string
+    expectedQuantity?: number
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterItemCreateManyUpdatedByInput = {
+    id?: string
+    facility?: string
+    section: string
+    areaName: string
+    name: string
+    expectedQuantity?: number
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterItemCreateManyRetiredByInput = {
+    id?: string
+    facility?: string
+    section: string
+    areaName: string
+    name: string
+    expectedQuantity?: number
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterListCreateManyUpdatedByInput = {
+    facility: string
+    version?: number
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterRecordCreateManyCreatedByInput = {
+    id?: string
+    facility?: string
+    period: string
+    periodStart: Date | string
+    periodEnd: Date | string
+    status?: string
+    conductedBy?: string
+    initials?: string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: number
+    okCount?: number
+    failCount?: number
+    notes?: string | null
+    lastEditedBy?: string | null
+    lastEditedAt?: Date | string | null
+    submittedAt?: Date | string | null
+    submittedById?: string | null
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ForeignMatterRecordCreateManySubmittedByInput = {
     id?: string
     facility?: string
     period: string
@@ -138531,6 +146956,297 @@ export namespace Prisma {
   }
 
   export type FacilitiesChecklistRecordUncheckedUpdateManyWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterItemUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    areaName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: IntFieldUpdateOperationsInput | number
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    retiredBy?: UserUpdateOneWithoutForeignMatterItemsRetiredNestedInput
+    updatedBy?: UserUpdateOneWithoutForeignMatterItemsUpdatedNestedInput
+  }
+
+  export type ForeignMatterItemUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    areaName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: IntFieldUpdateOperationsInput | number
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterItemUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    areaName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: IntFieldUpdateOperationsInput | number
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterItemUpdateWithoutUpdatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    areaName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: IntFieldUpdateOperationsInput | number
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    retiredBy?: UserUpdateOneWithoutForeignMatterItemsRetiredNestedInput
+    createdBy?: UserUpdateOneWithoutForeignMatterItemsCreatedNestedInput
+  }
+
+  export type ForeignMatterItemUncheckedUpdateWithoutUpdatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    areaName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: IntFieldUpdateOperationsInput | number
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterItemUncheckedUpdateManyWithoutUpdatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    areaName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: IntFieldUpdateOperationsInput | number
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterItemUpdateWithoutRetiredByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    areaName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: IntFieldUpdateOperationsInput | number
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneWithoutForeignMatterItemsCreatedNestedInput
+    updatedBy?: UserUpdateOneWithoutForeignMatterItemsUpdatedNestedInput
+  }
+
+  export type ForeignMatterItemUncheckedUpdateWithoutRetiredByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    areaName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: IntFieldUpdateOperationsInput | number
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterItemUncheckedUpdateManyWithoutRetiredByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    section?: StringFieldUpdateOperationsInput | string
+    areaName?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: IntFieldUpdateOperationsInput | number
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterListUpdateWithoutUpdatedByInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterListUncheckedUpdateWithoutUpdatedByInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterListUncheckedUpdateManyWithoutUpdatedByInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterRecordUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    submittedBy?: UserUpdateOneWithoutForeignMatterRecordsSubmittedNestedInput
+  }
+
+  export type ForeignMatterRecordUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterRecordUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterRecordUpdateWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneWithoutForeignMatterRecordsCreatedNestedInput
+  }
+
+  export type ForeignMatterRecordUncheckedUpdateWithoutSubmittedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    period?: StringFieldUpdateOperationsInput | string
+    periodStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    periodEnd?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    conductedBy?: StringFieldUpdateOperationsInput | string
+    initials?: StringFieldUpdateOperationsInput | string
+    items?: JsonNullValueInput | InputJsonValue
+    listVersion?: IntFieldUpdateOperationsInput | number
+    okCount?: IntFieldUpdateOperationsInput | number
+    failCount?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    lastEditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ForeignMatterRecordUncheckedUpdateManyWithoutSubmittedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     facility?: StringFieldUpdateOperationsInput | string
     period?: StringFieldUpdateOperationsInput | string
@@ -142168,6 +150884,18 @@ export namespace Prisma {
      * @deprecated Use FacilitiesChecklistRecordDefaultArgs instead
      */
     export type FacilitiesChecklistRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = FacilitiesChecklistRecordDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ForeignMatterItemDefaultArgs instead
+     */
+    export type ForeignMatterItemArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ForeignMatterItemDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ForeignMatterListDefaultArgs instead
+     */
+    export type ForeignMatterListArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ForeignMatterListDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ForeignMatterRecordDefaultArgs instead
+     */
+    export type ForeignMatterRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ForeignMatterRecordDefaultArgs<ExtArgs>
     /**
      * @deprecated Use NotificationDefaultArgs instead
      */

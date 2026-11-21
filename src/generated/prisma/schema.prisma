@@ -81,6 +81,12 @@ model User {
   facilitiesChecklistListsUpdated     FacilitiesChecklistList[]      @relation("FacilitiesChecklistListUpdated")
   facilitiesChecklistRecordsCreated   FacilitiesChecklistRecord[]    @relation("FacilitiesChecklistRecordCreated")
   facilitiesChecklistRecordsSubmitted FacilitiesChecklistRecord[]    @relation("FacilitiesChecklistRecordSubmitted")
+  foreignMatterItemsCreated           ForeignMatterItem[]            @relation("ForeignMatterItemCreated")
+  foreignMatterItemsUpdated           ForeignMatterItem[]            @relation("ForeignMatterItemUpdated")
+  foreignMatterItemsRetired           ForeignMatterItem[]            @relation("ForeignMatterItemRetired")
+  foreignMatterListsUpdated           ForeignMatterList[]            @relation("ForeignMatterListUpdated")
+  foreignMatterRecordsCreated         ForeignMatterRecord[]          @relation("ForeignMatterRecordCreated")
+  foreignMatterRecordsSubmitted       ForeignMatterRecord[]          @relation("ForeignMatterRecordSubmitted")
 
   @@map("users")
 }
@@ -1610,6 +1616,74 @@ model FacilitiesChecklistRecord {
 
   @@unique([facility, period], map: "facilities_checklist_records_facility_period_key")
   @@map("facilities_checklist_records")
+}
+
+// ── Foreign Matter Inspection (twice a month) ─────────────────────────────────
+// The editable list. Items are retired, never deleted. An area exists through its items.
+model ForeignMatterItem {
+  id               String    @id @default(cuid())
+  facility         String    @default("624")
+  section          String // 'glass_brittle' | 'knives_blades'
+  areaName         String
+  name             String
+  expectedQuantity Int       @default(1)
+  sortOrder        Int       @default(0)
+  retiredAt        DateTime?
+  retiredById      String?
+  createdById      String?
+  updatedById      String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @default(now()) @updatedAt
+
+  retiredBy User? @relation("ForeignMatterItemRetired", fields: [retiredById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "foreign_matter_items_retired_fkey")
+  createdBy User? @relation("ForeignMatterItemCreated", fields: [createdById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "foreign_matter_items_created_fkey")
+  updatedBy User? @relation("ForeignMatterItemUpdated", fields: [updatedById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "foreign_matter_items_updated_fkey")
+
+  @@index([facility, section, sortOrder], map: "foreign_matter_items_facility_idx")
+  @@map("foreign_matter_items")
+}
+
+// One row per facility; version goes up on every change to the list.
+model ForeignMatterList {
+  facility    String   @id
+  version     Int      @default(1)
+  updatedById String?
+  updatedAt   DateTime @default(now()) @updatedAt
+
+  updatedBy User? @relation("ForeignMatterListUpdated", fields: [updatedById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "foreign_matter_lists_updated_fkey")
+
+  @@map("foreign_matter_lists")
+}
+
+// One record per facility and half-month period ('2026-11-A' = 1st–15th, '2026-11-B' = 16th–last day).
+model ForeignMatterRecord {
+  id               String    @id @default(cuid())
+  facility         String    @default("624")
+  period           String
+  periodStart      DateTime  @db.Date
+  periodEnd        DateTime  @db.Date
+  status           String    @default("draft")
+  conductedBy      String    @default("")
+  initials         String    @default("")
+  items            Json      @default("[]")
+  listVersion      Int       @default(1)
+  okCount          Int       @default(0)
+  failCount        Int       @default(0)
+  notes            String?
+  lastEditedBy     String?
+  lastEditedAt     DateTime?
+  createdById      String?
+  submittedAt      DateTime?
+  submittedById    String?
+  linkedInstanceId String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @default(now()) @updatedAt
+
+  createdBy   User? @relation("ForeignMatterRecordCreated", fields: [createdById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "foreign_matter_records_created_fkey")
+  submittedBy User? @relation("ForeignMatterRecordSubmitted", fields: [submittedById], references: [id], onDelete: SetNull, onUpdate: Cascade, map: "foreign_matter_records_submitted_fkey")
+
+  @@unique([facility, period], map: "foreign_matter_records_facility_period_key")
+  @@map("foreign_matter_records")
 }
 
 model Notification {
