@@ -231,6 +231,12 @@ const inventoryNav = [
     icon: ShieldAlert,
     roles: ["ADMIN"],
   },
+  {
+    label: "Quality",
+    href: "/dashboard/admin/quality",
+    icon: ShieldCheck,
+    roles: ["ADMIN"],
+  },
 ];
 
 // Purchasing (admin only)

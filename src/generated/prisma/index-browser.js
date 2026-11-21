@@ -1202,6 +1202,123 @@ exports.Prisma.ForeignMatterRecordScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.QualityCounterScalarFieldEnum = {
+  kind: 'kind',
+  year: 'year',
+  lastNumber: 'lastNumber'
+};
+
+exports.Prisma.QualityIncidentScalarFieldEnum = {
+  id: 'id',
+  reference: 'reference',
+  facility: 'facility',
+  dateReceived: 'dateReceived',
+  channel: 'channel',
+  customer: 'customer',
+  productId: 'productId',
+  productName: 'productName',
+  lotCode: 'lotCode',
+  bestByDate: 'bestByDate',
+  description: 'description',
+  category: 'category',
+  foodSafetyConcern: 'foodSafetyConcern',
+  immediateAction: 'immediateAction',
+  responseDate: 'responseDate',
+  responseChannel: 'responseChannel',
+  responseSummary: 'responseSummary',
+  capaRequired: 'capaRequired',
+  noCapaReason: 'noCapaReason',
+  status: 'status',
+  closedDate: 'closedDate',
+  closedById: 'closedById',
+  voidedAt: 'voidedAt',
+  voidedById: 'voidedById',
+  voidReason: 'voidReason',
+  createdById: 'createdById',
+  updatedById: 'updatedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.QualityCapaScalarFieldEnum = {
+  id: 'id',
+  reference: 'reference',
+  facility: 'facility',
+  source: 'source',
+  problem: 'problem',
+  rootCause: 'rootCause',
+  correctiveAction: 'correctiveAction',
+  preventiveAction: 'preventiveAction',
+  ownerId: 'ownerId',
+  dueDate: 'dueDate',
+  effectivenessDate: 'effectivenessDate',
+  effectivenessResult: 'effectivenessResult',
+  status: 'status',
+  closedDate: 'closedDate',
+  closedById: 'closedById',
+  closedByName: 'closedByName',
+  taskInstanceId: 'taskInstanceId',
+  voidedAt: 'voidedAt',
+  voidedById: 'voidedById',
+  voidReason: 'voidReason',
+  createdById: 'createdById',
+  updatedById: 'updatedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.QualityIncidentCapaScalarFieldEnum = {
+  incidentId: 'incidentId',
+  capaId: 'capaId',
+  linkedById: 'linkedById',
+  linkedAt: 'linkedAt'
+};
+
+exports.Prisma.QualityAttachmentScalarFieldEnum = {
+  id: 'id',
+  recordType: 'recordType',
+  recordId: 'recordId',
+  kind: 'kind',
+  fileName: 'fileName',
+  fileUrl: 'fileUrl',
+  fileSize: 'fileSize',
+  mimeType: 'mimeType',
+  description: 'description',
+  uploadedById: 'uploadedById',
+  uploadedAt: 'uploadedAt',
+  removedAt: 'removedAt',
+  removedById: 'removedById',
+  removeReason: 'removeReason'
+};
+
+exports.Prisma.QualityEventScalarFieldEnum = {
+  id: 'id',
+  recordType: 'recordType',
+  recordId: 'recordId',
+  reference: 'reference',
+  action: 'action',
+  userId: 'userId',
+  userName: 'userName',
+  changes: 'changes',
+  note: 'note',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.QualityReviewScalarFieldEnum = {
+  id: 'id',
+  facility: 'facility',
+  period: 'period',
+  reviewDate: 'reviewDate',
+  reviewedById: 'reviewedById',
+  reviewedByName: 'reviewedByName',
+  whatWasReviewed: 'whatWasReviewed',
+  notes: 'notes',
+  counts: 'counts',
+  linkedInstanceId: 'linkedInstanceId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.NotificationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -1400,6 +1517,13 @@ exports.Prisma.ModelName = {
   ForeignMatterItem: 'ForeignMatterItem',
   ForeignMatterList: 'ForeignMatterList',
   ForeignMatterRecord: 'ForeignMatterRecord',
+  QualityCounter: 'QualityCounter',
+  QualityIncident: 'QualityIncident',
+  QualityCapa: 'QualityCapa',
+  QualityIncidentCapa: 'QualityIncidentCapa',
+  QualityAttachment: 'QualityAttachment',
+  QualityEvent: 'QualityEvent',
+  QualityReview: 'QualityReview',
   Notification: 'Notification'
 };
 

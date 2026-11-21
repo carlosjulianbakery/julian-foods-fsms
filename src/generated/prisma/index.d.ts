@@ -354,6 +354,41 @@ export type ForeignMatterList = $Result.DefaultSelection<Prisma.$ForeignMatterLi
  */
 export type ForeignMatterRecord = $Result.DefaultSelection<Prisma.$ForeignMatterRecordPayload>
 /**
+ * Model QualityCounter
+ * 
+ */
+export type QualityCounter = $Result.DefaultSelection<Prisma.$QualityCounterPayload>
+/**
+ * Model QualityIncident
+ * 
+ */
+export type QualityIncident = $Result.DefaultSelection<Prisma.$QualityIncidentPayload>
+/**
+ * Model QualityCapa
+ * 
+ */
+export type QualityCapa = $Result.DefaultSelection<Prisma.$QualityCapaPayload>
+/**
+ * Model QualityIncidentCapa
+ * 
+ */
+export type QualityIncidentCapa = $Result.DefaultSelection<Prisma.$QualityIncidentCapaPayload>
+/**
+ * Model QualityAttachment
+ * 
+ */
+export type QualityAttachment = $Result.DefaultSelection<Prisma.$QualityAttachmentPayload>
+/**
+ * Model QualityEvent
+ * 
+ */
+export type QualityEvent = $Result.DefaultSelection<Prisma.$QualityEventPayload>
+/**
+ * Model QualityReview
+ * 
+ */
+export type QualityReview = $Result.DefaultSelection<Prisma.$QualityReviewPayload>
+/**
  * Model Notification
  * 
  */
@@ -1347,6 +1382,76 @@ export class PrismaClient<
   get foreignMatterRecord(): Prisma.ForeignMatterRecordDelegate<ExtArgs>;
 
   /**
+   * `prisma.qualityCounter`: Exposes CRUD operations for the **QualityCounter** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more QualityCounters
+    * const qualityCounters = await prisma.qualityCounter.findMany()
+    * ```
+    */
+  get qualityCounter(): Prisma.QualityCounterDelegate<ExtArgs>;
+
+  /**
+   * `prisma.qualityIncident`: Exposes CRUD operations for the **QualityIncident** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more QualityIncidents
+    * const qualityIncidents = await prisma.qualityIncident.findMany()
+    * ```
+    */
+  get qualityIncident(): Prisma.QualityIncidentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.qualityCapa`: Exposes CRUD operations for the **QualityCapa** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more QualityCapas
+    * const qualityCapas = await prisma.qualityCapa.findMany()
+    * ```
+    */
+  get qualityCapa(): Prisma.QualityCapaDelegate<ExtArgs>;
+
+  /**
+   * `prisma.qualityIncidentCapa`: Exposes CRUD operations for the **QualityIncidentCapa** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more QualityIncidentCapas
+    * const qualityIncidentCapas = await prisma.qualityIncidentCapa.findMany()
+    * ```
+    */
+  get qualityIncidentCapa(): Prisma.QualityIncidentCapaDelegate<ExtArgs>;
+
+  /**
+   * `prisma.qualityAttachment`: Exposes CRUD operations for the **QualityAttachment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more QualityAttachments
+    * const qualityAttachments = await prisma.qualityAttachment.findMany()
+    * ```
+    */
+  get qualityAttachment(): Prisma.QualityAttachmentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.qualityEvent`: Exposes CRUD operations for the **QualityEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more QualityEvents
+    * const qualityEvents = await prisma.qualityEvent.findMany()
+    * ```
+    */
+  get qualityEvent(): Prisma.QualityEventDelegate<ExtArgs>;
+
+  /**
+   * `prisma.qualityReview`: Exposes CRUD operations for the **QualityReview** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more QualityReviews
+    * const qualityReviews = await prisma.qualityReview.findMany()
+    * ```
+    */
+  get qualityReview(): Prisma.QualityReviewDelegate<ExtArgs>;
+
+  /**
    * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
     * Example usage:
     * ```ts
@@ -1864,6 +1969,13 @@ export namespace Prisma {
     ForeignMatterItem: 'ForeignMatterItem',
     ForeignMatterList: 'ForeignMatterList',
     ForeignMatterRecord: 'ForeignMatterRecord',
+    QualityCounter: 'QualityCounter',
+    QualityIncident: 'QualityIncident',
+    QualityCapa: 'QualityCapa',
+    QualityIncidentCapa: 'QualityIncidentCapa',
+    QualityAttachment: 'QualityAttachment',
+    QualityEvent: 'QualityEvent',
+    QualityReview: 'QualityReview',
     Notification: 'Notification'
   };
 
@@ -1880,7 +1992,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "record" | "preOpInspection" | "preOp624Inspection" | "dailyClean624Record" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "monthlyClean624Record" | "verification624Equipment" | "verification624List" | "verification624Record" | "facilitiesChecklistItem" | "facilitiesChecklistList" | "facilitiesChecklistRecord" | "foreignMatterItem" | "foreignMatterList" | "foreignMatterRecord" | "notification"
+      modelProps: "user" | "form" | "formSubmission" | "record" | "preOpInspection" | "preOp624Inspection" | "dailyClean624Record" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "monthlyClean624Record" | "verification624Equipment" | "verification624List" | "verification624Record" | "facilitiesChecklistItem" | "facilitiesChecklistList" | "facilitiesChecklistRecord" | "foreignMatterItem" | "foreignMatterList" | "foreignMatterRecord" | "qualityCounter" | "qualityIncident" | "qualityCapa" | "qualityIncidentCapa" | "qualityAttachment" | "qualityEvent" | "qualityReview" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6641,6 +6753,496 @@ export namespace Prisma {
           count: {
             args: Prisma.ForeignMatterRecordCountArgs<ExtArgs>
             result: $Utils.Optional<ForeignMatterRecordCountAggregateOutputType> | number
+          }
+        }
+      }
+      QualityCounter: {
+        payload: Prisma.$QualityCounterPayload<ExtArgs>
+        fields: Prisma.QualityCounterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.QualityCounterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCounterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.QualityCounterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCounterPayload>
+          }
+          findFirst: {
+            args: Prisma.QualityCounterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCounterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.QualityCounterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCounterPayload>
+          }
+          findMany: {
+            args: Prisma.QualityCounterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCounterPayload>[]
+          }
+          create: {
+            args: Prisma.QualityCounterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCounterPayload>
+          }
+          createMany: {
+            args: Prisma.QualityCounterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.QualityCounterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCounterPayload>[]
+          }
+          delete: {
+            args: Prisma.QualityCounterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCounterPayload>
+          }
+          update: {
+            args: Prisma.QualityCounterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCounterPayload>
+          }
+          deleteMany: {
+            args: Prisma.QualityCounterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.QualityCounterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.QualityCounterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCounterPayload>
+          }
+          aggregate: {
+            args: Prisma.QualityCounterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateQualityCounter>
+          }
+          groupBy: {
+            args: Prisma.QualityCounterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<QualityCounterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.QualityCounterCountArgs<ExtArgs>
+            result: $Utils.Optional<QualityCounterCountAggregateOutputType> | number
+          }
+        }
+      }
+      QualityIncident: {
+        payload: Prisma.$QualityIncidentPayload<ExtArgs>
+        fields: Prisma.QualityIncidentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.QualityIncidentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.QualityIncidentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentPayload>
+          }
+          findFirst: {
+            args: Prisma.QualityIncidentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.QualityIncidentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentPayload>
+          }
+          findMany: {
+            args: Prisma.QualityIncidentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentPayload>[]
+          }
+          create: {
+            args: Prisma.QualityIncidentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentPayload>
+          }
+          createMany: {
+            args: Prisma.QualityIncidentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.QualityIncidentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentPayload>[]
+          }
+          delete: {
+            args: Prisma.QualityIncidentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentPayload>
+          }
+          update: {
+            args: Prisma.QualityIncidentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentPayload>
+          }
+          deleteMany: {
+            args: Prisma.QualityIncidentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.QualityIncidentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.QualityIncidentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentPayload>
+          }
+          aggregate: {
+            args: Prisma.QualityIncidentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateQualityIncident>
+          }
+          groupBy: {
+            args: Prisma.QualityIncidentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<QualityIncidentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.QualityIncidentCountArgs<ExtArgs>
+            result: $Utils.Optional<QualityIncidentCountAggregateOutputType> | number
+          }
+        }
+      }
+      QualityCapa: {
+        payload: Prisma.$QualityCapaPayload<ExtArgs>
+        fields: Prisma.QualityCapaFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.QualityCapaFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCapaPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.QualityCapaFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCapaPayload>
+          }
+          findFirst: {
+            args: Prisma.QualityCapaFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCapaPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.QualityCapaFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCapaPayload>
+          }
+          findMany: {
+            args: Prisma.QualityCapaFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCapaPayload>[]
+          }
+          create: {
+            args: Prisma.QualityCapaCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCapaPayload>
+          }
+          createMany: {
+            args: Prisma.QualityCapaCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.QualityCapaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCapaPayload>[]
+          }
+          delete: {
+            args: Prisma.QualityCapaDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCapaPayload>
+          }
+          update: {
+            args: Prisma.QualityCapaUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCapaPayload>
+          }
+          deleteMany: {
+            args: Prisma.QualityCapaDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.QualityCapaUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.QualityCapaUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityCapaPayload>
+          }
+          aggregate: {
+            args: Prisma.QualityCapaAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateQualityCapa>
+          }
+          groupBy: {
+            args: Prisma.QualityCapaGroupByArgs<ExtArgs>
+            result: $Utils.Optional<QualityCapaGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.QualityCapaCountArgs<ExtArgs>
+            result: $Utils.Optional<QualityCapaCountAggregateOutputType> | number
+          }
+        }
+      }
+      QualityIncidentCapa: {
+        payload: Prisma.$QualityIncidentCapaPayload<ExtArgs>
+        fields: Prisma.QualityIncidentCapaFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.QualityIncidentCapaFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentCapaPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.QualityIncidentCapaFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentCapaPayload>
+          }
+          findFirst: {
+            args: Prisma.QualityIncidentCapaFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentCapaPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.QualityIncidentCapaFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentCapaPayload>
+          }
+          findMany: {
+            args: Prisma.QualityIncidentCapaFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentCapaPayload>[]
+          }
+          create: {
+            args: Prisma.QualityIncidentCapaCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentCapaPayload>
+          }
+          createMany: {
+            args: Prisma.QualityIncidentCapaCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.QualityIncidentCapaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentCapaPayload>[]
+          }
+          delete: {
+            args: Prisma.QualityIncidentCapaDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentCapaPayload>
+          }
+          update: {
+            args: Prisma.QualityIncidentCapaUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentCapaPayload>
+          }
+          deleteMany: {
+            args: Prisma.QualityIncidentCapaDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.QualityIncidentCapaUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.QualityIncidentCapaUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityIncidentCapaPayload>
+          }
+          aggregate: {
+            args: Prisma.QualityIncidentCapaAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateQualityIncidentCapa>
+          }
+          groupBy: {
+            args: Prisma.QualityIncidentCapaGroupByArgs<ExtArgs>
+            result: $Utils.Optional<QualityIncidentCapaGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.QualityIncidentCapaCountArgs<ExtArgs>
+            result: $Utils.Optional<QualityIncidentCapaCountAggregateOutputType> | number
+          }
+        }
+      }
+      QualityAttachment: {
+        payload: Prisma.$QualityAttachmentPayload<ExtArgs>
+        fields: Prisma.QualityAttachmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.QualityAttachmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityAttachmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.QualityAttachmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityAttachmentPayload>
+          }
+          findFirst: {
+            args: Prisma.QualityAttachmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityAttachmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.QualityAttachmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityAttachmentPayload>
+          }
+          findMany: {
+            args: Prisma.QualityAttachmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityAttachmentPayload>[]
+          }
+          create: {
+            args: Prisma.QualityAttachmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityAttachmentPayload>
+          }
+          createMany: {
+            args: Prisma.QualityAttachmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.QualityAttachmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityAttachmentPayload>[]
+          }
+          delete: {
+            args: Prisma.QualityAttachmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityAttachmentPayload>
+          }
+          update: {
+            args: Prisma.QualityAttachmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityAttachmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.QualityAttachmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.QualityAttachmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.QualityAttachmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityAttachmentPayload>
+          }
+          aggregate: {
+            args: Prisma.QualityAttachmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateQualityAttachment>
+          }
+          groupBy: {
+            args: Prisma.QualityAttachmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<QualityAttachmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.QualityAttachmentCountArgs<ExtArgs>
+            result: $Utils.Optional<QualityAttachmentCountAggregateOutputType> | number
+          }
+        }
+      }
+      QualityEvent: {
+        payload: Prisma.$QualityEventPayload<ExtArgs>
+        fields: Prisma.QualityEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.QualityEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.QualityEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityEventPayload>
+          }
+          findFirst: {
+            args: Prisma.QualityEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.QualityEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityEventPayload>
+          }
+          findMany: {
+            args: Prisma.QualityEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityEventPayload>[]
+          }
+          create: {
+            args: Prisma.QualityEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityEventPayload>
+          }
+          createMany: {
+            args: Prisma.QualityEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.QualityEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityEventPayload>[]
+          }
+          delete: {
+            args: Prisma.QualityEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityEventPayload>
+          }
+          update: {
+            args: Prisma.QualityEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.QualityEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.QualityEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.QualityEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityEventPayload>
+          }
+          aggregate: {
+            args: Prisma.QualityEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateQualityEvent>
+          }
+          groupBy: {
+            args: Prisma.QualityEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<QualityEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.QualityEventCountArgs<ExtArgs>
+            result: $Utils.Optional<QualityEventCountAggregateOutputType> | number
+          }
+        }
+      }
+      QualityReview: {
+        payload: Prisma.$QualityReviewPayload<ExtArgs>
+        fields: Prisma.QualityReviewFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.QualityReviewFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityReviewPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.QualityReviewFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityReviewPayload>
+          }
+          findFirst: {
+            args: Prisma.QualityReviewFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityReviewPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.QualityReviewFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityReviewPayload>
+          }
+          findMany: {
+            args: Prisma.QualityReviewFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityReviewPayload>[]
+          }
+          create: {
+            args: Prisma.QualityReviewCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityReviewPayload>
+          }
+          createMany: {
+            args: Prisma.QualityReviewCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.QualityReviewCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityReviewPayload>[]
+          }
+          delete: {
+            args: Prisma.QualityReviewDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityReviewPayload>
+          }
+          update: {
+            args: Prisma.QualityReviewUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityReviewPayload>
+          }
+          deleteMany: {
+            args: Prisma.QualityReviewDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.QualityReviewUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.QualityReviewUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QualityReviewPayload>
+          }
+          aggregate: {
+            args: Prisma.QualityReviewAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateQualityReview>
+          }
+          groupBy: {
+            args: Prisma.QualityReviewGroupByArgs<ExtArgs>
+            result: $Utils.Optional<QualityReviewGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.QualityReviewCountArgs<ExtArgs>
+            result: $Utils.Optional<QualityReviewCountAggregateOutputType> | number
           }
         }
       }
@@ -83118,6 +83720,6948 @@ export namespace Prisma {
 
 
   /**
+   * Model QualityCounter
+   */
+
+  export type AggregateQualityCounter = {
+    _count: QualityCounterCountAggregateOutputType | null
+    _avg: QualityCounterAvgAggregateOutputType | null
+    _sum: QualityCounterSumAggregateOutputType | null
+    _min: QualityCounterMinAggregateOutputType | null
+    _max: QualityCounterMaxAggregateOutputType | null
+  }
+
+  export type QualityCounterAvgAggregateOutputType = {
+    year: number | null
+    lastNumber: number | null
+  }
+
+  export type QualityCounterSumAggregateOutputType = {
+    year: number | null
+    lastNumber: number | null
+  }
+
+  export type QualityCounterMinAggregateOutputType = {
+    kind: string | null
+    year: number | null
+    lastNumber: number | null
+  }
+
+  export type QualityCounterMaxAggregateOutputType = {
+    kind: string | null
+    year: number | null
+    lastNumber: number | null
+  }
+
+  export type QualityCounterCountAggregateOutputType = {
+    kind: number
+    year: number
+    lastNumber: number
+    _all: number
+  }
+
+
+  export type QualityCounterAvgAggregateInputType = {
+    year?: true
+    lastNumber?: true
+  }
+
+  export type QualityCounterSumAggregateInputType = {
+    year?: true
+    lastNumber?: true
+  }
+
+  export type QualityCounterMinAggregateInputType = {
+    kind?: true
+    year?: true
+    lastNumber?: true
+  }
+
+  export type QualityCounterMaxAggregateInputType = {
+    kind?: true
+    year?: true
+    lastNumber?: true
+  }
+
+  export type QualityCounterCountAggregateInputType = {
+    kind?: true
+    year?: true
+    lastNumber?: true
+    _all?: true
+  }
+
+  export type QualityCounterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QualityCounter to aggregate.
+     */
+    where?: QualityCounterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityCounters to fetch.
+     */
+    orderBy?: QualityCounterOrderByWithRelationInput | QualityCounterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: QualityCounterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityCounters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityCounters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned QualityCounters
+    **/
+    _count?: true | QualityCounterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: QualityCounterAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: QualityCounterSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: QualityCounterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: QualityCounterMaxAggregateInputType
+  }
+
+  export type GetQualityCounterAggregateType<T extends QualityCounterAggregateArgs> = {
+        [P in keyof T & keyof AggregateQualityCounter]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQualityCounter[P]>
+      : GetScalarType<T[P], AggregateQualityCounter[P]>
+  }
+
+
+
+
+  export type QualityCounterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QualityCounterWhereInput
+    orderBy?: QualityCounterOrderByWithAggregationInput | QualityCounterOrderByWithAggregationInput[]
+    by: QualityCounterScalarFieldEnum[] | QualityCounterScalarFieldEnum
+    having?: QualityCounterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: QualityCounterCountAggregateInputType | true
+    _avg?: QualityCounterAvgAggregateInputType
+    _sum?: QualityCounterSumAggregateInputType
+    _min?: QualityCounterMinAggregateInputType
+    _max?: QualityCounterMaxAggregateInputType
+  }
+
+  export type QualityCounterGroupByOutputType = {
+    kind: string
+    year: number
+    lastNumber: number
+    _count: QualityCounterCountAggregateOutputType | null
+    _avg: QualityCounterAvgAggregateOutputType | null
+    _sum: QualityCounterSumAggregateOutputType | null
+    _min: QualityCounterMinAggregateOutputType | null
+    _max: QualityCounterMaxAggregateOutputType | null
+  }
+
+  type GetQualityCounterGroupByPayload<T extends QualityCounterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<QualityCounterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof QualityCounterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QualityCounterGroupByOutputType[P]>
+            : GetScalarType<T[P], QualityCounterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type QualityCounterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    kind?: boolean
+    year?: boolean
+    lastNumber?: boolean
+  }, ExtArgs["result"]["qualityCounter"]>
+
+  export type QualityCounterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    kind?: boolean
+    year?: boolean
+    lastNumber?: boolean
+  }, ExtArgs["result"]["qualityCounter"]>
+
+  export type QualityCounterSelectScalar = {
+    kind?: boolean
+    year?: boolean
+    lastNumber?: boolean
+  }
+
+
+  export type $QualityCounterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "QualityCounter"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      kind: string
+      year: number
+      lastNumber: number
+    }, ExtArgs["result"]["qualityCounter"]>
+    composites: {}
+  }
+
+  type QualityCounterGetPayload<S extends boolean | null | undefined | QualityCounterDefaultArgs> = $Result.GetResult<Prisma.$QualityCounterPayload, S>
+
+  type QualityCounterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<QualityCounterFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: QualityCounterCountAggregateInputType | true
+    }
+
+  export interface QualityCounterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['QualityCounter'], meta: { name: 'QualityCounter' } }
+    /**
+     * Find zero or one QualityCounter that matches the filter.
+     * @param {QualityCounterFindUniqueArgs} args - Arguments to find a QualityCounter
+     * @example
+     * // Get one QualityCounter
+     * const qualityCounter = await prisma.qualityCounter.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QualityCounterFindUniqueArgs>(args: SelectSubset<T, QualityCounterFindUniqueArgs<ExtArgs>>): Prisma__QualityCounterClient<$Result.GetResult<Prisma.$QualityCounterPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one QualityCounter that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {QualityCounterFindUniqueOrThrowArgs} args - Arguments to find a QualityCounter
+     * @example
+     * // Get one QualityCounter
+     * const qualityCounter = await prisma.qualityCounter.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QualityCounterFindUniqueOrThrowArgs>(args: SelectSubset<T, QualityCounterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__QualityCounterClient<$Result.GetResult<Prisma.$QualityCounterPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first QualityCounter that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityCounterFindFirstArgs} args - Arguments to find a QualityCounter
+     * @example
+     * // Get one QualityCounter
+     * const qualityCounter = await prisma.qualityCounter.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QualityCounterFindFirstArgs>(args?: SelectSubset<T, QualityCounterFindFirstArgs<ExtArgs>>): Prisma__QualityCounterClient<$Result.GetResult<Prisma.$QualityCounterPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first QualityCounter that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityCounterFindFirstOrThrowArgs} args - Arguments to find a QualityCounter
+     * @example
+     * // Get one QualityCounter
+     * const qualityCounter = await prisma.qualityCounter.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QualityCounterFindFirstOrThrowArgs>(args?: SelectSubset<T, QualityCounterFindFirstOrThrowArgs<ExtArgs>>): Prisma__QualityCounterClient<$Result.GetResult<Prisma.$QualityCounterPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more QualityCounters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityCounterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all QualityCounters
+     * const qualityCounters = await prisma.qualityCounter.findMany()
+     * 
+     * // Get first 10 QualityCounters
+     * const qualityCounters = await prisma.qualityCounter.findMany({ take: 10 })
+     * 
+     * // Only select the `kind`
+     * const qualityCounterWithKindOnly = await prisma.qualityCounter.findMany({ select: { kind: true } })
+     * 
+     */
+    findMany<T extends QualityCounterFindManyArgs>(args?: SelectSubset<T, QualityCounterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QualityCounterPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a QualityCounter.
+     * @param {QualityCounterCreateArgs} args - Arguments to create a QualityCounter.
+     * @example
+     * // Create one QualityCounter
+     * const QualityCounter = await prisma.qualityCounter.create({
+     *   data: {
+     *     // ... data to create a QualityCounter
+     *   }
+     * })
+     * 
+     */
+    create<T extends QualityCounterCreateArgs>(args: SelectSubset<T, QualityCounterCreateArgs<ExtArgs>>): Prisma__QualityCounterClient<$Result.GetResult<Prisma.$QualityCounterPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many QualityCounters.
+     * @param {QualityCounterCreateManyArgs} args - Arguments to create many QualityCounters.
+     * @example
+     * // Create many QualityCounters
+     * const qualityCounter = await prisma.qualityCounter.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends QualityCounterCreateManyArgs>(args?: SelectSubset<T, QualityCounterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many QualityCounters and returns the data saved in the database.
+     * @param {QualityCounterCreateManyAndReturnArgs} args - Arguments to create many QualityCounters.
+     * @example
+     * // Create many QualityCounters
+     * const qualityCounter = await prisma.qualityCounter.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many QualityCounters and only return the `kind`
+     * const qualityCounterWithKindOnly = await prisma.qualityCounter.createManyAndReturn({ 
+     *   select: { kind: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends QualityCounterCreateManyAndReturnArgs>(args?: SelectSubset<T, QualityCounterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QualityCounterPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a QualityCounter.
+     * @param {QualityCounterDeleteArgs} args - Arguments to delete one QualityCounter.
+     * @example
+     * // Delete one QualityCounter
+     * const QualityCounter = await prisma.qualityCounter.delete({
+     *   where: {
+     *     // ... filter to delete one QualityCounter
+     *   }
+     * })
+     * 
+     */
+    delete<T extends QualityCounterDeleteArgs>(args: SelectSubset<T, QualityCounterDeleteArgs<ExtArgs>>): Prisma__QualityCounterClient<$Result.GetResult<Prisma.$QualityCounterPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one QualityCounter.
+     * @param {QualityCounterUpdateArgs} args - Arguments to update one QualityCounter.
+     * @example
+     * // Update one QualityCounter
+     * const qualityCounter = await prisma.qualityCounter.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends QualityCounterUpdateArgs>(args: SelectSubset<T, QualityCounterUpdateArgs<ExtArgs>>): Prisma__QualityCounterClient<$Result.GetResult<Prisma.$QualityCounterPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more QualityCounters.
+     * @param {QualityCounterDeleteManyArgs} args - Arguments to filter QualityCounters to delete.
+     * @example
+     * // Delete a few QualityCounters
+     * const { count } = await prisma.qualityCounter.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends QualityCounterDeleteManyArgs>(args?: SelectSubset<T, QualityCounterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QualityCounters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityCounterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many QualityCounters
+     * const qualityCounter = await prisma.qualityCounter.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends QualityCounterUpdateManyArgs>(args: SelectSubset<T, QualityCounterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one QualityCounter.
+     * @param {QualityCounterUpsertArgs} args - Arguments to update or create a QualityCounter.
+     * @example
+     * // Update or create a QualityCounter
+     * const qualityCounter = await prisma.qualityCounter.upsert({
+     *   create: {
+     *     // ... data to create a QualityCounter
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the QualityCounter we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QualityCounterUpsertArgs>(args: SelectSubset<T, QualityCounterUpsertArgs<ExtArgs>>): Prisma__QualityCounterClient<$Result.GetResult<Prisma.$QualityCounterPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of QualityCounters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityCounterCountArgs} args - Arguments to filter QualityCounters to count.
+     * @example
+     * // Count the number of QualityCounters
+     * const count = await prisma.qualityCounter.count({
+     *   where: {
+     *     // ... the filter for the QualityCounters we want to count
+     *   }
+     * })
+    **/
+    count<T extends QualityCounterCountArgs>(
+      args?: Subset<T, QualityCounterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QualityCounterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a QualityCounter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityCounterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends QualityCounterAggregateArgs>(args: Subset<T, QualityCounterAggregateArgs>): Prisma.PrismaPromise<GetQualityCounterAggregateType<T>>
+
+    /**
+     * Group by QualityCounter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityCounterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends QualityCounterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QualityCounterGroupByArgs['orderBy'] }
+        : { orderBy?: QualityCounterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, QualityCounterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQualityCounterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the QualityCounter model
+   */
+  readonly fields: QualityCounterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for QualityCounter.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QualityCounterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the QualityCounter model
+   */ 
+  interface QualityCounterFieldRefs {
+    readonly kind: FieldRef<"QualityCounter", 'String'>
+    readonly year: FieldRef<"QualityCounter", 'Int'>
+    readonly lastNumber: FieldRef<"QualityCounter", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * QualityCounter findUnique
+   */
+  export type QualityCounterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCounter
+     */
+    select?: QualityCounterSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityCounter to fetch.
+     */
+    where: QualityCounterWhereUniqueInput
+  }
+
+  /**
+   * QualityCounter findUniqueOrThrow
+   */
+  export type QualityCounterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCounter
+     */
+    select?: QualityCounterSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityCounter to fetch.
+     */
+    where: QualityCounterWhereUniqueInput
+  }
+
+  /**
+   * QualityCounter findFirst
+   */
+  export type QualityCounterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCounter
+     */
+    select?: QualityCounterSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityCounter to fetch.
+     */
+    where?: QualityCounterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityCounters to fetch.
+     */
+    orderBy?: QualityCounterOrderByWithRelationInput | QualityCounterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QualityCounters.
+     */
+    cursor?: QualityCounterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityCounters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityCounters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QualityCounters.
+     */
+    distinct?: QualityCounterScalarFieldEnum | QualityCounterScalarFieldEnum[]
+  }
+
+  /**
+   * QualityCounter findFirstOrThrow
+   */
+  export type QualityCounterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCounter
+     */
+    select?: QualityCounterSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityCounter to fetch.
+     */
+    where?: QualityCounterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityCounters to fetch.
+     */
+    orderBy?: QualityCounterOrderByWithRelationInput | QualityCounterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QualityCounters.
+     */
+    cursor?: QualityCounterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityCounters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityCounters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QualityCounters.
+     */
+    distinct?: QualityCounterScalarFieldEnum | QualityCounterScalarFieldEnum[]
+  }
+
+  /**
+   * QualityCounter findMany
+   */
+  export type QualityCounterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCounter
+     */
+    select?: QualityCounterSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityCounters to fetch.
+     */
+    where?: QualityCounterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityCounters to fetch.
+     */
+    orderBy?: QualityCounterOrderByWithRelationInput | QualityCounterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing QualityCounters.
+     */
+    cursor?: QualityCounterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityCounters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityCounters.
+     */
+    skip?: number
+    distinct?: QualityCounterScalarFieldEnum | QualityCounterScalarFieldEnum[]
+  }
+
+  /**
+   * QualityCounter create
+   */
+  export type QualityCounterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCounter
+     */
+    select?: QualityCounterSelect<ExtArgs> | null
+    /**
+     * The data needed to create a QualityCounter.
+     */
+    data: XOR<QualityCounterCreateInput, QualityCounterUncheckedCreateInput>
+  }
+
+  /**
+   * QualityCounter createMany
+   */
+  export type QualityCounterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many QualityCounters.
+     */
+    data: QualityCounterCreateManyInput | QualityCounterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QualityCounter createManyAndReturn
+   */
+  export type QualityCounterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCounter
+     */
+    select?: QualityCounterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many QualityCounters.
+     */
+    data: QualityCounterCreateManyInput | QualityCounterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QualityCounter update
+   */
+  export type QualityCounterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCounter
+     */
+    select?: QualityCounterSelect<ExtArgs> | null
+    /**
+     * The data needed to update a QualityCounter.
+     */
+    data: XOR<QualityCounterUpdateInput, QualityCounterUncheckedUpdateInput>
+    /**
+     * Choose, which QualityCounter to update.
+     */
+    where: QualityCounterWhereUniqueInput
+  }
+
+  /**
+   * QualityCounter updateMany
+   */
+  export type QualityCounterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update QualityCounters.
+     */
+    data: XOR<QualityCounterUpdateManyMutationInput, QualityCounterUncheckedUpdateManyInput>
+    /**
+     * Filter which QualityCounters to update
+     */
+    where?: QualityCounterWhereInput
+  }
+
+  /**
+   * QualityCounter upsert
+   */
+  export type QualityCounterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCounter
+     */
+    select?: QualityCounterSelect<ExtArgs> | null
+    /**
+     * The filter to search for the QualityCounter to update in case it exists.
+     */
+    where: QualityCounterWhereUniqueInput
+    /**
+     * In case the QualityCounter found by the `where` argument doesn't exist, create a new QualityCounter with this data.
+     */
+    create: XOR<QualityCounterCreateInput, QualityCounterUncheckedCreateInput>
+    /**
+     * In case the QualityCounter was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QualityCounterUpdateInput, QualityCounterUncheckedUpdateInput>
+  }
+
+  /**
+   * QualityCounter delete
+   */
+  export type QualityCounterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCounter
+     */
+    select?: QualityCounterSelect<ExtArgs> | null
+    /**
+     * Filter which QualityCounter to delete.
+     */
+    where: QualityCounterWhereUniqueInput
+  }
+
+  /**
+   * QualityCounter deleteMany
+   */
+  export type QualityCounterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QualityCounters to delete
+     */
+    where?: QualityCounterWhereInput
+  }
+
+  /**
+   * QualityCounter without action
+   */
+  export type QualityCounterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCounter
+     */
+    select?: QualityCounterSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model QualityIncident
+   */
+
+  export type AggregateQualityIncident = {
+    _count: QualityIncidentCountAggregateOutputType | null
+    _min: QualityIncidentMinAggregateOutputType | null
+    _max: QualityIncidentMaxAggregateOutputType | null
+  }
+
+  export type QualityIncidentMinAggregateOutputType = {
+    id: string | null
+    reference: string | null
+    facility: string | null
+    dateReceived: Date | null
+    channel: string | null
+    customer: string | null
+    productId: string | null
+    productName: string | null
+    lotCode: string | null
+    bestByDate: Date | null
+    description: string | null
+    category: string | null
+    foodSafetyConcern: boolean | null
+    immediateAction: string | null
+    responseDate: Date | null
+    responseChannel: string | null
+    responseSummary: string | null
+    capaRequired: boolean | null
+    noCapaReason: string | null
+    status: string | null
+    closedDate: Date | null
+    closedById: string | null
+    voidedAt: Date | null
+    voidedById: string | null
+    voidReason: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QualityIncidentMaxAggregateOutputType = {
+    id: string | null
+    reference: string | null
+    facility: string | null
+    dateReceived: Date | null
+    channel: string | null
+    customer: string | null
+    productId: string | null
+    productName: string | null
+    lotCode: string | null
+    bestByDate: Date | null
+    description: string | null
+    category: string | null
+    foodSafetyConcern: boolean | null
+    immediateAction: string | null
+    responseDate: Date | null
+    responseChannel: string | null
+    responseSummary: string | null
+    capaRequired: boolean | null
+    noCapaReason: string | null
+    status: string | null
+    closedDate: Date | null
+    closedById: string | null
+    voidedAt: Date | null
+    voidedById: string | null
+    voidReason: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QualityIncidentCountAggregateOutputType = {
+    id: number
+    reference: number
+    facility: number
+    dateReceived: number
+    channel: number
+    customer: number
+    productId: number
+    productName: number
+    lotCode: number
+    bestByDate: number
+    description: number
+    category: number
+    foodSafetyConcern: number
+    immediateAction: number
+    responseDate: number
+    responseChannel: number
+    responseSummary: number
+    capaRequired: number
+    noCapaReason: number
+    status: number
+    closedDate: number
+    closedById: number
+    voidedAt: number
+    voidedById: number
+    voidReason: number
+    createdById: number
+    updatedById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type QualityIncidentMinAggregateInputType = {
+    id?: true
+    reference?: true
+    facility?: true
+    dateReceived?: true
+    channel?: true
+    customer?: true
+    productId?: true
+    productName?: true
+    lotCode?: true
+    bestByDate?: true
+    description?: true
+    category?: true
+    foodSafetyConcern?: true
+    immediateAction?: true
+    responseDate?: true
+    responseChannel?: true
+    responseSummary?: true
+    capaRequired?: true
+    noCapaReason?: true
+    status?: true
+    closedDate?: true
+    closedById?: true
+    voidedAt?: true
+    voidedById?: true
+    voidReason?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QualityIncidentMaxAggregateInputType = {
+    id?: true
+    reference?: true
+    facility?: true
+    dateReceived?: true
+    channel?: true
+    customer?: true
+    productId?: true
+    productName?: true
+    lotCode?: true
+    bestByDate?: true
+    description?: true
+    category?: true
+    foodSafetyConcern?: true
+    immediateAction?: true
+    responseDate?: true
+    responseChannel?: true
+    responseSummary?: true
+    capaRequired?: true
+    noCapaReason?: true
+    status?: true
+    closedDate?: true
+    closedById?: true
+    voidedAt?: true
+    voidedById?: true
+    voidReason?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QualityIncidentCountAggregateInputType = {
+    id?: true
+    reference?: true
+    facility?: true
+    dateReceived?: true
+    channel?: true
+    customer?: true
+    productId?: true
+    productName?: true
+    lotCode?: true
+    bestByDate?: true
+    description?: true
+    category?: true
+    foodSafetyConcern?: true
+    immediateAction?: true
+    responseDate?: true
+    responseChannel?: true
+    responseSummary?: true
+    capaRequired?: true
+    noCapaReason?: true
+    status?: true
+    closedDate?: true
+    closedById?: true
+    voidedAt?: true
+    voidedById?: true
+    voidReason?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type QualityIncidentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QualityIncident to aggregate.
+     */
+    where?: QualityIncidentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityIncidents to fetch.
+     */
+    orderBy?: QualityIncidentOrderByWithRelationInput | QualityIncidentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: QualityIncidentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityIncidents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityIncidents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned QualityIncidents
+    **/
+    _count?: true | QualityIncidentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: QualityIncidentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: QualityIncidentMaxAggregateInputType
+  }
+
+  export type GetQualityIncidentAggregateType<T extends QualityIncidentAggregateArgs> = {
+        [P in keyof T & keyof AggregateQualityIncident]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQualityIncident[P]>
+      : GetScalarType<T[P], AggregateQualityIncident[P]>
+  }
+
+
+
+
+  export type QualityIncidentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QualityIncidentWhereInput
+    orderBy?: QualityIncidentOrderByWithAggregationInput | QualityIncidentOrderByWithAggregationInput[]
+    by: QualityIncidentScalarFieldEnum[] | QualityIncidentScalarFieldEnum
+    having?: QualityIncidentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: QualityIncidentCountAggregateInputType | true
+    _min?: QualityIncidentMinAggregateInputType
+    _max?: QualityIncidentMaxAggregateInputType
+  }
+
+  export type QualityIncidentGroupByOutputType = {
+    id: string
+    reference: string
+    facility: string | null
+    dateReceived: Date
+    channel: string
+    customer: string
+    productId: string | null
+    productName: string
+    lotCode: string
+    bestByDate: Date | null
+    description: string
+    category: string | null
+    foodSafetyConcern: boolean
+    immediateAction: string
+    responseDate: Date | null
+    responseChannel: string | null
+    responseSummary: string
+    capaRequired: boolean | null
+    noCapaReason: string
+    status: string
+    closedDate: Date | null
+    closedById: string | null
+    voidedAt: Date | null
+    voidedById: string | null
+    voidReason: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: QualityIncidentCountAggregateOutputType | null
+    _min: QualityIncidentMinAggregateOutputType | null
+    _max: QualityIncidentMaxAggregateOutputType | null
+  }
+
+  type GetQualityIncidentGroupByPayload<T extends QualityIncidentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<QualityIncidentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof QualityIncidentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QualityIncidentGroupByOutputType[P]>
+            : GetScalarType<T[P], QualityIncidentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type QualityIncidentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reference?: boolean
+    facility?: boolean
+    dateReceived?: boolean
+    channel?: boolean
+    customer?: boolean
+    productId?: boolean
+    productName?: boolean
+    lotCode?: boolean
+    bestByDate?: boolean
+    description?: boolean
+    category?: boolean
+    foodSafetyConcern?: boolean
+    immediateAction?: boolean
+    responseDate?: boolean
+    responseChannel?: boolean
+    responseSummary?: boolean
+    capaRequired?: boolean
+    noCapaReason?: boolean
+    status?: boolean
+    closedDate?: boolean
+    closedById?: boolean
+    voidedAt?: boolean
+    voidedById?: boolean
+    voidReason?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["qualityIncident"]>
+
+  export type QualityIncidentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reference?: boolean
+    facility?: boolean
+    dateReceived?: boolean
+    channel?: boolean
+    customer?: boolean
+    productId?: boolean
+    productName?: boolean
+    lotCode?: boolean
+    bestByDate?: boolean
+    description?: boolean
+    category?: boolean
+    foodSafetyConcern?: boolean
+    immediateAction?: boolean
+    responseDate?: boolean
+    responseChannel?: boolean
+    responseSummary?: boolean
+    capaRequired?: boolean
+    noCapaReason?: boolean
+    status?: boolean
+    closedDate?: boolean
+    closedById?: boolean
+    voidedAt?: boolean
+    voidedById?: boolean
+    voidReason?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["qualityIncident"]>
+
+  export type QualityIncidentSelectScalar = {
+    id?: boolean
+    reference?: boolean
+    facility?: boolean
+    dateReceived?: boolean
+    channel?: boolean
+    customer?: boolean
+    productId?: boolean
+    productName?: boolean
+    lotCode?: boolean
+    bestByDate?: boolean
+    description?: boolean
+    category?: boolean
+    foodSafetyConcern?: boolean
+    immediateAction?: boolean
+    responseDate?: boolean
+    responseChannel?: boolean
+    responseSummary?: boolean
+    capaRequired?: boolean
+    noCapaReason?: boolean
+    status?: boolean
+    closedDate?: boolean
+    closedById?: boolean
+    voidedAt?: boolean
+    voidedById?: boolean
+    voidReason?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $QualityIncidentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "QualityIncident"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      reference: string
+      facility: string | null
+      dateReceived: Date
+      channel: string
+      customer: string
+      productId: string | null
+      productName: string
+      lotCode: string
+      bestByDate: Date | null
+      description: string
+      category: string | null
+      foodSafetyConcern: boolean
+      immediateAction: string
+      responseDate: Date | null
+      responseChannel: string | null
+      responseSummary: string
+      capaRequired: boolean | null
+      noCapaReason: string
+      status: string
+      closedDate: Date | null
+      closedById: string | null
+      voidedAt: Date | null
+      voidedById: string | null
+      voidReason: string | null
+      createdById: string | null
+      updatedById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["qualityIncident"]>
+    composites: {}
+  }
+
+  type QualityIncidentGetPayload<S extends boolean | null | undefined | QualityIncidentDefaultArgs> = $Result.GetResult<Prisma.$QualityIncidentPayload, S>
+
+  type QualityIncidentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<QualityIncidentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: QualityIncidentCountAggregateInputType | true
+    }
+
+  export interface QualityIncidentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['QualityIncident'], meta: { name: 'QualityIncident' } }
+    /**
+     * Find zero or one QualityIncident that matches the filter.
+     * @param {QualityIncidentFindUniqueArgs} args - Arguments to find a QualityIncident
+     * @example
+     * // Get one QualityIncident
+     * const qualityIncident = await prisma.qualityIncident.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QualityIncidentFindUniqueArgs>(args: SelectSubset<T, QualityIncidentFindUniqueArgs<ExtArgs>>): Prisma__QualityIncidentClient<$Result.GetResult<Prisma.$QualityIncidentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one QualityIncident that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {QualityIncidentFindUniqueOrThrowArgs} args - Arguments to find a QualityIncident
+     * @example
+     * // Get one QualityIncident
+     * const qualityIncident = await prisma.qualityIncident.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QualityIncidentFindUniqueOrThrowArgs>(args: SelectSubset<T, QualityIncidentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__QualityIncidentClient<$Result.GetResult<Prisma.$QualityIncidentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first QualityIncident that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityIncidentFindFirstArgs} args - Arguments to find a QualityIncident
+     * @example
+     * // Get one QualityIncident
+     * const qualityIncident = await prisma.qualityIncident.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QualityIncidentFindFirstArgs>(args?: SelectSubset<T, QualityIncidentFindFirstArgs<ExtArgs>>): Prisma__QualityIncidentClient<$Result.GetResult<Prisma.$QualityIncidentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first QualityIncident that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityIncidentFindFirstOrThrowArgs} args - Arguments to find a QualityIncident
+     * @example
+     * // Get one QualityIncident
+     * const qualityIncident = await prisma.qualityIncident.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QualityIncidentFindFirstOrThrowArgs>(args?: SelectSubset<T, QualityIncidentFindFirstOrThrowArgs<ExtArgs>>): Prisma__QualityIncidentClient<$Result.GetResult<Prisma.$QualityIncidentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more QualityIncidents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityIncidentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all QualityIncidents
+     * const qualityIncidents = await prisma.qualityIncident.findMany()
+     * 
+     * // Get first 10 QualityIncidents
+     * const qualityIncidents = await prisma.qualityIncident.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const qualityIncidentWithIdOnly = await prisma.qualityIncident.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends QualityIncidentFindManyArgs>(args?: SelectSubset<T, QualityIncidentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QualityIncidentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a QualityIncident.
+     * @param {QualityIncidentCreateArgs} args - Arguments to create a QualityIncident.
+     * @example
+     * // Create one QualityIncident
+     * const QualityIncident = await prisma.qualityIncident.create({
+     *   data: {
+     *     // ... data to create a QualityIncident
+     *   }
+     * })
+     * 
+     */
+    create<T extends QualityIncidentCreateArgs>(args: SelectSubset<T, QualityIncidentCreateArgs<ExtArgs>>): Prisma__QualityIncidentClient<$Result.GetResult<Prisma.$QualityIncidentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many QualityIncidents.
+     * @param {QualityIncidentCreateManyArgs} args - Arguments to create many QualityIncidents.
+     * @example
+     * // Create many QualityIncidents
+     * const qualityIncident = await prisma.qualityIncident.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends QualityIncidentCreateManyArgs>(args?: SelectSubset<T, QualityIncidentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many QualityIncidents and returns the data saved in the database.
+     * @param {QualityIncidentCreateManyAndReturnArgs} args - Arguments to create many QualityIncidents.
+     * @example
+     * // Create many QualityIncidents
+     * const qualityIncident = await prisma.qualityIncident.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many QualityIncidents and only return the `id`
+     * const qualityIncidentWithIdOnly = await prisma.qualityIncident.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends QualityIncidentCreateManyAndReturnArgs>(args?: SelectSubset<T, QualityIncidentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QualityIncidentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a QualityIncident.
+     * @param {QualityIncidentDeleteArgs} args - Arguments to delete one QualityIncident.
+     * @example
+     * // Delete one QualityIncident
+     * const QualityIncident = await prisma.qualityIncident.delete({
+     *   where: {
+     *     // ... filter to delete one QualityIncident
+     *   }
+     * })
+     * 
+     */
+    delete<T extends QualityIncidentDeleteArgs>(args: SelectSubset<T, QualityIncidentDeleteArgs<ExtArgs>>): Prisma__QualityIncidentClient<$Result.GetResult<Prisma.$QualityIncidentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one QualityIncident.
+     * @param {QualityIncidentUpdateArgs} args - Arguments to update one QualityIncident.
+     * @example
+     * // Update one QualityIncident
+     * const qualityIncident = await prisma.qualityIncident.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends QualityIncidentUpdateArgs>(args: SelectSubset<T, QualityIncidentUpdateArgs<ExtArgs>>): Prisma__QualityIncidentClient<$Result.GetResult<Prisma.$QualityIncidentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more QualityIncidents.
+     * @param {QualityIncidentDeleteManyArgs} args - Arguments to filter QualityIncidents to delete.
+     * @example
+     * // Delete a few QualityIncidents
+     * const { count } = await prisma.qualityIncident.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends QualityIncidentDeleteManyArgs>(args?: SelectSubset<T, QualityIncidentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QualityIncidents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityIncidentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many QualityIncidents
+     * const qualityIncident = await prisma.qualityIncident.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends QualityIncidentUpdateManyArgs>(args: SelectSubset<T, QualityIncidentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one QualityIncident.
+     * @param {QualityIncidentUpsertArgs} args - Arguments to update or create a QualityIncident.
+     * @example
+     * // Update or create a QualityIncident
+     * const qualityIncident = await prisma.qualityIncident.upsert({
+     *   create: {
+     *     // ... data to create a QualityIncident
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the QualityIncident we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QualityIncidentUpsertArgs>(args: SelectSubset<T, QualityIncidentUpsertArgs<ExtArgs>>): Prisma__QualityIncidentClient<$Result.GetResult<Prisma.$QualityIncidentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of QualityIncidents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityIncidentCountArgs} args - Arguments to filter QualityIncidents to count.
+     * @example
+     * // Count the number of QualityIncidents
+     * const count = await prisma.qualityIncident.count({
+     *   where: {
+     *     // ... the filter for the QualityIncidents we want to count
+     *   }
+     * })
+    **/
+    count<T extends QualityIncidentCountArgs>(
+      args?: Subset<T, QualityIncidentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QualityIncidentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a QualityIncident.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityIncidentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends QualityIncidentAggregateArgs>(args: Subset<T, QualityIncidentAggregateArgs>): Prisma.PrismaPromise<GetQualityIncidentAggregateType<T>>
+
+    /**
+     * Group by QualityIncident.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityIncidentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends QualityIncidentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QualityIncidentGroupByArgs['orderBy'] }
+        : { orderBy?: QualityIncidentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, QualityIncidentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQualityIncidentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the QualityIncident model
+   */
+  readonly fields: QualityIncidentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for QualityIncident.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QualityIncidentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the QualityIncident model
+   */ 
+  interface QualityIncidentFieldRefs {
+    readonly id: FieldRef<"QualityIncident", 'String'>
+    readonly reference: FieldRef<"QualityIncident", 'String'>
+    readonly facility: FieldRef<"QualityIncident", 'String'>
+    readonly dateReceived: FieldRef<"QualityIncident", 'DateTime'>
+    readonly channel: FieldRef<"QualityIncident", 'String'>
+    readonly customer: FieldRef<"QualityIncident", 'String'>
+    readonly productId: FieldRef<"QualityIncident", 'String'>
+    readonly productName: FieldRef<"QualityIncident", 'String'>
+    readonly lotCode: FieldRef<"QualityIncident", 'String'>
+    readonly bestByDate: FieldRef<"QualityIncident", 'DateTime'>
+    readonly description: FieldRef<"QualityIncident", 'String'>
+    readonly category: FieldRef<"QualityIncident", 'String'>
+    readonly foodSafetyConcern: FieldRef<"QualityIncident", 'Boolean'>
+    readonly immediateAction: FieldRef<"QualityIncident", 'String'>
+    readonly responseDate: FieldRef<"QualityIncident", 'DateTime'>
+    readonly responseChannel: FieldRef<"QualityIncident", 'String'>
+    readonly responseSummary: FieldRef<"QualityIncident", 'String'>
+    readonly capaRequired: FieldRef<"QualityIncident", 'Boolean'>
+    readonly noCapaReason: FieldRef<"QualityIncident", 'String'>
+    readonly status: FieldRef<"QualityIncident", 'String'>
+    readonly closedDate: FieldRef<"QualityIncident", 'DateTime'>
+    readonly closedById: FieldRef<"QualityIncident", 'String'>
+    readonly voidedAt: FieldRef<"QualityIncident", 'DateTime'>
+    readonly voidedById: FieldRef<"QualityIncident", 'String'>
+    readonly voidReason: FieldRef<"QualityIncident", 'String'>
+    readonly createdById: FieldRef<"QualityIncident", 'String'>
+    readonly updatedById: FieldRef<"QualityIncident", 'String'>
+    readonly createdAt: FieldRef<"QualityIncident", 'DateTime'>
+    readonly updatedAt: FieldRef<"QualityIncident", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * QualityIncident findUnique
+   */
+  export type QualityIncidentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncident
+     */
+    select?: QualityIncidentSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityIncident to fetch.
+     */
+    where: QualityIncidentWhereUniqueInput
+  }
+
+  /**
+   * QualityIncident findUniqueOrThrow
+   */
+  export type QualityIncidentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncident
+     */
+    select?: QualityIncidentSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityIncident to fetch.
+     */
+    where: QualityIncidentWhereUniqueInput
+  }
+
+  /**
+   * QualityIncident findFirst
+   */
+  export type QualityIncidentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncident
+     */
+    select?: QualityIncidentSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityIncident to fetch.
+     */
+    where?: QualityIncidentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityIncidents to fetch.
+     */
+    orderBy?: QualityIncidentOrderByWithRelationInput | QualityIncidentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QualityIncidents.
+     */
+    cursor?: QualityIncidentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityIncidents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityIncidents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QualityIncidents.
+     */
+    distinct?: QualityIncidentScalarFieldEnum | QualityIncidentScalarFieldEnum[]
+  }
+
+  /**
+   * QualityIncident findFirstOrThrow
+   */
+  export type QualityIncidentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncident
+     */
+    select?: QualityIncidentSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityIncident to fetch.
+     */
+    where?: QualityIncidentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityIncidents to fetch.
+     */
+    orderBy?: QualityIncidentOrderByWithRelationInput | QualityIncidentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QualityIncidents.
+     */
+    cursor?: QualityIncidentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityIncidents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityIncidents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QualityIncidents.
+     */
+    distinct?: QualityIncidentScalarFieldEnum | QualityIncidentScalarFieldEnum[]
+  }
+
+  /**
+   * QualityIncident findMany
+   */
+  export type QualityIncidentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncident
+     */
+    select?: QualityIncidentSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityIncidents to fetch.
+     */
+    where?: QualityIncidentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityIncidents to fetch.
+     */
+    orderBy?: QualityIncidentOrderByWithRelationInput | QualityIncidentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing QualityIncidents.
+     */
+    cursor?: QualityIncidentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityIncidents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityIncidents.
+     */
+    skip?: number
+    distinct?: QualityIncidentScalarFieldEnum | QualityIncidentScalarFieldEnum[]
+  }
+
+  /**
+   * QualityIncident create
+   */
+  export type QualityIncidentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncident
+     */
+    select?: QualityIncidentSelect<ExtArgs> | null
+    /**
+     * The data needed to create a QualityIncident.
+     */
+    data: XOR<QualityIncidentCreateInput, QualityIncidentUncheckedCreateInput>
+  }
+
+  /**
+   * QualityIncident createMany
+   */
+  export type QualityIncidentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many QualityIncidents.
+     */
+    data: QualityIncidentCreateManyInput | QualityIncidentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QualityIncident createManyAndReturn
+   */
+  export type QualityIncidentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncident
+     */
+    select?: QualityIncidentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many QualityIncidents.
+     */
+    data: QualityIncidentCreateManyInput | QualityIncidentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QualityIncident update
+   */
+  export type QualityIncidentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncident
+     */
+    select?: QualityIncidentSelect<ExtArgs> | null
+    /**
+     * The data needed to update a QualityIncident.
+     */
+    data: XOR<QualityIncidentUpdateInput, QualityIncidentUncheckedUpdateInput>
+    /**
+     * Choose, which QualityIncident to update.
+     */
+    where: QualityIncidentWhereUniqueInput
+  }
+
+  /**
+   * QualityIncident updateMany
+   */
+  export type QualityIncidentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update QualityIncidents.
+     */
+    data: XOR<QualityIncidentUpdateManyMutationInput, QualityIncidentUncheckedUpdateManyInput>
+    /**
+     * Filter which QualityIncidents to update
+     */
+    where?: QualityIncidentWhereInput
+  }
+
+  /**
+   * QualityIncident upsert
+   */
+  export type QualityIncidentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncident
+     */
+    select?: QualityIncidentSelect<ExtArgs> | null
+    /**
+     * The filter to search for the QualityIncident to update in case it exists.
+     */
+    where: QualityIncidentWhereUniqueInput
+    /**
+     * In case the QualityIncident found by the `where` argument doesn't exist, create a new QualityIncident with this data.
+     */
+    create: XOR<QualityIncidentCreateInput, QualityIncidentUncheckedCreateInput>
+    /**
+     * In case the QualityIncident was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QualityIncidentUpdateInput, QualityIncidentUncheckedUpdateInput>
+  }
+
+  /**
+   * QualityIncident delete
+   */
+  export type QualityIncidentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncident
+     */
+    select?: QualityIncidentSelect<ExtArgs> | null
+    /**
+     * Filter which QualityIncident to delete.
+     */
+    where: QualityIncidentWhereUniqueInput
+  }
+
+  /**
+   * QualityIncident deleteMany
+   */
+  export type QualityIncidentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QualityIncidents to delete
+     */
+    where?: QualityIncidentWhereInput
+  }
+
+  /**
+   * QualityIncident without action
+   */
+  export type QualityIncidentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncident
+     */
+    select?: QualityIncidentSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model QualityCapa
+   */
+
+  export type AggregateQualityCapa = {
+    _count: QualityCapaCountAggregateOutputType | null
+    _min: QualityCapaMinAggregateOutputType | null
+    _max: QualityCapaMaxAggregateOutputType | null
+  }
+
+  export type QualityCapaMinAggregateOutputType = {
+    id: string | null
+    reference: string | null
+    facility: string | null
+    source: string | null
+    problem: string | null
+    rootCause: string | null
+    correctiveAction: string | null
+    preventiveAction: string | null
+    ownerId: string | null
+    dueDate: Date | null
+    effectivenessDate: Date | null
+    effectivenessResult: string | null
+    status: string | null
+    closedDate: Date | null
+    closedById: string | null
+    closedByName: string | null
+    taskInstanceId: string | null
+    voidedAt: Date | null
+    voidedById: string | null
+    voidReason: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QualityCapaMaxAggregateOutputType = {
+    id: string | null
+    reference: string | null
+    facility: string | null
+    source: string | null
+    problem: string | null
+    rootCause: string | null
+    correctiveAction: string | null
+    preventiveAction: string | null
+    ownerId: string | null
+    dueDate: Date | null
+    effectivenessDate: Date | null
+    effectivenessResult: string | null
+    status: string | null
+    closedDate: Date | null
+    closedById: string | null
+    closedByName: string | null
+    taskInstanceId: string | null
+    voidedAt: Date | null
+    voidedById: string | null
+    voidReason: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QualityCapaCountAggregateOutputType = {
+    id: number
+    reference: number
+    facility: number
+    source: number
+    problem: number
+    rootCause: number
+    correctiveAction: number
+    preventiveAction: number
+    ownerId: number
+    dueDate: number
+    effectivenessDate: number
+    effectivenessResult: number
+    status: number
+    closedDate: number
+    closedById: number
+    closedByName: number
+    taskInstanceId: number
+    voidedAt: number
+    voidedById: number
+    voidReason: number
+    createdById: number
+    updatedById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type QualityCapaMinAggregateInputType = {
+    id?: true
+    reference?: true
+    facility?: true
+    source?: true
+    problem?: true
+    rootCause?: true
+    correctiveAction?: true
+    preventiveAction?: true
+    ownerId?: true
+    dueDate?: true
+    effectivenessDate?: true
+    effectivenessResult?: true
+    status?: true
+    closedDate?: true
+    closedById?: true
+    closedByName?: true
+    taskInstanceId?: true
+    voidedAt?: true
+    voidedById?: true
+    voidReason?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QualityCapaMaxAggregateInputType = {
+    id?: true
+    reference?: true
+    facility?: true
+    source?: true
+    problem?: true
+    rootCause?: true
+    correctiveAction?: true
+    preventiveAction?: true
+    ownerId?: true
+    dueDate?: true
+    effectivenessDate?: true
+    effectivenessResult?: true
+    status?: true
+    closedDate?: true
+    closedById?: true
+    closedByName?: true
+    taskInstanceId?: true
+    voidedAt?: true
+    voidedById?: true
+    voidReason?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QualityCapaCountAggregateInputType = {
+    id?: true
+    reference?: true
+    facility?: true
+    source?: true
+    problem?: true
+    rootCause?: true
+    correctiveAction?: true
+    preventiveAction?: true
+    ownerId?: true
+    dueDate?: true
+    effectivenessDate?: true
+    effectivenessResult?: true
+    status?: true
+    closedDate?: true
+    closedById?: true
+    closedByName?: true
+    taskInstanceId?: true
+    voidedAt?: true
+    voidedById?: true
+    voidReason?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type QualityCapaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QualityCapa to aggregate.
+     */
+    where?: QualityCapaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityCapas to fetch.
+     */
+    orderBy?: QualityCapaOrderByWithRelationInput | QualityCapaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: QualityCapaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityCapas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityCapas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned QualityCapas
+    **/
+    _count?: true | QualityCapaCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: QualityCapaMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: QualityCapaMaxAggregateInputType
+  }
+
+  export type GetQualityCapaAggregateType<T extends QualityCapaAggregateArgs> = {
+        [P in keyof T & keyof AggregateQualityCapa]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQualityCapa[P]>
+      : GetScalarType<T[P], AggregateQualityCapa[P]>
+  }
+
+
+
+
+  export type QualityCapaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QualityCapaWhereInput
+    orderBy?: QualityCapaOrderByWithAggregationInput | QualityCapaOrderByWithAggregationInput[]
+    by: QualityCapaScalarFieldEnum[] | QualityCapaScalarFieldEnum
+    having?: QualityCapaScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: QualityCapaCountAggregateInputType | true
+    _min?: QualityCapaMinAggregateInputType
+    _max?: QualityCapaMaxAggregateInputType
+  }
+
+  export type QualityCapaGroupByOutputType = {
+    id: string
+    reference: string
+    facility: string | null
+    source: string
+    problem: string
+    rootCause: string
+    correctiveAction: string
+    preventiveAction: string
+    ownerId: string | null
+    dueDate: Date | null
+    effectivenessDate: Date | null
+    effectivenessResult: string
+    status: string
+    closedDate: Date | null
+    closedById: string | null
+    closedByName: string | null
+    taskInstanceId: string | null
+    voidedAt: Date | null
+    voidedById: string | null
+    voidReason: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: QualityCapaCountAggregateOutputType | null
+    _min: QualityCapaMinAggregateOutputType | null
+    _max: QualityCapaMaxAggregateOutputType | null
+  }
+
+  type GetQualityCapaGroupByPayload<T extends QualityCapaGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<QualityCapaGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof QualityCapaGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QualityCapaGroupByOutputType[P]>
+            : GetScalarType<T[P], QualityCapaGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type QualityCapaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reference?: boolean
+    facility?: boolean
+    source?: boolean
+    problem?: boolean
+    rootCause?: boolean
+    correctiveAction?: boolean
+    preventiveAction?: boolean
+    ownerId?: boolean
+    dueDate?: boolean
+    effectivenessDate?: boolean
+    effectivenessResult?: boolean
+    status?: boolean
+    closedDate?: boolean
+    closedById?: boolean
+    closedByName?: boolean
+    taskInstanceId?: boolean
+    voidedAt?: boolean
+    voidedById?: boolean
+    voidReason?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["qualityCapa"]>
+
+  export type QualityCapaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reference?: boolean
+    facility?: boolean
+    source?: boolean
+    problem?: boolean
+    rootCause?: boolean
+    correctiveAction?: boolean
+    preventiveAction?: boolean
+    ownerId?: boolean
+    dueDate?: boolean
+    effectivenessDate?: boolean
+    effectivenessResult?: boolean
+    status?: boolean
+    closedDate?: boolean
+    closedById?: boolean
+    closedByName?: boolean
+    taskInstanceId?: boolean
+    voidedAt?: boolean
+    voidedById?: boolean
+    voidReason?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["qualityCapa"]>
+
+  export type QualityCapaSelectScalar = {
+    id?: boolean
+    reference?: boolean
+    facility?: boolean
+    source?: boolean
+    problem?: boolean
+    rootCause?: boolean
+    correctiveAction?: boolean
+    preventiveAction?: boolean
+    ownerId?: boolean
+    dueDate?: boolean
+    effectivenessDate?: boolean
+    effectivenessResult?: boolean
+    status?: boolean
+    closedDate?: boolean
+    closedById?: boolean
+    closedByName?: boolean
+    taskInstanceId?: boolean
+    voidedAt?: boolean
+    voidedById?: boolean
+    voidReason?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $QualityCapaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "QualityCapa"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      reference: string
+      facility: string | null
+      source: string
+      problem: string
+      rootCause: string
+      correctiveAction: string
+      preventiveAction: string
+      ownerId: string | null
+      dueDate: Date | null
+      effectivenessDate: Date | null
+      effectivenessResult: string
+      status: string
+      closedDate: Date | null
+      closedById: string | null
+      closedByName: string | null
+      taskInstanceId: string | null
+      voidedAt: Date | null
+      voidedById: string | null
+      voidReason: string | null
+      createdById: string | null
+      updatedById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["qualityCapa"]>
+    composites: {}
+  }
+
+  type QualityCapaGetPayload<S extends boolean | null | undefined | QualityCapaDefaultArgs> = $Result.GetResult<Prisma.$QualityCapaPayload, S>
+
+  type QualityCapaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<QualityCapaFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: QualityCapaCountAggregateInputType | true
+    }
+
+  export interface QualityCapaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['QualityCapa'], meta: { name: 'QualityCapa' } }
+    /**
+     * Find zero or one QualityCapa that matches the filter.
+     * @param {QualityCapaFindUniqueArgs} args - Arguments to find a QualityCapa
+     * @example
+     * // Get one QualityCapa
+     * const qualityCapa = await prisma.qualityCapa.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QualityCapaFindUniqueArgs>(args: SelectSubset<T, QualityCapaFindUniqueArgs<ExtArgs>>): Prisma__QualityCapaClient<$Result.GetResult<Prisma.$QualityCapaPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one QualityCapa that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {QualityCapaFindUniqueOrThrowArgs} args - Arguments to find a QualityCapa
+     * @example
+     * // Get one QualityCapa
+     * const qualityCapa = await prisma.qualityCapa.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QualityCapaFindUniqueOrThrowArgs>(args: SelectSubset<T, QualityCapaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__QualityCapaClient<$Result.GetResult<Prisma.$QualityCapaPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first QualityCapa that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityCapaFindFirstArgs} args - Arguments to find a QualityCapa
+     * @example
+     * // Get one QualityCapa
+     * const qualityCapa = await prisma.qualityCapa.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QualityCapaFindFirstArgs>(args?: SelectSubset<T, QualityCapaFindFirstArgs<ExtArgs>>): Prisma__QualityCapaClient<$Result.GetResult<Prisma.$QualityCapaPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first QualityCapa that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityCapaFindFirstOrThrowArgs} args - Arguments to find a QualityCapa
+     * @example
+     * // Get one QualityCapa
+     * const qualityCapa = await prisma.qualityCapa.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QualityCapaFindFirstOrThrowArgs>(args?: SelectSubset<T, QualityCapaFindFirstOrThrowArgs<ExtArgs>>): Prisma__QualityCapaClient<$Result.GetResult<Prisma.$QualityCapaPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more QualityCapas that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityCapaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all QualityCapas
+     * const qualityCapas = await prisma.qualityCapa.findMany()
+     * 
+     * // Get first 10 QualityCapas
+     * const qualityCapas = await prisma.qualityCapa.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const qualityCapaWithIdOnly = await prisma.qualityCapa.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends QualityCapaFindManyArgs>(args?: SelectSubset<T, QualityCapaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QualityCapaPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a QualityCapa.
+     * @param {QualityCapaCreateArgs} args - Arguments to create a QualityCapa.
+     * @example
+     * // Create one QualityCapa
+     * const QualityCapa = await prisma.qualityCapa.create({
+     *   data: {
+     *     // ... data to create a QualityCapa
+     *   }
+     * })
+     * 
+     */
+    create<T extends QualityCapaCreateArgs>(args: SelectSubset<T, QualityCapaCreateArgs<ExtArgs>>): Prisma__QualityCapaClient<$Result.GetResult<Prisma.$QualityCapaPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many QualityCapas.
+     * @param {QualityCapaCreateManyArgs} args - Arguments to create many QualityCapas.
+     * @example
+     * // Create many QualityCapas
+     * const qualityCapa = await prisma.qualityCapa.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends QualityCapaCreateManyArgs>(args?: SelectSubset<T, QualityCapaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many QualityCapas and returns the data saved in the database.
+     * @param {QualityCapaCreateManyAndReturnArgs} args - Arguments to create many QualityCapas.
+     * @example
+     * // Create many QualityCapas
+     * const qualityCapa = await prisma.qualityCapa.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many QualityCapas and only return the `id`
+     * const qualityCapaWithIdOnly = await prisma.qualityCapa.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends QualityCapaCreateManyAndReturnArgs>(args?: SelectSubset<T, QualityCapaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QualityCapaPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a QualityCapa.
+     * @param {QualityCapaDeleteArgs} args - Arguments to delete one QualityCapa.
+     * @example
+     * // Delete one QualityCapa
+     * const QualityCapa = await prisma.qualityCapa.delete({
+     *   where: {
+     *     // ... filter to delete one QualityCapa
+     *   }
+     * })
+     * 
+     */
+    delete<T extends QualityCapaDeleteArgs>(args: SelectSubset<T, QualityCapaDeleteArgs<ExtArgs>>): Prisma__QualityCapaClient<$Result.GetResult<Prisma.$QualityCapaPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one QualityCapa.
+     * @param {QualityCapaUpdateArgs} args - Arguments to update one QualityCapa.
+     * @example
+     * // Update one QualityCapa
+     * const qualityCapa = await prisma.qualityCapa.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends QualityCapaUpdateArgs>(args: SelectSubset<T, QualityCapaUpdateArgs<ExtArgs>>): Prisma__QualityCapaClient<$Result.GetResult<Prisma.$QualityCapaPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more QualityCapas.
+     * @param {QualityCapaDeleteManyArgs} args - Arguments to filter QualityCapas to delete.
+     * @example
+     * // Delete a few QualityCapas
+     * const { count } = await prisma.qualityCapa.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends QualityCapaDeleteManyArgs>(args?: SelectSubset<T, QualityCapaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QualityCapas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityCapaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many QualityCapas
+     * const qualityCapa = await prisma.qualityCapa.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends QualityCapaUpdateManyArgs>(args: SelectSubset<T, QualityCapaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one QualityCapa.
+     * @param {QualityCapaUpsertArgs} args - Arguments to update or create a QualityCapa.
+     * @example
+     * // Update or create a QualityCapa
+     * const qualityCapa = await prisma.qualityCapa.upsert({
+     *   create: {
+     *     // ... data to create a QualityCapa
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the QualityCapa we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QualityCapaUpsertArgs>(args: SelectSubset<T, QualityCapaUpsertArgs<ExtArgs>>): Prisma__QualityCapaClient<$Result.GetResult<Prisma.$QualityCapaPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of QualityCapas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityCapaCountArgs} args - Arguments to filter QualityCapas to count.
+     * @example
+     * // Count the number of QualityCapas
+     * const count = await prisma.qualityCapa.count({
+     *   where: {
+     *     // ... the filter for the QualityCapas we want to count
+     *   }
+     * })
+    **/
+    count<T extends QualityCapaCountArgs>(
+      args?: Subset<T, QualityCapaCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QualityCapaCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a QualityCapa.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityCapaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends QualityCapaAggregateArgs>(args: Subset<T, QualityCapaAggregateArgs>): Prisma.PrismaPromise<GetQualityCapaAggregateType<T>>
+
+    /**
+     * Group by QualityCapa.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityCapaGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends QualityCapaGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QualityCapaGroupByArgs['orderBy'] }
+        : { orderBy?: QualityCapaGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, QualityCapaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQualityCapaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the QualityCapa model
+   */
+  readonly fields: QualityCapaFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for QualityCapa.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QualityCapaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the QualityCapa model
+   */ 
+  interface QualityCapaFieldRefs {
+    readonly id: FieldRef<"QualityCapa", 'String'>
+    readonly reference: FieldRef<"QualityCapa", 'String'>
+    readonly facility: FieldRef<"QualityCapa", 'String'>
+    readonly source: FieldRef<"QualityCapa", 'String'>
+    readonly problem: FieldRef<"QualityCapa", 'String'>
+    readonly rootCause: FieldRef<"QualityCapa", 'String'>
+    readonly correctiveAction: FieldRef<"QualityCapa", 'String'>
+    readonly preventiveAction: FieldRef<"QualityCapa", 'String'>
+    readonly ownerId: FieldRef<"QualityCapa", 'String'>
+    readonly dueDate: FieldRef<"QualityCapa", 'DateTime'>
+    readonly effectivenessDate: FieldRef<"QualityCapa", 'DateTime'>
+    readonly effectivenessResult: FieldRef<"QualityCapa", 'String'>
+    readonly status: FieldRef<"QualityCapa", 'String'>
+    readonly closedDate: FieldRef<"QualityCapa", 'DateTime'>
+    readonly closedById: FieldRef<"QualityCapa", 'String'>
+    readonly closedByName: FieldRef<"QualityCapa", 'String'>
+    readonly taskInstanceId: FieldRef<"QualityCapa", 'String'>
+    readonly voidedAt: FieldRef<"QualityCapa", 'DateTime'>
+    readonly voidedById: FieldRef<"QualityCapa", 'String'>
+    readonly voidReason: FieldRef<"QualityCapa", 'String'>
+    readonly createdById: FieldRef<"QualityCapa", 'String'>
+    readonly updatedById: FieldRef<"QualityCapa", 'String'>
+    readonly createdAt: FieldRef<"QualityCapa", 'DateTime'>
+    readonly updatedAt: FieldRef<"QualityCapa", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * QualityCapa findUnique
+   */
+  export type QualityCapaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCapa
+     */
+    select?: QualityCapaSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityCapa to fetch.
+     */
+    where: QualityCapaWhereUniqueInput
+  }
+
+  /**
+   * QualityCapa findUniqueOrThrow
+   */
+  export type QualityCapaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCapa
+     */
+    select?: QualityCapaSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityCapa to fetch.
+     */
+    where: QualityCapaWhereUniqueInput
+  }
+
+  /**
+   * QualityCapa findFirst
+   */
+  export type QualityCapaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCapa
+     */
+    select?: QualityCapaSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityCapa to fetch.
+     */
+    where?: QualityCapaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityCapas to fetch.
+     */
+    orderBy?: QualityCapaOrderByWithRelationInput | QualityCapaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QualityCapas.
+     */
+    cursor?: QualityCapaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityCapas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityCapas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QualityCapas.
+     */
+    distinct?: QualityCapaScalarFieldEnum | QualityCapaScalarFieldEnum[]
+  }
+
+  /**
+   * QualityCapa findFirstOrThrow
+   */
+  export type QualityCapaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCapa
+     */
+    select?: QualityCapaSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityCapa to fetch.
+     */
+    where?: QualityCapaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityCapas to fetch.
+     */
+    orderBy?: QualityCapaOrderByWithRelationInput | QualityCapaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QualityCapas.
+     */
+    cursor?: QualityCapaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityCapas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityCapas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QualityCapas.
+     */
+    distinct?: QualityCapaScalarFieldEnum | QualityCapaScalarFieldEnum[]
+  }
+
+  /**
+   * QualityCapa findMany
+   */
+  export type QualityCapaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCapa
+     */
+    select?: QualityCapaSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityCapas to fetch.
+     */
+    where?: QualityCapaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityCapas to fetch.
+     */
+    orderBy?: QualityCapaOrderByWithRelationInput | QualityCapaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing QualityCapas.
+     */
+    cursor?: QualityCapaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityCapas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityCapas.
+     */
+    skip?: number
+    distinct?: QualityCapaScalarFieldEnum | QualityCapaScalarFieldEnum[]
+  }
+
+  /**
+   * QualityCapa create
+   */
+  export type QualityCapaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCapa
+     */
+    select?: QualityCapaSelect<ExtArgs> | null
+    /**
+     * The data needed to create a QualityCapa.
+     */
+    data: XOR<QualityCapaCreateInput, QualityCapaUncheckedCreateInput>
+  }
+
+  /**
+   * QualityCapa createMany
+   */
+  export type QualityCapaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many QualityCapas.
+     */
+    data: QualityCapaCreateManyInput | QualityCapaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QualityCapa createManyAndReturn
+   */
+  export type QualityCapaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCapa
+     */
+    select?: QualityCapaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many QualityCapas.
+     */
+    data: QualityCapaCreateManyInput | QualityCapaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QualityCapa update
+   */
+  export type QualityCapaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCapa
+     */
+    select?: QualityCapaSelect<ExtArgs> | null
+    /**
+     * The data needed to update a QualityCapa.
+     */
+    data: XOR<QualityCapaUpdateInput, QualityCapaUncheckedUpdateInput>
+    /**
+     * Choose, which QualityCapa to update.
+     */
+    where: QualityCapaWhereUniqueInput
+  }
+
+  /**
+   * QualityCapa updateMany
+   */
+  export type QualityCapaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update QualityCapas.
+     */
+    data: XOR<QualityCapaUpdateManyMutationInput, QualityCapaUncheckedUpdateManyInput>
+    /**
+     * Filter which QualityCapas to update
+     */
+    where?: QualityCapaWhereInput
+  }
+
+  /**
+   * QualityCapa upsert
+   */
+  export type QualityCapaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCapa
+     */
+    select?: QualityCapaSelect<ExtArgs> | null
+    /**
+     * The filter to search for the QualityCapa to update in case it exists.
+     */
+    where: QualityCapaWhereUniqueInput
+    /**
+     * In case the QualityCapa found by the `where` argument doesn't exist, create a new QualityCapa with this data.
+     */
+    create: XOR<QualityCapaCreateInput, QualityCapaUncheckedCreateInput>
+    /**
+     * In case the QualityCapa was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QualityCapaUpdateInput, QualityCapaUncheckedUpdateInput>
+  }
+
+  /**
+   * QualityCapa delete
+   */
+  export type QualityCapaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCapa
+     */
+    select?: QualityCapaSelect<ExtArgs> | null
+    /**
+     * Filter which QualityCapa to delete.
+     */
+    where: QualityCapaWhereUniqueInput
+  }
+
+  /**
+   * QualityCapa deleteMany
+   */
+  export type QualityCapaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QualityCapas to delete
+     */
+    where?: QualityCapaWhereInput
+  }
+
+  /**
+   * QualityCapa without action
+   */
+  export type QualityCapaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityCapa
+     */
+    select?: QualityCapaSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model QualityIncidentCapa
+   */
+
+  export type AggregateQualityIncidentCapa = {
+    _count: QualityIncidentCapaCountAggregateOutputType | null
+    _min: QualityIncidentCapaMinAggregateOutputType | null
+    _max: QualityIncidentCapaMaxAggregateOutputType | null
+  }
+
+  export type QualityIncidentCapaMinAggregateOutputType = {
+    incidentId: string | null
+    capaId: string | null
+    linkedById: string | null
+    linkedAt: Date | null
+  }
+
+  export type QualityIncidentCapaMaxAggregateOutputType = {
+    incidentId: string | null
+    capaId: string | null
+    linkedById: string | null
+    linkedAt: Date | null
+  }
+
+  export type QualityIncidentCapaCountAggregateOutputType = {
+    incidentId: number
+    capaId: number
+    linkedById: number
+    linkedAt: number
+    _all: number
+  }
+
+
+  export type QualityIncidentCapaMinAggregateInputType = {
+    incidentId?: true
+    capaId?: true
+    linkedById?: true
+    linkedAt?: true
+  }
+
+  export type QualityIncidentCapaMaxAggregateInputType = {
+    incidentId?: true
+    capaId?: true
+    linkedById?: true
+    linkedAt?: true
+  }
+
+  export type QualityIncidentCapaCountAggregateInputType = {
+    incidentId?: true
+    capaId?: true
+    linkedById?: true
+    linkedAt?: true
+    _all?: true
+  }
+
+  export type QualityIncidentCapaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QualityIncidentCapa to aggregate.
+     */
+    where?: QualityIncidentCapaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityIncidentCapas to fetch.
+     */
+    orderBy?: QualityIncidentCapaOrderByWithRelationInput | QualityIncidentCapaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: QualityIncidentCapaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityIncidentCapas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityIncidentCapas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned QualityIncidentCapas
+    **/
+    _count?: true | QualityIncidentCapaCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: QualityIncidentCapaMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: QualityIncidentCapaMaxAggregateInputType
+  }
+
+  export type GetQualityIncidentCapaAggregateType<T extends QualityIncidentCapaAggregateArgs> = {
+        [P in keyof T & keyof AggregateQualityIncidentCapa]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQualityIncidentCapa[P]>
+      : GetScalarType<T[P], AggregateQualityIncidentCapa[P]>
+  }
+
+
+
+
+  export type QualityIncidentCapaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QualityIncidentCapaWhereInput
+    orderBy?: QualityIncidentCapaOrderByWithAggregationInput | QualityIncidentCapaOrderByWithAggregationInput[]
+    by: QualityIncidentCapaScalarFieldEnum[] | QualityIncidentCapaScalarFieldEnum
+    having?: QualityIncidentCapaScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: QualityIncidentCapaCountAggregateInputType | true
+    _min?: QualityIncidentCapaMinAggregateInputType
+    _max?: QualityIncidentCapaMaxAggregateInputType
+  }
+
+  export type QualityIncidentCapaGroupByOutputType = {
+    incidentId: string
+    capaId: string
+    linkedById: string | null
+    linkedAt: Date
+    _count: QualityIncidentCapaCountAggregateOutputType | null
+    _min: QualityIncidentCapaMinAggregateOutputType | null
+    _max: QualityIncidentCapaMaxAggregateOutputType | null
+  }
+
+  type GetQualityIncidentCapaGroupByPayload<T extends QualityIncidentCapaGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<QualityIncidentCapaGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof QualityIncidentCapaGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QualityIncidentCapaGroupByOutputType[P]>
+            : GetScalarType<T[P], QualityIncidentCapaGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type QualityIncidentCapaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    incidentId?: boolean
+    capaId?: boolean
+    linkedById?: boolean
+    linkedAt?: boolean
+  }, ExtArgs["result"]["qualityIncidentCapa"]>
+
+  export type QualityIncidentCapaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    incidentId?: boolean
+    capaId?: boolean
+    linkedById?: boolean
+    linkedAt?: boolean
+  }, ExtArgs["result"]["qualityIncidentCapa"]>
+
+  export type QualityIncidentCapaSelectScalar = {
+    incidentId?: boolean
+    capaId?: boolean
+    linkedById?: boolean
+    linkedAt?: boolean
+  }
+
+
+  export type $QualityIncidentCapaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "QualityIncidentCapa"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      incidentId: string
+      capaId: string
+      linkedById: string | null
+      linkedAt: Date
+    }, ExtArgs["result"]["qualityIncidentCapa"]>
+    composites: {}
+  }
+
+  type QualityIncidentCapaGetPayload<S extends boolean | null | undefined | QualityIncidentCapaDefaultArgs> = $Result.GetResult<Prisma.$QualityIncidentCapaPayload, S>
+
+  type QualityIncidentCapaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<QualityIncidentCapaFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: QualityIncidentCapaCountAggregateInputType | true
+    }
+
+  export interface QualityIncidentCapaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['QualityIncidentCapa'], meta: { name: 'QualityIncidentCapa' } }
+    /**
+     * Find zero or one QualityIncidentCapa that matches the filter.
+     * @param {QualityIncidentCapaFindUniqueArgs} args - Arguments to find a QualityIncidentCapa
+     * @example
+     * // Get one QualityIncidentCapa
+     * const qualityIncidentCapa = await prisma.qualityIncidentCapa.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QualityIncidentCapaFindUniqueArgs>(args: SelectSubset<T, QualityIncidentCapaFindUniqueArgs<ExtArgs>>): Prisma__QualityIncidentCapaClient<$Result.GetResult<Prisma.$QualityIncidentCapaPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one QualityIncidentCapa that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {QualityIncidentCapaFindUniqueOrThrowArgs} args - Arguments to find a QualityIncidentCapa
+     * @example
+     * // Get one QualityIncidentCapa
+     * const qualityIncidentCapa = await prisma.qualityIncidentCapa.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QualityIncidentCapaFindUniqueOrThrowArgs>(args: SelectSubset<T, QualityIncidentCapaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__QualityIncidentCapaClient<$Result.GetResult<Prisma.$QualityIncidentCapaPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first QualityIncidentCapa that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityIncidentCapaFindFirstArgs} args - Arguments to find a QualityIncidentCapa
+     * @example
+     * // Get one QualityIncidentCapa
+     * const qualityIncidentCapa = await prisma.qualityIncidentCapa.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QualityIncidentCapaFindFirstArgs>(args?: SelectSubset<T, QualityIncidentCapaFindFirstArgs<ExtArgs>>): Prisma__QualityIncidentCapaClient<$Result.GetResult<Prisma.$QualityIncidentCapaPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first QualityIncidentCapa that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityIncidentCapaFindFirstOrThrowArgs} args - Arguments to find a QualityIncidentCapa
+     * @example
+     * // Get one QualityIncidentCapa
+     * const qualityIncidentCapa = await prisma.qualityIncidentCapa.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QualityIncidentCapaFindFirstOrThrowArgs>(args?: SelectSubset<T, QualityIncidentCapaFindFirstOrThrowArgs<ExtArgs>>): Prisma__QualityIncidentCapaClient<$Result.GetResult<Prisma.$QualityIncidentCapaPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more QualityIncidentCapas that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityIncidentCapaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all QualityIncidentCapas
+     * const qualityIncidentCapas = await prisma.qualityIncidentCapa.findMany()
+     * 
+     * // Get first 10 QualityIncidentCapas
+     * const qualityIncidentCapas = await prisma.qualityIncidentCapa.findMany({ take: 10 })
+     * 
+     * // Only select the `incidentId`
+     * const qualityIncidentCapaWithIncidentIdOnly = await prisma.qualityIncidentCapa.findMany({ select: { incidentId: true } })
+     * 
+     */
+    findMany<T extends QualityIncidentCapaFindManyArgs>(args?: SelectSubset<T, QualityIncidentCapaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QualityIncidentCapaPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a QualityIncidentCapa.
+     * @param {QualityIncidentCapaCreateArgs} args - Arguments to create a QualityIncidentCapa.
+     * @example
+     * // Create one QualityIncidentCapa
+     * const QualityIncidentCapa = await prisma.qualityIncidentCapa.create({
+     *   data: {
+     *     // ... data to create a QualityIncidentCapa
+     *   }
+     * })
+     * 
+     */
+    create<T extends QualityIncidentCapaCreateArgs>(args: SelectSubset<T, QualityIncidentCapaCreateArgs<ExtArgs>>): Prisma__QualityIncidentCapaClient<$Result.GetResult<Prisma.$QualityIncidentCapaPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many QualityIncidentCapas.
+     * @param {QualityIncidentCapaCreateManyArgs} args - Arguments to create many QualityIncidentCapas.
+     * @example
+     * // Create many QualityIncidentCapas
+     * const qualityIncidentCapa = await prisma.qualityIncidentCapa.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends QualityIncidentCapaCreateManyArgs>(args?: SelectSubset<T, QualityIncidentCapaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many QualityIncidentCapas and returns the data saved in the database.
+     * @param {QualityIncidentCapaCreateManyAndReturnArgs} args - Arguments to create many QualityIncidentCapas.
+     * @example
+     * // Create many QualityIncidentCapas
+     * const qualityIncidentCapa = await prisma.qualityIncidentCapa.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many QualityIncidentCapas and only return the `incidentId`
+     * const qualityIncidentCapaWithIncidentIdOnly = await prisma.qualityIncidentCapa.createManyAndReturn({ 
+     *   select: { incidentId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends QualityIncidentCapaCreateManyAndReturnArgs>(args?: SelectSubset<T, QualityIncidentCapaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QualityIncidentCapaPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a QualityIncidentCapa.
+     * @param {QualityIncidentCapaDeleteArgs} args - Arguments to delete one QualityIncidentCapa.
+     * @example
+     * // Delete one QualityIncidentCapa
+     * const QualityIncidentCapa = await prisma.qualityIncidentCapa.delete({
+     *   where: {
+     *     // ... filter to delete one QualityIncidentCapa
+     *   }
+     * })
+     * 
+     */
+    delete<T extends QualityIncidentCapaDeleteArgs>(args: SelectSubset<T, QualityIncidentCapaDeleteArgs<ExtArgs>>): Prisma__QualityIncidentCapaClient<$Result.GetResult<Prisma.$QualityIncidentCapaPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one QualityIncidentCapa.
+     * @param {QualityIncidentCapaUpdateArgs} args - Arguments to update one QualityIncidentCapa.
+     * @example
+     * // Update one QualityIncidentCapa
+     * const qualityIncidentCapa = await prisma.qualityIncidentCapa.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends QualityIncidentCapaUpdateArgs>(args: SelectSubset<T, QualityIncidentCapaUpdateArgs<ExtArgs>>): Prisma__QualityIncidentCapaClient<$Result.GetResult<Prisma.$QualityIncidentCapaPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more QualityIncidentCapas.
+     * @param {QualityIncidentCapaDeleteManyArgs} args - Arguments to filter QualityIncidentCapas to delete.
+     * @example
+     * // Delete a few QualityIncidentCapas
+     * const { count } = await prisma.qualityIncidentCapa.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends QualityIncidentCapaDeleteManyArgs>(args?: SelectSubset<T, QualityIncidentCapaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QualityIncidentCapas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityIncidentCapaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many QualityIncidentCapas
+     * const qualityIncidentCapa = await prisma.qualityIncidentCapa.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends QualityIncidentCapaUpdateManyArgs>(args: SelectSubset<T, QualityIncidentCapaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one QualityIncidentCapa.
+     * @param {QualityIncidentCapaUpsertArgs} args - Arguments to update or create a QualityIncidentCapa.
+     * @example
+     * // Update or create a QualityIncidentCapa
+     * const qualityIncidentCapa = await prisma.qualityIncidentCapa.upsert({
+     *   create: {
+     *     // ... data to create a QualityIncidentCapa
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the QualityIncidentCapa we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QualityIncidentCapaUpsertArgs>(args: SelectSubset<T, QualityIncidentCapaUpsertArgs<ExtArgs>>): Prisma__QualityIncidentCapaClient<$Result.GetResult<Prisma.$QualityIncidentCapaPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of QualityIncidentCapas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityIncidentCapaCountArgs} args - Arguments to filter QualityIncidentCapas to count.
+     * @example
+     * // Count the number of QualityIncidentCapas
+     * const count = await prisma.qualityIncidentCapa.count({
+     *   where: {
+     *     // ... the filter for the QualityIncidentCapas we want to count
+     *   }
+     * })
+    **/
+    count<T extends QualityIncidentCapaCountArgs>(
+      args?: Subset<T, QualityIncidentCapaCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QualityIncidentCapaCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a QualityIncidentCapa.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityIncidentCapaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends QualityIncidentCapaAggregateArgs>(args: Subset<T, QualityIncidentCapaAggregateArgs>): Prisma.PrismaPromise<GetQualityIncidentCapaAggregateType<T>>
+
+    /**
+     * Group by QualityIncidentCapa.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityIncidentCapaGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends QualityIncidentCapaGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QualityIncidentCapaGroupByArgs['orderBy'] }
+        : { orderBy?: QualityIncidentCapaGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, QualityIncidentCapaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQualityIncidentCapaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the QualityIncidentCapa model
+   */
+  readonly fields: QualityIncidentCapaFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for QualityIncidentCapa.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QualityIncidentCapaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the QualityIncidentCapa model
+   */ 
+  interface QualityIncidentCapaFieldRefs {
+    readonly incidentId: FieldRef<"QualityIncidentCapa", 'String'>
+    readonly capaId: FieldRef<"QualityIncidentCapa", 'String'>
+    readonly linkedById: FieldRef<"QualityIncidentCapa", 'String'>
+    readonly linkedAt: FieldRef<"QualityIncidentCapa", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * QualityIncidentCapa findUnique
+   */
+  export type QualityIncidentCapaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncidentCapa
+     */
+    select?: QualityIncidentCapaSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityIncidentCapa to fetch.
+     */
+    where: QualityIncidentCapaWhereUniqueInput
+  }
+
+  /**
+   * QualityIncidentCapa findUniqueOrThrow
+   */
+  export type QualityIncidentCapaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncidentCapa
+     */
+    select?: QualityIncidentCapaSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityIncidentCapa to fetch.
+     */
+    where: QualityIncidentCapaWhereUniqueInput
+  }
+
+  /**
+   * QualityIncidentCapa findFirst
+   */
+  export type QualityIncidentCapaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncidentCapa
+     */
+    select?: QualityIncidentCapaSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityIncidentCapa to fetch.
+     */
+    where?: QualityIncidentCapaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityIncidentCapas to fetch.
+     */
+    orderBy?: QualityIncidentCapaOrderByWithRelationInput | QualityIncidentCapaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QualityIncidentCapas.
+     */
+    cursor?: QualityIncidentCapaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityIncidentCapas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityIncidentCapas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QualityIncidentCapas.
+     */
+    distinct?: QualityIncidentCapaScalarFieldEnum | QualityIncidentCapaScalarFieldEnum[]
+  }
+
+  /**
+   * QualityIncidentCapa findFirstOrThrow
+   */
+  export type QualityIncidentCapaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncidentCapa
+     */
+    select?: QualityIncidentCapaSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityIncidentCapa to fetch.
+     */
+    where?: QualityIncidentCapaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityIncidentCapas to fetch.
+     */
+    orderBy?: QualityIncidentCapaOrderByWithRelationInput | QualityIncidentCapaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QualityIncidentCapas.
+     */
+    cursor?: QualityIncidentCapaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityIncidentCapas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityIncidentCapas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QualityIncidentCapas.
+     */
+    distinct?: QualityIncidentCapaScalarFieldEnum | QualityIncidentCapaScalarFieldEnum[]
+  }
+
+  /**
+   * QualityIncidentCapa findMany
+   */
+  export type QualityIncidentCapaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncidentCapa
+     */
+    select?: QualityIncidentCapaSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityIncidentCapas to fetch.
+     */
+    where?: QualityIncidentCapaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityIncidentCapas to fetch.
+     */
+    orderBy?: QualityIncidentCapaOrderByWithRelationInput | QualityIncidentCapaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing QualityIncidentCapas.
+     */
+    cursor?: QualityIncidentCapaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityIncidentCapas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityIncidentCapas.
+     */
+    skip?: number
+    distinct?: QualityIncidentCapaScalarFieldEnum | QualityIncidentCapaScalarFieldEnum[]
+  }
+
+  /**
+   * QualityIncidentCapa create
+   */
+  export type QualityIncidentCapaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncidentCapa
+     */
+    select?: QualityIncidentCapaSelect<ExtArgs> | null
+    /**
+     * The data needed to create a QualityIncidentCapa.
+     */
+    data: XOR<QualityIncidentCapaCreateInput, QualityIncidentCapaUncheckedCreateInput>
+  }
+
+  /**
+   * QualityIncidentCapa createMany
+   */
+  export type QualityIncidentCapaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many QualityIncidentCapas.
+     */
+    data: QualityIncidentCapaCreateManyInput | QualityIncidentCapaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QualityIncidentCapa createManyAndReturn
+   */
+  export type QualityIncidentCapaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncidentCapa
+     */
+    select?: QualityIncidentCapaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many QualityIncidentCapas.
+     */
+    data: QualityIncidentCapaCreateManyInput | QualityIncidentCapaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QualityIncidentCapa update
+   */
+  export type QualityIncidentCapaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncidentCapa
+     */
+    select?: QualityIncidentCapaSelect<ExtArgs> | null
+    /**
+     * The data needed to update a QualityIncidentCapa.
+     */
+    data: XOR<QualityIncidentCapaUpdateInput, QualityIncidentCapaUncheckedUpdateInput>
+    /**
+     * Choose, which QualityIncidentCapa to update.
+     */
+    where: QualityIncidentCapaWhereUniqueInput
+  }
+
+  /**
+   * QualityIncidentCapa updateMany
+   */
+  export type QualityIncidentCapaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update QualityIncidentCapas.
+     */
+    data: XOR<QualityIncidentCapaUpdateManyMutationInput, QualityIncidentCapaUncheckedUpdateManyInput>
+    /**
+     * Filter which QualityIncidentCapas to update
+     */
+    where?: QualityIncidentCapaWhereInput
+  }
+
+  /**
+   * QualityIncidentCapa upsert
+   */
+  export type QualityIncidentCapaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncidentCapa
+     */
+    select?: QualityIncidentCapaSelect<ExtArgs> | null
+    /**
+     * The filter to search for the QualityIncidentCapa to update in case it exists.
+     */
+    where: QualityIncidentCapaWhereUniqueInput
+    /**
+     * In case the QualityIncidentCapa found by the `where` argument doesn't exist, create a new QualityIncidentCapa with this data.
+     */
+    create: XOR<QualityIncidentCapaCreateInput, QualityIncidentCapaUncheckedCreateInput>
+    /**
+     * In case the QualityIncidentCapa was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QualityIncidentCapaUpdateInput, QualityIncidentCapaUncheckedUpdateInput>
+  }
+
+  /**
+   * QualityIncidentCapa delete
+   */
+  export type QualityIncidentCapaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncidentCapa
+     */
+    select?: QualityIncidentCapaSelect<ExtArgs> | null
+    /**
+     * Filter which QualityIncidentCapa to delete.
+     */
+    where: QualityIncidentCapaWhereUniqueInput
+  }
+
+  /**
+   * QualityIncidentCapa deleteMany
+   */
+  export type QualityIncidentCapaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QualityIncidentCapas to delete
+     */
+    where?: QualityIncidentCapaWhereInput
+  }
+
+  /**
+   * QualityIncidentCapa without action
+   */
+  export type QualityIncidentCapaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityIncidentCapa
+     */
+    select?: QualityIncidentCapaSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model QualityAttachment
+   */
+
+  export type AggregateQualityAttachment = {
+    _count: QualityAttachmentCountAggregateOutputType | null
+    _avg: QualityAttachmentAvgAggregateOutputType | null
+    _sum: QualityAttachmentSumAggregateOutputType | null
+    _min: QualityAttachmentMinAggregateOutputType | null
+    _max: QualityAttachmentMaxAggregateOutputType | null
+  }
+
+  export type QualityAttachmentAvgAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type QualityAttachmentSumAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type QualityAttachmentMinAggregateOutputType = {
+    id: string | null
+    recordType: string | null
+    recordId: string | null
+    kind: string | null
+    fileName: string | null
+    fileUrl: string | null
+    fileSize: number | null
+    mimeType: string | null
+    description: string | null
+    uploadedById: string | null
+    uploadedAt: Date | null
+    removedAt: Date | null
+    removedById: string | null
+    removeReason: string | null
+  }
+
+  export type QualityAttachmentMaxAggregateOutputType = {
+    id: string | null
+    recordType: string | null
+    recordId: string | null
+    kind: string | null
+    fileName: string | null
+    fileUrl: string | null
+    fileSize: number | null
+    mimeType: string | null
+    description: string | null
+    uploadedById: string | null
+    uploadedAt: Date | null
+    removedAt: Date | null
+    removedById: string | null
+    removeReason: string | null
+  }
+
+  export type QualityAttachmentCountAggregateOutputType = {
+    id: number
+    recordType: number
+    recordId: number
+    kind: number
+    fileName: number
+    fileUrl: number
+    fileSize: number
+    mimeType: number
+    description: number
+    uploadedById: number
+    uploadedAt: number
+    removedAt: number
+    removedById: number
+    removeReason: number
+    _all: number
+  }
+
+
+  export type QualityAttachmentAvgAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type QualityAttachmentSumAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type QualityAttachmentMinAggregateInputType = {
+    id?: true
+    recordType?: true
+    recordId?: true
+    kind?: true
+    fileName?: true
+    fileUrl?: true
+    fileSize?: true
+    mimeType?: true
+    description?: true
+    uploadedById?: true
+    uploadedAt?: true
+    removedAt?: true
+    removedById?: true
+    removeReason?: true
+  }
+
+  export type QualityAttachmentMaxAggregateInputType = {
+    id?: true
+    recordType?: true
+    recordId?: true
+    kind?: true
+    fileName?: true
+    fileUrl?: true
+    fileSize?: true
+    mimeType?: true
+    description?: true
+    uploadedById?: true
+    uploadedAt?: true
+    removedAt?: true
+    removedById?: true
+    removeReason?: true
+  }
+
+  export type QualityAttachmentCountAggregateInputType = {
+    id?: true
+    recordType?: true
+    recordId?: true
+    kind?: true
+    fileName?: true
+    fileUrl?: true
+    fileSize?: true
+    mimeType?: true
+    description?: true
+    uploadedById?: true
+    uploadedAt?: true
+    removedAt?: true
+    removedById?: true
+    removeReason?: true
+    _all?: true
+  }
+
+  export type QualityAttachmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QualityAttachment to aggregate.
+     */
+    where?: QualityAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityAttachments to fetch.
+     */
+    orderBy?: QualityAttachmentOrderByWithRelationInput | QualityAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: QualityAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityAttachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned QualityAttachments
+    **/
+    _count?: true | QualityAttachmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: QualityAttachmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: QualityAttachmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: QualityAttachmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: QualityAttachmentMaxAggregateInputType
+  }
+
+  export type GetQualityAttachmentAggregateType<T extends QualityAttachmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateQualityAttachment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQualityAttachment[P]>
+      : GetScalarType<T[P], AggregateQualityAttachment[P]>
+  }
+
+
+
+
+  export type QualityAttachmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QualityAttachmentWhereInput
+    orderBy?: QualityAttachmentOrderByWithAggregationInput | QualityAttachmentOrderByWithAggregationInput[]
+    by: QualityAttachmentScalarFieldEnum[] | QualityAttachmentScalarFieldEnum
+    having?: QualityAttachmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: QualityAttachmentCountAggregateInputType | true
+    _avg?: QualityAttachmentAvgAggregateInputType
+    _sum?: QualityAttachmentSumAggregateInputType
+    _min?: QualityAttachmentMinAggregateInputType
+    _max?: QualityAttachmentMaxAggregateInputType
+  }
+
+  export type QualityAttachmentGroupByOutputType = {
+    id: string
+    recordType: string
+    recordId: string
+    kind: string
+    fileName: string
+    fileUrl: string
+    fileSize: number | null
+    mimeType: string | null
+    description: string
+    uploadedById: string | null
+    uploadedAt: Date
+    removedAt: Date | null
+    removedById: string | null
+    removeReason: string | null
+    _count: QualityAttachmentCountAggregateOutputType | null
+    _avg: QualityAttachmentAvgAggregateOutputType | null
+    _sum: QualityAttachmentSumAggregateOutputType | null
+    _min: QualityAttachmentMinAggregateOutputType | null
+    _max: QualityAttachmentMaxAggregateOutputType | null
+  }
+
+  type GetQualityAttachmentGroupByPayload<T extends QualityAttachmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<QualityAttachmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof QualityAttachmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QualityAttachmentGroupByOutputType[P]>
+            : GetScalarType<T[P], QualityAttachmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type QualityAttachmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recordType?: boolean
+    recordId?: boolean
+    kind?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileSize?: boolean
+    mimeType?: boolean
+    description?: boolean
+    uploadedById?: boolean
+    uploadedAt?: boolean
+    removedAt?: boolean
+    removedById?: boolean
+    removeReason?: boolean
+  }, ExtArgs["result"]["qualityAttachment"]>
+
+  export type QualityAttachmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recordType?: boolean
+    recordId?: boolean
+    kind?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileSize?: boolean
+    mimeType?: boolean
+    description?: boolean
+    uploadedById?: boolean
+    uploadedAt?: boolean
+    removedAt?: boolean
+    removedById?: boolean
+    removeReason?: boolean
+  }, ExtArgs["result"]["qualityAttachment"]>
+
+  export type QualityAttachmentSelectScalar = {
+    id?: boolean
+    recordType?: boolean
+    recordId?: boolean
+    kind?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileSize?: boolean
+    mimeType?: boolean
+    description?: boolean
+    uploadedById?: boolean
+    uploadedAt?: boolean
+    removedAt?: boolean
+    removedById?: boolean
+    removeReason?: boolean
+  }
+
+
+  export type $QualityAttachmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "QualityAttachment"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      recordType: string
+      recordId: string
+      kind: string
+      fileName: string
+      fileUrl: string
+      fileSize: number | null
+      mimeType: string | null
+      description: string
+      uploadedById: string | null
+      uploadedAt: Date
+      removedAt: Date | null
+      removedById: string | null
+      removeReason: string | null
+    }, ExtArgs["result"]["qualityAttachment"]>
+    composites: {}
+  }
+
+  type QualityAttachmentGetPayload<S extends boolean | null | undefined | QualityAttachmentDefaultArgs> = $Result.GetResult<Prisma.$QualityAttachmentPayload, S>
+
+  type QualityAttachmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<QualityAttachmentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: QualityAttachmentCountAggregateInputType | true
+    }
+
+  export interface QualityAttachmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['QualityAttachment'], meta: { name: 'QualityAttachment' } }
+    /**
+     * Find zero or one QualityAttachment that matches the filter.
+     * @param {QualityAttachmentFindUniqueArgs} args - Arguments to find a QualityAttachment
+     * @example
+     * // Get one QualityAttachment
+     * const qualityAttachment = await prisma.qualityAttachment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QualityAttachmentFindUniqueArgs>(args: SelectSubset<T, QualityAttachmentFindUniqueArgs<ExtArgs>>): Prisma__QualityAttachmentClient<$Result.GetResult<Prisma.$QualityAttachmentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one QualityAttachment that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {QualityAttachmentFindUniqueOrThrowArgs} args - Arguments to find a QualityAttachment
+     * @example
+     * // Get one QualityAttachment
+     * const qualityAttachment = await prisma.qualityAttachment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QualityAttachmentFindUniqueOrThrowArgs>(args: SelectSubset<T, QualityAttachmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__QualityAttachmentClient<$Result.GetResult<Prisma.$QualityAttachmentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first QualityAttachment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityAttachmentFindFirstArgs} args - Arguments to find a QualityAttachment
+     * @example
+     * // Get one QualityAttachment
+     * const qualityAttachment = await prisma.qualityAttachment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QualityAttachmentFindFirstArgs>(args?: SelectSubset<T, QualityAttachmentFindFirstArgs<ExtArgs>>): Prisma__QualityAttachmentClient<$Result.GetResult<Prisma.$QualityAttachmentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first QualityAttachment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityAttachmentFindFirstOrThrowArgs} args - Arguments to find a QualityAttachment
+     * @example
+     * // Get one QualityAttachment
+     * const qualityAttachment = await prisma.qualityAttachment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QualityAttachmentFindFirstOrThrowArgs>(args?: SelectSubset<T, QualityAttachmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__QualityAttachmentClient<$Result.GetResult<Prisma.$QualityAttachmentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more QualityAttachments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityAttachmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all QualityAttachments
+     * const qualityAttachments = await prisma.qualityAttachment.findMany()
+     * 
+     * // Get first 10 QualityAttachments
+     * const qualityAttachments = await prisma.qualityAttachment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const qualityAttachmentWithIdOnly = await prisma.qualityAttachment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends QualityAttachmentFindManyArgs>(args?: SelectSubset<T, QualityAttachmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QualityAttachmentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a QualityAttachment.
+     * @param {QualityAttachmentCreateArgs} args - Arguments to create a QualityAttachment.
+     * @example
+     * // Create one QualityAttachment
+     * const QualityAttachment = await prisma.qualityAttachment.create({
+     *   data: {
+     *     // ... data to create a QualityAttachment
+     *   }
+     * })
+     * 
+     */
+    create<T extends QualityAttachmentCreateArgs>(args: SelectSubset<T, QualityAttachmentCreateArgs<ExtArgs>>): Prisma__QualityAttachmentClient<$Result.GetResult<Prisma.$QualityAttachmentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many QualityAttachments.
+     * @param {QualityAttachmentCreateManyArgs} args - Arguments to create many QualityAttachments.
+     * @example
+     * // Create many QualityAttachments
+     * const qualityAttachment = await prisma.qualityAttachment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends QualityAttachmentCreateManyArgs>(args?: SelectSubset<T, QualityAttachmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many QualityAttachments and returns the data saved in the database.
+     * @param {QualityAttachmentCreateManyAndReturnArgs} args - Arguments to create many QualityAttachments.
+     * @example
+     * // Create many QualityAttachments
+     * const qualityAttachment = await prisma.qualityAttachment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many QualityAttachments and only return the `id`
+     * const qualityAttachmentWithIdOnly = await prisma.qualityAttachment.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends QualityAttachmentCreateManyAndReturnArgs>(args?: SelectSubset<T, QualityAttachmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QualityAttachmentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a QualityAttachment.
+     * @param {QualityAttachmentDeleteArgs} args - Arguments to delete one QualityAttachment.
+     * @example
+     * // Delete one QualityAttachment
+     * const QualityAttachment = await prisma.qualityAttachment.delete({
+     *   where: {
+     *     // ... filter to delete one QualityAttachment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends QualityAttachmentDeleteArgs>(args: SelectSubset<T, QualityAttachmentDeleteArgs<ExtArgs>>): Prisma__QualityAttachmentClient<$Result.GetResult<Prisma.$QualityAttachmentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one QualityAttachment.
+     * @param {QualityAttachmentUpdateArgs} args - Arguments to update one QualityAttachment.
+     * @example
+     * // Update one QualityAttachment
+     * const qualityAttachment = await prisma.qualityAttachment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends QualityAttachmentUpdateArgs>(args: SelectSubset<T, QualityAttachmentUpdateArgs<ExtArgs>>): Prisma__QualityAttachmentClient<$Result.GetResult<Prisma.$QualityAttachmentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more QualityAttachments.
+     * @param {QualityAttachmentDeleteManyArgs} args - Arguments to filter QualityAttachments to delete.
+     * @example
+     * // Delete a few QualityAttachments
+     * const { count } = await prisma.qualityAttachment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends QualityAttachmentDeleteManyArgs>(args?: SelectSubset<T, QualityAttachmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QualityAttachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityAttachmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many QualityAttachments
+     * const qualityAttachment = await prisma.qualityAttachment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends QualityAttachmentUpdateManyArgs>(args: SelectSubset<T, QualityAttachmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one QualityAttachment.
+     * @param {QualityAttachmentUpsertArgs} args - Arguments to update or create a QualityAttachment.
+     * @example
+     * // Update or create a QualityAttachment
+     * const qualityAttachment = await prisma.qualityAttachment.upsert({
+     *   create: {
+     *     // ... data to create a QualityAttachment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the QualityAttachment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QualityAttachmentUpsertArgs>(args: SelectSubset<T, QualityAttachmentUpsertArgs<ExtArgs>>): Prisma__QualityAttachmentClient<$Result.GetResult<Prisma.$QualityAttachmentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of QualityAttachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityAttachmentCountArgs} args - Arguments to filter QualityAttachments to count.
+     * @example
+     * // Count the number of QualityAttachments
+     * const count = await prisma.qualityAttachment.count({
+     *   where: {
+     *     // ... the filter for the QualityAttachments we want to count
+     *   }
+     * })
+    **/
+    count<T extends QualityAttachmentCountArgs>(
+      args?: Subset<T, QualityAttachmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QualityAttachmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a QualityAttachment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityAttachmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends QualityAttachmentAggregateArgs>(args: Subset<T, QualityAttachmentAggregateArgs>): Prisma.PrismaPromise<GetQualityAttachmentAggregateType<T>>
+
+    /**
+     * Group by QualityAttachment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityAttachmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends QualityAttachmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QualityAttachmentGroupByArgs['orderBy'] }
+        : { orderBy?: QualityAttachmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, QualityAttachmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQualityAttachmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the QualityAttachment model
+   */
+  readonly fields: QualityAttachmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for QualityAttachment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QualityAttachmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the QualityAttachment model
+   */ 
+  interface QualityAttachmentFieldRefs {
+    readonly id: FieldRef<"QualityAttachment", 'String'>
+    readonly recordType: FieldRef<"QualityAttachment", 'String'>
+    readonly recordId: FieldRef<"QualityAttachment", 'String'>
+    readonly kind: FieldRef<"QualityAttachment", 'String'>
+    readonly fileName: FieldRef<"QualityAttachment", 'String'>
+    readonly fileUrl: FieldRef<"QualityAttachment", 'String'>
+    readonly fileSize: FieldRef<"QualityAttachment", 'Int'>
+    readonly mimeType: FieldRef<"QualityAttachment", 'String'>
+    readonly description: FieldRef<"QualityAttachment", 'String'>
+    readonly uploadedById: FieldRef<"QualityAttachment", 'String'>
+    readonly uploadedAt: FieldRef<"QualityAttachment", 'DateTime'>
+    readonly removedAt: FieldRef<"QualityAttachment", 'DateTime'>
+    readonly removedById: FieldRef<"QualityAttachment", 'String'>
+    readonly removeReason: FieldRef<"QualityAttachment", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * QualityAttachment findUnique
+   */
+  export type QualityAttachmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityAttachment
+     */
+    select?: QualityAttachmentSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityAttachment to fetch.
+     */
+    where: QualityAttachmentWhereUniqueInput
+  }
+
+  /**
+   * QualityAttachment findUniqueOrThrow
+   */
+  export type QualityAttachmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityAttachment
+     */
+    select?: QualityAttachmentSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityAttachment to fetch.
+     */
+    where: QualityAttachmentWhereUniqueInput
+  }
+
+  /**
+   * QualityAttachment findFirst
+   */
+  export type QualityAttachmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityAttachment
+     */
+    select?: QualityAttachmentSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityAttachment to fetch.
+     */
+    where?: QualityAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityAttachments to fetch.
+     */
+    orderBy?: QualityAttachmentOrderByWithRelationInput | QualityAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QualityAttachments.
+     */
+    cursor?: QualityAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityAttachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QualityAttachments.
+     */
+    distinct?: QualityAttachmentScalarFieldEnum | QualityAttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * QualityAttachment findFirstOrThrow
+   */
+  export type QualityAttachmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityAttachment
+     */
+    select?: QualityAttachmentSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityAttachment to fetch.
+     */
+    where?: QualityAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityAttachments to fetch.
+     */
+    orderBy?: QualityAttachmentOrderByWithRelationInput | QualityAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QualityAttachments.
+     */
+    cursor?: QualityAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityAttachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QualityAttachments.
+     */
+    distinct?: QualityAttachmentScalarFieldEnum | QualityAttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * QualityAttachment findMany
+   */
+  export type QualityAttachmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityAttachment
+     */
+    select?: QualityAttachmentSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityAttachments to fetch.
+     */
+    where?: QualityAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityAttachments to fetch.
+     */
+    orderBy?: QualityAttachmentOrderByWithRelationInput | QualityAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing QualityAttachments.
+     */
+    cursor?: QualityAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityAttachments.
+     */
+    skip?: number
+    distinct?: QualityAttachmentScalarFieldEnum | QualityAttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * QualityAttachment create
+   */
+  export type QualityAttachmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityAttachment
+     */
+    select?: QualityAttachmentSelect<ExtArgs> | null
+    /**
+     * The data needed to create a QualityAttachment.
+     */
+    data: XOR<QualityAttachmentCreateInput, QualityAttachmentUncheckedCreateInput>
+  }
+
+  /**
+   * QualityAttachment createMany
+   */
+  export type QualityAttachmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many QualityAttachments.
+     */
+    data: QualityAttachmentCreateManyInput | QualityAttachmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QualityAttachment createManyAndReturn
+   */
+  export type QualityAttachmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityAttachment
+     */
+    select?: QualityAttachmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many QualityAttachments.
+     */
+    data: QualityAttachmentCreateManyInput | QualityAttachmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QualityAttachment update
+   */
+  export type QualityAttachmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityAttachment
+     */
+    select?: QualityAttachmentSelect<ExtArgs> | null
+    /**
+     * The data needed to update a QualityAttachment.
+     */
+    data: XOR<QualityAttachmentUpdateInput, QualityAttachmentUncheckedUpdateInput>
+    /**
+     * Choose, which QualityAttachment to update.
+     */
+    where: QualityAttachmentWhereUniqueInput
+  }
+
+  /**
+   * QualityAttachment updateMany
+   */
+  export type QualityAttachmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update QualityAttachments.
+     */
+    data: XOR<QualityAttachmentUpdateManyMutationInput, QualityAttachmentUncheckedUpdateManyInput>
+    /**
+     * Filter which QualityAttachments to update
+     */
+    where?: QualityAttachmentWhereInput
+  }
+
+  /**
+   * QualityAttachment upsert
+   */
+  export type QualityAttachmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityAttachment
+     */
+    select?: QualityAttachmentSelect<ExtArgs> | null
+    /**
+     * The filter to search for the QualityAttachment to update in case it exists.
+     */
+    where: QualityAttachmentWhereUniqueInput
+    /**
+     * In case the QualityAttachment found by the `where` argument doesn't exist, create a new QualityAttachment with this data.
+     */
+    create: XOR<QualityAttachmentCreateInput, QualityAttachmentUncheckedCreateInput>
+    /**
+     * In case the QualityAttachment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QualityAttachmentUpdateInput, QualityAttachmentUncheckedUpdateInput>
+  }
+
+  /**
+   * QualityAttachment delete
+   */
+  export type QualityAttachmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityAttachment
+     */
+    select?: QualityAttachmentSelect<ExtArgs> | null
+    /**
+     * Filter which QualityAttachment to delete.
+     */
+    where: QualityAttachmentWhereUniqueInput
+  }
+
+  /**
+   * QualityAttachment deleteMany
+   */
+  export type QualityAttachmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QualityAttachments to delete
+     */
+    where?: QualityAttachmentWhereInput
+  }
+
+  /**
+   * QualityAttachment without action
+   */
+  export type QualityAttachmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityAttachment
+     */
+    select?: QualityAttachmentSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model QualityEvent
+   */
+
+  export type AggregateQualityEvent = {
+    _count: QualityEventCountAggregateOutputType | null
+    _min: QualityEventMinAggregateOutputType | null
+    _max: QualityEventMaxAggregateOutputType | null
+  }
+
+  export type QualityEventMinAggregateOutputType = {
+    id: string | null
+    recordType: string | null
+    recordId: string | null
+    reference: string | null
+    action: string | null
+    userId: string | null
+    userName: string | null
+    note: string | null
+    createdAt: Date | null
+  }
+
+  export type QualityEventMaxAggregateOutputType = {
+    id: string | null
+    recordType: string | null
+    recordId: string | null
+    reference: string | null
+    action: string | null
+    userId: string | null
+    userName: string | null
+    note: string | null
+    createdAt: Date | null
+  }
+
+  export type QualityEventCountAggregateOutputType = {
+    id: number
+    recordType: number
+    recordId: number
+    reference: number
+    action: number
+    userId: number
+    userName: number
+    changes: number
+    note: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type QualityEventMinAggregateInputType = {
+    id?: true
+    recordType?: true
+    recordId?: true
+    reference?: true
+    action?: true
+    userId?: true
+    userName?: true
+    note?: true
+    createdAt?: true
+  }
+
+  export type QualityEventMaxAggregateInputType = {
+    id?: true
+    recordType?: true
+    recordId?: true
+    reference?: true
+    action?: true
+    userId?: true
+    userName?: true
+    note?: true
+    createdAt?: true
+  }
+
+  export type QualityEventCountAggregateInputType = {
+    id?: true
+    recordType?: true
+    recordId?: true
+    reference?: true
+    action?: true
+    userId?: true
+    userName?: true
+    changes?: true
+    note?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type QualityEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QualityEvent to aggregate.
+     */
+    where?: QualityEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityEvents to fetch.
+     */
+    orderBy?: QualityEventOrderByWithRelationInput | QualityEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: QualityEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned QualityEvents
+    **/
+    _count?: true | QualityEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: QualityEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: QualityEventMaxAggregateInputType
+  }
+
+  export type GetQualityEventAggregateType<T extends QualityEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateQualityEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQualityEvent[P]>
+      : GetScalarType<T[P], AggregateQualityEvent[P]>
+  }
+
+
+
+
+  export type QualityEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QualityEventWhereInput
+    orderBy?: QualityEventOrderByWithAggregationInput | QualityEventOrderByWithAggregationInput[]
+    by: QualityEventScalarFieldEnum[] | QualityEventScalarFieldEnum
+    having?: QualityEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: QualityEventCountAggregateInputType | true
+    _min?: QualityEventMinAggregateInputType
+    _max?: QualityEventMaxAggregateInputType
+  }
+
+  export type QualityEventGroupByOutputType = {
+    id: string
+    recordType: string
+    recordId: string
+    reference: string
+    action: string
+    userId: string | null
+    userName: string
+    changes: JsonValue
+    note: string | null
+    createdAt: Date
+    _count: QualityEventCountAggregateOutputType | null
+    _min: QualityEventMinAggregateOutputType | null
+    _max: QualityEventMaxAggregateOutputType | null
+  }
+
+  type GetQualityEventGroupByPayload<T extends QualityEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<QualityEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof QualityEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QualityEventGroupByOutputType[P]>
+            : GetScalarType<T[P], QualityEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type QualityEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recordType?: boolean
+    recordId?: boolean
+    reference?: boolean
+    action?: boolean
+    userId?: boolean
+    userName?: boolean
+    changes?: boolean
+    note?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["qualityEvent"]>
+
+  export type QualityEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recordType?: boolean
+    recordId?: boolean
+    reference?: boolean
+    action?: boolean
+    userId?: boolean
+    userName?: boolean
+    changes?: boolean
+    note?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["qualityEvent"]>
+
+  export type QualityEventSelectScalar = {
+    id?: boolean
+    recordType?: boolean
+    recordId?: boolean
+    reference?: boolean
+    action?: boolean
+    userId?: boolean
+    userName?: boolean
+    changes?: boolean
+    note?: boolean
+    createdAt?: boolean
+  }
+
+
+  export type $QualityEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "QualityEvent"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      recordType: string
+      recordId: string
+      reference: string
+      action: string
+      userId: string | null
+      userName: string
+      changes: Prisma.JsonValue
+      note: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["qualityEvent"]>
+    composites: {}
+  }
+
+  type QualityEventGetPayload<S extends boolean | null | undefined | QualityEventDefaultArgs> = $Result.GetResult<Prisma.$QualityEventPayload, S>
+
+  type QualityEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<QualityEventFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: QualityEventCountAggregateInputType | true
+    }
+
+  export interface QualityEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['QualityEvent'], meta: { name: 'QualityEvent' } }
+    /**
+     * Find zero or one QualityEvent that matches the filter.
+     * @param {QualityEventFindUniqueArgs} args - Arguments to find a QualityEvent
+     * @example
+     * // Get one QualityEvent
+     * const qualityEvent = await prisma.qualityEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QualityEventFindUniqueArgs>(args: SelectSubset<T, QualityEventFindUniqueArgs<ExtArgs>>): Prisma__QualityEventClient<$Result.GetResult<Prisma.$QualityEventPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one QualityEvent that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {QualityEventFindUniqueOrThrowArgs} args - Arguments to find a QualityEvent
+     * @example
+     * // Get one QualityEvent
+     * const qualityEvent = await prisma.qualityEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QualityEventFindUniqueOrThrowArgs>(args: SelectSubset<T, QualityEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__QualityEventClient<$Result.GetResult<Prisma.$QualityEventPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first QualityEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityEventFindFirstArgs} args - Arguments to find a QualityEvent
+     * @example
+     * // Get one QualityEvent
+     * const qualityEvent = await prisma.qualityEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QualityEventFindFirstArgs>(args?: SelectSubset<T, QualityEventFindFirstArgs<ExtArgs>>): Prisma__QualityEventClient<$Result.GetResult<Prisma.$QualityEventPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first QualityEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityEventFindFirstOrThrowArgs} args - Arguments to find a QualityEvent
+     * @example
+     * // Get one QualityEvent
+     * const qualityEvent = await prisma.qualityEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QualityEventFindFirstOrThrowArgs>(args?: SelectSubset<T, QualityEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__QualityEventClient<$Result.GetResult<Prisma.$QualityEventPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more QualityEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all QualityEvents
+     * const qualityEvents = await prisma.qualityEvent.findMany()
+     * 
+     * // Get first 10 QualityEvents
+     * const qualityEvents = await prisma.qualityEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const qualityEventWithIdOnly = await prisma.qualityEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends QualityEventFindManyArgs>(args?: SelectSubset<T, QualityEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QualityEventPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a QualityEvent.
+     * @param {QualityEventCreateArgs} args - Arguments to create a QualityEvent.
+     * @example
+     * // Create one QualityEvent
+     * const QualityEvent = await prisma.qualityEvent.create({
+     *   data: {
+     *     // ... data to create a QualityEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends QualityEventCreateArgs>(args: SelectSubset<T, QualityEventCreateArgs<ExtArgs>>): Prisma__QualityEventClient<$Result.GetResult<Prisma.$QualityEventPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many QualityEvents.
+     * @param {QualityEventCreateManyArgs} args - Arguments to create many QualityEvents.
+     * @example
+     * // Create many QualityEvents
+     * const qualityEvent = await prisma.qualityEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends QualityEventCreateManyArgs>(args?: SelectSubset<T, QualityEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many QualityEvents and returns the data saved in the database.
+     * @param {QualityEventCreateManyAndReturnArgs} args - Arguments to create many QualityEvents.
+     * @example
+     * // Create many QualityEvents
+     * const qualityEvent = await prisma.qualityEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many QualityEvents and only return the `id`
+     * const qualityEventWithIdOnly = await prisma.qualityEvent.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends QualityEventCreateManyAndReturnArgs>(args?: SelectSubset<T, QualityEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QualityEventPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a QualityEvent.
+     * @param {QualityEventDeleteArgs} args - Arguments to delete one QualityEvent.
+     * @example
+     * // Delete one QualityEvent
+     * const QualityEvent = await prisma.qualityEvent.delete({
+     *   where: {
+     *     // ... filter to delete one QualityEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends QualityEventDeleteArgs>(args: SelectSubset<T, QualityEventDeleteArgs<ExtArgs>>): Prisma__QualityEventClient<$Result.GetResult<Prisma.$QualityEventPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one QualityEvent.
+     * @param {QualityEventUpdateArgs} args - Arguments to update one QualityEvent.
+     * @example
+     * // Update one QualityEvent
+     * const qualityEvent = await prisma.qualityEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends QualityEventUpdateArgs>(args: SelectSubset<T, QualityEventUpdateArgs<ExtArgs>>): Prisma__QualityEventClient<$Result.GetResult<Prisma.$QualityEventPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more QualityEvents.
+     * @param {QualityEventDeleteManyArgs} args - Arguments to filter QualityEvents to delete.
+     * @example
+     * // Delete a few QualityEvents
+     * const { count } = await prisma.qualityEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends QualityEventDeleteManyArgs>(args?: SelectSubset<T, QualityEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QualityEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many QualityEvents
+     * const qualityEvent = await prisma.qualityEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends QualityEventUpdateManyArgs>(args: SelectSubset<T, QualityEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one QualityEvent.
+     * @param {QualityEventUpsertArgs} args - Arguments to update or create a QualityEvent.
+     * @example
+     * // Update or create a QualityEvent
+     * const qualityEvent = await prisma.qualityEvent.upsert({
+     *   create: {
+     *     // ... data to create a QualityEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the QualityEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QualityEventUpsertArgs>(args: SelectSubset<T, QualityEventUpsertArgs<ExtArgs>>): Prisma__QualityEventClient<$Result.GetResult<Prisma.$QualityEventPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of QualityEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityEventCountArgs} args - Arguments to filter QualityEvents to count.
+     * @example
+     * // Count the number of QualityEvents
+     * const count = await prisma.qualityEvent.count({
+     *   where: {
+     *     // ... the filter for the QualityEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends QualityEventCountArgs>(
+      args?: Subset<T, QualityEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QualityEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a QualityEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends QualityEventAggregateArgs>(args: Subset<T, QualityEventAggregateArgs>): Prisma.PrismaPromise<GetQualityEventAggregateType<T>>
+
+    /**
+     * Group by QualityEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends QualityEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QualityEventGroupByArgs['orderBy'] }
+        : { orderBy?: QualityEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, QualityEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQualityEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the QualityEvent model
+   */
+  readonly fields: QualityEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for QualityEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QualityEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the QualityEvent model
+   */ 
+  interface QualityEventFieldRefs {
+    readonly id: FieldRef<"QualityEvent", 'String'>
+    readonly recordType: FieldRef<"QualityEvent", 'String'>
+    readonly recordId: FieldRef<"QualityEvent", 'String'>
+    readonly reference: FieldRef<"QualityEvent", 'String'>
+    readonly action: FieldRef<"QualityEvent", 'String'>
+    readonly userId: FieldRef<"QualityEvent", 'String'>
+    readonly userName: FieldRef<"QualityEvent", 'String'>
+    readonly changes: FieldRef<"QualityEvent", 'Json'>
+    readonly note: FieldRef<"QualityEvent", 'String'>
+    readonly createdAt: FieldRef<"QualityEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * QualityEvent findUnique
+   */
+  export type QualityEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityEvent
+     */
+    select?: QualityEventSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityEvent to fetch.
+     */
+    where: QualityEventWhereUniqueInput
+  }
+
+  /**
+   * QualityEvent findUniqueOrThrow
+   */
+  export type QualityEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityEvent
+     */
+    select?: QualityEventSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityEvent to fetch.
+     */
+    where: QualityEventWhereUniqueInput
+  }
+
+  /**
+   * QualityEvent findFirst
+   */
+  export type QualityEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityEvent
+     */
+    select?: QualityEventSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityEvent to fetch.
+     */
+    where?: QualityEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityEvents to fetch.
+     */
+    orderBy?: QualityEventOrderByWithRelationInput | QualityEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QualityEvents.
+     */
+    cursor?: QualityEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QualityEvents.
+     */
+    distinct?: QualityEventScalarFieldEnum | QualityEventScalarFieldEnum[]
+  }
+
+  /**
+   * QualityEvent findFirstOrThrow
+   */
+  export type QualityEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityEvent
+     */
+    select?: QualityEventSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityEvent to fetch.
+     */
+    where?: QualityEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityEvents to fetch.
+     */
+    orderBy?: QualityEventOrderByWithRelationInput | QualityEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QualityEvents.
+     */
+    cursor?: QualityEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QualityEvents.
+     */
+    distinct?: QualityEventScalarFieldEnum | QualityEventScalarFieldEnum[]
+  }
+
+  /**
+   * QualityEvent findMany
+   */
+  export type QualityEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityEvent
+     */
+    select?: QualityEventSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityEvents to fetch.
+     */
+    where?: QualityEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityEvents to fetch.
+     */
+    orderBy?: QualityEventOrderByWithRelationInput | QualityEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing QualityEvents.
+     */
+    cursor?: QualityEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityEvents.
+     */
+    skip?: number
+    distinct?: QualityEventScalarFieldEnum | QualityEventScalarFieldEnum[]
+  }
+
+  /**
+   * QualityEvent create
+   */
+  export type QualityEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityEvent
+     */
+    select?: QualityEventSelect<ExtArgs> | null
+    /**
+     * The data needed to create a QualityEvent.
+     */
+    data: XOR<QualityEventCreateInput, QualityEventUncheckedCreateInput>
+  }
+
+  /**
+   * QualityEvent createMany
+   */
+  export type QualityEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many QualityEvents.
+     */
+    data: QualityEventCreateManyInput | QualityEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QualityEvent createManyAndReturn
+   */
+  export type QualityEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityEvent
+     */
+    select?: QualityEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many QualityEvents.
+     */
+    data: QualityEventCreateManyInput | QualityEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QualityEvent update
+   */
+  export type QualityEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityEvent
+     */
+    select?: QualityEventSelect<ExtArgs> | null
+    /**
+     * The data needed to update a QualityEvent.
+     */
+    data: XOR<QualityEventUpdateInput, QualityEventUncheckedUpdateInput>
+    /**
+     * Choose, which QualityEvent to update.
+     */
+    where: QualityEventWhereUniqueInput
+  }
+
+  /**
+   * QualityEvent updateMany
+   */
+  export type QualityEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update QualityEvents.
+     */
+    data: XOR<QualityEventUpdateManyMutationInput, QualityEventUncheckedUpdateManyInput>
+    /**
+     * Filter which QualityEvents to update
+     */
+    where?: QualityEventWhereInput
+  }
+
+  /**
+   * QualityEvent upsert
+   */
+  export type QualityEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityEvent
+     */
+    select?: QualityEventSelect<ExtArgs> | null
+    /**
+     * The filter to search for the QualityEvent to update in case it exists.
+     */
+    where: QualityEventWhereUniqueInput
+    /**
+     * In case the QualityEvent found by the `where` argument doesn't exist, create a new QualityEvent with this data.
+     */
+    create: XOR<QualityEventCreateInput, QualityEventUncheckedCreateInput>
+    /**
+     * In case the QualityEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QualityEventUpdateInput, QualityEventUncheckedUpdateInput>
+  }
+
+  /**
+   * QualityEvent delete
+   */
+  export type QualityEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityEvent
+     */
+    select?: QualityEventSelect<ExtArgs> | null
+    /**
+     * Filter which QualityEvent to delete.
+     */
+    where: QualityEventWhereUniqueInput
+  }
+
+  /**
+   * QualityEvent deleteMany
+   */
+  export type QualityEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QualityEvents to delete
+     */
+    where?: QualityEventWhereInput
+  }
+
+  /**
+   * QualityEvent without action
+   */
+  export type QualityEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityEvent
+     */
+    select?: QualityEventSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model QualityReview
+   */
+
+  export type AggregateQualityReview = {
+    _count: QualityReviewCountAggregateOutputType | null
+    _min: QualityReviewMinAggregateOutputType | null
+    _max: QualityReviewMaxAggregateOutputType | null
+  }
+
+  export type QualityReviewMinAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    period: string | null
+    reviewDate: Date | null
+    reviewedById: string | null
+    reviewedByName: string | null
+    whatWasReviewed: string | null
+    notes: string | null
+    linkedInstanceId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QualityReviewMaxAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    period: string | null
+    reviewDate: Date | null
+    reviewedById: string | null
+    reviewedByName: string | null
+    whatWasReviewed: string | null
+    notes: string | null
+    linkedInstanceId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QualityReviewCountAggregateOutputType = {
+    id: number
+    facility: number
+    period: number
+    reviewDate: number
+    reviewedById: number
+    reviewedByName: number
+    whatWasReviewed: number
+    notes: number
+    counts: number
+    linkedInstanceId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type QualityReviewMinAggregateInputType = {
+    id?: true
+    facility?: true
+    period?: true
+    reviewDate?: true
+    reviewedById?: true
+    reviewedByName?: true
+    whatWasReviewed?: true
+    notes?: true
+    linkedInstanceId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QualityReviewMaxAggregateInputType = {
+    id?: true
+    facility?: true
+    period?: true
+    reviewDate?: true
+    reviewedById?: true
+    reviewedByName?: true
+    whatWasReviewed?: true
+    notes?: true
+    linkedInstanceId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QualityReviewCountAggregateInputType = {
+    id?: true
+    facility?: true
+    period?: true
+    reviewDate?: true
+    reviewedById?: true
+    reviewedByName?: true
+    whatWasReviewed?: true
+    notes?: true
+    counts?: true
+    linkedInstanceId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type QualityReviewAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QualityReview to aggregate.
+     */
+    where?: QualityReviewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityReviews to fetch.
+     */
+    orderBy?: QualityReviewOrderByWithRelationInput | QualityReviewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: QualityReviewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityReviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityReviews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned QualityReviews
+    **/
+    _count?: true | QualityReviewCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: QualityReviewMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: QualityReviewMaxAggregateInputType
+  }
+
+  export type GetQualityReviewAggregateType<T extends QualityReviewAggregateArgs> = {
+        [P in keyof T & keyof AggregateQualityReview]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQualityReview[P]>
+      : GetScalarType<T[P], AggregateQualityReview[P]>
+  }
+
+
+
+
+  export type QualityReviewGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QualityReviewWhereInput
+    orderBy?: QualityReviewOrderByWithAggregationInput | QualityReviewOrderByWithAggregationInput[]
+    by: QualityReviewScalarFieldEnum[] | QualityReviewScalarFieldEnum
+    having?: QualityReviewScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: QualityReviewCountAggregateInputType | true
+    _min?: QualityReviewMinAggregateInputType
+    _max?: QualityReviewMaxAggregateInputType
+  }
+
+  export type QualityReviewGroupByOutputType = {
+    id: string
+    facility: string | null
+    period: string
+    reviewDate: Date
+    reviewedById: string | null
+    reviewedByName: string
+    whatWasReviewed: string
+    notes: string
+    counts: JsonValue
+    linkedInstanceId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: QualityReviewCountAggregateOutputType | null
+    _min: QualityReviewMinAggregateOutputType | null
+    _max: QualityReviewMaxAggregateOutputType | null
+  }
+
+  type GetQualityReviewGroupByPayload<T extends QualityReviewGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<QualityReviewGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof QualityReviewGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QualityReviewGroupByOutputType[P]>
+            : GetScalarType<T[P], QualityReviewGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type QualityReviewSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    period?: boolean
+    reviewDate?: boolean
+    reviewedById?: boolean
+    reviewedByName?: boolean
+    whatWasReviewed?: boolean
+    notes?: boolean
+    counts?: boolean
+    linkedInstanceId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["qualityReview"]>
+
+  export type QualityReviewSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    period?: boolean
+    reviewDate?: boolean
+    reviewedById?: boolean
+    reviewedByName?: boolean
+    whatWasReviewed?: boolean
+    notes?: boolean
+    counts?: boolean
+    linkedInstanceId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["qualityReview"]>
+
+  export type QualityReviewSelectScalar = {
+    id?: boolean
+    facility?: boolean
+    period?: boolean
+    reviewDate?: boolean
+    reviewedById?: boolean
+    reviewedByName?: boolean
+    whatWasReviewed?: boolean
+    notes?: boolean
+    counts?: boolean
+    linkedInstanceId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $QualityReviewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "QualityReview"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      facility: string | null
+      period: string
+      reviewDate: Date
+      reviewedById: string | null
+      reviewedByName: string
+      whatWasReviewed: string
+      notes: string
+      counts: Prisma.JsonValue
+      linkedInstanceId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["qualityReview"]>
+    composites: {}
+  }
+
+  type QualityReviewGetPayload<S extends boolean | null | undefined | QualityReviewDefaultArgs> = $Result.GetResult<Prisma.$QualityReviewPayload, S>
+
+  type QualityReviewCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<QualityReviewFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: QualityReviewCountAggregateInputType | true
+    }
+
+  export interface QualityReviewDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['QualityReview'], meta: { name: 'QualityReview' } }
+    /**
+     * Find zero or one QualityReview that matches the filter.
+     * @param {QualityReviewFindUniqueArgs} args - Arguments to find a QualityReview
+     * @example
+     * // Get one QualityReview
+     * const qualityReview = await prisma.qualityReview.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QualityReviewFindUniqueArgs>(args: SelectSubset<T, QualityReviewFindUniqueArgs<ExtArgs>>): Prisma__QualityReviewClient<$Result.GetResult<Prisma.$QualityReviewPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one QualityReview that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {QualityReviewFindUniqueOrThrowArgs} args - Arguments to find a QualityReview
+     * @example
+     * // Get one QualityReview
+     * const qualityReview = await prisma.qualityReview.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QualityReviewFindUniqueOrThrowArgs>(args: SelectSubset<T, QualityReviewFindUniqueOrThrowArgs<ExtArgs>>): Prisma__QualityReviewClient<$Result.GetResult<Prisma.$QualityReviewPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first QualityReview that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityReviewFindFirstArgs} args - Arguments to find a QualityReview
+     * @example
+     * // Get one QualityReview
+     * const qualityReview = await prisma.qualityReview.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QualityReviewFindFirstArgs>(args?: SelectSubset<T, QualityReviewFindFirstArgs<ExtArgs>>): Prisma__QualityReviewClient<$Result.GetResult<Prisma.$QualityReviewPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first QualityReview that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityReviewFindFirstOrThrowArgs} args - Arguments to find a QualityReview
+     * @example
+     * // Get one QualityReview
+     * const qualityReview = await prisma.qualityReview.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QualityReviewFindFirstOrThrowArgs>(args?: SelectSubset<T, QualityReviewFindFirstOrThrowArgs<ExtArgs>>): Prisma__QualityReviewClient<$Result.GetResult<Prisma.$QualityReviewPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more QualityReviews that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityReviewFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all QualityReviews
+     * const qualityReviews = await prisma.qualityReview.findMany()
+     * 
+     * // Get first 10 QualityReviews
+     * const qualityReviews = await prisma.qualityReview.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const qualityReviewWithIdOnly = await prisma.qualityReview.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends QualityReviewFindManyArgs>(args?: SelectSubset<T, QualityReviewFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QualityReviewPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a QualityReview.
+     * @param {QualityReviewCreateArgs} args - Arguments to create a QualityReview.
+     * @example
+     * // Create one QualityReview
+     * const QualityReview = await prisma.qualityReview.create({
+     *   data: {
+     *     // ... data to create a QualityReview
+     *   }
+     * })
+     * 
+     */
+    create<T extends QualityReviewCreateArgs>(args: SelectSubset<T, QualityReviewCreateArgs<ExtArgs>>): Prisma__QualityReviewClient<$Result.GetResult<Prisma.$QualityReviewPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many QualityReviews.
+     * @param {QualityReviewCreateManyArgs} args - Arguments to create many QualityReviews.
+     * @example
+     * // Create many QualityReviews
+     * const qualityReview = await prisma.qualityReview.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends QualityReviewCreateManyArgs>(args?: SelectSubset<T, QualityReviewCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many QualityReviews and returns the data saved in the database.
+     * @param {QualityReviewCreateManyAndReturnArgs} args - Arguments to create many QualityReviews.
+     * @example
+     * // Create many QualityReviews
+     * const qualityReview = await prisma.qualityReview.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many QualityReviews and only return the `id`
+     * const qualityReviewWithIdOnly = await prisma.qualityReview.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends QualityReviewCreateManyAndReturnArgs>(args?: SelectSubset<T, QualityReviewCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QualityReviewPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a QualityReview.
+     * @param {QualityReviewDeleteArgs} args - Arguments to delete one QualityReview.
+     * @example
+     * // Delete one QualityReview
+     * const QualityReview = await prisma.qualityReview.delete({
+     *   where: {
+     *     // ... filter to delete one QualityReview
+     *   }
+     * })
+     * 
+     */
+    delete<T extends QualityReviewDeleteArgs>(args: SelectSubset<T, QualityReviewDeleteArgs<ExtArgs>>): Prisma__QualityReviewClient<$Result.GetResult<Prisma.$QualityReviewPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one QualityReview.
+     * @param {QualityReviewUpdateArgs} args - Arguments to update one QualityReview.
+     * @example
+     * // Update one QualityReview
+     * const qualityReview = await prisma.qualityReview.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends QualityReviewUpdateArgs>(args: SelectSubset<T, QualityReviewUpdateArgs<ExtArgs>>): Prisma__QualityReviewClient<$Result.GetResult<Prisma.$QualityReviewPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more QualityReviews.
+     * @param {QualityReviewDeleteManyArgs} args - Arguments to filter QualityReviews to delete.
+     * @example
+     * // Delete a few QualityReviews
+     * const { count } = await prisma.qualityReview.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends QualityReviewDeleteManyArgs>(args?: SelectSubset<T, QualityReviewDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QualityReviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityReviewUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many QualityReviews
+     * const qualityReview = await prisma.qualityReview.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends QualityReviewUpdateManyArgs>(args: SelectSubset<T, QualityReviewUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one QualityReview.
+     * @param {QualityReviewUpsertArgs} args - Arguments to update or create a QualityReview.
+     * @example
+     * // Update or create a QualityReview
+     * const qualityReview = await prisma.qualityReview.upsert({
+     *   create: {
+     *     // ... data to create a QualityReview
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the QualityReview we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QualityReviewUpsertArgs>(args: SelectSubset<T, QualityReviewUpsertArgs<ExtArgs>>): Prisma__QualityReviewClient<$Result.GetResult<Prisma.$QualityReviewPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of QualityReviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityReviewCountArgs} args - Arguments to filter QualityReviews to count.
+     * @example
+     * // Count the number of QualityReviews
+     * const count = await prisma.qualityReview.count({
+     *   where: {
+     *     // ... the filter for the QualityReviews we want to count
+     *   }
+     * })
+    **/
+    count<T extends QualityReviewCountArgs>(
+      args?: Subset<T, QualityReviewCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QualityReviewCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a QualityReview.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityReviewAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends QualityReviewAggregateArgs>(args: Subset<T, QualityReviewAggregateArgs>): Prisma.PrismaPromise<GetQualityReviewAggregateType<T>>
+
+    /**
+     * Group by QualityReview.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QualityReviewGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends QualityReviewGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QualityReviewGroupByArgs['orderBy'] }
+        : { orderBy?: QualityReviewGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, QualityReviewGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQualityReviewGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the QualityReview model
+   */
+  readonly fields: QualityReviewFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for QualityReview.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QualityReviewClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the QualityReview model
+   */ 
+  interface QualityReviewFieldRefs {
+    readonly id: FieldRef<"QualityReview", 'String'>
+    readonly facility: FieldRef<"QualityReview", 'String'>
+    readonly period: FieldRef<"QualityReview", 'String'>
+    readonly reviewDate: FieldRef<"QualityReview", 'DateTime'>
+    readonly reviewedById: FieldRef<"QualityReview", 'String'>
+    readonly reviewedByName: FieldRef<"QualityReview", 'String'>
+    readonly whatWasReviewed: FieldRef<"QualityReview", 'String'>
+    readonly notes: FieldRef<"QualityReview", 'String'>
+    readonly counts: FieldRef<"QualityReview", 'Json'>
+    readonly linkedInstanceId: FieldRef<"QualityReview", 'String'>
+    readonly createdAt: FieldRef<"QualityReview", 'DateTime'>
+    readonly updatedAt: FieldRef<"QualityReview", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * QualityReview findUnique
+   */
+  export type QualityReviewFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityReview
+     */
+    select?: QualityReviewSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityReview to fetch.
+     */
+    where: QualityReviewWhereUniqueInput
+  }
+
+  /**
+   * QualityReview findUniqueOrThrow
+   */
+  export type QualityReviewFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityReview
+     */
+    select?: QualityReviewSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityReview to fetch.
+     */
+    where: QualityReviewWhereUniqueInput
+  }
+
+  /**
+   * QualityReview findFirst
+   */
+  export type QualityReviewFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityReview
+     */
+    select?: QualityReviewSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityReview to fetch.
+     */
+    where?: QualityReviewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityReviews to fetch.
+     */
+    orderBy?: QualityReviewOrderByWithRelationInput | QualityReviewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QualityReviews.
+     */
+    cursor?: QualityReviewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityReviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityReviews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QualityReviews.
+     */
+    distinct?: QualityReviewScalarFieldEnum | QualityReviewScalarFieldEnum[]
+  }
+
+  /**
+   * QualityReview findFirstOrThrow
+   */
+  export type QualityReviewFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityReview
+     */
+    select?: QualityReviewSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityReview to fetch.
+     */
+    where?: QualityReviewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityReviews to fetch.
+     */
+    orderBy?: QualityReviewOrderByWithRelationInput | QualityReviewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QualityReviews.
+     */
+    cursor?: QualityReviewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityReviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityReviews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QualityReviews.
+     */
+    distinct?: QualityReviewScalarFieldEnum | QualityReviewScalarFieldEnum[]
+  }
+
+  /**
+   * QualityReview findMany
+   */
+  export type QualityReviewFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityReview
+     */
+    select?: QualityReviewSelect<ExtArgs> | null
+    /**
+     * Filter, which QualityReviews to fetch.
+     */
+    where?: QualityReviewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QualityReviews to fetch.
+     */
+    orderBy?: QualityReviewOrderByWithRelationInput | QualityReviewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing QualityReviews.
+     */
+    cursor?: QualityReviewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QualityReviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QualityReviews.
+     */
+    skip?: number
+    distinct?: QualityReviewScalarFieldEnum | QualityReviewScalarFieldEnum[]
+  }
+
+  /**
+   * QualityReview create
+   */
+  export type QualityReviewCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityReview
+     */
+    select?: QualityReviewSelect<ExtArgs> | null
+    /**
+     * The data needed to create a QualityReview.
+     */
+    data: XOR<QualityReviewCreateInput, QualityReviewUncheckedCreateInput>
+  }
+
+  /**
+   * QualityReview createMany
+   */
+  export type QualityReviewCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many QualityReviews.
+     */
+    data: QualityReviewCreateManyInput | QualityReviewCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QualityReview createManyAndReturn
+   */
+  export type QualityReviewCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityReview
+     */
+    select?: QualityReviewSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many QualityReviews.
+     */
+    data: QualityReviewCreateManyInput | QualityReviewCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * QualityReview update
+   */
+  export type QualityReviewUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityReview
+     */
+    select?: QualityReviewSelect<ExtArgs> | null
+    /**
+     * The data needed to update a QualityReview.
+     */
+    data: XOR<QualityReviewUpdateInput, QualityReviewUncheckedUpdateInput>
+    /**
+     * Choose, which QualityReview to update.
+     */
+    where: QualityReviewWhereUniqueInput
+  }
+
+  /**
+   * QualityReview updateMany
+   */
+  export type QualityReviewUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update QualityReviews.
+     */
+    data: XOR<QualityReviewUpdateManyMutationInput, QualityReviewUncheckedUpdateManyInput>
+    /**
+     * Filter which QualityReviews to update
+     */
+    where?: QualityReviewWhereInput
+  }
+
+  /**
+   * QualityReview upsert
+   */
+  export type QualityReviewUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityReview
+     */
+    select?: QualityReviewSelect<ExtArgs> | null
+    /**
+     * The filter to search for the QualityReview to update in case it exists.
+     */
+    where: QualityReviewWhereUniqueInput
+    /**
+     * In case the QualityReview found by the `where` argument doesn't exist, create a new QualityReview with this data.
+     */
+    create: XOR<QualityReviewCreateInput, QualityReviewUncheckedCreateInput>
+    /**
+     * In case the QualityReview was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QualityReviewUpdateInput, QualityReviewUncheckedUpdateInput>
+  }
+
+  /**
+   * QualityReview delete
+   */
+  export type QualityReviewDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityReview
+     */
+    select?: QualityReviewSelect<ExtArgs> | null
+    /**
+     * Filter which QualityReview to delete.
+     */
+    where: QualityReviewWhereUniqueInput
+  }
+
+  /**
+   * QualityReview deleteMany
+   */
+  export type QualityReviewDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QualityReviews to delete
+     */
+    where?: QualityReviewWhereInput
+  }
+
+  /**
+   * QualityReview without action
+   */
+  export type QualityReviewDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QualityReview
+     */
+    select?: QualityReviewSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Model Notification
    */
 
@@ -85394,6 +92938,144 @@ export namespace Prisma {
   };
 
   export type ForeignMatterRecordScalarFieldEnum = (typeof ForeignMatterRecordScalarFieldEnum)[keyof typeof ForeignMatterRecordScalarFieldEnum]
+
+
+  export const QualityCounterScalarFieldEnum: {
+    kind: 'kind',
+    year: 'year',
+    lastNumber: 'lastNumber'
+  };
+
+  export type QualityCounterScalarFieldEnum = (typeof QualityCounterScalarFieldEnum)[keyof typeof QualityCounterScalarFieldEnum]
+
+
+  export const QualityIncidentScalarFieldEnum: {
+    id: 'id',
+    reference: 'reference',
+    facility: 'facility',
+    dateReceived: 'dateReceived',
+    channel: 'channel',
+    customer: 'customer',
+    productId: 'productId',
+    productName: 'productName',
+    lotCode: 'lotCode',
+    bestByDate: 'bestByDate',
+    description: 'description',
+    category: 'category',
+    foodSafetyConcern: 'foodSafetyConcern',
+    immediateAction: 'immediateAction',
+    responseDate: 'responseDate',
+    responseChannel: 'responseChannel',
+    responseSummary: 'responseSummary',
+    capaRequired: 'capaRequired',
+    noCapaReason: 'noCapaReason',
+    status: 'status',
+    closedDate: 'closedDate',
+    closedById: 'closedById',
+    voidedAt: 'voidedAt',
+    voidedById: 'voidedById',
+    voidReason: 'voidReason',
+    createdById: 'createdById',
+    updatedById: 'updatedById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type QualityIncidentScalarFieldEnum = (typeof QualityIncidentScalarFieldEnum)[keyof typeof QualityIncidentScalarFieldEnum]
+
+
+  export const QualityCapaScalarFieldEnum: {
+    id: 'id',
+    reference: 'reference',
+    facility: 'facility',
+    source: 'source',
+    problem: 'problem',
+    rootCause: 'rootCause',
+    correctiveAction: 'correctiveAction',
+    preventiveAction: 'preventiveAction',
+    ownerId: 'ownerId',
+    dueDate: 'dueDate',
+    effectivenessDate: 'effectivenessDate',
+    effectivenessResult: 'effectivenessResult',
+    status: 'status',
+    closedDate: 'closedDate',
+    closedById: 'closedById',
+    closedByName: 'closedByName',
+    taskInstanceId: 'taskInstanceId',
+    voidedAt: 'voidedAt',
+    voidedById: 'voidedById',
+    voidReason: 'voidReason',
+    createdById: 'createdById',
+    updatedById: 'updatedById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type QualityCapaScalarFieldEnum = (typeof QualityCapaScalarFieldEnum)[keyof typeof QualityCapaScalarFieldEnum]
+
+
+  export const QualityIncidentCapaScalarFieldEnum: {
+    incidentId: 'incidentId',
+    capaId: 'capaId',
+    linkedById: 'linkedById',
+    linkedAt: 'linkedAt'
+  };
+
+  export type QualityIncidentCapaScalarFieldEnum = (typeof QualityIncidentCapaScalarFieldEnum)[keyof typeof QualityIncidentCapaScalarFieldEnum]
+
+
+  export const QualityAttachmentScalarFieldEnum: {
+    id: 'id',
+    recordType: 'recordType',
+    recordId: 'recordId',
+    kind: 'kind',
+    fileName: 'fileName',
+    fileUrl: 'fileUrl',
+    fileSize: 'fileSize',
+    mimeType: 'mimeType',
+    description: 'description',
+    uploadedById: 'uploadedById',
+    uploadedAt: 'uploadedAt',
+    removedAt: 'removedAt',
+    removedById: 'removedById',
+    removeReason: 'removeReason'
+  };
+
+  export type QualityAttachmentScalarFieldEnum = (typeof QualityAttachmentScalarFieldEnum)[keyof typeof QualityAttachmentScalarFieldEnum]
+
+
+  export const QualityEventScalarFieldEnum: {
+    id: 'id',
+    recordType: 'recordType',
+    recordId: 'recordId',
+    reference: 'reference',
+    action: 'action',
+    userId: 'userId',
+    userName: 'userName',
+    changes: 'changes',
+    note: 'note',
+    createdAt: 'createdAt'
+  };
+
+  export type QualityEventScalarFieldEnum = (typeof QualityEventScalarFieldEnum)[keyof typeof QualityEventScalarFieldEnum]
+
+
+  export const QualityReviewScalarFieldEnum: {
+    id: 'id',
+    facility: 'facility',
+    period: 'period',
+    reviewDate: 'reviewDate',
+    reviewedById: 'reviewedById',
+    reviewedByName: 'reviewedByName',
+    whatWasReviewed: 'whatWasReviewed',
+    notes: 'notes',
+    counts: 'counts',
+    linkedInstanceId: 'linkedInstanceId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type QualityReviewScalarFieldEnum = (typeof QualityReviewScalarFieldEnum)[keyof typeof QualityReviewScalarFieldEnum]
 
 
   export const NotificationScalarFieldEnum: {
@@ -92714,6 +100396,681 @@ export namespace Prisma {
     linkedInstanceId?: StringNullableWithAggregatesFilter<"ForeignMatterRecord"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"ForeignMatterRecord"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ForeignMatterRecord"> | Date | string
+  }
+
+  export type QualityCounterWhereInput = {
+    AND?: QualityCounterWhereInput | QualityCounterWhereInput[]
+    OR?: QualityCounterWhereInput[]
+    NOT?: QualityCounterWhereInput | QualityCounterWhereInput[]
+    kind?: StringFilter<"QualityCounter"> | string
+    year?: IntFilter<"QualityCounter"> | number
+    lastNumber?: IntFilter<"QualityCounter"> | number
+  }
+
+  export type QualityCounterOrderByWithRelationInput = {
+    kind?: SortOrder
+    year?: SortOrder
+    lastNumber?: SortOrder
+  }
+
+  export type QualityCounterWhereUniqueInput = Prisma.AtLeast<{
+    kind_year?: QualityCounterKindYearCompoundUniqueInput
+    AND?: QualityCounterWhereInput | QualityCounterWhereInput[]
+    OR?: QualityCounterWhereInput[]
+    NOT?: QualityCounterWhereInput | QualityCounterWhereInput[]
+    kind?: StringFilter<"QualityCounter"> | string
+    year?: IntFilter<"QualityCounter"> | number
+    lastNumber?: IntFilter<"QualityCounter"> | number
+  }, "kind_year">
+
+  export type QualityCounterOrderByWithAggregationInput = {
+    kind?: SortOrder
+    year?: SortOrder
+    lastNumber?: SortOrder
+    _count?: QualityCounterCountOrderByAggregateInput
+    _avg?: QualityCounterAvgOrderByAggregateInput
+    _max?: QualityCounterMaxOrderByAggregateInput
+    _min?: QualityCounterMinOrderByAggregateInput
+    _sum?: QualityCounterSumOrderByAggregateInput
+  }
+
+  export type QualityCounterScalarWhereWithAggregatesInput = {
+    AND?: QualityCounterScalarWhereWithAggregatesInput | QualityCounterScalarWhereWithAggregatesInput[]
+    OR?: QualityCounterScalarWhereWithAggregatesInput[]
+    NOT?: QualityCounterScalarWhereWithAggregatesInput | QualityCounterScalarWhereWithAggregatesInput[]
+    kind?: StringWithAggregatesFilter<"QualityCounter"> | string
+    year?: IntWithAggregatesFilter<"QualityCounter"> | number
+    lastNumber?: IntWithAggregatesFilter<"QualityCounter"> | number
+  }
+
+  export type QualityIncidentWhereInput = {
+    AND?: QualityIncidentWhereInput | QualityIncidentWhereInput[]
+    OR?: QualityIncidentWhereInput[]
+    NOT?: QualityIncidentWhereInput | QualityIncidentWhereInput[]
+    id?: StringFilter<"QualityIncident"> | string
+    reference?: StringFilter<"QualityIncident"> | string
+    facility?: StringNullableFilter<"QualityIncident"> | string | null
+    dateReceived?: DateTimeFilter<"QualityIncident"> | Date | string
+    channel?: StringFilter<"QualityIncident"> | string
+    customer?: StringFilter<"QualityIncident"> | string
+    productId?: StringNullableFilter<"QualityIncident"> | string | null
+    productName?: StringFilter<"QualityIncident"> | string
+    lotCode?: StringFilter<"QualityIncident"> | string
+    bestByDate?: DateTimeNullableFilter<"QualityIncident"> | Date | string | null
+    description?: StringFilter<"QualityIncident"> | string
+    category?: StringNullableFilter<"QualityIncident"> | string | null
+    foodSafetyConcern?: BoolFilter<"QualityIncident"> | boolean
+    immediateAction?: StringFilter<"QualityIncident"> | string
+    responseDate?: DateTimeNullableFilter<"QualityIncident"> | Date | string | null
+    responseChannel?: StringNullableFilter<"QualityIncident"> | string | null
+    responseSummary?: StringFilter<"QualityIncident"> | string
+    capaRequired?: BoolNullableFilter<"QualityIncident"> | boolean | null
+    noCapaReason?: StringFilter<"QualityIncident"> | string
+    status?: StringFilter<"QualityIncident"> | string
+    closedDate?: DateTimeNullableFilter<"QualityIncident"> | Date | string | null
+    closedById?: StringNullableFilter<"QualityIncident"> | string | null
+    voidedAt?: DateTimeNullableFilter<"QualityIncident"> | Date | string | null
+    voidedById?: StringNullableFilter<"QualityIncident"> | string | null
+    voidReason?: StringNullableFilter<"QualityIncident"> | string | null
+    createdById?: StringNullableFilter<"QualityIncident"> | string | null
+    updatedById?: StringNullableFilter<"QualityIncident"> | string | null
+    createdAt?: DateTimeFilter<"QualityIncident"> | Date | string
+    updatedAt?: DateTimeFilter<"QualityIncident"> | Date | string
+  }
+
+  export type QualityIncidentOrderByWithRelationInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    facility?: SortOrderInput | SortOrder
+    dateReceived?: SortOrder
+    channel?: SortOrder
+    customer?: SortOrder
+    productId?: SortOrderInput | SortOrder
+    productName?: SortOrder
+    lotCode?: SortOrder
+    bestByDate?: SortOrderInput | SortOrder
+    description?: SortOrder
+    category?: SortOrderInput | SortOrder
+    foodSafetyConcern?: SortOrder
+    immediateAction?: SortOrder
+    responseDate?: SortOrderInput | SortOrder
+    responseChannel?: SortOrderInput | SortOrder
+    responseSummary?: SortOrder
+    capaRequired?: SortOrderInput | SortOrder
+    noCapaReason?: SortOrder
+    status?: SortOrder
+    closedDate?: SortOrderInput | SortOrder
+    closedById?: SortOrderInput | SortOrder
+    voidedAt?: SortOrderInput | SortOrder
+    voidedById?: SortOrderInput | SortOrder
+    voidReason?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QualityIncidentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    reference?: string
+    AND?: QualityIncidentWhereInput | QualityIncidentWhereInput[]
+    OR?: QualityIncidentWhereInput[]
+    NOT?: QualityIncidentWhereInput | QualityIncidentWhereInput[]
+    facility?: StringNullableFilter<"QualityIncident"> | string | null
+    dateReceived?: DateTimeFilter<"QualityIncident"> | Date | string
+    channel?: StringFilter<"QualityIncident"> | string
+    customer?: StringFilter<"QualityIncident"> | string
+    productId?: StringNullableFilter<"QualityIncident"> | string | null
+    productName?: StringFilter<"QualityIncident"> | string
+    lotCode?: StringFilter<"QualityIncident"> | string
+    bestByDate?: DateTimeNullableFilter<"QualityIncident"> | Date | string | null
+    description?: StringFilter<"QualityIncident"> | string
+    category?: StringNullableFilter<"QualityIncident"> | string | null
+    foodSafetyConcern?: BoolFilter<"QualityIncident"> | boolean
+    immediateAction?: StringFilter<"QualityIncident"> | string
+    responseDate?: DateTimeNullableFilter<"QualityIncident"> | Date | string | null
+    responseChannel?: StringNullableFilter<"QualityIncident"> | string | null
+    responseSummary?: StringFilter<"QualityIncident"> | string
+    capaRequired?: BoolNullableFilter<"QualityIncident"> | boolean | null
+    noCapaReason?: StringFilter<"QualityIncident"> | string
+    status?: StringFilter<"QualityIncident"> | string
+    closedDate?: DateTimeNullableFilter<"QualityIncident"> | Date | string | null
+    closedById?: StringNullableFilter<"QualityIncident"> | string | null
+    voidedAt?: DateTimeNullableFilter<"QualityIncident"> | Date | string | null
+    voidedById?: StringNullableFilter<"QualityIncident"> | string | null
+    voidReason?: StringNullableFilter<"QualityIncident"> | string | null
+    createdById?: StringNullableFilter<"QualityIncident"> | string | null
+    updatedById?: StringNullableFilter<"QualityIncident"> | string | null
+    createdAt?: DateTimeFilter<"QualityIncident"> | Date | string
+    updatedAt?: DateTimeFilter<"QualityIncident"> | Date | string
+  }, "id" | "reference">
+
+  export type QualityIncidentOrderByWithAggregationInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    facility?: SortOrderInput | SortOrder
+    dateReceived?: SortOrder
+    channel?: SortOrder
+    customer?: SortOrder
+    productId?: SortOrderInput | SortOrder
+    productName?: SortOrder
+    lotCode?: SortOrder
+    bestByDate?: SortOrderInput | SortOrder
+    description?: SortOrder
+    category?: SortOrderInput | SortOrder
+    foodSafetyConcern?: SortOrder
+    immediateAction?: SortOrder
+    responseDate?: SortOrderInput | SortOrder
+    responseChannel?: SortOrderInput | SortOrder
+    responseSummary?: SortOrder
+    capaRequired?: SortOrderInput | SortOrder
+    noCapaReason?: SortOrder
+    status?: SortOrder
+    closedDate?: SortOrderInput | SortOrder
+    closedById?: SortOrderInput | SortOrder
+    voidedAt?: SortOrderInput | SortOrder
+    voidedById?: SortOrderInput | SortOrder
+    voidReason?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: QualityIncidentCountOrderByAggregateInput
+    _max?: QualityIncidentMaxOrderByAggregateInput
+    _min?: QualityIncidentMinOrderByAggregateInput
+  }
+
+  export type QualityIncidentScalarWhereWithAggregatesInput = {
+    AND?: QualityIncidentScalarWhereWithAggregatesInput | QualityIncidentScalarWhereWithAggregatesInput[]
+    OR?: QualityIncidentScalarWhereWithAggregatesInput[]
+    NOT?: QualityIncidentScalarWhereWithAggregatesInput | QualityIncidentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"QualityIncident"> | string
+    reference?: StringWithAggregatesFilter<"QualityIncident"> | string
+    facility?: StringNullableWithAggregatesFilter<"QualityIncident"> | string | null
+    dateReceived?: DateTimeWithAggregatesFilter<"QualityIncident"> | Date | string
+    channel?: StringWithAggregatesFilter<"QualityIncident"> | string
+    customer?: StringWithAggregatesFilter<"QualityIncident"> | string
+    productId?: StringNullableWithAggregatesFilter<"QualityIncident"> | string | null
+    productName?: StringWithAggregatesFilter<"QualityIncident"> | string
+    lotCode?: StringWithAggregatesFilter<"QualityIncident"> | string
+    bestByDate?: DateTimeNullableWithAggregatesFilter<"QualityIncident"> | Date | string | null
+    description?: StringWithAggregatesFilter<"QualityIncident"> | string
+    category?: StringNullableWithAggregatesFilter<"QualityIncident"> | string | null
+    foodSafetyConcern?: BoolWithAggregatesFilter<"QualityIncident"> | boolean
+    immediateAction?: StringWithAggregatesFilter<"QualityIncident"> | string
+    responseDate?: DateTimeNullableWithAggregatesFilter<"QualityIncident"> | Date | string | null
+    responseChannel?: StringNullableWithAggregatesFilter<"QualityIncident"> | string | null
+    responseSummary?: StringWithAggregatesFilter<"QualityIncident"> | string
+    capaRequired?: BoolNullableWithAggregatesFilter<"QualityIncident"> | boolean | null
+    noCapaReason?: StringWithAggregatesFilter<"QualityIncident"> | string
+    status?: StringWithAggregatesFilter<"QualityIncident"> | string
+    closedDate?: DateTimeNullableWithAggregatesFilter<"QualityIncident"> | Date | string | null
+    closedById?: StringNullableWithAggregatesFilter<"QualityIncident"> | string | null
+    voidedAt?: DateTimeNullableWithAggregatesFilter<"QualityIncident"> | Date | string | null
+    voidedById?: StringNullableWithAggregatesFilter<"QualityIncident"> | string | null
+    voidReason?: StringNullableWithAggregatesFilter<"QualityIncident"> | string | null
+    createdById?: StringNullableWithAggregatesFilter<"QualityIncident"> | string | null
+    updatedById?: StringNullableWithAggregatesFilter<"QualityIncident"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"QualityIncident"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"QualityIncident"> | Date | string
+  }
+
+  export type QualityCapaWhereInput = {
+    AND?: QualityCapaWhereInput | QualityCapaWhereInput[]
+    OR?: QualityCapaWhereInput[]
+    NOT?: QualityCapaWhereInput | QualityCapaWhereInput[]
+    id?: StringFilter<"QualityCapa"> | string
+    reference?: StringFilter<"QualityCapa"> | string
+    facility?: StringNullableFilter<"QualityCapa"> | string | null
+    source?: StringFilter<"QualityCapa"> | string
+    problem?: StringFilter<"QualityCapa"> | string
+    rootCause?: StringFilter<"QualityCapa"> | string
+    correctiveAction?: StringFilter<"QualityCapa"> | string
+    preventiveAction?: StringFilter<"QualityCapa"> | string
+    ownerId?: StringNullableFilter<"QualityCapa"> | string | null
+    dueDate?: DateTimeNullableFilter<"QualityCapa"> | Date | string | null
+    effectivenessDate?: DateTimeNullableFilter<"QualityCapa"> | Date | string | null
+    effectivenessResult?: StringFilter<"QualityCapa"> | string
+    status?: StringFilter<"QualityCapa"> | string
+    closedDate?: DateTimeNullableFilter<"QualityCapa"> | Date | string | null
+    closedById?: StringNullableFilter<"QualityCapa"> | string | null
+    closedByName?: StringNullableFilter<"QualityCapa"> | string | null
+    taskInstanceId?: StringNullableFilter<"QualityCapa"> | string | null
+    voidedAt?: DateTimeNullableFilter<"QualityCapa"> | Date | string | null
+    voidedById?: StringNullableFilter<"QualityCapa"> | string | null
+    voidReason?: StringNullableFilter<"QualityCapa"> | string | null
+    createdById?: StringNullableFilter<"QualityCapa"> | string | null
+    updatedById?: StringNullableFilter<"QualityCapa"> | string | null
+    createdAt?: DateTimeFilter<"QualityCapa"> | Date | string
+    updatedAt?: DateTimeFilter<"QualityCapa"> | Date | string
+  }
+
+  export type QualityCapaOrderByWithRelationInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    facility?: SortOrderInput | SortOrder
+    source?: SortOrder
+    problem?: SortOrder
+    rootCause?: SortOrder
+    correctiveAction?: SortOrder
+    preventiveAction?: SortOrder
+    ownerId?: SortOrderInput | SortOrder
+    dueDate?: SortOrderInput | SortOrder
+    effectivenessDate?: SortOrderInput | SortOrder
+    effectivenessResult?: SortOrder
+    status?: SortOrder
+    closedDate?: SortOrderInput | SortOrder
+    closedById?: SortOrderInput | SortOrder
+    closedByName?: SortOrderInput | SortOrder
+    taskInstanceId?: SortOrderInput | SortOrder
+    voidedAt?: SortOrderInput | SortOrder
+    voidedById?: SortOrderInput | SortOrder
+    voidReason?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QualityCapaWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    reference?: string
+    AND?: QualityCapaWhereInput | QualityCapaWhereInput[]
+    OR?: QualityCapaWhereInput[]
+    NOT?: QualityCapaWhereInput | QualityCapaWhereInput[]
+    facility?: StringNullableFilter<"QualityCapa"> | string | null
+    source?: StringFilter<"QualityCapa"> | string
+    problem?: StringFilter<"QualityCapa"> | string
+    rootCause?: StringFilter<"QualityCapa"> | string
+    correctiveAction?: StringFilter<"QualityCapa"> | string
+    preventiveAction?: StringFilter<"QualityCapa"> | string
+    ownerId?: StringNullableFilter<"QualityCapa"> | string | null
+    dueDate?: DateTimeNullableFilter<"QualityCapa"> | Date | string | null
+    effectivenessDate?: DateTimeNullableFilter<"QualityCapa"> | Date | string | null
+    effectivenessResult?: StringFilter<"QualityCapa"> | string
+    status?: StringFilter<"QualityCapa"> | string
+    closedDate?: DateTimeNullableFilter<"QualityCapa"> | Date | string | null
+    closedById?: StringNullableFilter<"QualityCapa"> | string | null
+    closedByName?: StringNullableFilter<"QualityCapa"> | string | null
+    taskInstanceId?: StringNullableFilter<"QualityCapa"> | string | null
+    voidedAt?: DateTimeNullableFilter<"QualityCapa"> | Date | string | null
+    voidedById?: StringNullableFilter<"QualityCapa"> | string | null
+    voidReason?: StringNullableFilter<"QualityCapa"> | string | null
+    createdById?: StringNullableFilter<"QualityCapa"> | string | null
+    updatedById?: StringNullableFilter<"QualityCapa"> | string | null
+    createdAt?: DateTimeFilter<"QualityCapa"> | Date | string
+    updatedAt?: DateTimeFilter<"QualityCapa"> | Date | string
+  }, "id" | "reference">
+
+  export type QualityCapaOrderByWithAggregationInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    facility?: SortOrderInput | SortOrder
+    source?: SortOrder
+    problem?: SortOrder
+    rootCause?: SortOrder
+    correctiveAction?: SortOrder
+    preventiveAction?: SortOrder
+    ownerId?: SortOrderInput | SortOrder
+    dueDate?: SortOrderInput | SortOrder
+    effectivenessDate?: SortOrderInput | SortOrder
+    effectivenessResult?: SortOrder
+    status?: SortOrder
+    closedDate?: SortOrderInput | SortOrder
+    closedById?: SortOrderInput | SortOrder
+    closedByName?: SortOrderInput | SortOrder
+    taskInstanceId?: SortOrderInput | SortOrder
+    voidedAt?: SortOrderInput | SortOrder
+    voidedById?: SortOrderInput | SortOrder
+    voidReason?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: QualityCapaCountOrderByAggregateInput
+    _max?: QualityCapaMaxOrderByAggregateInput
+    _min?: QualityCapaMinOrderByAggregateInput
+  }
+
+  export type QualityCapaScalarWhereWithAggregatesInput = {
+    AND?: QualityCapaScalarWhereWithAggregatesInput | QualityCapaScalarWhereWithAggregatesInput[]
+    OR?: QualityCapaScalarWhereWithAggregatesInput[]
+    NOT?: QualityCapaScalarWhereWithAggregatesInput | QualityCapaScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"QualityCapa"> | string
+    reference?: StringWithAggregatesFilter<"QualityCapa"> | string
+    facility?: StringNullableWithAggregatesFilter<"QualityCapa"> | string | null
+    source?: StringWithAggregatesFilter<"QualityCapa"> | string
+    problem?: StringWithAggregatesFilter<"QualityCapa"> | string
+    rootCause?: StringWithAggregatesFilter<"QualityCapa"> | string
+    correctiveAction?: StringWithAggregatesFilter<"QualityCapa"> | string
+    preventiveAction?: StringWithAggregatesFilter<"QualityCapa"> | string
+    ownerId?: StringNullableWithAggregatesFilter<"QualityCapa"> | string | null
+    dueDate?: DateTimeNullableWithAggregatesFilter<"QualityCapa"> | Date | string | null
+    effectivenessDate?: DateTimeNullableWithAggregatesFilter<"QualityCapa"> | Date | string | null
+    effectivenessResult?: StringWithAggregatesFilter<"QualityCapa"> | string
+    status?: StringWithAggregatesFilter<"QualityCapa"> | string
+    closedDate?: DateTimeNullableWithAggregatesFilter<"QualityCapa"> | Date | string | null
+    closedById?: StringNullableWithAggregatesFilter<"QualityCapa"> | string | null
+    closedByName?: StringNullableWithAggregatesFilter<"QualityCapa"> | string | null
+    taskInstanceId?: StringNullableWithAggregatesFilter<"QualityCapa"> | string | null
+    voidedAt?: DateTimeNullableWithAggregatesFilter<"QualityCapa"> | Date | string | null
+    voidedById?: StringNullableWithAggregatesFilter<"QualityCapa"> | string | null
+    voidReason?: StringNullableWithAggregatesFilter<"QualityCapa"> | string | null
+    createdById?: StringNullableWithAggregatesFilter<"QualityCapa"> | string | null
+    updatedById?: StringNullableWithAggregatesFilter<"QualityCapa"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"QualityCapa"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"QualityCapa"> | Date | string
+  }
+
+  export type QualityIncidentCapaWhereInput = {
+    AND?: QualityIncidentCapaWhereInput | QualityIncidentCapaWhereInput[]
+    OR?: QualityIncidentCapaWhereInput[]
+    NOT?: QualityIncidentCapaWhereInput | QualityIncidentCapaWhereInput[]
+    incidentId?: StringFilter<"QualityIncidentCapa"> | string
+    capaId?: StringFilter<"QualityIncidentCapa"> | string
+    linkedById?: StringNullableFilter<"QualityIncidentCapa"> | string | null
+    linkedAt?: DateTimeFilter<"QualityIncidentCapa"> | Date | string
+  }
+
+  export type QualityIncidentCapaOrderByWithRelationInput = {
+    incidentId?: SortOrder
+    capaId?: SortOrder
+    linkedById?: SortOrderInput | SortOrder
+    linkedAt?: SortOrder
+  }
+
+  export type QualityIncidentCapaWhereUniqueInput = Prisma.AtLeast<{
+    incidentId?: string
+    incidentId_capaId?: QualityIncidentCapaIncidentIdCapaIdCompoundUniqueInput
+    AND?: QualityIncidentCapaWhereInput | QualityIncidentCapaWhereInput[]
+    OR?: QualityIncidentCapaWhereInput[]
+    NOT?: QualityIncidentCapaWhereInput | QualityIncidentCapaWhereInput[]
+    capaId?: StringFilter<"QualityIncidentCapa"> | string
+    linkedById?: StringNullableFilter<"QualityIncidentCapa"> | string | null
+    linkedAt?: DateTimeFilter<"QualityIncidentCapa"> | Date | string
+  }, "incidentId_capaId" | "incidentId">
+
+  export type QualityIncidentCapaOrderByWithAggregationInput = {
+    incidentId?: SortOrder
+    capaId?: SortOrder
+    linkedById?: SortOrderInput | SortOrder
+    linkedAt?: SortOrder
+    _count?: QualityIncidentCapaCountOrderByAggregateInput
+    _max?: QualityIncidentCapaMaxOrderByAggregateInput
+    _min?: QualityIncidentCapaMinOrderByAggregateInput
+  }
+
+  export type QualityIncidentCapaScalarWhereWithAggregatesInput = {
+    AND?: QualityIncidentCapaScalarWhereWithAggregatesInput | QualityIncidentCapaScalarWhereWithAggregatesInput[]
+    OR?: QualityIncidentCapaScalarWhereWithAggregatesInput[]
+    NOT?: QualityIncidentCapaScalarWhereWithAggregatesInput | QualityIncidentCapaScalarWhereWithAggregatesInput[]
+    incidentId?: StringWithAggregatesFilter<"QualityIncidentCapa"> | string
+    capaId?: StringWithAggregatesFilter<"QualityIncidentCapa"> | string
+    linkedById?: StringNullableWithAggregatesFilter<"QualityIncidentCapa"> | string | null
+    linkedAt?: DateTimeWithAggregatesFilter<"QualityIncidentCapa"> | Date | string
+  }
+
+  export type QualityAttachmentWhereInput = {
+    AND?: QualityAttachmentWhereInput | QualityAttachmentWhereInput[]
+    OR?: QualityAttachmentWhereInput[]
+    NOT?: QualityAttachmentWhereInput | QualityAttachmentWhereInput[]
+    id?: StringFilter<"QualityAttachment"> | string
+    recordType?: StringFilter<"QualityAttachment"> | string
+    recordId?: StringFilter<"QualityAttachment"> | string
+    kind?: StringFilter<"QualityAttachment"> | string
+    fileName?: StringFilter<"QualityAttachment"> | string
+    fileUrl?: StringFilter<"QualityAttachment"> | string
+    fileSize?: IntNullableFilter<"QualityAttachment"> | number | null
+    mimeType?: StringNullableFilter<"QualityAttachment"> | string | null
+    description?: StringFilter<"QualityAttachment"> | string
+    uploadedById?: StringNullableFilter<"QualityAttachment"> | string | null
+    uploadedAt?: DateTimeFilter<"QualityAttachment"> | Date | string
+    removedAt?: DateTimeNullableFilter<"QualityAttachment"> | Date | string | null
+    removedById?: StringNullableFilter<"QualityAttachment"> | string | null
+    removeReason?: StringNullableFilter<"QualityAttachment"> | string | null
+  }
+
+  export type QualityAttachmentOrderByWithRelationInput = {
+    id?: SortOrder
+    recordType?: SortOrder
+    recordId?: SortOrder
+    kind?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrderInput | SortOrder
+    mimeType?: SortOrderInput | SortOrder
+    description?: SortOrder
+    uploadedById?: SortOrderInput | SortOrder
+    uploadedAt?: SortOrder
+    removedAt?: SortOrderInput | SortOrder
+    removedById?: SortOrderInput | SortOrder
+    removeReason?: SortOrderInput | SortOrder
+  }
+
+  export type QualityAttachmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: QualityAttachmentWhereInput | QualityAttachmentWhereInput[]
+    OR?: QualityAttachmentWhereInput[]
+    NOT?: QualityAttachmentWhereInput | QualityAttachmentWhereInput[]
+    recordType?: StringFilter<"QualityAttachment"> | string
+    recordId?: StringFilter<"QualityAttachment"> | string
+    kind?: StringFilter<"QualityAttachment"> | string
+    fileName?: StringFilter<"QualityAttachment"> | string
+    fileUrl?: StringFilter<"QualityAttachment"> | string
+    fileSize?: IntNullableFilter<"QualityAttachment"> | number | null
+    mimeType?: StringNullableFilter<"QualityAttachment"> | string | null
+    description?: StringFilter<"QualityAttachment"> | string
+    uploadedById?: StringNullableFilter<"QualityAttachment"> | string | null
+    uploadedAt?: DateTimeFilter<"QualityAttachment"> | Date | string
+    removedAt?: DateTimeNullableFilter<"QualityAttachment"> | Date | string | null
+    removedById?: StringNullableFilter<"QualityAttachment"> | string | null
+    removeReason?: StringNullableFilter<"QualityAttachment"> | string | null
+  }, "id">
+
+  export type QualityAttachmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    recordType?: SortOrder
+    recordId?: SortOrder
+    kind?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrderInput | SortOrder
+    mimeType?: SortOrderInput | SortOrder
+    description?: SortOrder
+    uploadedById?: SortOrderInput | SortOrder
+    uploadedAt?: SortOrder
+    removedAt?: SortOrderInput | SortOrder
+    removedById?: SortOrderInput | SortOrder
+    removeReason?: SortOrderInput | SortOrder
+    _count?: QualityAttachmentCountOrderByAggregateInput
+    _avg?: QualityAttachmentAvgOrderByAggregateInput
+    _max?: QualityAttachmentMaxOrderByAggregateInput
+    _min?: QualityAttachmentMinOrderByAggregateInput
+    _sum?: QualityAttachmentSumOrderByAggregateInput
+  }
+
+  export type QualityAttachmentScalarWhereWithAggregatesInput = {
+    AND?: QualityAttachmentScalarWhereWithAggregatesInput | QualityAttachmentScalarWhereWithAggregatesInput[]
+    OR?: QualityAttachmentScalarWhereWithAggregatesInput[]
+    NOT?: QualityAttachmentScalarWhereWithAggregatesInput | QualityAttachmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"QualityAttachment"> | string
+    recordType?: StringWithAggregatesFilter<"QualityAttachment"> | string
+    recordId?: StringWithAggregatesFilter<"QualityAttachment"> | string
+    kind?: StringWithAggregatesFilter<"QualityAttachment"> | string
+    fileName?: StringWithAggregatesFilter<"QualityAttachment"> | string
+    fileUrl?: StringWithAggregatesFilter<"QualityAttachment"> | string
+    fileSize?: IntNullableWithAggregatesFilter<"QualityAttachment"> | number | null
+    mimeType?: StringNullableWithAggregatesFilter<"QualityAttachment"> | string | null
+    description?: StringWithAggregatesFilter<"QualityAttachment"> | string
+    uploadedById?: StringNullableWithAggregatesFilter<"QualityAttachment"> | string | null
+    uploadedAt?: DateTimeWithAggregatesFilter<"QualityAttachment"> | Date | string
+    removedAt?: DateTimeNullableWithAggregatesFilter<"QualityAttachment"> | Date | string | null
+    removedById?: StringNullableWithAggregatesFilter<"QualityAttachment"> | string | null
+    removeReason?: StringNullableWithAggregatesFilter<"QualityAttachment"> | string | null
+  }
+
+  export type QualityEventWhereInput = {
+    AND?: QualityEventWhereInput | QualityEventWhereInput[]
+    OR?: QualityEventWhereInput[]
+    NOT?: QualityEventWhereInput | QualityEventWhereInput[]
+    id?: StringFilter<"QualityEvent"> | string
+    recordType?: StringFilter<"QualityEvent"> | string
+    recordId?: StringFilter<"QualityEvent"> | string
+    reference?: StringFilter<"QualityEvent"> | string
+    action?: StringFilter<"QualityEvent"> | string
+    userId?: StringNullableFilter<"QualityEvent"> | string | null
+    userName?: StringFilter<"QualityEvent"> | string
+    changes?: JsonFilter<"QualityEvent">
+    note?: StringNullableFilter<"QualityEvent"> | string | null
+    createdAt?: DateTimeFilter<"QualityEvent"> | Date | string
+  }
+
+  export type QualityEventOrderByWithRelationInput = {
+    id?: SortOrder
+    recordType?: SortOrder
+    recordId?: SortOrder
+    reference?: SortOrder
+    action?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    userName?: SortOrder
+    changes?: SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type QualityEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: QualityEventWhereInput | QualityEventWhereInput[]
+    OR?: QualityEventWhereInput[]
+    NOT?: QualityEventWhereInput | QualityEventWhereInput[]
+    recordType?: StringFilter<"QualityEvent"> | string
+    recordId?: StringFilter<"QualityEvent"> | string
+    reference?: StringFilter<"QualityEvent"> | string
+    action?: StringFilter<"QualityEvent"> | string
+    userId?: StringNullableFilter<"QualityEvent"> | string | null
+    userName?: StringFilter<"QualityEvent"> | string
+    changes?: JsonFilter<"QualityEvent">
+    note?: StringNullableFilter<"QualityEvent"> | string | null
+    createdAt?: DateTimeFilter<"QualityEvent"> | Date | string
+  }, "id">
+
+  export type QualityEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    recordType?: SortOrder
+    recordId?: SortOrder
+    reference?: SortOrder
+    action?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    userName?: SortOrder
+    changes?: SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: QualityEventCountOrderByAggregateInput
+    _max?: QualityEventMaxOrderByAggregateInput
+    _min?: QualityEventMinOrderByAggregateInput
+  }
+
+  export type QualityEventScalarWhereWithAggregatesInput = {
+    AND?: QualityEventScalarWhereWithAggregatesInput | QualityEventScalarWhereWithAggregatesInput[]
+    OR?: QualityEventScalarWhereWithAggregatesInput[]
+    NOT?: QualityEventScalarWhereWithAggregatesInput | QualityEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"QualityEvent"> | string
+    recordType?: StringWithAggregatesFilter<"QualityEvent"> | string
+    recordId?: StringWithAggregatesFilter<"QualityEvent"> | string
+    reference?: StringWithAggregatesFilter<"QualityEvent"> | string
+    action?: StringWithAggregatesFilter<"QualityEvent"> | string
+    userId?: StringNullableWithAggregatesFilter<"QualityEvent"> | string | null
+    userName?: StringWithAggregatesFilter<"QualityEvent"> | string
+    changes?: JsonWithAggregatesFilter<"QualityEvent">
+    note?: StringNullableWithAggregatesFilter<"QualityEvent"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"QualityEvent"> | Date | string
+  }
+
+  export type QualityReviewWhereInput = {
+    AND?: QualityReviewWhereInput | QualityReviewWhereInput[]
+    OR?: QualityReviewWhereInput[]
+    NOT?: QualityReviewWhereInput | QualityReviewWhereInput[]
+    id?: StringFilter<"QualityReview"> | string
+    facility?: StringNullableFilter<"QualityReview"> | string | null
+    period?: StringFilter<"QualityReview"> | string
+    reviewDate?: DateTimeFilter<"QualityReview"> | Date | string
+    reviewedById?: StringNullableFilter<"QualityReview"> | string | null
+    reviewedByName?: StringFilter<"QualityReview"> | string
+    whatWasReviewed?: StringFilter<"QualityReview"> | string
+    notes?: StringFilter<"QualityReview"> | string
+    counts?: JsonFilter<"QualityReview">
+    linkedInstanceId?: StringNullableFilter<"QualityReview"> | string | null
+    createdAt?: DateTimeFilter<"QualityReview"> | Date | string
+    updatedAt?: DateTimeFilter<"QualityReview"> | Date | string
+  }
+
+  export type QualityReviewOrderByWithRelationInput = {
+    id?: SortOrder
+    facility?: SortOrderInput | SortOrder
+    period?: SortOrder
+    reviewDate?: SortOrder
+    reviewedById?: SortOrderInput | SortOrder
+    reviewedByName?: SortOrder
+    whatWasReviewed?: SortOrder
+    notes?: SortOrder
+    counts?: SortOrder
+    linkedInstanceId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QualityReviewWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    period?: string
+    AND?: QualityReviewWhereInput | QualityReviewWhereInput[]
+    OR?: QualityReviewWhereInput[]
+    NOT?: QualityReviewWhereInput | QualityReviewWhereInput[]
+    facility?: StringNullableFilter<"QualityReview"> | string | null
+    reviewDate?: DateTimeFilter<"QualityReview"> | Date | string
+    reviewedById?: StringNullableFilter<"QualityReview"> | string | null
+    reviewedByName?: StringFilter<"QualityReview"> | string
+    whatWasReviewed?: StringFilter<"QualityReview"> | string
+    notes?: StringFilter<"QualityReview"> | string
+    counts?: JsonFilter<"QualityReview">
+    linkedInstanceId?: StringNullableFilter<"QualityReview"> | string | null
+    createdAt?: DateTimeFilter<"QualityReview"> | Date | string
+    updatedAt?: DateTimeFilter<"QualityReview"> | Date | string
+  }, "id" | "period">
+
+  export type QualityReviewOrderByWithAggregationInput = {
+    id?: SortOrder
+    facility?: SortOrderInput | SortOrder
+    period?: SortOrder
+    reviewDate?: SortOrder
+    reviewedById?: SortOrderInput | SortOrder
+    reviewedByName?: SortOrder
+    whatWasReviewed?: SortOrder
+    notes?: SortOrder
+    counts?: SortOrder
+    linkedInstanceId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: QualityReviewCountOrderByAggregateInput
+    _max?: QualityReviewMaxOrderByAggregateInput
+    _min?: QualityReviewMinOrderByAggregateInput
+  }
+
+  export type QualityReviewScalarWhereWithAggregatesInput = {
+    AND?: QualityReviewScalarWhereWithAggregatesInput | QualityReviewScalarWhereWithAggregatesInput[]
+    OR?: QualityReviewScalarWhereWithAggregatesInput[]
+    NOT?: QualityReviewScalarWhereWithAggregatesInput | QualityReviewScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"QualityReview"> | string
+    facility?: StringNullableWithAggregatesFilter<"QualityReview"> | string | null
+    period?: StringWithAggregatesFilter<"QualityReview"> | string
+    reviewDate?: DateTimeWithAggregatesFilter<"QualityReview"> | Date | string
+    reviewedById?: StringNullableWithAggregatesFilter<"QualityReview"> | string | null
+    reviewedByName?: StringWithAggregatesFilter<"QualityReview"> | string
+    whatWasReviewed?: StringWithAggregatesFilter<"QualityReview"> | string
+    notes?: StringWithAggregatesFilter<"QualityReview"> | string
+    counts?: JsonWithAggregatesFilter<"QualityReview">
+    linkedInstanceId?: StringNullableWithAggregatesFilter<"QualityReview"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"QualityReview"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"QualityReview"> | Date | string
   }
 
   export type NotificationWhereInput = {
@@ -100693,6 +109050,825 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type QualityCounterCreateInput = {
+    kind: string
+    year: number
+    lastNumber?: number
+  }
+
+  export type QualityCounterUncheckedCreateInput = {
+    kind: string
+    year: number
+    lastNumber?: number
+  }
+
+  export type QualityCounterUpdateInput = {
+    kind?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    lastNumber?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type QualityCounterUncheckedUpdateInput = {
+    kind?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    lastNumber?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type QualityCounterCreateManyInput = {
+    kind: string
+    year: number
+    lastNumber?: number
+  }
+
+  export type QualityCounterUpdateManyMutationInput = {
+    kind?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    lastNumber?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type QualityCounterUncheckedUpdateManyInput = {
+    kind?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    lastNumber?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type QualityIncidentCreateInput = {
+    id?: string
+    reference: string
+    facility?: string | null
+    dateReceived: Date | string
+    channel: string
+    customer?: string
+    productId?: string | null
+    productName?: string
+    lotCode?: string
+    bestByDate?: Date | string | null
+    description?: string
+    category?: string | null
+    foodSafetyConcern?: boolean
+    immediateAction?: string
+    responseDate?: Date | string | null
+    responseChannel?: string | null
+    responseSummary?: string
+    capaRequired?: boolean | null
+    noCapaReason?: string
+    status?: string
+    closedDate?: Date | string | null
+    closedById?: string | null
+    voidedAt?: Date | string | null
+    voidedById?: string | null
+    voidReason?: string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QualityIncidentUncheckedCreateInput = {
+    id?: string
+    reference: string
+    facility?: string | null
+    dateReceived: Date | string
+    channel: string
+    customer?: string
+    productId?: string | null
+    productName?: string
+    lotCode?: string
+    bestByDate?: Date | string | null
+    description?: string
+    category?: string | null
+    foodSafetyConcern?: boolean
+    immediateAction?: string
+    responseDate?: Date | string | null
+    responseChannel?: string | null
+    responseSummary?: string
+    capaRequired?: boolean | null
+    noCapaReason?: string
+    status?: string
+    closedDate?: Date | string | null
+    closedById?: string | null
+    voidedAt?: Date | string | null
+    voidedById?: string | null
+    voidReason?: string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QualityIncidentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    facility?: NullableStringFieldUpdateOperationsInput | string | null
+    dateReceived?: DateTimeFieldUpdateOperationsInput | Date | string
+    channel?: StringFieldUpdateOperationsInput | string
+    customer?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    lotCode?: StringFieldUpdateOperationsInput | string
+    bestByDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    foodSafetyConcern?: BoolFieldUpdateOperationsInput | boolean
+    immediateAction?: StringFieldUpdateOperationsInput | string
+    responseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    responseChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    responseSummary?: StringFieldUpdateOperationsInput | string
+    capaRequired?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    noCapaReason?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    closedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedById?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedById?: NullableStringFieldUpdateOperationsInput | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityIncidentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    facility?: NullableStringFieldUpdateOperationsInput | string | null
+    dateReceived?: DateTimeFieldUpdateOperationsInput | Date | string
+    channel?: StringFieldUpdateOperationsInput | string
+    customer?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    lotCode?: StringFieldUpdateOperationsInput | string
+    bestByDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    foodSafetyConcern?: BoolFieldUpdateOperationsInput | boolean
+    immediateAction?: StringFieldUpdateOperationsInput | string
+    responseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    responseChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    responseSummary?: StringFieldUpdateOperationsInput | string
+    capaRequired?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    noCapaReason?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    closedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedById?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedById?: NullableStringFieldUpdateOperationsInput | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityIncidentCreateManyInput = {
+    id?: string
+    reference: string
+    facility?: string | null
+    dateReceived: Date | string
+    channel: string
+    customer?: string
+    productId?: string | null
+    productName?: string
+    lotCode?: string
+    bestByDate?: Date | string | null
+    description?: string
+    category?: string | null
+    foodSafetyConcern?: boolean
+    immediateAction?: string
+    responseDate?: Date | string | null
+    responseChannel?: string | null
+    responseSummary?: string
+    capaRequired?: boolean | null
+    noCapaReason?: string
+    status?: string
+    closedDate?: Date | string | null
+    closedById?: string | null
+    voidedAt?: Date | string | null
+    voidedById?: string | null
+    voidReason?: string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QualityIncidentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    facility?: NullableStringFieldUpdateOperationsInput | string | null
+    dateReceived?: DateTimeFieldUpdateOperationsInput | Date | string
+    channel?: StringFieldUpdateOperationsInput | string
+    customer?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    lotCode?: StringFieldUpdateOperationsInput | string
+    bestByDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    foodSafetyConcern?: BoolFieldUpdateOperationsInput | boolean
+    immediateAction?: StringFieldUpdateOperationsInput | string
+    responseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    responseChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    responseSummary?: StringFieldUpdateOperationsInput | string
+    capaRequired?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    noCapaReason?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    closedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedById?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedById?: NullableStringFieldUpdateOperationsInput | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityIncidentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    facility?: NullableStringFieldUpdateOperationsInput | string | null
+    dateReceived?: DateTimeFieldUpdateOperationsInput | Date | string
+    channel?: StringFieldUpdateOperationsInput | string
+    customer?: StringFieldUpdateOperationsInput | string
+    productId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    lotCode?: StringFieldUpdateOperationsInput | string
+    bestByDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    foodSafetyConcern?: BoolFieldUpdateOperationsInput | boolean
+    immediateAction?: StringFieldUpdateOperationsInput | string
+    responseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    responseChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    responseSummary?: StringFieldUpdateOperationsInput | string
+    capaRequired?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    noCapaReason?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    closedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedById?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedById?: NullableStringFieldUpdateOperationsInput | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityCapaCreateInput = {
+    id?: string
+    reference: string
+    facility?: string | null
+    source: string
+    problem?: string
+    rootCause?: string
+    correctiveAction?: string
+    preventiveAction?: string
+    ownerId?: string | null
+    dueDate?: Date | string | null
+    effectivenessDate?: Date | string | null
+    effectivenessResult?: string
+    status?: string
+    closedDate?: Date | string | null
+    closedById?: string | null
+    closedByName?: string | null
+    taskInstanceId?: string | null
+    voidedAt?: Date | string | null
+    voidedById?: string | null
+    voidReason?: string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QualityCapaUncheckedCreateInput = {
+    id?: string
+    reference: string
+    facility?: string | null
+    source: string
+    problem?: string
+    rootCause?: string
+    correctiveAction?: string
+    preventiveAction?: string
+    ownerId?: string | null
+    dueDate?: Date | string | null
+    effectivenessDate?: Date | string | null
+    effectivenessResult?: string
+    status?: string
+    closedDate?: Date | string | null
+    closedById?: string | null
+    closedByName?: string | null
+    taskInstanceId?: string | null
+    voidedAt?: Date | string | null
+    voidedById?: string | null
+    voidReason?: string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QualityCapaUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    facility?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
+    problem?: StringFieldUpdateOperationsInput | string
+    rootCause?: StringFieldUpdateOperationsInput | string
+    correctiveAction?: StringFieldUpdateOperationsInput | string
+    preventiveAction?: StringFieldUpdateOperationsInput | string
+    ownerId?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectivenessDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectivenessResult?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    closedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedById?: NullableStringFieldUpdateOperationsInput | string | null
+    closedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedById?: NullableStringFieldUpdateOperationsInput | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityCapaUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    facility?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
+    problem?: StringFieldUpdateOperationsInput | string
+    rootCause?: StringFieldUpdateOperationsInput | string
+    correctiveAction?: StringFieldUpdateOperationsInput | string
+    preventiveAction?: StringFieldUpdateOperationsInput | string
+    ownerId?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectivenessDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectivenessResult?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    closedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedById?: NullableStringFieldUpdateOperationsInput | string | null
+    closedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedById?: NullableStringFieldUpdateOperationsInput | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityCapaCreateManyInput = {
+    id?: string
+    reference: string
+    facility?: string | null
+    source: string
+    problem?: string
+    rootCause?: string
+    correctiveAction?: string
+    preventiveAction?: string
+    ownerId?: string | null
+    dueDate?: Date | string | null
+    effectivenessDate?: Date | string | null
+    effectivenessResult?: string
+    status?: string
+    closedDate?: Date | string | null
+    closedById?: string | null
+    closedByName?: string | null
+    taskInstanceId?: string | null
+    voidedAt?: Date | string | null
+    voidedById?: string | null
+    voidReason?: string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QualityCapaUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    facility?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
+    problem?: StringFieldUpdateOperationsInput | string
+    rootCause?: StringFieldUpdateOperationsInput | string
+    correctiveAction?: StringFieldUpdateOperationsInput | string
+    preventiveAction?: StringFieldUpdateOperationsInput | string
+    ownerId?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectivenessDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectivenessResult?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    closedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedById?: NullableStringFieldUpdateOperationsInput | string | null
+    closedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedById?: NullableStringFieldUpdateOperationsInput | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityCapaUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    facility?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: StringFieldUpdateOperationsInput | string
+    problem?: StringFieldUpdateOperationsInput | string
+    rootCause?: StringFieldUpdateOperationsInput | string
+    correctiveAction?: StringFieldUpdateOperationsInput | string
+    preventiveAction?: StringFieldUpdateOperationsInput | string
+    ownerId?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectivenessDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    effectivenessResult?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    closedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    closedById?: NullableStringFieldUpdateOperationsInput | string | null
+    closedByName?: NullableStringFieldUpdateOperationsInput | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    voidedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voidedById?: NullableStringFieldUpdateOperationsInput | string | null
+    voidReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityIncidentCapaCreateInput = {
+    incidentId: string
+    capaId: string
+    linkedById?: string | null
+    linkedAt?: Date | string
+  }
+
+  export type QualityIncidentCapaUncheckedCreateInput = {
+    incidentId: string
+    capaId: string
+    linkedById?: string | null
+    linkedAt?: Date | string
+  }
+
+  export type QualityIncidentCapaUpdateInput = {
+    incidentId?: StringFieldUpdateOperationsInput | string
+    capaId?: StringFieldUpdateOperationsInput | string
+    linkedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityIncidentCapaUncheckedUpdateInput = {
+    incidentId?: StringFieldUpdateOperationsInput | string
+    capaId?: StringFieldUpdateOperationsInput | string
+    linkedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityIncidentCapaCreateManyInput = {
+    incidentId: string
+    capaId: string
+    linkedById?: string | null
+    linkedAt?: Date | string
+  }
+
+  export type QualityIncidentCapaUpdateManyMutationInput = {
+    incidentId?: StringFieldUpdateOperationsInput | string
+    capaId?: StringFieldUpdateOperationsInput | string
+    linkedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityIncidentCapaUncheckedUpdateManyInput = {
+    incidentId?: StringFieldUpdateOperationsInput | string
+    capaId?: StringFieldUpdateOperationsInput | string
+    linkedById?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityAttachmentCreateInput = {
+    id?: string
+    recordType: string
+    recordId: string
+    kind?: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    description?: string
+    uploadedById?: string | null
+    uploadedAt?: Date | string
+    removedAt?: Date | string | null
+    removedById?: string | null
+    removeReason?: string | null
+  }
+
+  export type QualityAttachmentUncheckedCreateInput = {
+    id?: string
+    recordType: string
+    recordId: string
+    kind?: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    description?: string
+    uploadedById?: string | null
+    uploadedAt?: Date | string
+    removedAt?: Date | string | null
+    removedById?: string | null
+    removeReason?: string | null
+  }
+
+  export type QualityAttachmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    recordId?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    uploadedById?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    removedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    removedById?: NullableStringFieldUpdateOperationsInput | string | null
+    removeReason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type QualityAttachmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    recordId?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    uploadedById?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    removedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    removedById?: NullableStringFieldUpdateOperationsInput | string | null
+    removeReason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type QualityAttachmentCreateManyInput = {
+    id?: string
+    recordType: string
+    recordId: string
+    kind?: string
+    fileName: string
+    fileUrl: string
+    fileSize?: number | null
+    mimeType?: string | null
+    description?: string
+    uploadedById?: string | null
+    uploadedAt?: Date | string
+    removedAt?: Date | string | null
+    removedById?: string | null
+    removeReason?: string | null
+  }
+
+  export type QualityAttachmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    recordId?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    uploadedById?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    removedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    removedById?: NullableStringFieldUpdateOperationsInput | string | null
+    removeReason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type QualityAttachmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    recordId?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    mimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    uploadedById?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    removedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    removedById?: NullableStringFieldUpdateOperationsInput | string | null
+    removeReason?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type QualityEventCreateInput = {
+    id?: string
+    recordType: string
+    recordId: string
+    reference?: string
+    action: string
+    userId?: string | null
+    userName?: string
+    changes?: JsonNullValueInput | InputJsonValue
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type QualityEventUncheckedCreateInput = {
+    id?: string
+    recordType: string
+    recordId: string
+    reference?: string
+    action: string
+    userId?: string | null
+    userName?: string
+    changes?: JsonNullValueInput | InputJsonValue
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type QualityEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    recordId?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    userName?: StringFieldUpdateOperationsInput | string
+    changes?: JsonNullValueInput | InputJsonValue
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    recordId?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    userName?: StringFieldUpdateOperationsInput | string
+    changes?: JsonNullValueInput | InputJsonValue
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityEventCreateManyInput = {
+    id?: string
+    recordType: string
+    recordId: string
+    reference?: string
+    action: string
+    userId?: string | null
+    userName?: string
+    changes?: JsonNullValueInput | InputJsonValue
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type QualityEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    recordId?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    userName?: StringFieldUpdateOperationsInput | string
+    changes?: JsonNullValueInput | InputJsonValue
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    recordId?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    userName?: StringFieldUpdateOperationsInput | string
+    changes?: JsonNullValueInput | InputJsonValue
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityReviewCreateInput = {
+    id?: string
+    facility?: string | null
+    period: string
+    reviewDate: Date | string
+    reviewedById?: string | null
+    reviewedByName?: string
+    whatWasReviewed?: string
+    notes?: string
+    counts?: JsonNullValueInput | InputJsonValue
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QualityReviewUncheckedCreateInput = {
+    id?: string
+    facility?: string | null
+    period: string
+    reviewDate: Date | string
+    reviewedById?: string | null
+    reviewedByName?: string
+    whatWasReviewed?: string
+    notes?: string
+    counts?: JsonNullValueInput | InputJsonValue
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QualityReviewUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: NullableStringFieldUpdateOperationsInput | string | null
+    period?: StringFieldUpdateOperationsInput | string
+    reviewDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedByName?: StringFieldUpdateOperationsInput | string
+    whatWasReviewed?: StringFieldUpdateOperationsInput | string
+    notes?: StringFieldUpdateOperationsInput | string
+    counts?: JsonNullValueInput | InputJsonValue
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityReviewUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: NullableStringFieldUpdateOperationsInput | string | null
+    period?: StringFieldUpdateOperationsInput | string
+    reviewDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedByName?: StringFieldUpdateOperationsInput | string
+    whatWasReviewed?: StringFieldUpdateOperationsInput | string
+    notes?: StringFieldUpdateOperationsInput | string
+    counts?: JsonNullValueInput | InputJsonValue
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityReviewCreateManyInput = {
+    id?: string
+    facility?: string | null
+    period: string
+    reviewDate: Date | string
+    reviewedById?: string | null
+    reviewedByName?: string
+    whatWasReviewed?: string
+    notes?: string
+    counts?: JsonNullValueInput | InputJsonValue
+    linkedInstanceId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QualityReviewUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: NullableStringFieldUpdateOperationsInput | string | null
+    period?: StringFieldUpdateOperationsInput | string
+    reviewDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedByName?: StringFieldUpdateOperationsInput | string
+    whatWasReviewed?: StringFieldUpdateOperationsInput | string
+    notes?: StringFieldUpdateOperationsInput | string
+    counts?: JsonNullValueInput | InputJsonValue
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QualityReviewUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: NullableStringFieldUpdateOperationsInput | string | null
+    period?: StringFieldUpdateOperationsInput | string
+    reviewDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedByName?: StringFieldUpdateOperationsInput | string
+    whatWasReviewed?: StringFieldUpdateOperationsInput | string
+    notes?: StringFieldUpdateOperationsInput | string
+    counts?: JsonNullValueInput | InputJsonValue
+    linkedInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type NotificationCreateInput = {
     id?: string
     type: $Enums.NotificationType
@@ -105805,6 +114981,381 @@ export namespace Prisma {
     listVersion?: SortOrder
     okCount?: SortOrder
     failCount?: SortOrder
+  }
+
+  export type QualityCounterKindYearCompoundUniqueInput = {
+    kind: string
+    year: number
+  }
+
+  export type QualityCounterCountOrderByAggregateInput = {
+    kind?: SortOrder
+    year?: SortOrder
+    lastNumber?: SortOrder
+  }
+
+  export type QualityCounterAvgOrderByAggregateInput = {
+    year?: SortOrder
+    lastNumber?: SortOrder
+  }
+
+  export type QualityCounterMaxOrderByAggregateInput = {
+    kind?: SortOrder
+    year?: SortOrder
+    lastNumber?: SortOrder
+  }
+
+  export type QualityCounterMinOrderByAggregateInput = {
+    kind?: SortOrder
+    year?: SortOrder
+    lastNumber?: SortOrder
+  }
+
+  export type QualityCounterSumOrderByAggregateInput = {
+    year?: SortOrder
+    lastNumber?: SortOrder
+  }
+
+  export type QualityIncidentCountOrderByAggregateInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    facility?: SortOrder
+    dateReceived?: SortOrder
+    channel?: SortOrder
+    customer?: SortOrder
+    productId?: SortOrder
+    productName?: SortOrder
+    lotCode?: SortOrder
+    bestByDate?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    foodSafetyConcern?: SortOrder
+    immediateAction?: SortOrder
+    responseDate?: SortOrder
+    responseChannel?: SortOrder
+    responseSummary?: SortOrder
+    capaRequired?: SortOrder
+    noCapaReason?: SortOrder
+    status?: SortOrder
+    closedDate?: SortOrder
+    closedById?: SortOrder
+    voidedAt?: SortOrder
+    voidedById?: SortOrder
+    voidReason?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QualityIncidentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    facility?: SortOrder
+    dateReceived?: SortOrder
+    channel?: SortOrder
+    customer?: SortOrder
+    productId?: SortOrder
+    productName?: SortOrder
+    lotCode?: SortOrder
+    bestByDate?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    foodSafetyConcern?: SortOrder
+    immediateAction?: SortOrder
+    responseDate?: SortOrder
+    responseChannel?: SortOrder
+    responseSummary?: SortOrder
+    capaRequired?: SortOrder
+    noCapaReason?: SortOrder
+    status?: SortOrder
+    closedDate?: SortOrder
+    closedById?: SortOrder
+    voidedAt?: SortOrder
+    voidedById?: SortOrder
+    voidReason?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QualityIncidentMinOrderByAggregateInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    facility?: SortOrder
+    dateReceived?: SortOrder
+    channel?: SortOrder
+    customer?: SortOrder
+    productId?: SortOrder
+    productName?: SortOrder
+    lotCode?: SortOrder
+    bestByDate?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    foodSafetyConcern?: SortOrder
+    immediateAction?: SortOrder
+    responseDate?: SortOrder
+    responseChannel?: SortOrder
+    responseSummary?: SortOrder
+    capaRequired?: SortOrder
+    noCapaReason?: SortOrder
+    status?: SortOrder
+    closedDate?: SortOrder
+    closedById?: SortOrder
+    voidedAt?: SortOrder
+    voidedById?: SortOrder
+    voidReason?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QualityCapaCountOrderByAggregateInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    facility?: SortOrder
+    source?: SortOrder
+    problem?: SortOrder
+    rootCause?: SortOrder
+    correctiveAction?: SortOrder
+    preventiveAction?: SortOrder
+    ownerId?: SortOrder
+    dueDate?: SortOrder
+    effectivenessDate?: SortOrder
+    effectivenessResult?: SortOrder
+    status?: SortOrder
+    closedDate?: SortOrder
+    closedById?: SortOrder
+    closedByName?: SortOrder
+    taskInstanceId?: SortOrder
+    voidedAt?: SortOrder
+    voidedById?: SortOrder
+    voidReason?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QualityCapaMaxOrderByAggregateInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    facility?: SortOrder
+    source?: SortOrder
+    problem?: SortOrder
+    rootCause?: SortOrder
+    correctiveAction?: SortOrder
+    preventiveAction?: SortOrder
+    ownerId?: SortOrder
+    dueDate?: SortOrder
+    effectivenessDate?: SortOrder
+    effectivenessResult?: SortOrder
+    status?: SortOrder
+    closedDate?: SortOrder
+    closedById?: SortOrder
+    closedByName?: SortOrder
+    taskInstanceId?: SortOrder
+    voidedAt?: SortOrder
+    voidedById?: SortOrder
+    voidReason?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QualityCapaMinOrderByAggregateInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    facility?: SortOrder
+    source?: SortOrder
+    problem?: SortOrder
+    rootCause?: SortOrder
+    correctiveAction?: SortOrder
+    preventiveAction?: SortOrder
+    ownerId?: SortOrder
+    dueDate?: SortOrder
+    effectivenessDate?: SortOrder
+    effectivenessResult?: SortOrder
+    status?: SortOrder
+    closedDate?: SortOrder
+    closedById?: SortOrder
+    closedByName?: SortOrder
+    taskInstanceId?: SortOrder
+    voidedAt?: SortOrder
+    voidedById?: SortOrder
+    voidReason?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QualityIncidentCapaIncidentIdCapaIdCompoundUniqueInput = {
+    incidentId: string
+    capaId: string
+  }
+
+  export type QualityIncidentCapaCountOrderByAggregateInput = {
+    incidentId?: SortOrder
+    capaId?: SortOrder
+    linkedById?: SortOrder
+    linkedAt?: SortOrder
+  }
+
+  export type QualityIncidentCapaMaxOrderByAggregateInput = {
+    incidentId?: SortOrder
+    capaId?: SortOrder
+    linkedById?: SortOrder
+    linkedAt?: SortOrder
+  }
+
+  export type QualityIncidentCapaMinOrderByAggregateInput = {
+    incidentId?: SortOrder
+    capaId?: SortOrder
+    linkedById?: SortOrder
+    linkedAt?: SortOrder
+  }
+
+  export type QualityAttachmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    recordType?: SortOrder
+    recordId?: SortOrder
+    kind?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrder
+    mimeType?: SortOrder
+    description?: SortOrder
+    uploadedById?: SortOrder
+    uploadedAt?: SortOrder
+    removedAt?: SortOrder
+    removedById?: SortOrder
+    removeReason?: SortOrder
+  }
+
+  export type QualityAttachmentAvgOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
+  export type QualityAttachmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    recordType?: SortOrder
+    recordId?: SortOrder
+    kind?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrder
+    mimeType?: SortOrder
+    description?: SortOrder
+    uploadedById?: SortOrder
+    uploadedAt?: SortOrder
+    removedAt?: SortOrder
+    removedById?: SortOrder
+    removeReason?: SortOrder
+  }
+
+  export type QualityAttachmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    recordType?: SortOrder
+    recordId?: SortOrder
+    kind?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrder
+    mimeType?: SortOrder
+    description?: SortOrder
+    uploadedById?: SortOrder
+    uploadedAt?: SortOrder
+    removedAt?: SortOrder
+    removedById?: SortOrder
+    removeReason?: SortOrder
+  }
+
+  export type QualityAttachmentSumOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
+  export type QualityEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    recordType?: SortOrder
+    recordId?: SortOrder
+    reference?: SortOrder
+    action?: SortOrder
+    userId?: SortOrder
+    userName?: SortOrder
+    changes?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type QualityEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    recordType?: SortOrder
+    recordId?: SortOrder
+    reference?: SortOrder
+    action?: SortOrder
+    userId?: SortOrder
+    userName?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type QualityEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    recordType?: SortOrder
+    recordId?: SortOrder
+    reference?: SortOrder
+    action?: SortOrder
+    userId?: SortOrder
+    userName?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type QualityReviewCountOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    reviewDate?: SortOrder
+    reviewedById?: SortOrder
+    reviewedByName?: SortOrder
+    whatWasReviewed?: SortOrder
+    notes?: SortOrder
+    counts?: SortOrder
+    linkedInstanceId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QualityReviewMaxOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    reviewDate?: SortOrder
+    reviewedById?: SortOrder
+    reviewedByName?: SortOrder
+    whatWasReviewed?: SortOrder
+    notes?: SortOrder
+    linkedInstanceId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QualityReviewMinOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    period?: SortOrder
+    reviewDate?: SortOrder
+    reviewedById?: SortOrder
+    reviewedByName?: SortOrder
+    whatWasReviewed?: SortOrder
+    notes?: SortOrder
+    linkedInstanceId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EnumNotificationTypeFilter<$PrismaModel = never> = {
@@ -150896,6 +160447,34 @@ export namespace Prisma {
      * @deprecated Use ForeignMatterRecordDefaultArgs instead
      */
     export type ForeignMatterRecordArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ForeignMatterRecordDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use QualityCounterDefaultArgs instead
+     */
+    export type QualityCounterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = QualityCounterDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use QualityIncidentDefaultArgs instead
+     */
+    export type QualityIncidentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = QualityIncidentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use QualityCapaDefaultArgs instead
+     */
+    export type QualityCapaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = QualityCapaDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use QualityIncidentCapaDefaultArgs instead
+     */
+    export type QualityIncidentCapaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = QualityIncidentCapaDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use QualityAttachmentDefaultArgs instead
+     */
+    export type QualityAttachmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = QualityAttachmentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use QualityEventDefaultArgs instead
+     */
+    export type QualityEventArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = QualityEventDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use QualityReviewDefaultArgs instead
+     */
+    export type QualityReviewArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = QualityReviewDefaultArgs<ExtArgs>
     /**
      * @deprecated Use NotificationDefaultArgs instead
      */

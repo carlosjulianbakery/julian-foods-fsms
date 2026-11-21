@@ -1686,6 +1686,152 @@ model ForeignMatterRecord {
   @@map("foreign_matter_records")
 }
 
+// ── Quality: Customer Incidents and CAPA ──────────────────────────────────────
+// Foreign keys to users and products exist in the database; they are kept as plain ids here.
+
+// Last number handed out per kind ('CI' | 'CAPA') and Pacific year. Never decreases.
+model QualityCounter {
+  kind       String
+  year       Int
+  lastNumber Int    @default(0)
+
+  @@id([kind, year])
+  @@map("quality_counters")
+}
+
+model QualityIncident {
+  id                String    @id @default(cuid())
+  reference         String    @unique(map: "quality_incidents_reference_key")
+  facility          String? // null = company-wide
+  dateReceived      DateTime  @db.Date
+  channel           String
+  customer          String    @default("")
+  productId         String?
+  productName       String    @default("")
+  lotCode           String    @default("")
+  bestByDate        DateTime? @db.Date
+  description       String    @default("")
+  category          String?
+  foodSafetyConcern Boolean   @default(false)
+  immediateAction   String    @default("")
+  responseDate      DateTime? @db.Date
+  responseChannel   String?
+  responseSummary   String    @default("")
+  // CAPA decision: true = a CAPA is linked, false = none needed (noCapaReason says why), null = not decided
+  capaRequired      Boolean?
+  noCapaReason      String    @default("")
+  status            String    @default("open")
+  closedDate        DateTime? @db.Date
+  closedById        String?
+  voidedAt          DateTime?
+  voidedById        String?
+  voidReason        String?
+  createdById       String?
+  updatedById       String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @default(now())
+
+  @@index([status, dateReceived], map: "quality_incidents_status_idx")
+  @@map("quality_incidents")
+}
+
+model QualityCapa {
+  id                  String    @id @default(cuid())
+  reference           String    @unique(map: "quality_capas_reference_key")
+  facility            String?
+  source              String
+  problem             String    @default("")
+  rootCause           String    @default("")
+  correctiveAction    String    @default("")
+  preventiveAction    String    @default("")
+  ownerId             String?
+  dueDate             DateTime? @db.Date
+  effectivenessDate   DateTime? @db.Date
+  effectivenessResult String    @default("")
+  status              String    @default("open")
+  closedDate          DateTime? @db.Date
+  closedById          String?
+  closedByName        String?
+  taskInstanceId      String?
+  voidedAt            DateTime?
+  voidedById          String?
+  voidReason          String?
+  createdById         String?
+  updatedById         String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @default(now())
+
+  @@index([status, dueDate], map: "quality_capas_status_idx")
+  @@map("quality_capas")
+}
+
+// One CAPA can cover several incidents; an incident has at most one CAPA.
+model QualityIncidentCapa {
+  incidentId String   @unique(map: "quality_incident_capas_incident_key")
+  capaId     String
+  linkedById String?
+  linkedAt   DateTime @default(now())
+
+  @@id([incidentId, capaId])
+  @@map("quality_incident_capas")
+}
+
+// Later phase (no code yet).
+model QualityAttachment {
+  id           String    @id @default(cuid())
+  recordType   String
+  recordId     String
+  kind         String    @default("evidence")
+  fileName     String
+  fileUrl      String
+  fileSize     Int?
+  mimeType     String?
+  description  String    @default("")
+  uploadedById String?
+  uploadedAt   DateTime  @default(now())
+  removedAt    DateTime?
+  removedById  String?
+  removeReason String?
+
+  @@index([recordType, recordId], map: "quality_attachments_record_idx")
+  @@map("quality_attachments")
+}
+
+// The history. Append-only: no route updates or deletes a row, and a database trigger refuses both.
+model QualityEvent {
+  id         String   @id @default(cuid())
+  recordType String // 'incident' | 'capa'
+  recordId   String
+  reference  String   @default("")
+  action     String
+  userId     String?
+  userName   String   @default("")
+  changes    Json     @default("[]")
+  note       String?
+  createdAt  DateTime @default(now())
+
+  @@index([recordType, recordId, createdAt], map: "quality_events_record_idx")
+  @@map("quality_events")
+}
+
+// Later phase (no code yet).
+model QualityReview {
+  id               String   @id @default(cuid())
+  facility         String?
+  period           String   @unique(map: "quality_reviews_period_key")
+  reviewDate       DateTime @db.Date
+  reviewedById     String?
+  reviewedByName   String   @default("")
+  whatWasReviewed  String   @default("")
+  notes            String   @default("")
+  counts           Json     @default("{}")
+  linkedInstanceId String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now())
+
+  @@map("quality_reviews")
+}
+
 model Notification {
   id         String           @id @default(cuid())
   userId     String
