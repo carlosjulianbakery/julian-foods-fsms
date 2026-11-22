@@ -40,6 +40,7 @@ import {
   ClipboardX,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { QUALITY_ROLES, canUseQuality } from "@/lib/quality";
 
 import { cn } from "@/lib/utils";
 
@@ -231,11 +232,16 @@ const inventoryNav = [
     icon: ShieldAlert,
     roles: ["ADMIN"],
   },
+];
+
+// Quality — Customer Incidents and CAPA. Its own section, right under the general entries.
+// Who sees it is decided by canUseQuality (the same check the pages and the routes use), not by a role list here.
+const qualityNav = [
   {
     label: "Quality",
     href: "/dashboard/admin/quality",
     icon: ShieldCheck,
-    roles: ["ADMIN"],
+    roles: [...QUALITY_ROLES],
   },
 ];
 
@@ -465,6 +471,8 @@ export function Sidebar() {
   }, [role]);
 
   const visibleGeneral            = generalNav.filter((item)            => item.roles.includes(role));
+  // No session means no Quality entry, whatever the fallback role above is
+  const visibleQuality            = canUseQuality(session?.user?.role) ? qualityNav : [];
   const visibleForms              = formsNav.filter((item)              => item.roles.includes(role));
   const visibleLogs               = logsNav.filter((item)               => item.roles.includes(role));
   const visibleInventory          = inventoryNav.filter((item)          => item.roles.includes(role));
@@ -549,6 +557,19 @@ export function Sidebar() {
         {visibleGeneral.map((item) => (
           <NavLink key={item.href} item={item} />
         ))}
+
+        {visibleQuality.length > 0 && (
+          <>
+            <div className="pt-4 pb-1 px-3" data-nav-section="quality">
+              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
+                Quality
+              </p>
+            </div>
+            {visibleQuality.map((item) => (
+              <NavLink key={item.href} item={item} />
+            ))}
+          </>
+        )}
 
         {visibleForms.length > 0 && (
           <>

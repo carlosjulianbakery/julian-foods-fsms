@@ -4,8 +4,14 @@
  * and the list filters. Nothing here touches the database.
  */
 
-/** The one permission check for the whole Quality area: admins only. */
-export const canUseQuality = (role: string | null | undefined): boolean => role === "ADMIN";
+/** The roles that may use the Quality area. The app has two roles, ADMIN and SUPERVISOR; Quality is for admins. */
+export const QUALITY_ROLES: readonly string[] = ["ADMIN"];
+
+/**
+ * The one permission check for the whole Quality area — routes, pages and the navigation entry all
+ * use this and nothing else.
+ */
+export const canUseQuality = (role: string | null | undefined): boolean => !!role && QUALITY_ROLES.includes(role);
 
 // ── Fixed lists (stored value → label). Kept as dropdowns so trends can be worked out later. ──
 

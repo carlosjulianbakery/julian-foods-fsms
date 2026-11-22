@@ -313,7 +313,8 @@ describe("sidebar and files", () => {
     const at = sidebar.indexOf('label: "Quality"');
     const entry = sidebar.slice(at, sidebar.indexOf("},", at));
     expect(entry).toContain('href: "/dashboard/admin/quality"');
-    expect(entry).toContain('roles: ["ADMIN"]');
+    // who sees it is decided by canUseQuality: see src/components/layout/__tests__/QualityNav.test.tsx
+    expect(sidebar).toContain("canUseQuality(session?.user?.role) ? qualityNav : []");
   });
   it("the pages check canUseQuality on the server before rendering anything", () => {
     for (const page of ["page.tsx", "incidents/[id]/page.tsx", "capas/[id]/page.tsx"]) {
