@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { DateInput } from "@/components/DateInput";
+import { AttachmentsSection } from "@/components/quality/QualityAttachments";
 import { ClosureChecklist, Field, ProblemList, QualityHistory, ReadValue, StatusBadge, StatusButtons, type QualityEventRow, type StatusButton } from "@/components/quality/QualityParts";
 import {
   CAPA_ORDER, CAPA_SOURCES, CAPA_STATUSES, CATEGORIES, CHANNELS, COMPANY_WIDE, FACILITIES, INCIDENT_STATUSES, RESPONSE_CHANNELS, capaCanClose, capaClosingProblems,
-  diffFields, facilityLabel, formatDay, formatMoment, incidentClosingProblems, isReadOnly, type FieldProblem,
+  diffFields, facilityLabel, formatDay, formatMoment, incidentClosingProblems, isReadOnly, type AttachmentRow, type FieldProblem,
 } from "@/lib/quality";
 
 export interface QualityOptions { products: { id: string; name: string }[]; admins: { id: string; name: string }[]; today: string }
@@ -24,7 +25,11 @@ interface Common {
   onSave: (changed: Values) => void;
   /** A status action: move, close, void or reopen. */
   onAction: (body: { action: string; to?: string; reason?: string; closedDate?: string }) => void;
+  attachments?: AttachmentRow[];
+  onUpload?: (file: File, kind: "evidence" | "customer_response", description: string) => void;
+  onRemoveAttachment?: (id: string, reason: string) => void;
 }
+const nothing = () => {};
 
 /** Text, select and date inputs that turn into plain text when the record is read-only. */
 function useDraft(record: Values, readOnly: boolean) {
@@ -84,6 +89,8 @@ export function IncidentRecord(p: IncidentRecordProps) {
   const status = text(p.record.status);
   // The checklist looks at what is SAVED, so it always matches what closing would check
   const closing = incidentClosingProblems(p.record as never, !!p.capa, closedDate);
+  const attachments = p.attachments ?? [];
+  const activeAttachments = attachments.filter((a) => !a.removedAt).length;
   const buttons: StatusButton[] = readOnly
     ? [{ key: "reopen", label: "Reopen", needsReason: true }]
     : [
@@ -140,6 +147,12 @@ export function IncidentRecord(p: IncidentRecordProps) {
         <Field label="Date of the response">{d.date("responseDate")}</Field>
         <Field label="Channel">{d.select("responseChannel", RESPONSE_CHANNELS)}</Field>
         <Field label="Short summary of the message" wide>{d.input("responseSummary", 3)}</Field>
+        <div className="md:col-span-2">
+          <AttachmentsSection
+            attachments={attachments} kind="customer_response" title="Message sent to the customer" addLabel="Attach the message sent"
+            recordActiveCount={activeAttachments} readOnly={readOnly} busy={p.busy} onUpload={p.onUpload ?? nothing} onRemove={p.onRemoveAttachment ?? nothing}
+          />
+        </div>
       </section>
 
       <section className="card p-4 space-y-3" data-section="capa">
@@ -170,6 +183,13 @@ export function IncidentRecord(p: IncidentRecordProps) {
             {(d.draft.capaRequired === false || text(d.draft.noCapaReason)) && <Field label="Reason no CAPA is needed (required with that choice)">{d.input("noCapaReason", 2)}</Field>}
           </>
         )}
+      </section>
+
+      <section className="card p-4" data-section="attachments">
+        <AttachmentsSection
+          attachments={attachments} kind="evidence" title="Attachments" addLabel="Add a file"
+          recordActiveCount={activeAttachments} readOnly={readOnly} busy={p.busy} onUpload={p.onUpload ?? nothing} onRemove={p.onRemoveAttachment ?? nothing}
+        />
       </section>
 
       {!readOnly && (
@@ -203,7 +223,11 @@ export interface CapaRecordProps extends Common {
   onLink: (incidentId: string) => void;
   onUnlink: (incidentId: string, reason: string) => void;
   onGoToIncident: (id: string) => void;
+  /** The follow-up task, if the CAPA has one. */
+  task?: { id: string; status: string; dueDate: string; completedLate?: boolean; daysLate?: number | null } | null;
 }
+
+const TASK_STATUS: Record<string, string> = { UPCOMING: "Upcoming", DUE_TODAY: "Due today", IN_PROGRESS: "In progress", OVERDUE: "Overdue", DONE: "Done", SKIPPED: "Skipped", MISSED: "Missed" };
 
 export function CapaRecord(p: CapaRecordProps) {
   const readOnly = isReadOnly(text(p.record.status));
@@ -259,6 +283,11 @@ export function CapaRecord(p: CapaRecordProps) {
           )}
         </Field>
         <Field label="Due date">{d.date("dueDate")}</Field>
+        <p className="md:col-span-2 text-xs text-gray-600" data-capa-task={p.task ? p.task.status : "none"}>
+          {p.task
+            ? <>Follow-up task for the owner: due {formatDay(p.task.dueDate)} · <b>{TASK_STATUS[p.task.status] ?? p.task.status}</b>{p.task.completedLate ? ` (${p.task.daysLate ?? ""} day(s) late)` : ""}. It is completed when this CAPA reaches Verifying effectiveness or Closed.</>
+            : <>A follow-up task is created for the owner once both the owner and the due date are saved.</>}
+        </p>
       </section>
 
       <section className="card p-4 grid gap-3 md:grid-cols-2" data-section="effectiveness">
@@ -291,6 +320,13 @@ export function CapaRecord(p: CapaRecordProps) {
             <button type="button" disabled={p.busy || !toLink} className="btn-secondary text-sm disabled:opacity-50" onClick={() => { p.onLink(toLink); setToLink(""); }}>Link incident</button>
           </div>
         )}
+      </section>
+
+      <section className="card p-4" data-section="attachments">
+        <AttachmentsSection
+          attachments={p.attachments ?? []} kind="evidence" title="Attachments" addLabel="Add a file"
+          recordActiveCount={(p.attachments ?? []).filter((a) => !a.removedAt).length} readOnly={readOnly} busy={p.busy} onUpload={p.onUpload ?? nothing} onRemove={p.onRemoveAttachment ?? nothing}
+        />
       </section>
 
       {!readOnly && (

@@ -5,14 +5,17 @@ import { useRouter } from "next/navigation";
 import { AlertCircle, ChevronLeft } from "lucide-react";
 import { CapaRecord, IncidentRecord, type QualityOptions } from "@/components/quality/QualityRecords";
 import type { QualityEventRow } from "@/components/quality/QualityParts";
-import type { FieldProblem } from "@/lib/quality";
+import { ATTACHMENT_TYPES, type AttachmentRow, type FieldProblem } from "@/lib/quality";
 
 type Values = Record<string, string | boolean | null>;
 type Brief = { id: string; reference: string; status: string; dateReceived: string; description: string };
 interface Loaded {
   record: Values; events: QualityEventRow[]; names: Record<string, string>;
   capa?: { id: string; reference: string; status: string; problem: string } | null; incidents?: Brief[]; linkable?: Brief[];
+  attachments?: AttachmentRow[]; task?: { id: string; status: string; dueDate: string; completedLate?: boolean; daysLate?: number | null } | null;
 }
+/** Some browsers give HEIC photos no type: fall back to the file's extension. */
+const mimeOf = (file: File) => file.type || ({ heic: "image/heic", heif: "image/heif", jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp", pdf: "application/pdf" } as Record<string, string>)[file.name.split(".").pop()?.toLowerCase() ?? ""] || "";
 const BASE = "/dashboard/admin/quality";
 
 /** Loads one incident or CAPA and sends every change through its route. After each write the record is reloaded, so the history shown is the stored one. */
@@ -47,6 +50,25 @@ export function QualityRecordPage({ kind, id }: { kind: "incidents" | "capas"; i
     finally { setBusy(false); }
   }
 
+  /** Uploads straight from the browser to private storage with a short-lived token, then records the file on this record. */
+  async function uploadAttachment(file: File, attachmentKind: "evidence" | "customer_response", description: string) {
+    setBusy(true); setFailure({});
+    try {
+      const recordType = kind === "incidents" ? "incident" : "capa";
+      const mimeType = mimeOf(file);
+      if (!(mimeType in ATTACHMENT_TYPES)) throw new Error("That file type is not allowed. Use JPEG, PNG, WebP, HEIC or PDF.");
+      const details = { recordType, recordId: id, kind: attachmentKind, fileName: file.name, fileSize: file.size, mimeType };
+      const { upload } = await import("@vercel/blob/client");
+      const blob = await upload(`quality/${recordType}/${id}/${file.name.replace(/[^\w.\- ]+/g, "_")}`, file, {
+        access: "private", contentType: mimeType, handleUploadUrl: "/api/quality/attachments/upload-token", clientPayload: JSON.stringify(details),
+      });
+      const res = await fetch("/api/quality/attachments", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...details, fileUrl: blob.url, description }) });
+      if (!res.ok) throw new Error(((await res.json().catch(() => ({}))) as { error?: string }).error ?? "Could not attach the file.");
+      await load();
+    } catch (e) { setFailure({ error: e instanceof Error ? e.message : "Could not attach the file." }); }
+    finally { setBusy(false); }
+  }
+
   const back = (
     <button type="button" onClick={() => router.push(`${BASE}?tab=${kind}`)} className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-800">
       <ChevronLeft className="w-3 h-3" /> {kind === "incidents" ? "All incidents" : "All CAPAs"}
@@ -59,6 +81,9 @@ export function QualityRecordPage({ kind, id }: { kind: "incidents" | "capas"; i
     events: data.events, names: data.names, options, busy, error: failure.error, problems: failure.problems,
     onSave: (changed: Values) => void send(api, "PATCH", changed),
     onAction: (body: Record<string, unknown>) => void send(`${api}/status`, "POST", body),
+    attachments: data.attachments ?? [],
+    onUpload: (file: File, attachmentKind: "evidence" | "customer_response", description: string) => void uploadAttachment(file, attachmentKind, description),
+    onRemoveAttachment: (attachmentId: string, reason: string) => void send(`/api/quality/attachments/${attachmentId}`, "DELETE", { reason }),
   };
   return (
     <div className="max-w-4xl space-y-3">
@@ -72,7 +97,7 @@ export function QualityRecordPage({ kind, id }: { kind: "incidents" | "capas"; i
         />
       ) : (
         <CapaRecord
-          key={version} {...common} record={data.record} incidents={data.incidents ?? []} linkable={data.linkable ?? []}
+          key={version} {...common} record={data.record} incidents={data.incidents ?? []} linkable={data.linkable ?? []} task={data.task ?? null}
           onLink={(incidentId) => void send(`${api}/incidents`, "POST", { incidentId })}
           onUnlink={(incidentId, reason) => void send(`${api}/incidents`, "DELETE", { incidentId, reason })}
           onGoToIncident={(incidentId) => router.push(`${BASE}/incidents/${incidentId}`)}

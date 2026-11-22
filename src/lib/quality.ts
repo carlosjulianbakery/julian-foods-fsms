@@ -33,12 +33,12 @@ export const CAPA_STATUSES: Record<string, string> = { open: "Open", in_progress
 /** The working order of a CAPA; closed comes after verifying. */
 export const CAPA_ORDER = ["open", "in_progress", "verifying", "closed"] as const;
 
-export type RecordType = "incident" | "capa";
+export type RecordType = "incident" | "capa" | "review";
 export const isReadOnly = (status: string) => status === "closed" || status === "void";
 
 // ── Reference numbers ───────────────────────────────────────────────────────────
 
-export const REFERENCE_KIND: Record<RecordType, string> = { incident: "CI", capa: "CAPA" };
+export const REFERENCE_KIND: Record<"incident" | "capa", string> = { incident: "CI", capa: "CAPA" };
 /** CI-2026-001, CAPA-2026-012 … padded to three digits, growing past 999. */
 export const formatReference = (kind: string, year: number, n: number) => `${kind}-${year}-${String(n).padStart(3, "0")}`;
 
@@ -95,11 +95,18 @@ export const CAPA_FIELDS: Record<string, FieldSpec> = {
   effectivenessDate: { label: "Effectiveness check date", kind: "day" },
   effectivenessResult: { label: "Effectiveness check result", kind: "text", max: 5000 },
 };
+/** The monthly review. The reviewer and the counts are recorded by the system, not typed. */
+export const REVIEW_FIELDS: Record<string, FieldSpec> = {
+  reviewDate: { label: "Review date", kind: "day" },
+  whatWasReviewed: { label: "What was reviewed", kind: "text", max: 5000 },
+  notes: { label: "Notes", kind: "text", max: 5000 },
+};
 /** Fields the system sets itself; they appear in the history under these names. */
 export const SYSTEM_FIELD_LABELS: Record<string, string> = {
   status: "Status", closedDate: "Closed date", closedByName: "Closed by", voidReason: "Void reason", linkedCapa: "Linked CAPA", linkedIncident: "Linked incident",
+  attachment: "Attachment",
 };
-export const FIELDS: Record<RecordType, Record<string, FieldSpec>> = { incident: INCIDENT_FIELDS, capa: CAPA_FIELDS };
+export const FIELDS: Record<RecordType, Record<string, FieldSpec>> = { incident: INCIDENT_FIELDS, capa: CAPA_FIELDS, review: REVIEW_FIELDS };
 export const fieldLabel = (type: RecordType, field: string) => FIELDS[type][field]?.label ?? SYSTEM_FIELD_LABELS[field] ?? field;
 
 export interface FieldProblem { field: string; message: string }
@@ -239,7 +246,7 @@ export function capaMove(from: string, to: string): StatusMove {
 /** A CAPA can only be closed from Verifying effectiveness. */
 export const capaCanClose = (status: string) => status === "verifying";
 /** Where a reopened record goes back to. */
-export const REOPEN_TO: Record<RecordType, Record<string, string>> = {
+export const REOPEN_TO: Record<"incident" | "capa", Record<string, string>> = {
   incident: { closed: "under_review", void: "open" },
   capa: { closed: "verifying", void: "open" },
 };
@@ -247,9 +254,10 @@ export const REOPEN_TO: Record<RecordType, Record<string, string>> = {
 // ── History ─────────────────────────────────────────────────────────────────────
 
 export interface Change { field: string; from: FieldValue; to: FieldValue }
-export type EventAction = "created" | "updated" | "status_changed" | "closed" | "reopened" | "voided" | "linked" | "unlinked";
+export type EventAction = "created" | "updated" | "status_changed" | "closed" | "reopened" | "voided" | "linked" | "unlinked" | "attachment_added" | "attachment_removed";
 export const ACTION_LABELS: Record<EventAction, string> = {
   created: "Created", updated: "Updated", status_changed: "Status changed", closed: "Closed", reopened: "Reopened", voided: "Voided", linked: "Linked", unlinked: "Unlinked",
+  attachment_added: "Attachment added", attachment_removed: "Attachment removed",
 };
 
 /** A date value, whatever context created it. */
@@ -283,7 +291,7 @@ export function describeChange(type: RecordType, c: Change, names: Record<string
     if (typeof v === "boolean") return v ? "Yes" : "No";
     if (spec?.kind === "day" || c.field === "closedDate") return formatDay(v);
     if (spec && typeof spec.kind === "object") return spec.kind.oneOf[v] ?? v;
-    if (c.field === "status") return (type === "incident" ? INCIDENT_STATUSES : CAPA_STATUSES)[v] ?? v;
+    if (c.field === "status") return (type === "capa" ? CAPA_STATUSES : INCIDENT_STATUSES)[v] ?? v;
     if (spec?.kind === "id") return names[v] ?? v;
     return v;
   };
@@ -345,3 +353,147 @@ export function filterCapas(rows: CapaRow[], f: ListFilters): CapaRow[] {
 export function isOverdue(c: Pick<CapaRow, "dueDate" | "status">, today: string): boolean {
   return !!c.dueDate && c.dueDate < today && !isReadOnly(c.status);
 }
+
+// ── Attachments ─────────────────────────────────────────────────────────────────
+
+export const ATTACHMENT_TYPES: Record<string, string> = {
+  "image/jpeg": "JPEG", "image/png": "PNG", "image/webp": "WebP", "image/heic": "HEIC", "image/heif": "HEIC", "application/pdf": "PDF",
+};
+export const ATTACHMENT_MAX_BYTES = 15 * 1024 * 1024;
+export const ATTACHMENT_MAX_PER_RECORD = 10;
+export const ATTACHMENT_KINDS: Record<string, string> = { evidence: "Evidence", customer_response: "Message sent to the customer" };
+/** Types the browser can show as a picture. HEIC and PDF get a file icon and a download link. */
+export const hasThumbnail = (mimeType: string | null | undefined) => ["image/jpeg", "image/png", "image/webp"].includes(mimeType ?? "");
+export const formatBytes = (n: number | null | undefined) => (n == null ? "" : n < 1024 * 1024 ? `${Math.max(1, Math.round(n / 1024))} KB` : `${(n / 1024 / 1024).toFixed(1)} MB`);
+
+export interface AttachmentInput { recordType?: unknown; kind?: unknown; fileName?: unknown; fileSize?: unknown; mimeType?: unknown; description?: unknown }
+
+/**
+ * Why a file cannot be attached, in plain words; null when it can. Checked when the upload token is
+ * asked for and again when the attachment is recorded. `activeCount` is how many the record already has.
+ */
+export function attachmentProblem(a: AttachmentInput, activeCount: number): string | null {
+  if (a.recordType !== "incident" && a.recordType !== "capa") return "Attachments belong to an incident or a CAPA.";
+  if (typeof a.kind !== "string" || !(a.kind in ATTACHMENT_KINDS)) return "Choose what the file is: evidence, or the message sent to the customer.";
+  if (a.kind === "customer_response" && a.recordType !== "incident") return "The message sent to the customer belongs to an incident.";
+  if (typeof a.fileName !== "string" || !a.fileName.trim()) return "The file has no name.";
+  if (a.fileName.length > 200) return "The file name is too long (200 characters at most).";
+  if (typeof a.mimeType !== "string" || !(a.mimeType in ATTACHMENT_TYPES)) return "That file type is not allowed. Use JPEG, PNG, WebP, HEIC or PDF.";
+  if (typeof a.fileSize !== "number" || !Number.isInteger(a.fileSize) || a.fileSize <= 0) return "The file is empty.";
+  if (a.fileSize > ATTACHMENT_MAX_BYTES) return "The file is too large (15 MB at most).";
+  if (a.description !== undefined && a.description !== null && (typeof a.description !== "string" || a.description.length > 500)) return "The description is too long (500 characters at most).";
+  if (activeCount >= ATTACHMENT_MAX_PER_RECORD) return `This record already has ${ATTACHMENT_MAX_PER_RECORD} attachments, the most allowed. Remove one first.`;
+  return null;
+}
+
+/** Where a record's files are stored. A recorded attachment must point inside its own record's folder. */
+export const attachmentFolder = (recordType: string, recordId: string) => `quality/${recordType}/${recordId}/`;
+export function attachmentUrlBelongs(url: unknown, recordType: string, recordId: string): boolean {
+  if (typeof url !== "string") return false;
+  try {
+    const u = new URL(url);
+    return u.protocol === "https:" && u.hostname.endsWith(".blob.vercel-storage.com") && decodeURIComponent(u.pathname).startsWith(`/${attachmentFolder(recordType, recordId)}`);
+  } catch { return false; }
+}
+
+export interface AttachmentRow {
+  id: string; kind: string; fileName: string; fileSize: number | null; mimeType: string | null; description: string; uploadedAt: string; uploadedByName: string;
+  removedAt: string | null; removedByName: string; removeReason: string | null;
+}
+
+// ── The CAPA follow-up task ─────────────────────────────────────────────────────
+
+export const QUALITY_CAPA_FORM_KEY = "quality_capa";
+export const QUALITY_REVIEW_FORM_KEY = "quality_review";
+/** The facility the two Quality task rules are attached to (a rule needs one; the records stay company-wide). */
+export const QUALITY_RULE_FACILITY = "Julian Bakery";
+export const CAPA_RULE_TITLE = "CAPA follow-up";
+
+/** The task's label: "CAPA-2026-003: Mislabeled allergen on the sleeve…" */
+export function capaTaskLabel(reference: string, problem: string): string {
+  const text = problem.replace(/\s+/g, " ").trim();
+  return `${reference}: ${text.length > 70 ? `${text.slice(0, 69).trimEnd()}…` : text}`;
+}
+export const capaTaskKey = (capaId: string) => `capa:${capaId}`;
+
+/** A task nobody has acted on: it can be moved, re-assigned or removed freely. */
+export const taskUntouched = (status: string) => ["UPCOMING", "DUE_TODAY", "OVERDUE"].includes(status);
+const taskOpen = (status: string) => taskUntouched(status) || status === "IN_PROGRESS";
+
+export interface CapaForTask { id: string; reference: string; problem: string; status: string; ownerId: string | null; dueDate: string | null }
+export interface TaskForCapa { status: string; dueDate: string; ownerUserId: string | null; label: string }
+export type CapaTaskPlan =
+  | { do: "nothing" }
+  | { do: "create"; dueDate: string; ownerUserId: string; label: string }
+  | { do: "update"; dueDate: string; ownerUserId: string; label: string; changed: string[] }
+  | { do: "delete" }
+  | { do: "complete" };
+
+/**
+ * What should happen to a CAPA's follow-up task after the CAPA changed. One rule for every case:
+ *  - a task exists only while the CAPA has BOTH an owner and a due date;
+ *  - the task is done when the CAPA reaches Verifying effectiveness or Closed, whichever comes first;
+ *  - an untouched task follows the CAPA (new date, new owner; removed when it is no longer wanted);
+ *  - a started task keeps its history: only its date and owner follow, and it is never removed;
+ *  - a finished, skipped or missed task is never changed and never recreated.
+ */
+export function planCapaTask(capa: CapaForTask, task: TaskForCapa | null): CapaTaskPlan {
+  const wanted = !!capa.ownerId && !!capa.dueDate;
+  if (capa.status === "void") return task && taskUntouched(task.status) ? { do: "delete" } : { do: "nothing" };
+  if (capa.status === "verifying" || capa.status === "closed") return task && taskOpen(task.status) ? { do: "complete" } : { do: "nothing" };
+  // Open or Action in progress
+  if (!task) return wanted ? { do: "create", dueDate: capa.dueDate!, ownerUserId: capa.ownerId!, label: capaTaskLabel(capa.reference, capa.problem) } : { do: "nothing" };
+  if (!taskOpen(task.status)) return { do: "nothing" };
+  if (!wanted) return taskUntouched(task.status) ? { do: "delete" } : { do: "nothing" };
+  const label = capaTaskLabel(capa.reference, capa.problem);
+  const changed = [task.dueDate !== capa.dueDate ? "due date" : "", task.ownerUserId !== capa.ownerId ? "owner" : "", task.label !== label ? "label" : ""].filter(Boolean);
+  return changed.length ? { do: "update", dueDate: capa.dueDate!, ownerUserId: capa.ownerId!, label, changed } : { do: "nothing" };
+}
+
+// ── The monthly review ──────────────────────────────────────────────────────────
+
+const PERIOD = /^(\d{4})-(0[1-9]|1[0-2])$/;
+export const isPeriod = (v: unknown): v is string => typeof v === "string" && PERIOD.test(v);
+/** The month a Pacific date falls in: 2026-11. */
+export const periodOfDay = (day: string) => day.slice(0, 7);
+export function periodBounds(period: string): { start: string; end: string } {
+  const [y, m] = period.split("-").map(Number);
+  return { start: `${period}-01`, end: `${period}-${String(new Date(Date.UTC(y, m, 0)).getUTCDate()).padStart(2, "0")}` };
+}
+/** November 2026 */
+export const periodLabel = (period: string) =>
+  isPeriod(period) ? new Date(`${period}-15T12:00:00Z`).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" }) : period;
+export const reviewReference = (period: string) => `REVIEW-${period}`;
+
+export interface ReviewCounts { openIncidents: number; openCapas: number; overdueCapas: number; incidentsReceived: number }
+export const REVIEW_COUNT_LABELS: Record<keyof ReviewCounts, string> = {
+  openIncidents: "Open incidents", openCapas: "Open CAPAs", overdueCapas: "Overdue CAPAs", incidentsReceived: "Incidents received that month",
+};
+
+/** The numbers recorded with a review, taken at the moment it is saved. Void records are never counted. */
+export function reviewCounts(
+  incidents: { status: string; dateReceived: string }[], capas: { status: string; dueDate: string | null }[], period: string, today: string,
+): ReviewCounts {
+  const { start, end } = periodBounds(period);
+  return {
+    openIncidents: incidents.filter((i) => !isReadOnly(i.status)).length,
+    openCapas: capas.filter((c) => !isReadOnly(c.status)).length,
+    overdueCapas: capas.filter((c) => isOverdue(c, today)).length,
+    incidentsReceived: incidents.filter((i) => i.status !== "void" && i.dateReceived >= start && i.dateReceived <= end).length,
+  };
+}
+
+/** What a review must have to be saved. */
+export function reviewProblems(d: Record<string, FieldValue>, period: unknown): FieldProblem[] {
+  const out: FieldProblem[] = [];
+  if (!isPeriod(period)) out.push({ field: "period", message: "Month: choose the month being reviewed." });
+  if (blank(d.reviewDate)) out.push({ field: "reviewDate", message: "Review date: enter the date." });
+  if (blank(d.whatWasReviewed)) out.push({ field: "whatWasReviewed", message: "What was reviewed: describe it briefly." });
+  return out;
+}
+
+export interface ReviewRow {
+  id: string; period: string; reviewDate: string; reviewedByName: string; whatWasReviewed: string; notes: string; counts: ReviewCounts; updatedAt: string;
+}
+export const reviewYears = (rows: Pick<ReviewRow, "period">[]) => Array.from(new Set(rows.map((r) => r.period.slice(0, 4)))).sort().reverse();
+export const filterReviews = <T extends Pick<ReviewRow, "period">>(rows: T[], year: string | undefined) => rows.filter((r) => !year || r.period.startsWith(`${year}-`));

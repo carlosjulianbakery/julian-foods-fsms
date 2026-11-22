@@ -322,10 +322,11 @@ describe("sidebar and files", () => {
       expect(src, page).toContain('if (!session || !canUseQuality(session.user.role)) redirect("/dashboard");');
     }
   });
-  it("there is no Reviews tab yet, and no code for attachments, PDFs or exports", () => {
+  it("three tabs: Incidents, CAPAs and Reviews; still no code for PDFs or exports (phase 3)", () => {
     const home = read("../../../app/(dashboard)/dashboard/admin/quality/QualityHome.tsx");
-    expect(Array.from(home.matchAll(/role="tab"/g))).toHaveLength(2);
-    expect(home).not.toMatch(/Reviews/);
+    expect(Array.from(home.matchAll(/role="tab"/g))).toHaveLength(3);
+    expect(Array.from(home.matchAll(/onClick=\{\(\) => choose\("(\w+)"\)\}/g)).map((m) => m[1])).toEqual(["incidents", "capas", "reviews"]);
+    expect(home).not.toMatch(/\bpdf\b|\bcsv\b/i);
   });
   it("the new files contain real characters, never \\u escapes", () => {
     const files = ["../QualityParts.tsx", "../QualityLists.tsx", "../QualityRecords.tsx", "../../../lib/quality.ts", "../../../lib/quality-server.ts", "../../../lib/quality-sql.ts",

@@ -11,21 +11,24 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getPacificToday } from "@/lib/pacific-time";
 import { QUALITY_NEXT_NUMBER_SQL } from "@/lib/quality-sql";
+import { completeRuleInstanceForSubmission } from "@/lib/task-completion";
+import { RANK_STEP } from "@/lib/task-order";
 import {
+  CAPA_RULE_TITLE, QUALITY_CAPA_FORM_KEY, QUALITY_RULE_FACILITY, capaTaskKey, planCapaTask,
   CAPA_FIELDS, CAPA_STATUSES, INCIDENT_FIELDS, REFERENCE_KIND, REOPEN_TO, capaCanClose, capaClosingProblems, capaCreateProblems, capaMove,
   canUseQuality, diffFields, formatReference, isDate, incidentClosingProblems, incidentCreateProblems, incidentMove, isReadOnly, parseFields,
-  type CapaRow, type Change, type EventAction, type FieldProblem, type FieldValue, type IncidentRow, type RecordType,
+  type AttachmentRow, type CapaRow, type Change, type EventAction, type FieldProblem, type FieldValue, type IncidentRow, type RecordType,
 } from "@/lib/quality";
 
-type Tx = Prisma.TransactionClient;
+export type Tx = Prisma.TransactionClient;
 export interface Actor { id: string; name: string }
 
 /** An expected refusal: the route turns it into a JSON answer with this status. */
 export class QualityError extends Error {
   constructor(public status: number, message: string, public extra: Record<string, unknown> = {}) { super(message); }
 }
-const refuse = (status: number, message: string, extra: Record<string, unknown> = {}) => new QualityError(status, message, extra);
-const invalid = (problems: FieldProblem[]) => refuse(422, "Some fields need attention.", { problems });
+export const refuse = (status: number, message: string, extra: Record<string, unknown> = {}) => new QualityError(status, message, extra);
+export const invalid = (problems: FieldProblem[]) => refuse(422, "Some fields need attention.", { problems });
 
 /** The session check used by every Quality route: 401 without a session, 403 unless canUseQuality. */
 export async function qualityRoute(fn: (actor: Actor) => Promise<unknown>, okStatus = 200): Promise<NextResponse> {
@@ -41,6 +44,14 @@ export async function qualityRoute(fn: (actor: Actor) => Promise<unknown>, okSta
   }
 }
 
+/** For routes that do not answer JSON (file streaming): the actor, or the 401 / 403 answer to return. */
+export async function requireQuality(): Promise<{ actor: Actor; response?: undefined } | { actor?: undefined; response: NextResponse }> {
+  const session = await getServerSession(authOptions);
+  if (!session) return { response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
+  if (!canUseQuality(session.user.role)) return { response: NextResponse.json({ error: "Forbidden — admins only" }, { status: 403 }) };
+  return { actor: { id: session.user.id, name: session.user.name?.trim() || session.user.email || "Unknown" } };
+}
+
 /** One transaction per write. The change and its history row succeed or fail together. */
 export const write = <T,>(fn: (tx: Tx) => Promise<T>): Promise<T> => prisma.$transaction(fn);
 
@@ -52,7 +63,7 @@ export function recordEvent(tx: Tx, e: { type: RecordType; id: string; reference
 }
 
 /** The next reference of a kind for the Pacific year of `today`: CI-2026-001, CAPA-2026-001 … never reused. */
-export async function nextReference(tx: Tx, type: RecordType, today: string): Promise<string> {
+export async function nextReference(tx: Tx, type: "incident" | "capa", today: string): Promise<string> {
   const year = Number(today.slice(0, 4));
   const rows = await tx.$queryRawUnsafe<{ lastNumber: number | bigint }[]>(QUALITY_NEXT_NUMBER_SQL, REFERENCE_KIND[type], year);
   return formatReference(REFERENCE_KIND[type], year, Number(rows[0].lastNumber));
@@ -61,7 +72,7 @@ export async function nextReference(tx: Tx, type: RecordType, today: string): Pr
 // ── Shapes ──────────────────────────────────────────────────────────────────────
 
 const DAY_FIELDS = ["dateReceived", "bestByDate", "responseDate", "closedDate", "dueDate", "effectivenessDate"];
-const day = (d: Date | null | undefined) => (d ? d.toISOString().slice(0, 10) : null);
+export const day = (d: Date | null | undefined) => (d ? d.toISOString().slice(0, 10) : null);
 /** Field values as the database wants them: days become dates. */
 function toDb(data: Record<string, FieldValue>): Record<string, unknown> {
   return Object.fromEntries(Object.entries(data).map(([k, v]) => [k, DAY_FIELDS.includes(k) && typeof v === "string" ? new Date(`${v}T00:00:00Z`) : v]));
@@ -74,13 +85,13 @@ export function serialize<T extends Record<string, unknown>>(row: T): Record<str
 type IncidentDb = NonNullable<Awaited<ReturnType<Tx["qualityIncident"]["findUnique"]>>>;
 type CapaDb = NonNullable<Awaited<ReturnType<Tx["qualityCapa"]["findUnique"]>>>;
 
-const reason = (v: unknown, what: string): string => {
+export const reason = (v: unknown, what: string): string => {
   const r = typeof v === "string" ? v.trim() : "";
   if (r.length < 3) throw invalid([{ field: "reason", message: `Reason: say why you are ${what}.` }]);
   return r;
 };
 
-async function userNames(tx: Tx, ids: (string | null | undefined)[]): Promise<Record<string, string>> {
+export async function userNames(tx: Tx, ids: (string | null | undefined)[]): Promise<Record<string, string>> {
   const wanted = Array.from(new Set(ids.filter((x): x is string => !!x)));
   if (wanted.length === 0) return {};
   const users = await tx.user.findMany({ where: { id: { in: wanted } }, select: { id: true, name: true } });
@@ -101,18 +112,18 @@ async function save<T extends "incident" | "capa">(tx: Tx, type: T, current: Inc
   if (res.count !== 1) throw conflict();
 }
 
-async function loadIncident(tx: Tx, id: string): Promise<IncidentDb> {
+export async function loadIncident(tx: Tx, id: string): Promise<IncidentDb> {
   const row = await tx.qualityIncident.findUnique({ where: { id } });
   if (!row) throw refuse(404, "Incident not found.");
   return row;
 }
-async function loadCapa(tx: Tx, id: string): Promise<CapaDb> {
+export async function loadCapa(tx: Tx, id: string): Promise<CapaDb> {
   const row = await tx.qualityCapa.findUnique({ where: { id } });
   if (!row) throw refuse(404, "CAPA not found.");
   return row;
 }
 const linkOfIncident = (tx: Tx, incidentId: string) => tx.qualityIncidentCapa.findUnique({ where: { incidentId } });
-const mustBeEditable = (status: string, what: string) => {
+export const mustBeEditable = (status: string, what: string) => {
   if (isReadOnly(status)) throw refuse(409, `This ${what} is ${status === "void" ? "void" : "closed"} and read-only. Reopen it to make changes.`, { code: "read_only" });
 };
 
@@ -205,6 +216,89 @@ export function incidentAction(actor: Actor, id: string, body: StatusBody | null
   });
 }
 
+// ── The CAPA follow-up task ─────────────────────────────────────────────────────
+
+/**
+ * The one system rule every CAPA task hangs from. It is a ONE_OFF rule whose date is in the past, so the
+ * task generator never produces anything for it; the calendar sync only looks at production rules; its
+ * tasks are created, moved and removed here and nowhere else. Created on first use if it is missing.
+ */
+export async function ensureCapaRule(tx: Tx, ownerId: string): Promise<{ id: string; created: boolean }> {
+  const existing = await tx.taskRule.findFirst({ where: { formKey: QUALITY_CAPA_FORM_KEY }, select: { id: true } });
+  if (existing) return { id: existing.id, created: false };
+  const facility = await tx.facility.findUnique({ where: { name: QUALITY_RULE_FACILITY }, select: { id: true } });
+  if (!facility) throw refuse(500, `The facility "${QUALITY_RULE_FACILITY}" was not found, so the CAPA follow-up rule cannot be created.`);
+  // Ranked last in the work order
+  const lastRank = (await tx.taskRule.aggregate({ _max: { sortOrder: true } }))._max.sortOrder ?? 0;
+  const rule = await tx.taskRule.create({
+    data: {
+      title: CAPA_RULE_TITLE, description: "Managed by the system: one task per CAPA that has an owner and a due date. Change the CAPA to change its task.",
+      facilityId: facility.id, ownerId, triggerType: "ONE_OFF", recurrenceUnit: null, recurrenceEvery: 1, recurrenceStart: new Date("2026-01-01T00:00:00Z"),
+      formKey: QUALITY_CAPA_FORM_KEY, windowMode: "NONE", isActive: true, sortOrder: lastRank + RANK_STEP,
+    },
+    select: { id: true },
+  });
+  return { id: rule.id, created: true };
+}
+
+const statusForDue = (due: string, today: string) => (due < today ? "OVERDUE" : due === today ? "DUE_TODAY" : "UPCOMING");
+
+/**
+ * Brings a CAPA's follow-up task in line with the CAPA, inside the CAPA's own transaction (see
+ * planCapaTask for the rules). Returns the task to complete, if the CAPA just reached Verifying
+ * effectiveness or Closed: completion uses the app's shared helper, which runs right after the commit.
+ */
+export async function syncCapaTask(tx: Tx, actor: Actor, capaId: string): Promise<{ completeTaskId: string | null }> {
+  const capa = await loadCapa(tx, capaId);
+  const found = capa.taskInstanceId ? await tx.ruleInstance.findUnique({ where: { id: capa.taskInstanceId } }) : null;
+  const plan = planCapaTask(
+    { id: capa.id, reference: capa.reference, problem: capa.problem, status: capa.status, ownerId: capa.ownerId, dueDate: day(capa.dueDate) },
+    found ? { status: found.status, dueDate: day(found.dueDate)!, ownerUserId: found.ownerUserId, label: found.label } : null,
+  );
+  const setTaskId = (taskInstanceId: string | null) => tx.qualityCapa.updateMany({ where: { id: capa.id }, data: { taskInstanceId } });
+  const today = getPacificToday();
+  if (plan.do === "create") {
+    const rule = await ensureCapaRule(tx, actor.id);
+    const task = await tx.ruleInstance.create({
+      data: {
+        ruleId: rule.id, dueDate: new Date(`${plan.dueDate}T00:00:00Z`), status: statusForDue(plan.dueDate, today), label: plan.label,
+        calendarKey: capaTaskKey(capa.id), source: "MANUAL", ownerUserId: plan.ownerUserId,
+      },
+    });
+    await tx.taskInstanceAudit.create({ data: { instanceId: task.id, action: "created", userId: actor.id, note: `Created for ${capa.reference} (owner and due date set)` } });
+    await setTaskId(task.id);
+  } else if (plan.do === "update" && found) {
+    await tx.ruleInstance.update({
+      where: { id: found.id },
+      // A started task keeps its status and its history; only the date, the owner and the label follow the CAPA
+      data: { dueDate: new Date(`${plan.dueDate}T00:00:00Z`), ownerUserId: plan.ownerUserId, label: plan.label, ...(found.status === "IN_PROGRESS" ? {} : { status: statusForDue(plan.dueDate, today) }) },
+    });
+    await tx.taskInstanceAudit.create({ data: { instanceId: found.id, action: "updated", userId: actor.id, note: `${capa.reference}: ${plan.changed.join(", ")} changed on the CAPA` } });
+  } else if (plan.do === "delete" && found) {
+    // Removed, not skipped: nobody acted on it. Its audit rows go with it; notifications have no cascade.
+    await tx.notification.deleteMany({ where: { instanceId: found.id } });
+    await tx.ruleInstance.delete({ where: { id: found.id } });
+    await setTaskId(null);
+  } else if (plan.do === "complete" && found) {
+    return { completeTaskId: found.id };
+  }
+  return { completeTaskId: null };
+}
+
+/** Marks the CAPA's task done through the shared completion helper (its audit row, late if past the due date). Never fails the CAPA change. */
+export async function completeCapaTask(actor: Actor, capaId: string, taskId: string | null): Promise<string | null> {
+  if (!taskId) return null;
+  try {
+    return await completeRuleInstanceForSubmission({
+      formKey: QUALITY_CAPA_FORM_KEY, facilityName: QUALITY_RULE_FACILITY, submissionId: capaId, userId: actor.id,
+      submissionDate: getPacificToday(), taskId, prismaClient: prisma as never,
+    });
+  } catch (e) {
+    console.error("[quality] CAPA task completion failed:", e instanceof Error ? e.message : e);
+    return null;
+  }
+}
+
 // ── CAPAs ───────────────────────────────────────────────────────────────────────
 
 async function checkOwner(tx: Tx, data: Record<string, FieldValue>, problems: FieldProblem[]) {
@@ -226,12 +320,14 @@ export function createCapa(actor: Actor, body: Record<string, unknown> | null) {
     problems.push(...capaCreateProblems(data));
     await checkOwner(tx, data, problems);
     if (problems.length) throw invalid(problems);
-    return insertCapa(tx, actor, data);
+    const made = await insertCapa(tx, actor, data);
+    await syncCapaTask(tx, actor, made.id);
+    return made;
   });
 }
 
-export function updateCapa(actor: Actor, id: string, body: Record<string, unknown> | null) {
-  return write(async (tx) => {
+export async function updateCapa(actor: Actor, id: string, body: Record<string, unknown> | null) {
+  const out = await write(async (tx) => {
     const current = await loadCapa(tx, id);
     mustBeEditable(current.status, "CAPA");
     if (typeof body?.expectedUpdatedAt !== "string") throw refuse(400, "expectedUpdatedAt is required.");
@@ -245,18 +341,24 @@ export function updateCapa(actor: Actor, id: string, body: Record<string, unknow
     if (changes.length === 0) return { updatedAt: current.updatedAt.toISOString(), changed: 0 };
     await save(tx, "capa", current, toDb(Object.fromEntries(changes.map((c) => [c.field, data[c.field]]))), body.expectedUpdatedAt, actor);
     await recordEvent(tx, { type: "capa", id, reference: current.reference, action: "updated", actor, changes });
-    return { updatedAt: (await loadCapa(tx, id)).updatedAt.toISOString(), changed: changes.length };
+    // The follow-up task follows the owner and the due date
+    const task = await syncCapaTask(tx, actor, id);
+    return { updatedAt: (await loadCapa(tx, id)).updatedAt.toISOString(), changed: changes.length, task };
   });
+  if ("task" in out && out.task) await completeCapaTask(actor, id, out.task.completeTaskId);
+  return { updatedAt: out.updatedAt, changed: out.changed };
 }
 
-export function capaAction(actor: Actor, id: string, body: StatusBody | null) {
-  return write(async (tx) => {
+export async function capaAction(actor: Actor, id: string, body: StatusBody | null) {
+  const out = await write(async (tx) => {
     const current = await loadCapa(tx, id);
     const done = async (action: EventAction, data: Record<string, unknown>, note?: string) => {
       const changes = diffFields(current, data, Object.keys(data).filter((k) => ["status", "closedDate", "closedByName", "voidReason"].includes(k)));
       await save(tx, "capa", current, data, body?.expectedUpdatedAt, actor);
       await recordEvent(tx, { type: "capa", id, reference: current.reference, action, actor, changes, note });
-      return { status: data.status as string, updatedAt: (await loadCapa(tx, id)).updatedAt.toISOString() };
+      // Verifying or Closed completes the task; Void removes an untouched one; a reopened void CAPA gets its task back
+      const task = await syncCapaTask(tx, actor, id);
+      return { status: data.status as string, updatedAt: (await loadCapa(tx, id)).updatedAt.toISOString(), completeTaskId: task.completeTaskId };
     };
     switch (body?.action) {
       case "move": {
@@ -287,6 +389,8 @@ export function capaAction(actor: Actor, id: string, body: StatusBody | null) {
       default: throw refuse(400, "Unknown action.");
     }
   });
+  await completeCapaTask(actor, id, out.completeTaskId);
+  return { status: out.status, updatedAt: out.updatedAt };
 }
 
 // ── The link: one CAPA can cover several incidents; an incident has at most one CAPA ──
@@ -355,7 +459,7 @@ export function unlinkIncident(actor: Actor, incidentId: string, why: unknown, f
 
 // ── Reads ───────────────────────────────────────────────────────────────────────
 
-async function eventsOf(tx: Tx, type: RecordType, id: string) {
+export async function eventsOf(tx: Tx, type: RecordType, id: string) {
   const events = await tx.qualityEvent.findMany({ where: { recordType: type, recordId: id } });
   return events
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
@@ -388,6 +492,7 @@ export async function getIncident(id: string) {
     capa: capa ? { id: capa.id, reference: capa.reference, status: capa.status, problem: capa.problem } : null,
     events: await eventsOf(prisma, "incident", id),
     names: await userNames(prisma, [row.closedById, row.voidedById, row.createdById]),
+    attachments: await listAttachments(prisma, "incident", id),
   };
 }
 
@@ -419,7 +524,28 @@ export async function getCapa(id: string) {
     linkable: all.filter((i) => !taken.has(i.id) && !isReadOnly(i.status)).sort((a, b) => b.reference.localeCompare(a.reference)).map(brief),
     events: await eventsOf(prisma, "capa", id),
     names: await userNames(prisma, [row.ownerId, row.closedById, row.voidedById, row.createdById]),
+    task: await capaTaskSummary(row.taskInstanceId),
+    attachments: await listAttachments(prisma, "capa", id),
   };
+}
+
+/** The follow-up task as the CAPA page shows it. */
+async function capaTaskSummary(taskInstanceId: string | null) {
+  if (!taskInstanceId) return null;
+  const t = await prisma.ruleInstance.findUnique({ where: { id: taskInstanceId } });
+  return t ? { id: t.id, status: t.status as string, dueDate: day(t.dueDate)!, completedLate: t.completedLate, daysLate: t.daysLate } : null;
+}
+
+/** A record's attachments, newest first, WITHOUT their storage address: files are only ever reached through the download route. */
+export async function listAttachments(tx: Tx, type: "incident" | "capa", id: string): Promise<AttachmentRow[]> {
+  const rows = await tx.qualityAttachment.findMany({ where: { recordType: type, recordId: id } });
+  const names = await userNames(tx, rows.flatMap((r) => [r.uploadedById, r.removedById]));
+  return rows
+    .sort((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime())
+    .map((r) => ({
+      id: r.id, kind: r.kind, fileName: r.fileName, fileSize: r.fileSize, mimeType: r.mimeType, description: r.description, uploadedAt: r.uploadedAt.toISOString(),
+      uploadedByName: names[r.uploadedById ?? ""] ?? "", removedAt: r.removedAt?.toISOString() ?? null, removedByName: names[r.removedById ?? ""] ?? "", removeReason: r.removeReason,
+    }));
 }
 
 /** What the forms' dropdowns need: products, the admins who can own a CAPA, and today's Pacific date. */

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { SYSTEM_MANAGED_RULE_MESSAGE, isSystemManagedFormKey } from "@/lib/task-form-registry";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -21,6 +22,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
     const before = await prisma.taskRule.findUnique({ where: { id: params.id } });
     if (!before) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    // A system-managed rule (e.g. CAPA follow-up) is never edited, rescheduled, activated or deactivated by hand
+    if (isSystemManagedFormKey(before.formKey)) return NextResponse.json({ error: SYSTEM_MANAGED_RULE_MESSAGE }, { status: 403 });
 
     // Block facility change if rule has any instances (would rewrite all history)
     if (facilityId !== undefined) {
@@ -198,6 +201,9 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       include: { _count: { select: { instances: true } } },
     });
     if (!rule) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    // Neither archived nor deleted: its tasks belong to records that manage them
+    if (isSystemManagedFormKey(rule.formKey)) return NextResponse.json({ error: SYSTEM_MANAGED_RULE_MESSAGE }, { status: 403 });
 
     if (rule.formKey === "sop_review") {
       return NextResponse.json(

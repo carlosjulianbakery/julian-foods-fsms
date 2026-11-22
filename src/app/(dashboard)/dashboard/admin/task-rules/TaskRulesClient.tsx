@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { TASK_FORM_REGISTRY, getFormKeyOptions, getFormLabel } from "@/lib/task-form-registry";
+import { TASK_FORM_REGISTRY, getFormKeyOptions, getFormLabel, isSystemManagedFormKey } from "@/lib/task-form-registry";
 import { buildRulePayload, ruleToFormState, showEndOfMonthOption, showEveryOption, recurrenceLabel, RECURRENCE_UNITS, type TaskRuleFormState } from "@/lib/task-rule-form";
 
 interface Rule {
@@ -491,6 +491,11 @@ export function TaskRulesClient({ rules: initialRules, facilities, users, syncSt
                           Delete permanently
                         </button>
                       </>
+                    ) : isSystemManagedFormKey(rule.formKey) ? (
+                      // Created and maintained by the system (e.g. CAPA follow-up): nothing to edit, archive or delete here
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-gray-100 text-gray-600" title="Its tasks are created and updated from the records they belong to">
+                        System-managed
+                      </span>
                     ) : (
                       <>
                         <button onClick={() => openEdit(rule)} className="btn-secondary text-xs px-3 py-1">

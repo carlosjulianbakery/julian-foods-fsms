@@ -16,7 +16,9 @@ const mem = vi.hoisted(() => {
 
 vi.mock("next-auth", () => ({ getServerSession: vi.fn() }));
 vi.mock("@/lib/auth", () => ({ authOptions: {} }));
-vi.mock("@/lib/prisma", () => {
+vi.mock("@/lib/prisma", async () => {
+  // Phase 2: tasks, task rules and attachments live in the shared in-memory database (see memdb.ts)
+  const shared = (await import("./memdb")).makePrisma();
   const USERS = [
     { id: "carlos", name: "Carlos Gomory", role: "ADMIN", active: true }, { id: "chris", name: "Chris Pence", role: "ADMIN", active: true },
     { id: "hugo", name: "Hugo Ayala", role: "SUPERVISOR", active: true }, { id: "gone", name: "Former Admin", role: "ADMIN", active: false },
@@ -33,7 +35,7 @@ vi.mock("@/lib/prisma", () => {
     findUnique: vi.fn(async (a: { where: { id: string } }) => rows().find((r) => r.id === a.where.id) ?? null),
     findMany: vi.fn(async (a?: { where?: { id?: { in: string[] } } }) => rows().filter((r) => inList(a?.where, r.id))),
     updateMany: vi.fn(async (a: { where: { id: string; updatedAt: Date }; data: Record<string, unknown> }) => {
-      const row = rows().find((r) => r.id === a.where.id && r.updatedAt.getTime() === a.where.updatedAt.getTime());
+      const row = rows().find((r) => r.id === a.where.id && (!a.where.updatedAt || r.updatedAt.getTime() === a.where.updatedAt.getTime()));
       if (!row) return { count: 0 };
       Object.assign(row, a.data); return { count: 1 };
     }),
@@ -77,7 +79,9 @@ vi.mock("@/lib/prisma", () => {
       s().counters[key] = (s().counters[key] ?? 0) + 1;
       return [{ lastNumber: s().counters[key] }];
     }),
-    $transaction: vi.fn(async (fn: (tx: unknown) => Promise<unknown>) => {
+    ruleInstance: shared.ruleInstance, taskRule: shared.taskRule, facility: shared.facility, taskInstanceAudit: shared.taskInstanceAudit, notification: shared.notification, qualityAttachment: shared.qualityAttachment,
+    $transaction: vi.fn(async (fn: ((tx: unknown) => Promise<unknown>) | Promise<unknown>[]) => {
+      if (typeof fn !== "function") return Promise.all(fn);
       const before = structuredClone(mem.state);
       try { return await fn(prisma); } catch (e) { mem.state = before; throw e; }
     }),
@@ -86,6 +90,7 @@ vi.mock("@/lib/prisma", () => {
 });
 
 import { getServerSession } from "next-auth";
+import { resetDb, seed } from "./memdb";
 import { GET as LIST_I, POST as NEW_I } from "@/app/api/quality/incidents/route";
 import { GET as GET_I, PATCH as SAVE_I } from "@/app/api/quality/incidents/[id]/route";
 import { POST as ACT_I } from "@/app/api/quality/incidents/[id]/status/route";
@@ -123,6 +128,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   at("2026-11-21T18:00:00Z"); // 10:00 AM Pacific, November 21, 2026
   mem.state = mem.fresh(); mem.failEvents = false; mem.failEventOnAction = null;
+  resetDb(); seed("facility", [{ id: "fac-jb", name: "Julian Bakery" }]);
   as("ADMIN");
   vi.spyOn(console, "error").mockImplementation(() => {});
 });
@@ -156,10 +162,14 @@ describe("permission: one check, canUseQuality, on every route", () => {
     const files: string[] = [];
     const walk = (d: string) => { for (const f of readdirSync(d)) { const p = join(d, f); if (statSync(p).isDirectory()) { if (f !== "__tests__") walk(p); } else if (f === "route.ts") files.push(p); } };
     walk(dir);
-    expect(files).toHaveLength(9);
+    expect(files).toHaveLength(14); // 9 from phase 1, plus attachments (3) and reviews (2)
     for (const f of files) {
       const src = readFileSync(f, "utf8");
-      expect(src.split("export const ").length - 1, f).toBe((src.match(/qualityRoute\(/g) ?? []).length + 1); // every handler (plus `dynamic`)
+      // every handler goes through qualityRoute; the two that answer with something other than JSON (the upload token, the file itself) call the same check directly
+      const direct = (src.match(/export async function (GET|POST|PATCH|DELETE)/g) ?? []).length;
+      expect(src.split("export const ").length - 1, f).toBe((src.match(/qualityRoute\(/g) ?? []).length + 1); // every other handler (plus `dynamic`)
+      if (direct) expect((src.match(/await requireQuality\(\)/g) ?? []).length, f).toBe(direct);
+      expect(direct + (src.match(/qualityRoute\(/g) ?? []).length, f).toBeGreaterThan(0);
       expect(src, f).not.toContain("qualityEvent");
     }
     expect(files.some((f) => /events/.test(f))).toBe(false); // no route for events at all

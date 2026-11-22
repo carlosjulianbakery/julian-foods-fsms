@@ -3,6 +3,11 @@
 export interface TaskFormEntry {
   label: string;
   href: (instanceId: string) => string | null;
+  /**
+   * A rule of this kind is created and maintained by the system: it is not offered in the
+   * "Linked Form" dropdown, and its rule cannot be edited, rescheduled, archived or deleted by hand.
+   */
+  systemManaged?: boolean;
 }
 
 export const TASK_FORM_REGISTRY: Record<string, TaskFormEntry> = {
@@ -54,6 +59,16 @@ export const TASK_FORM_REGISTRY: Record<string, TaskFormEntry> = {
     label: "Foreign Matter Inspection (624)",
     href: () => "/dashboard/supervisor/foreign-matter-624",
   },
+  // Quality: Start carries ?taskId=…; the route finds the CAPA (or the review month) that task belongs to
+  quality_capa: {
+    label: "CAPA follow-up",
+    href: () => "/dashboard/admin/quality/capa-task",
+    systemManaged: true,
+  },
+  quality_review: {
+    label: "Review customer incidents and CAPAs",
+    href: () => "/dashboard/admin/quality/review-task",
+  },
   manual: {
     label: "Manual Task",
     href: () => null,
@@ -68,6 +83,7 @@ export interface FormKeyOption {
 /** Returns all registry entries as flat dropdown options, sorted alphabetically by label. */
 export function getFormKeyOptions(): FormKeyOption[] {
   return Object.entries(TASK_FORM_REGISTRY)
+    .filter(([, entry]) => !entry.systemManaged)
     .map(([key, entry]) => ({ value: key, label: entry.label }))
     .sort((a, b) => a.label.localeCompare(b.label));
 }
@@ -82,3 +98,9 @@ export function getFormEntry(formKey: string | null | undefined): TaskFormEntry 
   if (!formKey) return null;
   return TASK_FORM_REGISTRY[formKey] ?? null;
 }
+
+/** True for a form key whose rule the system manages itself (see TaskFormEntry.systemManaged). */
+export function isSystemManagedFormKey(formKey: string | null | undefined): boolean {
+  return !!formKey && TASK_FORM_REGISTRY[formKey]?.systemManaged === true;
+}
+export const SYSTEM_MANAGED_RULE_MESSAGE = "This rule is managed by the system and cannot be changed, archived or deleted here.";

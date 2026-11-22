@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { generateCalendarInstances } from "@/lib/calendar-generator";
-import { TASK_FORM_REGISTRY } from "@/lib/task-form-registry";
+import { TASK_FORM_REGISTRY, isSystemManagedFormKey } from "@/lib/task-form-registry";
 import { generateInstances, updateStatuses } from "@/lib/task-generator";
 import { resolveEndOfMonth } from "@/lib/task-rule-update";
 import { RANK_STEP } from "@/lib/task-order";
@@ -73,6 +73,8 @@ export async function POST(req: NextRequest) {
     if (!facilityId) return NextResponse.json({ error: "Facility is required" }, { status: 400 });
     if (!ownerId) return NextResponse.json({ error: "Owner is required" }, { status: 400 });
     if (!recurrenceStart) return NextResponse.json({ error: "Start date is required" }, { status: 400 });
+    // System-managed rules are created by the system only
+    if (isSystemManagedFormKey(formKey)) return NextResponse.json({ error: "This kind of rule is created by the system and cannot be added here." }, { status: 403 });
     if (formKey && !TASK_FORM_REGISTRY[formKey]) {
       return NextResponse.json({ error: `Unknown formKey: "${formKey}". Add it to the registry first.` }, { status: 400 });
     }
