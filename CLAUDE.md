@@ -19,6 +19,8 @@ TZ=UTC npx vitest run
 TZ=America/Los_Angeles npx vitest run
 ```
 
+At the end of every task, after the verification passes and the push is confirmed, delete the `/tmp/verify-*` folders created in that task (explicit paths only, after checking each is a clone with nothing unpushed) — authorized by Carlos on 2026-11-22.
+
 ## Protected files — never modify
 
 - `src/lib/google-sheets-fetcher.ts`
