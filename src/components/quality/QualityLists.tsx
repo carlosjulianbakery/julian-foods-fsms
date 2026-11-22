@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { DateInput } from "@/components/DateInput";
 import { Field, ProblemList, StatusBadge } from "@/components/quality/QualityParts";
+import { exportHref } from "@/lib/quality-export";
 import {
   CAPA_SOURCES, CAPA_STATUSES, CATEGORIES, CHANNELS, COMPANY_WIDE, FACILITIES, INCIDENT_STATUSES, capaDay, filterCapas, filterIncidents, formatDay,
   formatMomentDay, isOverdue, type CapaRow, type FieldProblem, type IncidentRow, type ListFilters,
@@ -48,6 +49,8 @@ function Filters({ kind, f, set, count, total }: { kind: "incident" | "capa"; f:
         <input type="checkbox" checked={!!f.showVoid} onChange={(e) => set({ showVoid: e.target.checked })} /> Show void
       </label>
       <span className="text-xs text-gray-400 pb-2 ml-auto" data-count>{count} of {total}</span>
+      {/* The file holds exactly what these filters show: the same filters are applied again on the server */}
+      <a href={exportHref(kind === "incident" ? "incidents" : "capas", f)} data-export={kind} className="btn-secondary text-xs mb-1">Export CSV</a>
     </div>
   );
 }

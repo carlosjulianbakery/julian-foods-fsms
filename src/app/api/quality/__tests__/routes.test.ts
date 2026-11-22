@@ -162,10 +162,10 @@ describe("permission: one check, canUseQuality, on every route", () => {
     const files: string[] = [];
     const walk = (d: string) => { for (const f of readdirSync(d)) { const p = join(d, f); if (statSync(p).isDirectory()) { if (f !== "__tests__") walk(p); } else if (f === "route.ts") files.push(p); } };
     walk(dir);
-    expect(files).toHaveLength(14); // 9 from phase 1, plus attachments (3) and reviews (2)
+    expect(files).toHaveLength(19); // 9 from phase 1, plus attachments (3) and reviews (2), plus the CSV exports (3) and the record PDFs (2)
     for (const f of files) {
       const src = readFileSync(f, "utf8");
-      // every handler goes through qualityRoute; the two that answer with something other than JSON (the upload token, the file itself) call the same check directly
+      // every handler goes through qualityRoute; those that answer with something other than JSON (the upload token, the file itself, the CSV exports) call the same check directly
       const direct = (src.match(/export async function (GET|POST|PATCH|DELETE)/g) ?? []).length;
       expect(src.split("export const ").length - 1, f).toBe((src.match(/qualityRoute\(/g) ?? []).length + 1); // every other handler (plus `dynamic`)
       if (direct) expect((src.match(/await requireQuality\(\)/g) ?? []).length, f).toBe(direct);

@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { FileDown } from "lucide-react";
 import { DateInput } from "@/components/DateInput";
 import { AttachmentsSection } from "@/components/quality/QualityAttachments";
 import { ClosureChecklist, Field, ProblemList, QualityHistory, ReadValue, StatusBadge, StatusButtons, type QualityEventRow, type StatusButton } from "@/components/quality/QualityParts";
 import {
   CAPA_ORDER, CAPA_SOURCES, CAPA_STATUSES, CATEGORIES, CHANNELS, COMPANY_WIDE, FACILITIES, INCIDENT_STATUSES, RESPONSE_CHANNELS, capaCanClose, capaClosingProblems,
-  diffFields, facilityLabel, formatDay, formatMoment, incidentClosingProblems, isReadOnly, type AttachmentRow, type FieldProblem,
+  TASK_STATUS_LABELS, diffFields, facilityLabel, formatDay, formatMoment, incidentClosingProblems, isReadOnly, type AttachmentRow, type FieldProblem,
 } from "@/lib/quality";
 
 export interface QualityOptions { products: { id: string; name: string }[]; admins: { id: string; name: string }[]; today: string }
@@ -28,8 +29,22 @@ interface Common {
   attachments?: AttachmentRow[];
   onUpload?: (file: File, kind: "evidence" | "customer_response", description: string) => void;
   onRemoveAttachment?: (id: string, reason: string) => void;
+  /** Downloads the record as a PDF. The button is only shown when this is given (the record pages are for admins). */
+  onDownloadPdf?: () => void;
+  pdfBusy?: boolean;
 }
 const nothing = () => {};
+
+/** "Download PDF" in the record's heading. The PDF shows what is saved, so unsaved changes are pointed out. */
+function PdfButton({ onDownload, busy, dirty }: { onDownload?: () => void; busy?: boolean; dirty: boolean }) {
+  if (!onDownload) return null;
+  return (
+    <button type="button" data-download-pdf disabled={busy} onClick={onDownload} title={dirty ? "The PDF shows what is saved. Save your changes first to include them." : undefined}
+      className="ml-auto inline-flex items-center gap-1 text-sm px-3 py-1.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 disabled:opacity-50">
+      <FileDown className="w-4 h-4" /> {busy ? "Preparing the PDF…" : "Download PDF"}
+    </button>
+  );
+}
 
 /** Text, select and date inputs that turn into plain text when the record is read-only. */
 function useDraft(record: Values, readOnly: boolean) {
@@ -111,6 +126,7 @@ export function IncidentRecord(p: IncidentRecordProps) {
         <StatusBadge type="incident" status={status} />
         {p.record.foodSafetyConcern === true && <span className="text-xs font-bold text-red-700 bg-red-100 rounded px-2 py-0.5">FOOD SAFETY CONCERN</span>}
         <span className="text-xs text-gray-500">{facilityLabel(text(p.record.facility))}</span>
+        <PdfButton onDownload={p.onDownloadPdf} busy={p.pdfBusy} dirty={d.dirty} />
       </div>
       <VoidOrClosedBanner record={p.record} what="incident" names={names} />
       <ProblemList error={p.error} problems={p.problems} />
@@ -227,7 +243,7 @@ export interface CapaRecordProps extends Common {
   task?: { id: string; status: string; dueDate: string; completedLate?: boolean; daysLate?: number | null } | null;
 }
 
-const TASK_STATUS: Record<string, string> = { UPCOMING: "Upcoming", DUE_TODAY: "Due today", IN_PROGRESS: "In progress", OVERDUE: "Overdue", DONE: "Done", SKIPPED: "Skipped", MISSED: "Missed" };
+const TASK_STATUS = TASK_STATUS_LABELS;
 
 export function CapaRecord(p: CapaRecordProps) {
   const readOnly = isReadOnly(text(p.record.status));
@@ -259,6 +275,7 @@ export function CapaRecord(p: CapaRecordProps) {
         <h1 className="text-xl font-bold font-mono text-gray-900">{text(p.record.reference)}</h1>
         <StatusBadge type="capa" status={status} />
         <span className="text-xs text-gray-500">{facilityLabel(text(p.record.facility))}</span>
+        <PdfButton onDownload={p.onDownloadPdf} busy={p.pdfBusy} dirty={d.dirty} />
       </div>
       <VoidOrClosedBanner record={p.record} what="CAPA" names={names} />
       <ProblemList error={p.error} problems={p.problems} />

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { DateInput } from "@/components/DateInput";
 import { Field, ProblemList, QualityHistory, type QualityEventRow } from "@/components/quality/QualityParts";
+import { exportHref } from "@/lib/quality-export";
 import {
   REVIEW_COUNT_LABELS, filterReviews, formatDay, formatMoment, periodLabel, reviewYears, type FieldProblem, type ReviewCounts, type ReviewRow,
 } from "@/lib/quality";
@@ -104,6 +105,7 @@ export function ReviewsTab(p: ReviewsTabProps) {
             <select className="input text-sm" value={year} onChange={(e) => setYear(e.target.value)}><option value="">All</option>{reviewYears(p.reviews).map((y) => <option key={y} value={y}>{y}</option>)}</select>
           </label>
           <span className="text-xs text-gray-400" data-count-shown>{shown.length} of {p.reviews.length}</span>
+          <a href={exportHref("reviews", { year: year || undefined })} data-export="review" className="btn-secondary text-xs ml-auto">Export CSV</a>
         </div>
         {shown.length === 0 ? <div className="card p-6 text-center text-sm text-gray-500">{p.reviews.length === 0 ? "No reviews yet." : "No reviews in that year."}</div> : (
           <div className="card overflow-x-auto">

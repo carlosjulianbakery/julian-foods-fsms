@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { AlertCircle, ChevronLeft } from "lucide-react";
 import { CapaRecord, IncidentRecord, type QualityOptions } from "@/components/quality/QualityRecords";
 import type { QualityEventRow } from "@/components/quality/QualityParts";
-import { ATTACHMENT_TYPES, type AttachmentRow, type FieldProblem } from "@/lib/quality";
+import { useMarkInProgress } from "@/hooks/useMarkInProgress";
+import { ATTACHMENT_TYPES, QUALITY_CAPA_FORM_KEY, QUALITY_RULE_FACILITY, taskUntouched, type AttachmentRow, type FieldProblem } from "@/lib/quality";
 
 type Values = Record<string, string | boolean | null>;
 type Brief = { id: string; reference: string; status: string; dateReceived: string; description: string };
@@ -19,7 +20,11 @@ const mimeOf = (file: File) => file.type || ({ heic: "image/heic", heif: "image/
 const BASE = "/dashboard/admin/quality";
 
 /** Loads one incident or CAPA and sends every change through its route. After each write the record is reloaded, so the history shown is the stored one. */
-export function QualityRecordPage({ kind, id }: { kind: "incidents" | "capas"; id: string }) {
+export function QualityRecordPage({ kind, id, startTaskId }: {
+  kind: "incidents" | "capas"; id: string;
+  /** Set when a CAPA was opened from its task's Start button (checked on the server): that task is marked "In progress". */
+  startTaskId?: string;
+}) {
   const router = useRouter();
   const api = `/api/quality/${kind}/${id}`;
   const [data, setData] = useState<Loaded | null>(null);
@@ -37,6 +42,36 @@ export function QualityRecordPage({ kind, id }: { kind: "incidents" | "capas"; i
     } catch (e) { setLoadError(e instanceof Error ? e.message : "Could not load this record."); }
   }, [api]);
   useEffect(() => { void load(); }, [load]);
+
+  // Opened from the task's Start button: mark the task "In progress", once, with the same hook the forms use.
+  // Only after the record has loaded (the load may just have completed the task) and only while nobody has
+  // acted on the task: a task in progress, done, skipped or missed is left as it is.
+  const markInProgress = useMarkInProgress({ taskId: startTaskId ?? null, formKey: QUALITY_CAPA_FORM_KEY, facilityName: QUALITY_RULE_FACILITY });
+  const task = data?.task;
+  useEffect(() => {
+    if (startTaskId && task && task.id === startTaskId && taskUntouched(task.status)) markInProgress();
+  }, [startTaskId, task, markInProgress]);
+  // The hook announces the change; show the task's new status
+  useEffect(() => {
+    if (!startTaskId) return;
+    const refresh = () => { void load(); };
+    window.addEventListener("task-action", refresh);
+    return () => window.removeEventListener("task-action", refresh);
+  }, [startTaskId, load]);
+
+  const [pdfBusy, setPdfBusy] = useState(false);
+  /** Asks the server for the record's PDF layout and turns it into the file with the 624 exporter. */
+  async function downloadPdf() {
+    setPdfBusy(true); setFailure({});
+    try {
+      const res = await fetch(`${api}/pdf`);
+      const out = (await res.json().catch(() => ({}))) as { html?: string; filename?: string; error?: string };
+      if (!res.ok || !out.html || !out.filename) throw new Error(out.error ?? "Could not prepare the PDF.");
+      const { exportFormPdf } = await import("@/components/forms624/pdfExport624");
+      await exportFormPdf(out.html, out.filename);
+    } catch (e) { setFailure({ error: e instanceof Error ? e.message : "Could not prepare the PDF." }); }
+    finally { setPdfBusy(false); }
+  }
 
   async function send(url: string, method: "PATCH" | "POST" | "DELETE", body: Record<string, unknown>): Promise<Record<string, unknown> | null> {
     setBusy(true); setFailure({});
@@ -84,6 +119,7 @@ export function QualityRecordPage({ kind, id }: { kind: "incidents" | "capas"; i
     attachments: data.attachments ?? [],
     onUpload: (file: File, attachmentKind: "evidence" | "customer_response", description: string) => void uploadAttachment(file, attachmentKind, description),
     onRemoveAttachment: (attachmentId: string, reason: string) => void send(`/api/quality/attachments/${attachmentId}`, "DELETE", { reason }),
+    onDownloadPdf: () => void downloadPdf(), pdfBusy,
   };
   return (
     <div className="max-w-4xl space-y-3">

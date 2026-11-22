@@ -6,14 +6,22 @@ import { AlertCircle, Plus, ShieldCheck } from "lucide-react";
 import { CapasList, IncidentsList, NewCapaForm, NewIncidentForm } from "@/components/quality/QualityLists";
 import { ReviewsTab } from "@/components/quality/QualityReviews";
 import type { QualityEventRow } from "@/components/quality/QualityParts";
-import type { CapaRow, FieldProblem, IncidentRow, ReviewCounts, ReviewRow } from "@/lib/quality";
+import { useMarkInProgress } from "@/hooks/useMarkInProgress";
+import { QUALITY_REVIEW_FORM_KEY, QUALITY_RULE_FACILITY, type CapaRow, type FieldProblem, type IncidentRow, type ReviewCounts, type ReviewRow } from "@/lib/quality";
 
 type Tab = "incidents" | "capas" | "reviews";
 const NO_COUNTS: ReviewCounts = { openIncidents: 0, openCapas: 0, overdueCapas: 0, incidentsReceived: 0 };
 const BASE = "/dashboard/admin/quality";
 
-export function QualityHome({ initialTab, reviewerName = "", initialPeriod, taskId }: { initialTab: Tab; reviewerName?: string; initialPeriod?: string; taskId?: string }) {
+export function QualityHome({ initialTab, reviewerName = "", initialPeriod, taskId, startTaskId }: {
+  initialTab: Tab; reviewerName?: string; initialPeriod?: string; taskId?: string;
+  /** Set when the page was opened from the review task's Start button (checked on the server): that task is marked "In progress". */
+  startTaskId?: string;
+}) {
   const router = useRouter();
+  // The same hook the forms use. It fires once; the start route never touches a finished task and never moves a status back.
+  const markInProgress = useMarkInProgress({ taskId: startTaskId ?? null, formKey: QUALITY_REVIEW_FORM_KEY, facilityName: QUALITY_RULE_FACILITY });
+  useEffect(() => { if (startTaskId) markInProgress(); }, [startTaskId, markInProgress]);
   const [tab, setTab] = useState<Tab>(initialTab);
   const [incidents, setIncidents] = useState<IncidentRow[]>([]);
   const [capas, setCapas] = useState<CapaRow[]>([]);

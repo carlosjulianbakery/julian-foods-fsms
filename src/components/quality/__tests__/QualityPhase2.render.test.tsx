@@ -6,6 +6,7 @@ vi.mock("next/navigation", () => ({ redirect: nav.redirect, useRouter: () => ({ 
 vi.mock("next-auth", () => ({ getServerSession: vi.fn() }));
 vi.mock("@/lib/auth", () => ({ authOptions: {} }));
 vi.mock("@/lib/quality-reviews", () => ({ capaOfTask: vi.fn(), periodOfReviewTask: vi.fn() }));
+vi.mock("@/lib/quality-server", () => ({ noteTaskStarted: vi.fn(async () => true) }));
 
 import { getServerSession } from "next-auth";
 import { capaOfTask, periodOfReviewTask } from "@/lib/quality-reviews";
@@ -262,7 +263,7 @@ describe("'Start' on a task lands on the right page (real pages)", () => {
 
   it("CAPA follow-up task: opens the CAPA that holds the task id", async () => {
     (capaOfTask as MockFn).mockResolvedValue({ id: "capa-7", reference: "CAPA-2026-007" });
-    expect(await landing(() => CapaTaskPage({ searchParams: { taskId: "task-1" } }))).toBe("REDIRECT /dashboard/admin/quality/capas/capa-7");
+    expect(await landing(() => CapaTaskPage({ searchParams: { taskId: "task-1" } }))).toBe("REDIRECT /dashboard/admin/quality/capas/capa-7?taskId=task-1");
     expect(capaOfTask).toHaveBeenCalledWith("task-1");
   });
   it("CAPA follow-up task: a clear message when no CAPA holds that task, or no task id came with the link", async () => {

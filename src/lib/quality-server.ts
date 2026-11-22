@@ -14,7 +14,8 @@ import { QUALITY_NEXT_NUMBER_SQL } from "@/lib/quality-sql";
 import { completeRuleInstanceForSubmission } from "@/lib/task-completion";
 import { RANK_STEP } from "@/lib/task-order";
 import {
-  CAPA_RULE_TITLE, QUALITY_CAPA_FORM_KEY, QUALITY_RULE_FACILITY, capaTaskKey, planCapaTask,
+  CAPA_RULE_TITLE, QUALITY_CAPA_FORM_KEY, QUALITY_REVIEW_FORM_KEY, QUALITY_RULE_FACILITY, TASK_STARTED_ACTION, TASK_STATUS_LABELS, capaTaskKey, capaTaskStatusAfterMove, planCapaTask,
+  taskOpen, taskWasStarted,
   CAPA_FIELDS, CAPA_STATUSES, INCIDENT_FIELDS, REFERENCE_KIND, REOPEN_TO, capaCanClose, capaClosingProblems, capaCreateProblems, capaMove,
   canUseQuality, diffFields, formatReference, isDate, incidentClosingProblems, incidentCreateProblems, incidentMove, isReadOnly, parseFields,
   type AttachmentRow, type CapaRow, type Change, type EventAction, type FieldProblem, type FieldValue, type IncidentRow, type RecordType,
@@ -251,9 +252,11 @@ const statusForDue = (due: string, today: string) => (due < today ? "OVERDUE" : 
 export async function syncCapaTask(tx: Tx, actor: Actor, capaId: string): Promise<{ completeTaskId: string | null }> {
   const capa = await loadCapa(tx, capaId);
   const found = capa.taskInstanceId ? await tx.ruleInstance.findUnique({ where: { id: capa.taskInstanceId } }) : null;
+  // The task's own audit rows: a task that was ever acted on is kept, whatever its status says now
+  const auditActions = found ? (await tx.taskInstanceAudit.findMany({ where: { instanceId: found.id }, select: { action: true } })).map((a) => a.action) : [];
   const plan = planCapaTask(
     { id: capa.id, reference: capa.reference, problem: capa.problem, status: capa.status, ownerId: capa.ownerId, dueDate: day(capa.dueDate) },
-    found ? { status: found.status, dueDate: day(found.dueDate)!, ownerUserId: found.ownerUserId, label: found.label } : null,
+    found ? { status: found.status, dueDate: day(found.dueDate)!, ownerUserId: found.ownerUserId, label: found.label, auditActions } : null,
   );
   const setTaskId = (taskInstanceId: string | null) => tx.qualityCapa.updateMany({ where: { id: capa.id }, data: { taskInstanceId } });
   const today = getPacificToday();
@@ -271,7 +274,7 @@ export async function syncCapaTask(tx: Tx, actor: Actor, capaId: string): Promis
     await tx.ruleInstance.update({
       where: { id: found.id },
       // A started task keeps its status and its history; only the date, the owner and the label follow the CAPA
-      data: { dueDate: new Date(`${plan.dueDate}T00:00:00Z`), ownerUserId: plan.ownerUserId, label: plan.label, ...(found.status === "IN_PROGRESS" ? {} : { status: statusForDue(plan.dueDate, today) }) },
+      data: { dueDate: new Date(`${plan.dueDate}T00:00:00Z`), ownerUserId: plan.ownerUserId, label: plan.label, status: capaTaskStatusAfterMove(found.status, taskWasStarted(auditActions), plan.dueDate, today) as never },
     });
     await tx.taskInstanceAudit.create({ data: { instanceId: found.id, action: "updated", userId: actor.id, note: `${capa.reference}: ${plan.changed.join(", ")} changed on the CAPA` } });
   } else if (plan.do === "delete" && found) {
@@ -296,6 +299,63 @@ export async function completeCapaTask(actor: Actor, capaId: string, taskId: str
   } catch (e) {
     console.error("[quality] CAPA task completion failed:", e instanceof Error ? e.message : e);
     return null;
+  }
+}
+
+/**
+ * Self-heal, run when the CAPA list or a CAPA page is loaded: a CAPA already at Verifying effectiveness or
+ * Closed whose follow-up task is still open gets that task completed, through the same shared helper (its
+ * audit row, late if past the due date) and with a line in the CAPA's history. Only tasks of the CAPA
+ * follow-up rule that a CAPA points at are ever looked at. Running it again changes nothing. Never fails the load.
+ */
+export async function healCapaTasks(actor: Actor, capaId?: string): Promise<string[]> {
+  const healed: string[] = [];
+  try {
+    const capas = await prisma.qualityCapa.findMany({ where: { status: { in: ["verifying", "closed"] }, taskInstanceId: { not: null }, ...(capaId ? { id: capaId } : {}) } });
+    if (capas.length === 0) return healed;
+    const tasks = await prisma.ruleInstance.findMany({
+      where: { id: { in: capas.map((c) => c.taskInstanceId!) }, status: { in: ["UPCOMING", "DUE_TODAY", "OVERDUE", "IN_PROGRESS"] } },
+      include: { rule: { select: { formKey: true } } },
+    });
+    for (const capa of capas) {
+      const task = tasks.find((t) => t.id === capa.taskInstanceId);
+      if (!task || task.rule.formKey !== QUALITY_CAPA_FORM_KEY) continue;
+      const completed = await completeCapaTask(actor, capa.id, task.id);
+      const after = await prisma.ruleInstance.findUnique({ where: { id: task.id }, select: { status: true } });
+      if (completed !== task.id || after?.status !== "DONE") continue;
+      await write((tx) => recordEvent(tx, {
+        type: "capa", id: capa.id, reference: capa.reference, action: "task_completed", actor,
+        changes: [{ field: "followUpTask", from: TASK_STATUS_LABELS[task.status] ?? task.status, to: TASK_STATUS_LABELS.DONE }],
+        note: `The follow-up task was still open although this CAPA was already ${CAPA_STATUSES[capa.status]}. It was completed automatically when the CAPA was opened.`,
+      }));
+      healed.push(capa.id);
+    }
+  } catch (e) {
+    console.error("[quality] CAPA task self-heal failed:", e instanceof Error ? e.message : e);
+  }
+  return healed;
+}
+
+/**
+ * Records, once, that a Quality task (a CAPA follow-up or a monthly review) was opened from its Start
+ * button. This audit row is what later proves the task was started, even after the shared status
+ * promotion has turned it into "Overdue". Finished, skipped and missed tasks, and tasks of any other
+ * rule, are left alone. The status itself is set by the app's existing start route.
+ */
+export async function noteTaskStarted(actor: Actor, taskId: string | null | undefined): Promise<boolean> {
+  if (!taskId) return false;
+  try {
+    return await write(async (tx) => {
+      const task = await tx.ruleInstance.findUnique({ where: { id: taskId }, include: { rule: { select: { formKey: true } } } });
+      if (!task || ![QUALITY_CAPA_FORM_KEY, QUALITY_REVIEW_FORM_KEY].includes(task.rule.formKey ?? "") || !taskOpen(task.status)) return false;
+      const already = await tx.taskInstanceAudit.findMany({ where: { instanceId: taskId, action: TASK_STARTED_ACTION }, select: { id: true } });
+      if (already.length > 0) return false;
+      await tx.taskInstanceAudit.create({ data: { instanceId: taskId, action: TASK_STARTED_ACTION, userId: actor.id, note: "Opened from the task's Start button" } });
+      return true;
+    });
+  } catch (e) {
+    console.error("[quality] could not record the task start:", e instanceof Error ? e.message : e);
+    return false;
   }
 }
 

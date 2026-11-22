@@ -104,7 +104,7 @@ export const REVIEW_FIELDS: Record<string, FieldSpec> = {
 /** Fields the system sets itself; they appear in the history under these names. */
 export const SYSTEM_FIELD_LABELS: Record<string, string> = {
   status: "Status", closedDate: "Closed date", closedByName: "Closed by", voidReason: "Void reason", linkedCapa: "Linked CAPA", linkedIncident: "Linked incident",
-  attachment: "Attachment",
+  attachment: "Attachment", followUpTask: "Follow-up task",
 };
 export const FIELDS: Record<RecordType, Record<string, FieldSpec>> = { incident: INCIDENT_FIELDS, capa: CAPA_FIELDS, review: REVIEW_FIELDS };
 export const fieldLabel = (type: RecordType, field: string) => FIELDS[type][field]?.label ?? SYSTEM_FIELD_LABELS[field] ?? field;
@@ -254,10 +254,10 @@ export const REOPEN_TO: Record<"incident" | "capa", Record<string, string>> = {
 // ── History ─────────────────────────────────────────────────────────────────────
 
 export interface Change { field: string; from: FieldValue; to: FieldValue }
-export type EventAction = "created" | "updated" | "status_changed" | "closed" | "reopened" | "voided" | "linked" | "unlinked" | "attachment_added" | "attachment_removed";
+export type EventAction = "created" | "updated" | "status_changed" | "closed" | "reopened" | "voided" | "linked" | "unlinked" | "attachment_added" | "attachment_removed" | "task_completed";
 export const ACTION_LABELS: Record<EventAction, string> = {
   created: "Created", updated: "Updated", status_changed: "Status changed", closed: "Closed", reopened: "Reopened", voided: "Voided", linked: "Linked", unlinked: "Unlinked",
-  attachment_added: "Attachment added", attachment_removed: "Attachment removed",
+  attachment_added: "Attachment added", attachment_removed: "Attachment removed", task_completed: "Follow-up task completed",
 };
 
 /** A date value, whatever context created it. */
@@ -416,12 +416,37 @@ export function capaTaskLabel(reference: string, problem: string): string {
 }
 export const capaTaskKey = (capaId: string) => `capa:${capaId}`;
 
-/** A task nobody has acted on: it can be moved, re-assigned or removed freely. */
+/** A task whose status says nobody has acted on it. The status alone is not proof: see taskHasHistory. */
 export const taskUntouched = (status: string) => ["UPCOMING", "DUE_TODAY", "OVERDUE"].includes(status);
-const taskOpen = (status: string) => taskUntouched(status) || status === "IN_PROGRESS";
+export const taskOpen = (status: string) => taskUntouched(status) || status === "IN_PROGRESS";
+export const TASK_STATUS_LABELS: Record<string, string> = { UPCOMING: "Upcoming", DUE_TODAY: "Due today", IN_PROGRESS: "In progress", OVERDUE: "Overdue", DONE: "Done", SKIPPED: "Skipped", MISSED: "Missed" };
+
+/** The audit rows the CAPA sync writes itself when it creates or moves a task. Every other row means a person acted on the task. */
+export const CAPA_SYNC_AUDIT_ACTIONS: readonly string[] = ["created", "updated"];
+/** The audit row written the first time a Quality task is opened from its Start button. */
+export const TASK_STARTED_ACTION = "started";
+/**
+ * Whether a task has any audit history of its own (started, reopened, completed …). The shared status
+ * promotion turns a started task that passes its due date into "Overdue", so its status no longer says
+ * it was started; its audit rows still do.
+ */
+export const taskHasHistory = (auditActions: readonly string[] | undefined) => (auditActions ?? []).some((a) => !CAPA_SYNC_AUDIT_ACTIONS.includes(a));
+export const taskWasStarted = (auditActions: readonly string[] | undefined) => (auditActions ?? []).includes(TASK_STARTED_ACTION);
+
+/**
+ * The status of a CAPA task after its due date moved. A task in progress stays in progress; a started
+ * task that had gone overdue is in progress again once its date is no longer in the past; a task nobody
+ * acted on simply follows the calendar.
+ */
+export function capaTaskStatusAfterMove(current: string, wasStarted: boolean, due: string, today: string): string {
+  if (current === "IN_PROGRESS") return current;
+  if (due < today) return "OVERDUE";
+  if (wasStarted) return "IN_PROGRESS";
+  return due === today ? "DUE_TODAY" : "UPCOMING";
+}
 
 export interface CapaForTask { id: string; reference: string; problem: string; status: string; ownerId: string | null; dueDate: string | null }
-export interface TaskForCapa { status: string; dueDate: string; ownerUserId: string | null; label: string }
+export interface TaskForCapa { status: string; dueDate: string; ownerUserId: string | null; label: string; /** The actions of the task's audit rows. */ auditActions?: readonly string[] }
 export type CapaTaskPlan =
   | { do: "nothing" }
   | { do: "create"; dueDate: string; ownerUserId: string; label: string }
@@ -434,17 +459,19 @@ export type CapaTaskPlan =
  *  - a task exists only while the CAPA has BOTH an owner and a due date;
  *  - the task is done when the CAPA reaches Verifying effectiveness or Closed, whichever comes first;
  *  - an untouched task follows the CAPA (new date, new owner; removed when it is no longer wanted);
- *  - a started task keeps its history: only its date and owner follow, and it is never removed;
+ *  - a started task keeps its history: only its date and owner follow, and it is never removed. A task
+ *    counts as started when it is in progress OR has any audit history of its own, whatever its status;
  *  - a finished, skipped or missed task is never changed and never recreated.
  */
 export function planCapaTask(capa: CapaForTask, task: TaskForCapa | null): CapaTaskPlan {
   const wanted = !!capa.ownerId && !!capa.dueDate;
-  if (capa.status === "void") return task && taskUntouched(task.status) ? { do: "delete" } : { do: "nothing" };
+  const removable = !!task && taskUntouched(task.status) && !taskHasHistory(task.auditActions);
+  if (capa.status === "void") return removable ? { do: "delete" } : { do: "nothing" };
   if (capa.status === "verifying" || capa.status === "closed") return task && taskOpen(task.status) ? { do: "complete" } : { do: "nothing" };
   // Open or Action in progress
   if (!task) return wanted ? { do: "create", dueDate: capa.dueDate!, ownerUserId: capa.ownerId!, label: capaTaskLabel(capa.reference, capa.problem) } : { do: "nothing" };
   if (!taskOpen(task.status)) return { do: "nothing" };
-  if (!wanted) return taskUntouched(task.status) ? { do: "delete" } : { do: "nothing" };
+  if (!wanted) return removable ? { do: "delete" } : { do: "nothing" };
   const label = capaTaskLabel(capa.reference, capa.problem);
   const changed = [task.dueDate !== capa.dueDate ? "due date" : "", task.ownerUserId !== capa.ownerId ? "owner" : "", task.label !== label ? "label" : ""].filter(Boolean);
   return changed.length ? { do: "update", dueDate: capa.dueDate!, ownerUserId: capa.ownerId!, label, changed } : { do: "nothing" };
