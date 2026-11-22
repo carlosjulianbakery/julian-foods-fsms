@@ -35,28 +35,47 @@ const variants: [string, () => string][] = [
   ["the layout with its slide-in drawer (phone)", () => renderToStaticMarkup(<DashboardShell><p>page</p></DashboardShell>)],
 ];
 
+/** The links of the top, untitled group: everything before the first section title. */
+function topGroup(html: string): string[] {
+  const nav = html.slice(html.indexOf("<nav"));
+  const top = nav.slice(0, nav.indexOf("uppercase tracking-wider"));
+  return Array.from(top.matchAll(/<span class="flex-1 font-mono text-\[13px\]">([^<]+)<\/span>/g)).map((m) => m[1].replace(/&amp;/g, "&"));
+}
+/** Labels of the entries currently highlighted as active. */
+function activeEntries(html: string): string[] {
+  return Array.from(html.matchAll(/<a[^>]*class="[^"]*bg-brand-50[^"]*"[^>]*>.*?<span class="flex-1 font-mono text-\[13px\]">([^<]+)<\/span>/g)).map((m) => m[1].replace(/&amp;/g, "&"));
+}
+
 describe.each(variants)("Quality in %s", (_name, render) => {
-  it("an admin sees one 'Quality' entry, in its own section near the top", () => {
+  it("an admin sees 'Quality' as the last entry of the top group, which has no title", () => {
     as("ADMIN");
     const html = render();
     expect(count(html, QUALITY_LINK)).toBe(1);
-    expect(html).toMatch(/href="\/dashboard\/admin\/quality"[^>]*>.*?<span class="flex-1 font-mono text-\[13px\]">Quality<\/span>/);
-    expect(html).toContain('data-nav-section="quality"');
-    const order = headings(html);
-    expect(order[0]).toBe("Quality"); // the first section, right under the general entries
-    expect(order.indexOf("Quality")).toBeLessThan(order.indexOf("Forms"));
-    expect(order.indexOf("Quality")).toBeLessThan(order.indexOf("Inventory & Alerts"));
-    // it is no longer the last item under "Inventory & Alerts"
-    const inventory = html.slice(html.indexOf("Inventory &amp; Alerts"), html.indexOf("Purchasing"));
+    expect(topGroup(html)).toEqual(["Dashboard", "R&D", "Quality"]);
+    // the first section title comes only after it
+    expect(html.indexOf(QUALITY_LINK)).toBeLessThan(html.indexOf("uppercase tracking-wider"));
+    expect(headings(html)[0]).toBe("Forms");
+  });
+
+  it("there is no 'Quality' section header left, and no empty group", () => {
+    as("ADMIN");
+    const html = render();
+    expect(headings(html)).not.toContain("Quality");
+    expect(html).not.toContain("data-nav-section");
+    expect(headings(html)).toEqual(["Forms", "Logs", "Inventory & Alerts", "Purchasing", "Planning (Under Construction)", "Suppliers", "Compliance", "Administration"]);
+    // every section title is followed by at least one entry
+    expect(html).not.toMatch(/uppercase tracking-wider">[^<]*<\/p><\/div><div class="pt-4/);
+    // and it is not under "Inventory & Alerts" either
+    const inventory = html.slice(html.indexOf("Inventory &amp; Alerts"), html.indexOf(">Purchasing<") === -1 ? undefined : html.indexOf("Purchasing"));
     expect(inventory).toContain("Quarantine");
     expect(inventory).not.toContain(QUALITY_LINK);
   });
 
-  it("a supervisor does not see it", () => {
+  it("a supervisor does not see it: their top group is just the Dashboard", () => {
     as("SUPERVISOR");
     const html = render();
     expect(html).not.toContain(QUALITY_LINK);
-    expect(html).not.toContain('data-nav-section="quality"');
+    expect(topGroup(html)).toEqual(["Dashboard"]);
     expect(headings(html)).not.toContain("Quality");
     expect(html).toContain('href="/dashboard/supervisor/pre-op-624"'); // their own entries are still there
   });
@@ -65,19 +84,34 @@ describe.each(variants)("Quality in %s", (_name, render) => {
     as(null);
     const html = render();
     expect(html).not.toContain(QUALITY_LINK);
-    expect(headings(html)).not.toContain("Quality");
+    expect(topGroup(html)).not.toContain("Quality");
   });
 
   it("any other role value does not see it either (only the app's real admin role does)", () => {
     for (const role of ["admin", "Admin", "MANAGER", ""]) { as(role); expect(render(), role).not.toContain(QUALITY_LINK); }
   });
 
-  it("the entry is highlighted while the admin is anywhere inside Quality", () => {
+  it("the entry is highlighted on /dashboard/admin/quality and its sub-pages — alone", () => {
     as("ADMIN");
-    state.pathname = "/dashboard/admin/quality/incidents/abc";
-    const html = render();
-    const link = html.slice(html.indexOf(QUALITY_LINK) - 200, html.indexOf(QUALITY_LINK) + 400);
-    expect(link).toContain("text-brand-600");
+    for (const path of ["/dashboard/admin/quality", "/dashboard/admin/quality/incidents/abc", "/dashboard/admin/quality/capas/xyz"]) {
+      state.pathname = path;
+      expect(activeEntries(render()), path).toEqual(["Quality"]); // no double highlight with Dashboard, R&D or anything else
+    }
+  });
+
+  it("and it is not highlighted anywhere else", () => {
+    as("ADMIN");
+    const elsewhere: [string, string[]][] = [
+      ["/dashboard", ["Dashboard"]], ["/dashboard/admin/rd/projects", ["R&D"]], ["/dashboard/admin/quarantine", ["Quarantine"]],
+      ["/dashboard/admin/quality-reports", []], // a path that merely starts with the same letters is not Quality
+      ["/dashboard/admin", []],
+    ];
+    for (const [path, expected] of elsewhere) {
+      state.pathname = path;
+      const active = activeEntries(render());
+      expect(active, path).toEqual(expected);
+      expect(active, path).not.toContain("Quality");
+    }
   });
 });
 

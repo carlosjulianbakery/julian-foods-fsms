@@ -234,7 +234,7 @@ const inventoryNav = [
   },
 ];
 
-// Quality — Customer Incidents and CAPA. Its own section, right under the general entries.
+// Quality — Customer Incidents and CAPA. Shown as the last entry of the top, untitled group (after Dashboard and R&D).
 // Who sees it is decided by canUseQuality (the same check the pages and the routes use), not by a role list here.
 const qualityNav = [
   {
@@ -554,22 +554,10 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto" style={{ WebkitOverflowScrolling: "touch" }}>
-        {visibleGeneral.map((item) => (
+        {/* The top group has no title. Quality closes it, for those who may use it. */}
+        {[...visibleGeneral, ...visibleQuality].map((item) => (
           <NavLink key={item.href} item={item} />
         ))}
-
-        {visibleQuality.length > 0 && (
-          <>
-            <div className="pt-4 pb-1 px-3" data-nav-section="quality">
-              <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-wider">
-                Quality
-              </p>
-            </div>
-            {visibleQuality.map((item) => (
-              <NavLink key={item.href} item={item} />
-            ))}
-          </>
-        )}
 
         {visibleForms.length > 0 && (
           <>
