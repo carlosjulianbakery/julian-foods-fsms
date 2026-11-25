@@ -36,6 +36,7 @@ import {
   BarChart2,
   MapPin,
   ShieldCheck,
+  Wrench,
   Users2,
   ClipboardX,
 } from "lucide-react";
@@ -242,6 +243,16 @@ const qualityNav = [
     href: "/dashboard/admin/quality",
     icon: ShieldCheck,
     roles: [...QUALITY_ROLES],
+  },
+];
+
+// Maintenance work orders: for everyone who is signed in, whatever their role. Last entry of the top, untitled group.
+const workOrdersNav = [
+  {
+    label: "Work Orders",
+    href: "/dashboard/work-orders",
+    icon: Wrench,
+    roles: [] as string[],
   },
 ];
 
@@ -473,6 +484,7 @@ export function Sidebar() {
   const visibleGeneral            = generalNav.filter((item)            => item.roles.includes(role));
   // No session means no Quality entry, whatever the fallback role above is
   const visibleQuality            = canUseQuality(session?.user?.role) ? qualityNav : [];
+  const visibleWorkOrders         = session?.user ? workOrdersNav : [];
   const visibleForms              = formsNav.filter((item)              => item.roles.includes(role));
   const visibleLogs               = logsNav.filter((item)               => item.roles.includes(role));
   const visibleInventory          = inventoryNav.filter((item)          => item.roles.includes(role));
@@ -555,7 +567,7 @@ export function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto" style={{ WebkitOverflowScrolling: "touch" }}>
         {/* The top group has no title. Quality closes it, for those who may use it. */}
-        {[...visibleGeneral, ...visibleQuality].map((item) => (
+        {[...visibleGeneral, ...visibleQuality, ...visibleWorkOrders].map((item) => (
           <NavLink key={item.href} item={item} />
         ))}
 

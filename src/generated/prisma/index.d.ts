@@ -393,6 +393,26 @@ export type QualityReview = $Result.DefaultSelection<Prisma.$QualityReviewPayloa
  * 
  */
 export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
+/**
+ * Model WorkOrder
+ * 
+ */
+export type WorkOrder = $Result.DefaultSelection<Prisma.$WorkOrderPayload>
+/**
+ * Model WorkOrderEvent
+ * 
+ */
+export type WorkOrderEvent = $Result.DefaultSelection<Prisma.$WorkOrderEventPayload>
+/**
+ * Model WorkOrderEquipment
+ * 
+ */
+export type WorkOrderEquipment = $Result.DefaultSelection<Prisma.$WorkOrderEquipmentPayload>
+/**
+ * Model WorkOrderEquipmentList
+ * 
+ */
+export type WorkOrderEquipmentList = $Result.DefaultSelection<Prisma.$WorkOrderEquipmentListPayload>
 
 /**
  * Enums
@@ -1460,6 +1480,46 @@ export class PrismaClient<
     * ```
     */
   get notification(): Prisma.NotificationDelegate<ExtArgs>;
+
+  /**
+   * `prisma.workOrder`: Exposes CRUD operations for the **WorkOrder** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WorkOrders
+    * const workOrders = await prisma.workOrder.findMany()
+    * ```
+    */
+  get workOrder(): Prisma.WorkOrderDelegate<ExtArgs>;
+
+  /**
+   * `prisma.workOrderEvent`: Exposes CRUD operations for the **WorkOrderEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WorkOrderEvents
+    * const workOrderEvents = await prisma.workOrderEvent.findMany()
+    * ```
+    */
+  get workOrderEvent(): Prisma.WorkOrderEventDelegate<ExtArgs>;
+
+  /**
+   * `prisma.workOrderEquipment`: Exposes CRUD operations for the **WorkOrderEquipment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WorkOrderEquipments
+    * const workOrderEquipments = await prisma.workOrderEquipment.findMany()
+    * ```
+    */
+  get workOrderEquipment(): Prisma.WorkOrderEquipmentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.workOrderEquipmentList`: Exposes CRUD operations for the **WorkOrderEquipmentList** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WorkOrderEquipmentLists
+    * const workOrderEquipmentLists = await prisma.workOrderEquipmentList.findMany()
+    * ```
+    */
+  get workOrderEquipmentList(): Prisma.WorkOrderEquipmentListDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1976,7 +2036,11 @@ export namespace Prisma {
     QualityAttachment: 'QualityAttachment',
     QualityEvent: 'QualityEvent',
     QualityReview: 'QualityReview',
-    Notification: 'Notification'
+    Notification: 'Notification',
+    WorkOrder: 'WorkOrder',
+    WorkOrderEvent: 'WorkOrderEvent',
+    WorkOrderEquipment: 'WorkOrderEquipment',
+    WorkOrderEquipmentList: 'WorkOrderEquipmentList'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1992,7 +2056,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "form" | "formSubmission" | "record" | "preOpInspection" | "preOp624Inspection" | "dailyClean624Record" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "monthlyClean624Record" | "verification624Equipment" | "verification624List" | "verification624Record" | "facilitiesChecklistItem" | "facilitiesChecklistList" | "facilitiesChecklistRecord" | "foreignMatterItem" | "foreignMatterList" | "foreignMatterRecord" | "qualityCounter" | "qualityIncident" | "qualityCapa" | "qualityIncidentCapa" | "qualityAttachment" | "qualityEvent" | "qualityReview" | "notification"
+      modelProps: "user" | "form" | "formSubmission" | "record" | "preOpInspection" | "preOp624Inspection" | "dailyClean624Record" | "batchSheetTemplate" | "batchSheetSubmission" | "dailyCleaningChecklist" | "monthlyCleaningChecklist" | "material" | "supplier" | "supplierBrand" | "supplierMaterial" | "documentRequirement" | "formTemplate" | "supplierDocument" | "perDeliveryObligation" | "supplierStatusLog" | "product" | "purchaseOrder" | "purchaseOrderItem" | "receivingRecord" | "quarantineRecord" | "inventoryLot" | "inventoryMovement" | "cycleCount" | "initialStockEntry" | "auditLog" | "stockAlertAcknowledgment" | "forecastExclusion" | "inventoryAuditExclusion" | "shipstationProduct" | "shipstationBundleComponent" | "shipstationBundleConfig" | "shipstationShipment" | "shipstationShipmentItem" | "shipstationSyncLog" | "rdIngredient" | "rdProject" | "rdIteration" | "rdSensoryEvaluation" | "rdAttachment" | "rdNutritionProfile" | "monthlyCleaningDraft" | "inventoryAuditAcknowledgment" | "certification" | "sopDocument" | "sopCertificationScope" | "sopTag" | "sopDocumentTag" | "sopReviewLog" | "sopReminder" | "facility" | "taskRule" | "ruleInstance" | "taskInstanceAudit" | "monthlyClean624Record" | "verification624Equipment" | "verification624List" | "verification624Record" | "facilitiesChecklistItem" | "facilitiesChecklistList" | "facilitiesChecklistRecord" | "foreignMatterItem" | "foreignMatterList" | "foreignMatterRecord" | "qualityCounter" | "qualityIncident" | "qualityCapa" | "qualityIncidentCapa" | "qualityAttachment" | "qualityEvent" | "qualityReview" | "notification" | "workOrder" | "workOrderEvent" | "workOrderEquipment" | "workOrderEquipmentList"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -7313,6 +7377,286 @@ export namespace Prisma {
           count: {
             args: Prisma.NotificationCountArgs<ExtArgs>
             result: $Utils.Optional<NotificationCountAggregateOutputType> | number
+          }
+        }
+      }
+      WorkOrder: {
+        payload: Prisma.$WorkOrderPayload<ExtArgs>
+        fields: Prisma.WorkOrderFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WorkOrderFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WorkOrderFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderPayload>
+          }
+          findFirst: {
+            args: Prisma.WorkOrderFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WorkOrderFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderPayload>
+          }
+          findMany: {
+            args: Prisma.WorkOrderFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderPayload>[]
+          }
+          create: {
+            args: Prisma.WorkOrderCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderPayload>
+          }
+          createMany: {
+            args: Prisma.WorkOrderCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WorkOrderCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderPayload>[]
+          }
+          delete: {
+            args: Prisma.WorkOrderDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderPayload>
+          }
+          update: {
+            args: Prisma.WorkOrderUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderPayload>
+          }
+          deleteMany: {
+            args: Prisma.WorkOrderDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WorkOrderUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.WorkOrderUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderPayload>
+          }
+          aggregate: {
+            args: Prisma.WorkOrderAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWorkOrder>
+          }
+          groupBy: {
+            args: Prisma.WorkOrderGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WorkOrderCountArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderCountAggregateOutputType> | number
+          }
+        }
+      }
+      WorkOrderEvent: {
+        payload: Prisma.$WorkOrderEventPayload<ExtArgs>
+        fields: Prisma.WorkOrderEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WorkOrderEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WorkOrderEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEventPayload>
+          }
+          findFirst: {
+            args: Prisma.WorkOrderEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WorkOrderEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEventPayload>
+          }
+          findMany: {
+            args: Prisma.WorkOrderEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEventPayload>[]
+          }
+          create: {
+            args: Prisma.WorkOrderEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEventPayload>
+          }
+          createMany: {
+            args: Prisma.WorkOrderEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WorkOrderEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEventPayload>[]
+          }
+          delete: {
+            args: Prisma.WorkOrderEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEventPayload>
+          }
+          update: {
+            args: Prisma.WorkOrderEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.WorkOrderEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WorkOrderEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.WorkOrderEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEventPayload>
+          }
+          aggregate: {
+            args: Prisma.WorkOrderEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWorkOrderEvent>
+          }
+          groupBy: {
+            args: Prisma.WorkOrderEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WorkOrderEventCountArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderEventCountAggregateOutputType> | number
+          }
+        }
+      }
+      WorkOrderEquipment: {
+        payload: Prisma.$WorkOrderEquipmentPayload<ExtArgs>
+        fields: Prisma.WorkOrderEquipmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WorkOrderEquipmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WorkOrderEquipmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentPayload>
+          }
+          findFirst: {
+            args: Prisma.WorkOrderEquipmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WorkOrderEquipmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentPayload>
+          }
+          findMany: {
+            args: Prisma.WorkOrderEquipmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentPayload>[]
+          }
+          create: {
+            args: Prisma.WorkOrderEquipmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentPayload>
+          }
+          createMany: {
+            args: Prisma.WorkOrderEquipmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WorkOrderEquipmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentPayload>[]
+          }
+          delete: {
+            args: Prisma.WorkOrderEquipmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentPayload>
+          }
+          update: {
+            args: Prisma.WorkOrderEquipmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.WorkOrderEquipmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WorkOrderEquipmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.WorkOrderEquipmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentPayload>
+          }
+          aggregate: {
+            args: Prisma.WorkOrderEquipmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWorkOrderEquipment>
+          }
+          groupBy: {
+            args: Prisma.WorkOrderEquipmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderEquipmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WorkOrderEquipmentCountArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderEquipmentCountAggregateOutputType> | number
+          }
+        }
+      }
+      WorkOrderEquipmentList: {
+        payload: Prisma.$WorkOrderEquipmentListPayload<ExtArgs>
+        fields: Prisma.WorkOrderEquipmentListFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WorkOrderEquipmentListFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentListPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WorkOrderEquipmentListFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentListPayload>
+          }
+          findFirst: {
+            args: Prisma.WorkOrderEquipmentListFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentListPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WorkOrderEquipmentListFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentListPayload>
+          }
+          findMany: {
+            args: Prisma.WorkOrderEquipmentListFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentListPayload>[]
+          }
+          create: {
+            args: Prisma.WorkOrderEquipmentListCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentListPayload>
+          }
+          createMany: {
+            args: Prisma.WorkOrderEquipmentListCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WorkOrderEquipmentListCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentListPayload>[]
+          }
+          delete: {
+            args: Prisma.WorkOrderEquipmentListDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentListPayload>
+          }
+          update: {
+            args: Prisma.WorkOrderEquipmentListUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentListPayload>
+          }
+          deleteMany: {
+            args: Prisma.WorkOrderEquipmentListDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WorkOrderEquipmentListUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.WorkOrderEquipmentListUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkOrderEquipmentListPayload>
+          }
+          aggregate: {
+            args: Prisma.WorkOrderEquipmentListAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWorkOrderEquipmentList>
+          }
+          groupBy: {
+            args: Prisma.WorkOrderEquipmentListGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderEquipmentListGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WorkOrderEquipmentListCountArgs<ExtArgs>
+            result: $Utils.Optional<WorkOrderEquipmentListCountAggregateOutputType> | number
           }
         }
       }
@@ -91643,6 +91987,4038 @@ export namespace Prisma {
 
 
   /**
+   * Model WorkOrder
+   */
+
+  export type AggregateWorkOrder = {
+    _count: WorkOrderCountAggregateOutputType | null
+    _min: WorkOrderMinAggregateOutputType | null
+    _max: WorkOrderMaxAggregateOutputType | null
+  }
+
+  export type WorkOrderMinAggregateOutputType = {
+    id: string | null
+    reference: string | null
+    facility: string | null
+    requestType: string | null
+    equipmentId: string | null
+    equipmentName: string | null
+    problem: string | null
+    priority: string | null
+    status: string | null
+    dueDate: Date | null
+    requestedById: string | null
+    requestedByName: string | null
+    requestedAt: Date | null
+    assigneeId: string | null
+    assigneeName: string | null
+    startedAt: Date | null
+    startDate: Date | null
+    startTime: string | null
+    stopTime: string | null
+    repairedByKind: string | null
+    repairedByUserId: string | null
+    repairedByName: string | null
+    toolsAccounted: boolean | null
+    workDescription: string | null
+    completedDate: Date | null
+    signatureName: string | null
+    signedById: string | null
+    signedAt: Date | null
+    cancelledAt: Date | null
+    cancelledById: string | null
+    cancelReason: string | null
+    taskInstanceId: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkOrderMaxAggregateOutputType = {
+    id: string | null
+    reference: string | null
+    facility: string | null
+    requestType: string | null
+    equipmentId: string | null
+    equipmentName: string | null
+    problem: string | null
+    priority: string | null
+    status: string | null
+    dueDate: Date | null
+    requestedById: string | null
+    requestedByName: string | null
+    requestedAt: Date | null
+    assigneeId: string | null
+    assigneeName: string | null
+    startedAt: Date | null
+    startDate: Date | null
+    startTime: string | null
+    stopTime: string | null
+    repairedByKind: string | null
+    repairedByUserId: string | null
+    repairedByName: string | null
+    toolsAccounted: boolean | null
+    workDescription: string | null
+    completedDate: Date | null
+    signatureName: string | null
+    signedById: string | null
+    signedAt: Date | null
+    cancelledAt: Date | null
+    cancelledById: string | null
+    cancelReason: string | null
+    taskInstanceId: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkOrderCountAggregateOutputType = {
+    id: number
+    reference: number
+    facility: number
+    requestType: number
+    equipmentId: number
+    equipmentName: number
+    problem: number
+    priority: number
+    status: number
+    dueDate: number
+    requestedById: number
+    requestedByName: number
+    requestedAt: number
+    assigneeId: number
+    assigneeName: number
+    startedAt: number
+    startDate: number
+    startTime: number
+    stopTime: number
+    repairedByKind: number
+    repairedByUserId: number
+    repairedByName: number
+    toolsAccounted: number
+    workDescription: number
+    completedDate: number
+    signatureName: number
+    signedById: number
+    signedAt: number
+    cancelledAt: number
+    cancelledById: number
+    cancelReason: number
+    taskInstanceId: number
+    updatedById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WorkOrderMinAggregateInputType = {
+    id?: true
+    reference?: true
+    facility?: true
+    requestType?: true
+    equipmentId?: true
+    equipmentName?: true
+    problem?: true
+    priority?: true
+    status?: true
+    dueDate?: true
+    requestedById?: true
+    requestedByName?: true
+    requestedAt?: true
+    assigneeId?: true
+    assigneeName?: true
+    startedAt?: true
+    startDate?: true
+    startTime?: true
+    stopTime?: true
+    repairedByKind?: true
+    repairedByUserId?: true
+    repairedByName?: true
+    toolsAccounted?: true
+    workDescription?: true
+    completedDate?: true
+    signatureName?: true
+    signedById?: true
+    signedAt?: true
+    cancelledAt?: true
+    cancelledById?: true
+    cancelReason?: true
+    taskInstanceId?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkOrderMaxAggregateInputType = {
+    id?: true
+    reference?: true
+    facility?: true
+    requestType?: true
+    equipmentId?: true
+    equipmentName?: true
+    problem?: true
+    priority?: true
+    status?: true
+    dueDate?: true
+    requestedById?: true
+    requestedByName?: true
+    requestedAt?: true
+    assigneeId?: true
+    assigneeName?: true
+    startedAt?: true
+    startDate?: true
+    startTime?: true
+    stopTime?: true
+    repairedByKind?: true
+    repairedByUserId?: true
+    repairedByName?: true
+    toolsAccounted?: true
+    workDescription?: true
+    completedDate?: true
+    signatureName?: true
+    signedById?: true
+    signedAt?: true
+    cancelledAt?: true
+    cancelledById?: true
+    cancelReason?: true
+    taskInstanceId?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkOrderCountAggregateInputType = {
+    id?: true
+    reference?: true
+    facility?: true
+    requestType?: true
+    equipmentId?: true
+    equipmentName?: true
+    problem?: true
+    priority?: true
+    status?: true
+    dueDate?: true
+    requestedById?: true
+    requestedByName?: true
+    requestedAt?: true
+    assigneeId?: true
+    assigneeName?: true
+    startedAt?: true
+    startDate?: true
+    startTime?: true
+    stopTime?: true
+    repairedByKind?: true
+    repairedByUserId?: true
+    repairedByName?: true
+    toolsAccounted?: true
+    workDescription?: true
+    completedDate?: true
+    signatureName?: true
+    signedById?: true
+    signedAt?: true
+    cancelledAt?: true
+    cancelledById?: true
+    cancelReason?: true
+    taskInstanceId?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WorkOrderAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrder to aggregate.
+     */
+    where?: WorkOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrders to fetch.
+     */
+    orderBy?: WorkOrderOrderByWithRelationInput | WorkOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WorkOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WorkOrders
+    **/
+    _count?: true | WorkOrderCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WorkOrderMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WorkOrderMaxAggregateInputType
+  }
+
+  export type GetWorkOrderAggregateType<T extends WorkOrderAggregateArgs> = {
+        [P in keyof T & keyof AggregateWorkOrder]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWorkOrder[P]>
+      : GetScalarType<T[P], AggregateWorkOrder[P]>
+  }
+
+
+
+
+  export type WorkOrderGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderWhereInput
+    orderBy?: WorkOrderOrderByWithAggregationInput | WorkOrderOrderByWithAggregationInput[]
+    by: WorkOrderScalarFieldEnum[] | WorkOrderScalarFieldEnum
+    having?: WorkOrderScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WorkOrderCountAggregateInputType | true
+    _min?: WorkOrderMinAggregateInputType
+    _max?: WorkOrderMaxAggregateInputType
+  }
+
+  export type WorkOrderGroupByOutputType = {
+    id: string
+    reference: string
+    facility: string
+    requestType: string
+    equipmentId: string | null
+    equipmentName: string
+    problem: string
+    priority: string
+    status: string
+    dueDate: Date
+    requestedById: string | null
+    requestedByName: string
+    requestedAt: Date
+    assigneeId: string | null
+    assigneeName: string
+    startedAt: Date | null
+    startDate: Date | null
+    startTime: string | null
+    stopTime: string | null
+    repairedByKind: string | null
+    repairedByUserId: string | null
+    repairedByName: string
+    toolsAccounted: boolean | null
+    workDescription: string
+    completedDate: Date | null
+    signatureName: string
+    signedById: string | null
+    signedAt: Date | null
+    cancelledAt: Date | null
+    cancelledById: string | null
+    cancelReason: string | null
+    taskInstanceId: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: WorkOrderCountAggregateOutputType | null
+    _min: WorkOrderMinAggregateOutputType | null
+    _max: WorkOrderMaxAggregateOutputType | null
+  }
+
+  type GetWorkOrderGroupByPayload<T extends WorkOrderGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WorkOrderGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WorkOrderGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WorkOrderGroupByOutputType[P]>
+            : GetScalarType<T[P], WorkOrderGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WorkOrderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reference?: boolean
+    facility?: boolean
+    requestType?: boolean
+    equipmentId?: boolean
+    equipmentName?: boolean
+    problem?: boolean
+    priority?: boolean
+    status?: boolean
+    dueDate?: boolean
+    requestedById?: boolean
+    requestedByName?: boolean
+    requestedAt?: boolean
+    assigneeId?: boolean
+    assigneeName?: boolean
+    startedAt?: boolean
+    startDate?: boolean
+    startTime?: boolean
+    stopTime?: boolean
+    repairedByKind?: boolean
+    repairedByUserId?: boolean
+    repairedByName?: boolean
+    toolsAccounted?: boolean
+    workDescription?: boolean
+    completedDate?: boolean
+    signatureName?: boolean
+    signedById?: boolean
+    signedAt?: boolean
+    cancelledAt?: boolean
+    cancelledById?: boolean
+    cancelReason?: boolean
+    taskInstanceId?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["workOrder"]>
+
+  export type WorkOrderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reference?: boolean
+    facility?: boolean
+    requestType?: boolean
+    equipmentId?: boolean
+    equipmentName?: boolean
+    problem?: boolean
+    priority?: boolean
+    status?: boolean
+    dueDate?: boolean
+    requestedById?: boolean
+    requestedByName?: boolean
+    requestedAt?: boolean
+    assigneeId?: boolean
+    assigneeName?: boolean
+    startedAt?: boolean
+    startDate?: boolean
+    startTime?: boolean
+    stopTime?: boolean
+    repairedByKind?: boolean
+    repairedByUserId?: boolean
+    repairedByName?: boolean
+    toolsAccounted?: boolean
+    workDescription?: boolean
+    completedDate?: boolean
+    signatureName?: boolean
+    signedById?: boolean
+    signedAt?: boolean
+    cancelledAt?: boolean
+    cancelledById?: boolean
+    cancelReason?: boolean
+    taskInstanceId?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["workOrder"]>
+
+  export type WorkOrderSelectScalar = {
+    id?: boolean
+    reference?: boolean
+    facility?: boolean
+    requestType?: boolean
+    equipmentId?: boolean
+    equipmentName?: boolean
+    problem?: boolean
+    priority?: boolean
+    status?: boolean
+    dueDate?: boolean
+    requestedById?: boolean
+    requestedByName?: boolean
+    requestedAt?: boolean
+    assigneeId?: boolean
+    assigneeName?: boolean
+    startedAt?: boolean
+    startDate?: boolean
+    startTime?: boolean
+    stopTime?: boolean
+    repairedByKind?: boolean
+    repairedByUserId?: boolean
+    repairedByName?: boolean
+    toolsAccounted?: boolean
+    workDescription?: boolean
+    completedDate?: boolean
+    signatureName?: boolean
+    signedById?: boolean
+    signedAt?: boolean
+    cancelledAt?: boolean
+    cancelledById?: boolean
+    cancelReason?: boolean
+    taskInstanceId?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $WorkOrderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WorkOrder"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      reference: string
+      facility: string
+      requestType: string
+      equipmentId: string | null
+      equipmentName: string
+      problem: string
+      priority: string
+      status: string
+      dueDate: Date
+      requestedById: string | null
+      requestedByName: string
+      requestedAt: Date
+      assigneeId: string | null
+      assigneeName: string
+      startedAt: Date | null
+      startDate: Date | null
+      startTime: string | null
+      stopTime: string | null
+      repairedByKind: string | null
+      repairedByUserId: string | null
+      repairedByName: string
+      toolsAccounted: boolean | null
+      workDescription: string
+      completedDate: Date | null
+      signatureName: string
+      signedById: string | null
+      signedAt: Date | null
+      cancelledAt: Date | null
+      cancelledById: string | null
+      cancelReason: string | null
+      taskInstanceId: string | null
+      updatedById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["workOrder"]>
+    composites: {}
+  }
+
+  type WorkOrderGetPayload<S extends boolean | null | undefined | WorkOrderDefaultArgs> = $Result.GetResult<Prisma.$WorkOrderPayload, S>
+
+  type WorkOrderCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<WorkOrderFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: WorkOrderCountAggregateInputType | true
+    }
+
+  export interface WorkOrderDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WorkOrder'], meta: { name: 'WorkOrder' } }
+    /**
+     * Find zero or one WorkOrder that matches the filter.
+     * @param {WorkOrderFindUniqueArgs} args - Arguments to find a WorkOrder
+     * @example
+     * // Get one WorkOrder
+     * const workOrder = await prisma.workOrder.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WorkOrderFindUniqueArgs>(args: SelectSubset<T, WorkOrderFindUniqueArgs<ExtArgs>>): Prisma__WorkOrderClient<$Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one WorkOrder that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {WorkOrderFindUniqueOrThrowArgs} args - Arguments to find a WorkOrder
+     * @example
+     * // Get one WorkOrder
+     * const workOrder = await prisma.workOrder.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WorkOrderFindUniqueOrThrowArgs>(args: SelectSubset<T, WorkOrderFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WorkOrderClient<$Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first WorkOrder that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderFindFirstArgs} args - Arguments to find a WorkOrder
+     * @example
+     * // Get one WorkOrder
+     * const workOrder = await prisma.workOrder.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WorkOrderFindFirstArgs>(args?: SelectSubset<T, WorkOrderFindFirstArgs<ExtArgs>>): Prisma__WorkOrderClient<$Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first WorkOrder that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderFindFirstOrThrowArgs} args - Arguments to find a WorkOrder
+     * @example
+     * // Get one WorkOrder
+     * const workOrder = await prisma.workOrder.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WorkOrderFindFirstOrThrowArgs>(args?: SelectSubset<T, WorkOrderFindFirstOrThrowArgs<ExtArgs>>): Prisma__WorkOrderClient<$Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more WorkOrders that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WorkOrders
+     * const workOrders = await prisma.workOrder.findMany()
+     * 
+     * // Get first 10 WorkOrders
+     * const workOrders = await prisma.workOrder.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const workOrderWithIdOnly = await prisma.workOrder.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WorkOrderFindManyArgs>(args?: SelectSubset<T, WorkOrderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a WorkOrder.
+     * @param {WorkOrderCreateArgs} args - Arguments to create a WorkOrder.
+     * @example
+     * // Create one WorkOrder
+     * const WorkOrder = await prisma.workOrder.create({
+     *   data: {
+     *     // ... data to create a WorkOrder
+     *   }
+     * })
+     * 
+     */
+    create<T extends WorkOrderCreateArgs>(args: SelectSubset<T, WorkOrderCreateArgs<ExtArgs>>): Prisma__WorkOrderClient<$Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many WorkOrders.
+     * @param {WorkOrderCreateManyArgs} args - Arguments to create many WorkOrders.
+     * @example
+     * // Create many WorkOrders
+     * const workOrder = await prisma.workOrder.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WorkOrderCreateManyArgs>(args?: SelectSubset<T, WorkOrderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WorkOrders and returns the data saved in the database.
+     * @param {WorkOrderCreateManyAndReturnArgs} args - Arguments to create many WorkOrders.
+     * @example
+     * // Create many WorkOrders
+     * const workOrder = await prisma.workOrder.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WorkOrders and only return the `id`
+     * const workOrderWithIdOnly = await prisma.workOrder.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WorkOrderCreateManyAndReturnArgs>(args?: SelectSubset<T, WorkOrderCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a WorkOrder.
+     * @param {WorkOrderDeleteArgs} args - Arguments to delete one WorkOrder.
+     * @example
+     * // Delete one WorkOrder
+     * const WorkOrder = await prisma.workOrder.delete({
+     *   where: {
+     *     // ... filter to delete one WorkOrder
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WorkOrderDeleteArgs>(args: SelectSubset<T, WorkOrderDeleteArgs<ExtArgs>>): Prisma__WorkOrderClient<$Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one WorkOrder.
+     * @param {WorkOrderUpdateArgs} args - Arguments to update one WorkOrder.
+     * @example
+     * // Update one WorkOrder
+     * const workOrder = await prisma.workOrder.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WorkOrderUpdateArgs>(args: SelectSubset<T, WorkOrderUpdateArgs<ExtArgs>>): Prisma__WorkOrderClient<$Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more WorkOrders.
+     * @param {WorkOrderDeleteManyArgs} args - Arguments to filter WorkOrders to delete.
+     * @example
+     * // Delete a few WorkOrders
+     * const { count } = await prisma.workOrder.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WorkOrderDeleteManyArgs>(args?: SelectSubset<T, WorkOrderDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkOrders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WorkOrders
+     * const workOrder = await prisma.workOrder.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WorkOrderUpdateManyArgs>(args: SelectSubset<T, WorkOrderUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one WorkOrder.
+     * @param {WorkOrderUpsertArgs} args - Arguments to update or create a WorkOrder.
+     * @example
+     * // Update or create a WorkOrder
+     * const workOrder = await prisma.workOrder.upsert({
+     *   create: {
+     *     // ... data to create a WorkOrder
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WorkOrder we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WorkOrderUpsertArgs>(args: SelectSubset<T, WorkOrderUpsertArgs<ExtArgs>>): Prisma__WorkOrderClient<$Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of WorkOrders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderCountArgs} args - Arguments to filter WorkOrders to count.
+     * @example
+     * // Count the number of WorkOrders
+     * const count = await prisma.workOrder.count({
+     *   where: {
+     *     // ... the filter for the WorkOrders we want to count
+     *   }
+     * })
+    **/
+    count<T extends WorkOrderCountArgs>(
+      args?: Subset<T, WorkOrderCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WorkOrderCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WorkOrder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WorkOrderAggregateArgs>(args: Subset<T, WorkOrderAggregateArgs>): Prisma.PrismaPromise<GetWorkOrderAggregateType<T>>
+
+    /**
+     * Group by WorkOrder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WorkOrderGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WorkOrderGroupByArgs['orderBy'] }
+        : { orderBy?: WorkOrderGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WorkOrderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWorkOrderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WorkOrder model
+   */
+  readonly fields: WorkOrderFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WorkOrder.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WorkOrderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WorkOrder model
+   */ 
+  interface WorkOrderFieldRefs {
+    readonly id: FieldRef<"WorkOrder", 'String'>
+    readonly reference: FieldRef<"WorkOrder", 'String'>
+    readonly facility: FieldRef<"WorkOrder", 'String'>
+    readonly requestType: FieldRef<"WorkOrder", 'String'>
+    readonly equipmentId: FieldRef<"WorkOrder", 'String'>
+    readonly equipmentName: FieldRef<"WorkOrder", 'String'>
+    readonly problem: FieldRef<"WorkOrder", 'String'>
+    readonly priority: FieldRef<"WorkOrder", 'String'>
+    readonly status: FieldRef<"WorkOrder", 'String'>
+    readonly dueDate: FieldRef<"WorkOrder", 'DateTime'>
+    readonly requestedById: FieldRef<"WorkOrder", 'String'>
+    readonly requestedByName: FieldRef<"WorkOrder", 'String'>
+    readonly requestedAt: FieldRef<"WorkOrder", 'DateTime'>
+    readonly assigneeId: FieldRef<"WorkOrder", 'String'>
+    readonly assigneeName: FieldRef<"WorkOrder", 'String'>
+    readonly startedAt: FieldRef<"WorkOrder", 'DateTime'>
+    readonly startDate: FieldRef<"WorkOrder", 'DateTime'>
+    readonly startTime: FieldRef<"WorkOrder", 'String'>
+    readonly stopTime: FieldRef<"WorkOrder", 'String'>
+    readonly repairedByKind: FieldRef<"WorkOrder", 'String'>
+    readonly repairedByUserId: FieldRef<"WorkOrder", 'String'>
+    readonly repairedByName: FieldRef<"WorkOrder", 'String'>
+    readonly toolsAccounted: FieldRef<"WorkOrder", 'Boolean'>
+    readonly workDescription: FieldRef<"WorkOrder", 'String'>
+    readonly completedDate: FieldRef<"WorkOrder", 'DateTime'>
+    readonly signatureName: FieldRef<"WorkOrder", 'String'>
+    readonly signedById: FieldRef<"WorkOrder", 'String'>
+    readonly signedAt: FieldRef<"WorkOrder", 'DateTime'>
+    readonly cancelledAt: FieldRef<"WorkOrder", 'DateTime'>
+    readonly cancelledById: FieldRef<"WorkOrder", 'String'>
+    readonly cancelReason: FieldRef<"WorkOrder", 'String'>
+    readonly taskInstanceId: FieldRef<"WorkOrder", 'String'>
+    readonly updatedById: FieldRef<"WorkOrder", 'String'>
+    readonly createdAt: FieldRef<"WorkOrder", 'DateTime'>
+    readonly updatedAt: FieldRef<"WorkOrder", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WorkOrder findUnique
+   */
+  export type WorkOrderFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrder
+     */
+    select?: WorkOrderSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrder to fetch.
+     */
+    where: WorkOrderWhereUniqueInput
+  }
+
+  /**
+   * WorkOrder findUniqueOrThrow
+   */
+  export type WorkOrderFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrder
+     */
+    select?: WorkOrderSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrder to fetch.
+     */
+    where: WorkOrderWhereUniqueInput
+  }
+
+  /**
+   * WorkOrder findFirst
+   */
+  export type WorkOrderFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrder
+     */
+    select?: WorkOrderSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrder to fetch.
+     */
+    where?: WorkOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrders to fetch.
+     */
+    orderBy?: WorkOrderOrderByWithRelationInput | WorkOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrders.
+     */
+    cursor?: WorkOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrders.
+     */
+    distinct?: WorkOrderScalarFieldEnum | WorkOrderScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrder findFirstOrThrow
+   */
+  export type WorkOrderFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrder
+     */
+    select?: WorkOrderSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrder to fetch.
+     */
+    where?: WorkOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrders to fetch.
+     */
+    orderBy?: WorkOrderOrderByWithRelationInput | WorkOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrders.
+     */
+    cursor?: WorkOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrders.
+     */
+    distinct?: WorkOrderScalarFieldEnum | WorkOrderScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrder findMany
+   */
+  export type WorkOrderFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrder
+     */
+    select?: WorkOrderSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrders to fetch.
+     */
+    where?: WorkOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrders to fetch.
+     */
+    orderBy?: WorkOrderOrderByWithRelationInput | WorkOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WorkOrders.
+     */
+    cursor?: WorkOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrders.
+     */
+    skip?: number
+    distinct?: WorkOrderScalarFieldEnum | WorkOrderScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrder create
+   */
+  export type WorkOrderCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrder
+     */
+    select?: WorkOrderSelect<ExtArgs> | null
+    /**
+     * The data needed to create a WorkOrder.
+     */
+    data: XOR<WorkOrderCreateInput, WorkOrderUncheckedCreateInput>
+  }
+
+  /**
+   * WorkOrder createMany
+   */
+  export type WorkOrderCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WorkOrders.
+     */
+    data: WorkOrderCreateManyInput | WorkOrderCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkOrder createManyAndReturn
+   */
+  export type WorkOrderCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrder
+     */
+    select?: WorkOrderSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many WorkOrders.
+     */
+    data: WorkOrderCreateManyInput | WorkOrderCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkOrder update
+   */
+  export type WorkOrderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrder
+     */
+    select?: WorkOrderSelect<ExtArgs> | null
+    /**
+     * The data needed to update a WorkOrder.
+     */
+    data: XOR<WorkOrderUpdateInput, WorkOrderUncheckedUpdateInput>
+    /**
+     * Choose, which WorkOrder to update.
+     */
+    where: WorkOrderWhereUniqueInput
+  }
+
+  /**
+   * WorkOrder updateMany
+   */
+  export type WorkOrderUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WorkOrders.
+     */
+    data: XOR<WorkOrderUpdateManyMutationInput, WorkOrderUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkOrders to update
+     */
+    where?: WorkOrderWhereInput
+  }
+
+  /**
+   * WorkOrder upsert
+   */
+  export type WorkOrderUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrder
+     */
+    select?: WorkOrderSelect<ExtArgs> | null
+    /**
+     * The filter to search for the WorkOrder to update in case it exists.
+     */
+    where: WorkOrderWhereUniqueInput
+    /**
+     * In case the WorkOrder found by the `where` argument doesn't exist, create a new WorkOrder with this data.
+     */
+    create: XOR<WorkOrderCreateInput, WorkOrderUncheckedCreateInput>
+    /**
+     * In case the WorkOrder was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WorkOrderUpdateInput, WorkOrderUncheckedUpdateInput>
+  }
+
+  /**
+   * WorkOrder delete
+   */
+  export type WorkOrderDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrder
+     */
+    select?: WorkOrderSelect<ExtArgs> | null
+    /**
+     * Filter which WorkOrder to delete.
+     */
+    where: WorkOrderWhereUniqueInput
+  }
+
+  /**
+   * WorkOrder deleteMany
+   */
+  export type WorkOrderDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrders to delete
+     */
+    where?: WorkOrderWhereInput
+  }
+
+  /**
+   * WorkOrder without action
+   */
+  export type WorkOrderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrder
+     */
+    select?: WorkOrderSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WorkOrderEvent
+   */
+
+  export type AggregateWorkOrderEvent = {
+    _count: WorkOrderEventCountAggregateOutputType | null
+    _min: WorkOrderEventMinAggregateOutputType | null
+    _max: WorkOrderEventMaxAggregateOutputType | null
+  }
+
+  export type WorkOrderEventMinAggregateOutputType = {
+    id: string | null
+    workOrderId: string | null
+    reference: string | null
+    action: string | null
+    userId: string | null
+    userName: string | null
+    note: string | null
+    createdAt: Date | null
+  }
+
+  export type WorkOrderEventMaxAggregateOutputType = {
+    id: string | null
+    workOrderId: string | null
+    reference: string | null
+    action: string | null
+    userId: string | null
+    userName: string | null
+    note: string | null
+    createdAt: Date | null
+  }
+
+  export type WorkOrderEventCountAggregateOutputType = {
+    id: number
+    workOrderId: number
+    reference: number
+    action: number
+    userId: number
+    userName: number
+    changes: number
+    note: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type WorkOrderEventMinAggregateInputType = {
+    id?: true
+    workOrderId?: true
+    reference?: true
+    action?: true
+    userId?: true
+    userName?: true
+    note?: true
+    createdAt?: true
+  }
+
+  export type WorkOrderEventMaxAggregateInputType = {
+    id?: true
+    workOrderId?: true
+    reference?: true
+    action?: true
+    userId?: true
+    userName?: true
+    note?: true
+    createdAt?: true
+  }
+
+  export type WorkOrderEventCountAggregateInputType = {
+    id?: true
+    workOrderId?: true
+    reference?: true
+    action?: true
+    userId?: true
+    userName?: true
+    changes?: true
+    note?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type WorkOrderEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrderEvent to aggregate.
+     */
+    where?: WorkOrderEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderEvents to fetch.
+     */
+    orderBy?: WorkOrderEventOrderByWithRelationInput | WorkOrderEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WorkOrderEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WorkOrderEvents
+    **/
+    _count?: true | WorkOrderEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WorkOrderEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WorkOrderEventMaxAggregateInputType
+  }
+
+  export type GetWorkOrderEventAggregateType<T extends WorkOrderEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateWorkOrderEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWorkOrderEvent[P]>
+      : GetScalarType<T[P], AggregateWorkOrderEvent[P]>
+  }
+
+
+
+
+  export type WorkOrderEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderEventWhereInput
+    orderBy?: WorkOrderEventOrderByWithAggregationInput | WorkOrderEventOrderByWithAggregationInput[]
+    by: WorkOrderEventScalarFieldEnum[] | WorkOrderEventScalarFieldEnum
+    having?: WorkOrderEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WorkOrderEventCountAggregateInputType | true
+    _min?: WorkOrderEventMinAggregateInputType
+    _max?: WorkOrderEventMaxAggregateInputType
+  }
+
+  export type WorkOrderEventGroupByOutputType = {
+    id: string
+    workOrderId: string
+    reference: string
+    action: string
+    userId: string | null
+    userName: string
+    changes: JsonValue
+    note: string | null
+    createdAt: Date
+    _count: WorkOrderEventCountAggregateOutputType | null
+    _min: WorkOrderEventMinAggregateOutputType | null
+    _max: WorkOrderEventMaxAggregateOutputType | null
+  }
+
+  type GetWorkOrderEventGroupByPayload<T extends WorkOrderEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WorkOrderEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WorkOrderEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WorkOrderEventGroupByOutputType[P]>
+            : GetScalarType<T[P], WorkOrderEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WorkOrderEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workOrderId?: boolean
+    reference?: boolean
+    action?: boolean
+    userId?: boolean
+    userName?: boolean
+    changes?: boolean
+    note?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["workOrderEvent"]>
+
+  export type WorkOrderEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    workOrderId?: boolean
+    reference?: boolean
+    action?: boolean
+    userId?: boolean
+    userName?: boolean
+    changes?: boolean
+    note?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["workOrderEvent"]>
+
+  export type WorkOrderEventSelectScalar = {
+    id?: boolean
+    workOrderId?: boolean
+    reference?: boolean
+    action?: boolean
+    userId?: boolean
+    userName?: boolean
+    changes?: boolean
+    note?: boolean
+    createdAt?: boolean
+  }
+
+
+  export type $WorkOrderEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WorkOrderEvent"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      workOrderId: string
+      reference: string
+      action: string
+      userId: string | null
+      userName: string
+      changes: Prisma.JsonValue
+      note: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["workOrderEvent"]>
+    composites: {}
+  }
+
+  type WorkOrderEventGetPayload<S extends boolean | null | undefined | WorkOrderEventDefaultArgs> = $Result.GetResult<Prisma.$WorkOrderEventPayload, S>
+
+  type WorkOrderEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<WorkOrderEventFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: WorkOrderEventCountAggregateInputType | true
+    }
+
+  export interface WorkOrderEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WorkOrderEvent'], meta: { name: 'WorkOrderEvent' } }
+    /**
+     * Find zero or one WorkOrderEvent that matches the filter.
+     * @param {WorkOrderEventFindUniqueArgs} args - Arguments to find a WorkOrderEvent
+     * @example
+     * // Get one WorkOrderEvent
+     * const workOrderEvent = await prisma.workOrderEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WorkOrderEventFindUniqueArgs>(args: SelectSubset<T, WorkOrderEventFindUniqueArgs<ExtArgs>>): Prisma__WorkOrderEventClient<$Result.GetResult<Prisma.$WorkOrderEventPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one WorkOrderEvent that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {WorkOrderEventFindUniqueOrThrowArgs} args - Arguments to find a WorkOrderEvent
+     * @example
+     * // Get one WorkOrderEvent
+     * const workOrderEvent = await prisma.workOrderEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WorkOrderEventFindUniqueOrThrowArgs>(args: SelectSubset<T, WorkOrderEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WorkOrderEventClient<$Result.GetResult<Prisma.$WorkOrderEventPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first WorkOrderEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEventFindFirstArgs} args - Arguments to find a WorkOrderEvent
+     * @example
+     * // Get one WorkOrderEvent
+     * const workOrderEvent = await prisma.workOrderEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WorkOrderEventFindFirstArgs>(args?: SelectSubset<T, WorkOrderEventFindFirstArgs<ExtArgs>>): Prisma__WorkOrderEventClient<$Result.GetResult<Prisma.$WorkOrderEventPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first WorkOrderEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEventFindFirstOrThrowArgs} args - Arguments to find a WorkOrderEvent
+     * @example
+     * // Get one WorkOrderEvent
+     * const workOrderEvent = await prisma.workOrderEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WorkOrderEventFindFirstOrThrowArgs>(args?: SelectSubset<T, WorkOrderEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__WorkOrderEventClient<$Result.GetResult<Prisma.$WorkOrderEventPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more WorkOrderEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WorkOrderEvents
+     * const workOrderEvents = await prisma.workOrderEvent.findMany()
+     * 
+     * // Get first 10 WorkOrderEvents
+     * const workOrderEvents = await prisma.workOrderEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const workOrderEventWithIdOnly = await prisma.workOrderEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WorkOrderEventFindManyArgs>(args?: SelectSubset<T, WorkOrderEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderEventPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a WorkOrderEvent.
+     * @param {WorkOrderEventCreateArgs} args - Arguments to create a WorkOrderEvent.
+     * @example
+     * // Create one WorkOrderEvent
+     * const WorkOrderEvent = await prisma.workOrderEvent.create({
+     *   data: {
+     *     // ... data to create a WorkOrderEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends WorkOrderEventCreateArgs>(args: SelectSubset<T, WorkOrderEventCreateArgs<ExtArgs>>): Prisma__WorkOrderEventClient<$Result.GetResult<Prisma.$WorkOrderEventPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many WorkOrderEvents.
+     * @param {WorkOrderEventCreateManyArgs} args - Arguments to create many WorkOrderEvents.
+     * @example
+     * // Create many WorkOrderEvents
+     * const workOrderEvent = await prisma.workOrderEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WorkOrderEventCreateManyArgs>(args?: SelectSubset<T, WorkOrderEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WorkOrderEvents and returns the data saved in the database.
+     * @param {WorkOrderEventCreateManyAndReturnArgs} args - Arguments to create many WorkOrderEvents.
+     * @example
+     * // Create many WorkOrderEvents
+     * const workOrderEvent = await prisma.workOrderEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WorkOrderEvents and only return the `id`
+     * const workOrderEventWithIdOnly = await prisma.workOrderEvent.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WorkOrderEventCreateManyAndReturnArgs>(args?: SelectSubset<T, WorkOrderEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderEventPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a WorkOrderEvent.
+     * @param {WorkOrderEventDeleteArgs} args - Arguments to delete one WorkOrderEvent.
+     * @example
+     * // Delete one WorkOrderEvent
+     * const WorkOrderEvent = await prisma.workOrderEvent.delete({
+     *   where: {
+     *     // ... filter to delete one WorkOrderEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WorkOrderEventDeleteArgs>(args: SelectSubset<T, WorkOrderEventDeleteArgs<ExtArgs>>): Prisma__WorkOrderEventClient<$Result.GetResult<Prisma.$WorkOrderEventPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one WorkOrderEvent.
+     * @param {WorkOrderEventUpdateArgs} args - Arguments to update one WorkOrderEvent.
+     * @example
+     * // Update one WorkOrderEvent
+     * const workOrderEvent = await prisma.workOrderEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WorkOrderEventUpdateArgs>(args: SelectSubset<T, WorkOrderEventUpdateArgs<ExtArgs>>): Prisma__WorkOrderEventClient<$Result.GetResult<Prisma.$WorkOrderEventPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more WorkOrderEvents.
+     * @param {WorkOrderEventDeleteManyArgs} args - Arguments to filter WorkOrderEvents to delete.
+     * @example
+     * // Delete a few WorkOrderEvents
+     * const { count } = await prisma.workOrderEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WorkOrderEventDeleteManyArgs>(args?: SelectSubset<T, WorkOrderEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkOrderEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WorkOrderEvents
+     * const workOrderEvent = await prisma.workOrderEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WorkOrderEventUpdateManyArgs>(args: SelectSubset<T, WorkOrderEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one WorkOrderEvent.
+     * @param {WorkOrderEventUpsertArgs} args - Arguments to update or create a WorkOrderEvent.
+     * @example
+     * // Update or create a WorkOrderEvent
+     * const workOrderEvent = await prisma.workOrderEvent.upsert({
+     *   create: {
+     *     // ... data to create a WorkOrderEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WorkOrderEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WorkOrderEventUpsertArgs>(args: SelectSubset<T, WorkOrderEventUpsertArgs<ExtArgs>>): Prisma__WorkOrderEventClient<$Result.GetResult<Prisma.$WorkOrderEventPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of WorkOrderEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEventCountArgs} args - Arguments to filter WorkOrderEvents to count.
+     * @example
+     * // Count the number of WorkOrderEvents
+     * const count = await prisma.workOrderEvent.count({
+     *   where: {
+     *     // ... the filter for the WorkOrderEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends WorkOrderEventCountArgs>(
+      args?: Subset<T, WorkOrderEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WorkOrderEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WorkOrderEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WorkOrderEventAggregateArgs>(args: Subset<T, WorkOrderEventAggregateArgs>): Prisma.PrismaPromise<GetWorkOrderEventAggregateType<T>>
+
+    /**
+     * Group by WorkOrderEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WorkOrderEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WorkOrderEventGroupByArgs['orderBy'] }
+        : { orderBy?: WorkOrderEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WorkOrderEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWorkOrderEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WorkOrderEvent model
+   */
+  readonly fields: WorkOrderEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WorkOrderEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WorkOrderEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WorkOrderEvent model
+   */ 
+  interface WorkOrderEventFieldRefs {
+    readonly id: FieldRef<"WorkOrderEvent", 'String'>
+    readonly workOrderId: FieldRef<"WorkOrderEvent", 'String'>
+    readonly reference: FieldRef<"WorkOrderEvent", 'String'>
+    readonly action: FieldRef<"WorkOrderEvent", 'String'>
+    readonly userId: FieldRef<"WorkOrderEvent", 'String'>
+    readonly userName: FieldRef<"WorkOrderEvent", 'String'>
+    readonly changes: FieldRef<"WorkOrderEvent", 'Json'>
+    readonly note: FieldRef<"WorkOrderEvent", 'String'>
+    readonly createdAt: FieldRef<"WorkOrderEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WorkOrderEvent findUnique
+   */
+  export type WorkOrderEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEvent
+     */
+    select?: WorkOrderEventSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderEvent to fetch.
+     */
+    where: WorkOrderEventWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderEvent findUniqueOrThrow
+   */
+  export type WorkOrderEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEvent
+     */
+    select?: WorkOrderEventSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderEvent to fetch.
+     */
+    where: WorkOrderEventWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderEvent findFirst
+   */
+  export type WorkOrderEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEvent
+     */
+    select?: WorkOrderEventSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderEvent to fetch.
+     */
+    where?: WorkOrderEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderEvents to fetch.
+     */
+    orderBy?: WorkOrderEventOrderByWithRelationInput | WorkOrderEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrderEvents.
+     */
+    cursor?: WorkOrderEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrderEvents.
+     */
+    distinct?: WorkOrderEventScalarFieldEnum | WorkOrderEventScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderEvent findFirstOrThrow
+   */
+  export type WorkOrderEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEvent
+     */
+    select?: WorkOrderEventSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderEvent to fetch.
+     */
+    where?: WorkOrderEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderEvents to fetch.
+     */
+    orderBy?: WorkOrderEventOrderByWithRelationInput | WorkOrderEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrderEvents.
+     */
+    cursor?: WorkOrderEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrderEvents.
+     */
+    distinct?: WorkOrderEventScalarFieldEnum | WorkOrderEventScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderEvent findMany
+   */
+  export type WorkOrderEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEvent
+     */
+    select?: WorkOrderEventSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderEvents to fetch.
+     */
+    where?: WorkOrderEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderEvents to fetch.
+     */
+    orderBy?: WorkOrderEventOrderByWithRelationInput | WorkOrderEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WorkOrderEvents.
+     */
+    cursor?: WorkOrderEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderEvents.
+     */
+    skip?: number
+    distinct?: WorkOrderEventScalarFieldEnum | WorkOrderEventScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderEvent create
+   */
+  export type WorkOrderEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEvent
+     */
+    select?: WorkOrderEventSelect<ExtArgs> | null
+    /**
+     * The data needed to create a WorkOrderEvent.
+     */
+    data: XOR<WorkOrderEventCreateInput, WorkOrderEventUncheckedCreateInput>
+  }
+
+  /**
+   * WorkOrderEvent createMany
+   */
+  export type WorkOrderEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WorkOrderEvents.
+     */
+    data: WorkOrderEventCreateManyInput | WorkOrderEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkOrderEvent createManyAndReturn
+   */
+  export type WorkOrderEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEvent
+     */
+    select?: WorkOrderEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many WorkOrderEvents.
+     */
+    data: WorkOrderEventCreateManyInput | WorkOrderEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkOrderEvent update
+   */
+  export type WorkOrderEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEvent
+     */
+    select?: WorkOrderEventSelect<ExtArgs> | null
+    /**
+     * The data needed to update a WorkOrderEvent.
+     */
+    data: XOR<WorkOrderEventUpdateInput, WorkOrderEventUncheckedUpdateInput>
+    /**
+     * Choose, which WorkOrderEvent to update.
+     */
+    where: WorkOrderEventWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderEvent updateMany
+   */
+  export type WorkOrderEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WorkOrderEvents.
+     */
+    data: XOR<WorkOrderEventUpdateManyMutationInput, WorkOrderEventUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkOrderEvents to update
+     */
+    where?: WorkOrderEventWhereInput
+  }
+
+  /**
+   * WorkOrderEvent upsert
+   */
+  export type WorkOrderEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEvent
+     */
+    select?: WorkOrderEventSelect<ExtArgs> | null
+    /**
+     * The filter to search for the WorkOrderEvent to update in case it exists.
+     */
+    where: WorkOrderEventWhereUniqueInput
+    /**
+     * In case the WorkOrderEvent found by the `where` argument doesn't exist, create a new WorkOrderEvent with this data.
+     */
+    create: XOR<WorkOrderEventCreateInput, WorkOrderEventUncheckedCreateInput>
+    /**
+     * In case the WorkOrderEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WorkOrderEventUpdateInput, WorkOrderEventUncheckedUpdateInput>
+  }
+
+  /**
+   * WorkOrderEvent delete
+   */
+  export type WorkOrderEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEvent
+     */
+    select?: WorkOrderEventSelect<ExtArgs> | null
+    /**
+     * Filter which WorkOrderEvent to delete.
+     */
+    where: WorkOrderEventWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderEvent deleteMany
+   */
+  export type WorkOrderEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrderEvents to delete
+     */
+    where?: WorkOrderEventWhereInput
+  }
+
+  /**
+   * WorkOrderEvent without action
+   */
+  export type WorkOrderEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEvent
+     */
+    select?: WorkOrderEventSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WorkOrderEquipment
+   */
+
+  export type AggregateWorkOrderEquipment = {
+    _count: WorkOrderEquipmentCountAggregateOutputType | null
+    _avg: WorkOrderEquipmentAvgAggregateOutputType | null
+    _sum: WorkOrderEquipmentSumAggregateOutputType | null
+    _min: WorkOrderEquipmentMinAggregateOutputType | null
+    _max: WorkOrderEquipmentMaxAggregateOutputType | null
+  }
+
+  export type WorkOrderEquipmentAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type WorkOrderEquipmentSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type WorkOrderEquipmentMinAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    name: string | null
+    sortOrder: number | null
+    retiredAt: Date | null
+    retiredById: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkOrderEquipmentMaxAggregateOutputType = {
+    id: string | null
+    facility: string | null
+    name: string | null
+    sortOrder: number | null
+    retiredAt: Date | null
+    retiredById: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WorkOrderEquipmentCountAggregateOutputType = {
+    id: number
+    facility: number
+    name: number
+    sortOrder: number
+    retiredAt: number
+    retiredById: number
+    createdById: number
+    updatedById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WorkOrderEquipmentAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type WorkOrderEquipmentSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type WorkOrderEquipmentMinAggregateInputType = {
+    id?: true
+    facility?: true
+    name?: true
+    sortOrder?: true
+    retiredAt?: true
+    retiredById?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkOrderEquipmentMaxAggregateInputType = {
+    id?: true
+    facility?: true
+    name?: true
+    sortOrder?: true
+    retiredAt?: true
+    retiredById?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WorkOrderEquipmentCountAggregateInputType = {
+    id?: true
+    facility?: true
+    name?: true
+    sortOrder?: true
+    retiredAt?: true
+    retiredById?: true
+    createdById?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WorkOrderEquipmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrderEquipment to aggregate.
+     */
+    where?: WorkOrderEquipmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderEquipments to fetch.
+     */
+    orderBy?: WorkOrderEquipmentOrderByWithRelationInput | WorkOrderEquipmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WorkOrderEquipmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderEquipments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderEquipments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WorkOrderEquipments
+    **/
+    _count?: true | WorkOrderEquipmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WorkOrderEquipmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WorkOrderEquipmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WorkOrderEquipmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WorkOrderEquipmentMaxAggregateInputType
+  }
+
+  export type GetWorkOrderEquipmentAggregateType<T extends WorkOrderEquipmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateWorkOrderEquipment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWorkOrderEquipment[P]>
+      : GetScalarType<T[P], AggregateWorkOrderEquipment[P]>
+  }
+
+
+
+
+  export type WorkOrderEquipmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderEquipmentWhereInput
+    orderBy?: WorkOrderEquipmentOrderByWithAggregationInput | WorkOrderEquipmentOrderByWithAggregationInput[]
+    by: WorkOrderEquipmentScalarFieldEnum[] | WorkOrderEquipmentScalarFieldEnum
+    having?: WorkOrderEquipmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WorkOrderEquipmentCountAggregateInputType | true
+    _avg?: WorkOrderEquipmentAvgAggregateInputType
+    _sum?: WorkOrderEquipmentSumAggregateInputType
+    _min?: WorkOrderEquipmentMinAggregateInputType
+    _max?: WorkOrderEquipmentMaxAggregateInputType
+  }
+
+  export type WorkOrderEquipmentGroupByOutputType = {
+    id: string
+    facility: string
+    name: string
+    sortOrder: number
+    retiredAt: Date | null
+    retiredById: string | null
+    createdById: string | null
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: WorkOrderEquipmentCountAggregateOutputType | null
+    _avg: WorkOrderEquipmentAvgAggregateOutputType | null
+    _sum: WorkOrderEquipmentSumAggregateOutputType | null
+    _min: WorkOrderEquipmentMinAggregateOutputType | null
+    _max: WorkOrderEquipmentMaxAggregateOutputType | null
+  }
+
+  type GetWorkOrderEquipmentGroupByPayload<T extends WorkOrderEquipmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WorkOrderEquipmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WorkOrderEquipmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WorkOrderEquipmentGroupByOutputType[P]>
+            : GetScalarType<T[P], WorkOrderEquipmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WorkOrderEquipmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    name?: boolean
+    sortOrder?: boolean
+    retiredAt?: boolean
+    retiredById?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["workOrderEquipment"]>
+
+  export type WorkOrderEquipmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    facility?: boolean
+    name?: boolean
+    sortOrder?: boolean
+    retiredAt?: boolean
+    retiredById?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["workOrderEquipment"]>
+
+  export type WorkOrderEquipmentSelectScalar = {
+    id?: boolean
+    facility?: boolean
+    name?: boolean
+    sortOrder?: boolean
+    retiredAt?: boolean
+    retiredById?: boolean
+    createdById?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $WorkOrderEquipmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WorkOrderEquipment"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      facility: string
+      name: string
+      sortOrder: number
+      retiredAt: Date | null
+      retiredById: string | null
+      createdById: string | null
+      updatedById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["workOrderEquipment"]>
+    composites: {}
+  }
+
+  type WorkOrderEquipmentGetPayload<S extends boolean | null | undefined | WorkOrderEquipmentDefaultArgs> = $Result.GetResult<Prisma.$WorkOrderEquipmentPayload, S>
+
+  type WorkOrderEquipmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<WorkOrderEquipmentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: WorkOrderEquipmentCountAggregateInputType | true
+    }
+
+  export interface WorkOrderEquipmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WorkOrderEquipment'], meta: { name: 'WorkOrderEquipment' } }
+    /**
+     * Find zero or one WorkOrderEquipment that matches the filter.
+     * @param {WorkOrderEquipmentFindUniqueArgs} args - Arguments to find a WorkOrderEquipment
+     * @example
+     * // Get one WorkOrderEquipment
+     * const workOrderEquipment = await prisma.workOrderEquipment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WorkOrderEquipmentFindUniqueArgs>(args: SelectSubset<T, WorkOrderEquipmentFindUniqueArgs<ExtArgs>>): Prisma__WorkOrderEquipmentClient<$Result.GetResult<Prisma.$WorkOrderEquipmentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one WorkOrderEquipment that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {WorkOrderEquipmentFindUniqueOrThrowArgs} args - Arguments to find a WorkOrderEquipment
+     * @example
+     * // Get one WorkOrderEquipment
+     * const workOrderEquipment = await prisma.workOrderEquipment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WorkOrderEquipmentFindUniqueOrThrowArgs>(args: SelectSubset<T, WorkOrderEquipmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WorkOrderEquipmentClient<$Result.GetResult<Prisma.$WorkOrderEquipmentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first WorkOrderEquipment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEquipmentFindFirstArgs} args - Arguments to find a WorkOrderEquipment
+     * @example
+     * // Get one WorkOrderEquipment
+     * const workOrderEquipment = await prisma.workOrderEquipment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WorkOrderEquipmentFindFirstArgs>(args?: SelectSubset<T, WorkOrderEquipmentFindFirstArgs<ExtArgs>>): Prisma__WorkOrderEquipmentClient<$Result.GetResult<Prisma.$WorkOrderEquipmentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first WorkOrderEquipment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEquipmentFindFirstOrThrowArgs} args - Arguments to find a WorkOrderEquipment
+     * @example
+     * // Get one WorkOrderEquipment
+     * const workOrderEquipment = await prisma.workOrderEquipment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WorkOrderEquipmentFindFirstOrThrowArgs>(args?: SelectSubset<T, WorkOrderEquipmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__WorkOrderEquipmentClient<$Result.GetResult<Prisma.$WorkOrderEquipmentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more WorkOrderEquipments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEquipmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WorkOrderEquipments
+     * const workOrderEquipments = await prisma.workOrderEquipment.findMany()
+     * 
+     * // Get first 10 WorkOrderEquipments
+     * const workOrderEquipments = await prisma.workOrderEquipment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const workOrderEquipmentWithIdOnly = await prisma.workOrderEquipment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WorkOrderEquipmentFindManyArgs>(args?: SelectSubset<T, WorkOrderEquipmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderEquipmentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a WorkOrderEquipment.
+     * @param {WorkOrderEquipmentCreateArgs} args - Arguments to create a WorkOrderEquipment.
+     * @example
+     * // Create one WorkOrderEquipment
+     * const WorkOrderEquipment = await prisma.workOrderEquipment.create({
+     *   data: {
+     *     // ... data to create a WorkOrderEquipment
+     *   }
+     * })
+     * 
+     */
+    create<T extends WorkOrderEquipmentCreateArgs>(args: SelectSubset<T, WorkOrderEquipmentCreateArgs<ExtArgs>>): Prisma__WorkOrderEquipmentClient<$Result.GetResult<Prisma.$WorkOrderEquipmentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many WorkOrderEquipments.
+     * @param {WorkOrderEquipmentCreateManyArgs} args - Arguments to create many WorkOrderEquipments.
+     * @example
+     * // Create many WorkOrderEquipments
+     * const workOrderEquipment = await prisma.workOrderEquipment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WorkOrderEquipmentCreateManyArgs>(args?: SelectSubset<T, WorkOrderEquipmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WorkOrderEquipments and returns the data saved in the database.
+     * @param {WorkOrderEquipmentCreateManyAndReturnArgs} args - Arguments to create many WorkOrderEquipments.
+     * @example
+     * // Create many WorkOrderEquipments
+     * const workOrderEquipment = await prisma.workOrderEquipment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WorkOrderEquipments and only return the `id`
+     * const workOrderEquipmentWithIdOnly = await prisma.workOrderEquipment.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WorkOrderEquipmentCreateManyAndReturnArgs>(args?: SelectSubset<T, WorkOrderEquipmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderEquipmentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a WorkOrderEquipment.
+     * @param {WorkOrderEquipmentDeleteArgs} args - Arguments to delete one WorkOrderEquipment.
+     * @example
+     * // Delete one WorkOrderEquipment
+     * const WorkOrderEquipment = await prisma.workOrderEquipment.delete({
+     *   where: {
+     *     // ... filter to delete one WorkOrderEquipment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WorkOrderEquipmentDeleteArgs>(args: SelectSubset<T, WorkOrderEquipmentDeleteArgs<ExtArgs>>): Prisma__WorkOrderEquipmentClient<$Result.GetResult<Prisma.$WorkOrderEquipmentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one WorkOrderEquipment.
+     * @param {WorkOrderEquipmentUpdateArgs} args - Arguments to update one WorkOrderEquipment.
+     * @example
+     * // Update one WorkOrderEquipment
+     * const workOrderEquipment = await prisma.workOrderEquipment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WorkOrderEquipmentUpdateArgs>(args: SelectSubset<T, WorkOrderEquipmentUpdateArgs<ExtArgs>>): Prisma__WorkOrderEquipmentClient<$Result.GetResult<Prisma.$WorkOrderEquipmentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more WorkOrderEquipments.
+     * @param {WorkOrderEquipmentDeleteManyArgs} args - Arguments to filter WorkOrderEquipments to delete.
+     * @example
+     * // Delete a few WorkOrderEquipments
+     * const { count } = await prisma.workOrderEquipment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WorkOrderEquipmentDeleteManyArgs>(args?: SelectSubset<T, WorkOrderEquipmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkOrderEquipments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEquipmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WorkOrderEquipments
+     * const workOrderEquipment = await prisma.workOrderEquipment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WorkOrderEquipmentUpdateManyArgs>(args: SelectSubset<T, WorkOrderEquipmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one WorkOrderEquipment.
+     * @param {WorkOrderEquipmentUpsertArgs} args - Arguments to update or create a WorkOrderEquipment.
+     * @example
+     * // Update or create a WorkOrderEquipment
+     * const workOrderEquipment = await prisma.workOrderEquipment.upsert({
+     *   create: {
+     *     // ... data to create a WorkOrderEquipment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WorkOrderEquipment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WorkOrderEquipmentUpsertArgs>(args: SelectSubset<T, WorkOrderEquipmentUpsertArgs<ExtArgs>>): Prisma__WorkOrderEquipmentClient<$Result.GetResult<Prisma.$WorkOrderEquipmentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of WorkOrderEquipments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEquipmentCountArgs} args - Arguments to filter WorkOrderEquipments to count.
+     * @example
+     * // Count the number of WorkOrderEquipments
+     * const count = await prisma.workOrderEquipment.count({
+     *   where: {
+     *     // ... the filter for the WorkOrderEquipments we want to count
+     *   }
+     * })
+    **/
+    count<T extends WorkOrderEquipmentCountArgs>(
+      args?: Subset<T, WorkOrderEquipmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WorkOrderEquipmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WorkOrderEquipment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEquipmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WorkOrderEquipmentAggregateArgs>(args: Subset<T, WorkOrderEquipmentAggregateArgs>): Prisma.PrismaPromise<GetWorkOrderEquipmentAggregateType<T>>
+
+    /**
+     * Group by WorkOrderEquipment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEquipmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WorkOrderEquipmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WorkOrderEquipmentGroupByArgs['orderBy'] }
+        : { orderBy?: WorkOrderEquipmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WorkOrderEquipmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWorkOrderEquipmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WorkOrderEquipment model
+   */
+  readonly fields: WorkOrderEquipmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WorkOrderEquipment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WorkOrderEquipmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WorkOrderEquipment model
+   */ 
+  interface WorkOrderEquipmentFieldRefs {
+    readonly id: FieldRef<"WorkOrderEquipment", 'String'>
+    readonly facility: FieldRef<"WorkOrderEquipment", 'String'>
+    readonly name: FieldRef<"WorkOrderEquipment", 'String'>
+    readonly sortOrder: FieldRef<"WorkOrderEquipment", 'Int'>
+    readonly retiredAt: FieldRef<"WorkOrderEquipment", 'DateTime'>
+    readonly retiredById: FieldRef<"WorkOrderEquipment", 'String'>
+    readonly createdById: FieldRef<"WorkOrderEquipment", 'String'>
+    readonly updatedById: FieldRef<"WorkOrderEquipment", 'String'>
+    readonly createdAt: FieldRef<"WorkOrderEquipment", 'DateTime'>
+    readonly updatedAt: FieldRef<"WorkOrderEquipment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WorkOrderEquipment findUnique
+   */
+  export type WorkOrderEquipmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipment
+     */
+    select?: WorkOrderEquipmentSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderEquipment to fetch.
+     */
+    where: WorkOrderEquipmentWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderEquipment findUniqueOrThrow
+   */
+  export type WorkOrderEquipmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipment
+     */
+    select?: WorkOrderEquipmentSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderEquipment to fetch.
+     */
+    where: WorkOrderEquipmentWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderEquipment findFirst
+   */
+  export type WorkOrderEquipmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipment
+     */
+    select?: WorkOrderEquipmentSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderEquipment to fetch.
+     */
+    where?: WorkOrderEquipmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderEquipments to fetch.
+     */
+    orderBy?: WorkOrderEquipmentOrderByWithRelationInput | WorkOrderEquipmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrderEquipments.
+     */
+    cursor?: WorkOrderEquipmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderEquipments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderEquipments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrderEquipments.
+     */
+    distinct?: WorkOrderEquipmentScalarFieldEnum | WorkOrderEquipmentScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderEquipment findFirstOrThrow
+   */
+  export type WorkOrderEquipmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipment
+     */
+    select?: WorkOrderEquipmentSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderEquipment to fetch.
+     */
+    where?: WorkOrderEquipmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderEquipments to fetch.
+     */
+    orderBy?: WorkOrderEquipmentOrderByWithRelationInput | WorkOrderEquipmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrderEquipments.
+     */
+    cursor?: WorkOrderEquipmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderEquipments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderEquipments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrderEquipments.
+     */
+    distinct?: WorkOrderEquipmentScalarFieldEnum | WorkOrderEquipmentScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderEquipment findMany
+   */
+  export type WorkOrderEquipmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipment
+     */
+    select?: WorkOrderEquipmentSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderEquipments to fetch.
+     */
+    where?: WorkOrderEquipmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderEquipments to fetch.
+     */
+    orderBy?: WorkOrderEquipmentOrderByWithRelationInput | WorkOrderEquipmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WorkOrderEquipments.
+     */
+    cursor?: WorkOrderEquipmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderEquipments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderEquipments.
+     */
+    skip?: number
+    distinct?: WorkOrderEquipmentScalarFieldEnum | WorkOrderEquipmentScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderEquipment create
+   */
+  export type WorkOrderEquipmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipment
+     */
+    select?: WorkOrderEquipmentSelect<ExtArgs> | null
+    /**
+     * The data needed to create a WorkOrderEquipment.
+     */
+    data: XOR<WorkOrderEquipmentCreateInput, WorkOrderEquipmentUncheckedCreateInput>
+  }
+
+  /**
+   * WorkOrderEquipment createMany
+   */
+  export type WorkOrderEquipmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WorkOrderEquipments.
+     */
+    data: WorkOrderEquipmentCreateManyInput | WorkOrderEquipmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkOrderEquipment createManyAndReturn
+   */
+  export type WorkOrderEquipmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipment
+     */
+    select?: WorkOrderEquipmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many WorkOrderEquipments.
+     */
+    data: WorkOrderEquipmentCreateManyInput | WorkOrderEquipmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkOrderEquipment update
+   */
+  export type WorkOrderEquipmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipment
+     */
+    select?: WorkOrderEquipmentSelect<ExtArgs> | null
+    /**
+     * The data needed to update a WorkOrderEquipment.
+     */
+    data: XOR<WorkOrderEquipmentUpdateInput, WorkOrderEquipmentUncheckedUpdateInput>
+    /**
+     * Choose, which WorkOrderEquipment to update.
+     */
+    where: WorkOrderEquipmentWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderEquipment updateMany
+   */
+  export type WorkOrderEquipmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WorkOrderEquipments.
+     */
+    data: XOR<WorkOrderEquipmentUpdateManyMutationInput, WorkOrderEquipmentUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkOrderEquipments to update
+     */
+    where?: WorkOrderEquipmentWhereInput
+  }
+
+  /**
+   * WorkOrderEquipment upsert
+   */
+  export type WorkOrderEquipmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipment
+     */
+    select?: WorkOrderEquipmentSelect<ExtArgs> | null
+    /**
+     * The filter to search for the WorkOrderEquipment to update in case it exists.
+     */
+    where: WorkOrderEquipmentWhereUniqueInput
+    /**
+     * In case the WorkOrderEquipment found by the `where` argument doesn't exist, create a new WorkOrderEquipment with this data.
+     */
+    create: XOR<WorkOrderEquipmentCreateInput, WorkOrderEquipmentUncheckedCreateInput>
+    /**
+     * In case the WorkOrderEquipment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WorkOrderEquipmentUpdateInput, WorkOrderEquipmentUncheckedUpdateInput>
+  }
+
+  /**
+   * WorkOrderEquipment delete
+   */
+  export type WorkOrderEquipmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipment
+     */
+    select?: WorkOrderEquipmentSelect<ExtArgs> | null
+    /**
+     * Filter which WorkOrderEquipment to delete.
+     */
+    where: WorkOrderEquipmentWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderEquipment deleteMany
+   */
+  export type WorkOrderEquipmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrderEquipments to delete
+     */
+    where?: WorkOrderEquipmentWhereInput
+  }
+
+  /**
+   * WorkOrderEquipment without action
+   */
+  export type WorkOrderEquipmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipment
+     */
+    select?: WorkOrderEquipmentSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WorkOrderEquipmentList
+   */
+
+  export type AggregateWorkOrderEquipmentList = {
+    _count: WorkOrderEquipmentListCountAggregateOutputType | null
+    _avg: WorkOrderEquipmentListAvgAggregateOutputType | null
+    _sum: WorkOrderEquipmentListSumAggregateOutputType | null
+    _min: WorkOrderEquipmentListMinAggregateOutputType | null
+    _max: WorkOrderEquipmentListMaxAggregateOutputType | null
+  }
+
+  export type WorkOrderEquipmentListAvgAggregateOutputType = {
+    version: number | null
+  }
+
+  export type WorkOrderEquipmentListSumAggregateOutputType = {
+    version: number | null
+  }
+
+  export type WorkOrderEquipmentListMinAggregateOutputType = {
+    facility: string | null
+    version: number | null
+    updatedById: string | null
+    updatedAt: Date | null
+  }
+
+  export type WorkOrderEquipmentListMaxAggregateOutputType = {
+    facility: string | null
+    version: number | null
+    updatedById: string | null
+    updatedAt: Date | null
+  }
+
+  export type WorkOrderEquipmentListCountAggregateOutputType = {
+    facility: number
+    version: number
+    updatedById: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WorkOrderEquipmentListAvgAggregateInputType = {
+    version?: true
+  }
+
+  export type WorkOrderEquipmentListSumAggregateInputType = {
+    version?: true
+  }
+
+  export type WorkOrderEquipmentListMinAggregateInputType = {
+    facility?: true
+    version?: true
+    updatedById?: true
+    updatedAt?: true
+  }
+
+  export type WorkOrderEquipmentListMaxAggregateInputType = {
+    facility?: true
+    version?: true
+    updatedById?: true
+    updatedAt?: true
+  }
+
+  export type WorkOrderEquipmentListCountAggregateInputType = {
+    facility?: true
+    version?: true
+    updatedById?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WorkOrderEquipmentListAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrderEquipmentList to aggregate.
+     */
+    where?: WorkOrderEquipmentListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderEquipmentLists to fetch.
+     */
+    orderBy?: WorkOrderEquipmentListOrderByWithRelationInput | WorkOrderEquipmentListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WorkOrderEquipmentListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderEquipmentLists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderEquipmentLists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WorkOrderEquipmentLists
+    **/
+    _count?: true | WorkOrderEquipmentListCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WorkOrderEquipmentListAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WorkOrderEquipmentListSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WorkOrderEquipmentListMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WorkOrderEquipmentListMaxAggregateInputType
+  }
+
+  export type GetWorkOrderEquipmentListAggregateType<T extends WorkOrderEquipmentListAggregateArgs> = {
+        [P in keyof T & keyof AggregateWorkOrderEquipmentList]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWorkOrderEquipmentList[P]>
+      : GetScalarType<T[P], AggregateWorkOrderEquipmentList[P]>
+  }
+
+
+
+
+  export type WorkOrderEquipmentListGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkOrderEquipmentListWhereInput
+    orderBy?: WorkOrderEquipmentListOrderByWithAggregationInput | WorkOrderEquipmentListOrderByWithAggregationInput[]
+    by: WorkOrderEquipmentListScalarFieldEnum[] | WorkOrderEquipmentListScalarFieldEnum
+    having?: WorkOrderEquipmentListScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WorkOrderEquipmentListCountAggregateInputType | true
+    _avg?: WorkOrderEquipmentListAvgAggregateInputType
+    _sum?: WorkOrderEquipmentListSumAggregateInputType
+    _min?: WorkOrderEquipmentListMinAggregateInputType
+    _max?: WorkOrderEquipmentListMaxAggregateInputType
+  }
+
+  export type WorkOrderEquipmentListGroupByOutputType = {
+    facility: string
+    version: number
+    updatedById: string | null
+    updatedAt: Date
+    _count: WorkOrderEquipmentListCountAggregateOutputType | null
+    _avg: WorkOrderEquipmentListAvgAggregateOutputType | null
+    _sum: WorkOrderEquipmentListSumAggregateOutputType | null
+    _min: WorkOrderEquipmentListMinAggregateOutputType | null
+    _max: WorkOrderEquipmentListMaxAggregateOutputType | null
+  }
+
+  type GetWorkOrderEquipmentListGroupByPayload<T extends WorkOrderEquipmentListGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WorkOrderEquipmentListGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WorkOrderEquipmentListGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WorkOrderEquipmentListGroupByOutputType[P]>
+            : GetScalarType<T[P], WorkOrderEquipmentListGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WorkOrderEquipmentListSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    facility?: boolean
+    version?: boolean
+    updatedById?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["workOrderEquipmentList"]>
+
+  export type WorkOrderEquipmentListSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    facility?: boolean
+    version?: boolean
+    updatedById?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["workOrderEquipmentList"]>
+
+  export type WorkOrderEquipmentListSelectScalar = {
+    facility?: boolean
+    version?: boolean
+    updatedById?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $WorkOrderEquipmentListPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WorkOrderEquipmentList"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      facility: string
+      version: number
+      updatedById: string | null
+      updatedAt: Date
+    }, ExtArgs["result"]["workOrderEquipmentList"]>
+    composites: {}
+  }
+
+  type WorkOrderEquipmentListGetPayload<S extends boolean | null | undefined | WorkOrderEquipmentListDefaultArgs> = $Result.GetResult<Prisma.$WorkOrderEquipmentListPayload, S>
+
+  type WorkOrderEquipmentListCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<WorkOrderEquipmentListFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: WorkOrderEquipmentListCountAggregateInputType | true
+    }
+
+  export interface WorkOrderEquipmentListDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WorkOrderEquipmentList'], meta: { name: 'WorkOrderEquipmentList' } }
+    /**
+     * Find zero or one WorkOrderEquipmentList that matches the filter.
+     * @param {WorkOrderEquipmentListFindUniqueArgs} args - Arguments to find a WorkOrderEquipmentList
+     * @example
+     * // Get one WorkOrderEquipmentList
+     * const workOrderEquipmentList = await prisma.workOrderEquipmentList.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WorkOrderEquipmentListFindUniqueArgs>(args: SelectSubset<T, WorkOrderEquipmentListFindUniqueArgs<ExtArgs>>): Prisma__WorkOrderEquipmentListClient<$Result.GetResult<Prisma.$WorkOrderEquipmentListPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one WorkOrderEquipmentList that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {WorkOrderEquipmentListFindUniqueOrThrowArgs} args - Arguments to find a WorkOrderEquipmentList
+     * @example
+     * // Get one WorkOrderEquipmentList
+     * const workOrderEquipmentList = await prisma.workOrderEquipmentList.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WorkOrderEquipmentListFindUniqueOrThrowArgs>(args: SelectSubset<T, WorkOrderEquipmentListFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WorkOrderEquipmentListClient<$Result.GetResult<Prisma.$WorkOrderEquipmentListPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first WorkOrderEquipmentList that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEquipmentListFindFirstArgs} args - Arguments to find a WorkOrderEquipmentList
+     * @example
+     * // Get one WorkOrderEquipmentList
+     * const workOrderEquipmentList = await prisma.workOrderEquipmentList.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WorkOrderEquipmentListFindFirstArgs>(args?: SelectSubset<T, WorkOrderEquipmentListFindFirstArgs<ExtArgs>>): Prisma__WorkOrderEquipmentListClient<$Result.GetResult<Prisma.$WorkOrderEquipmentListPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first WorkOrderEquipmentList that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEquipmentListFindFirstOrThrowArgs} args - Arguments to find a WorkOrderEquipmentList
+     * @example
+     * // Get one WorkOrderEquipmentList
+     * const workOrderEquipmentList = await prisma.workOrderEquipmentList.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WorkOrderEquipmentListFindFirstOrThrowArgs>(args?: SelectSubset<T, WorkOrderEquipmentListFindFirstOrThrowArgs<ExtArgs>>): Prisma__WorkOrderEquipmentListClient<$Result.GetResult<Prisma.$WorkOrderEquipmentListPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more WorkOrderEquipmentLists that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEquipmentListFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WorkOrderEquipmentLists
+     * const workOrderEquipmentLists = await prisma.workOrderEquipmentList.findMany()
+     * 
+     * // Get first 10 WorkOrderEquipmentLists
+     * const workOrderEquipmentLists = await prisma.workOrderEquipmentList.findMany({ take: 10 })
+     * 
+     * // Only select the `facility`
+     * const workOrderEquipmentListWithFacilityOnly = await prisma.workOrderEquipmentList.findMany({ select: { facility: true } })
+     * 
+     */
+    findMany<T extends WorkOrderEquipmentListFindManyArgs>(args?: SelectSubset<T, WorkOrderEquipmentListFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderEquipmentListPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a WorkOrderEquipmentList.
+     * @param {WorkOrderEquipmentListCreateArgs} args - Arguments to create a WorkOrderEquipmentList.
+     * @example
+     * // Create one WorkOrderEquipmentList
+     * const WorkOrderEquipmentList = await prisma.workOrderEquipmentList.create({
+     *   data: {
+     *     // ... data to create a WorkOrderEquipmentList
+     *   }
+     * })
+     * 
+     */
+    create<T extends WorkOrderEquipmentListCreateArgs>(args: SelectSubset<T, WorkOrderEquipmentListCreateArgs<ExtArgs>>): Prisma__WorkOrderEquipmentListClient<$Result.GetResult<Prisma.$WorkOrderEquipmentListPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many WorkOrderEquipmentLists.
+     * @param {WorkOrderEquipmentListCreateManyArgs} args - Arguments to create many WorkOrderEquipmentLists.
+     * @example
+     * // Create many WorkOrderEquipmentLists
+     * const workOrderEquipmentList = await prisma.workOrderEquipmentList.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WorkOrderEquipmentListCreateManyArgs>(args?: SelectSubset<T, WorkOrderEquipmentListCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WorkOrderEquipmentLists and returns the data saved in the database.
+     * @param {WorkOrderEquipmentListCreateManyAndReturnArgs} args - Arguments to create many WorkOrderEquipmentLists.
+     * @example
+     * // Create many WorkOrderEquipmentLists
+     * const workOrderEquipmentList = await prisma.workOrderEquipmentList.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WorkOrderEquipmentLists and only return the `facility`
+     * const workOrderEquipmentListWithFacilityOnly = await prisma.workOrderEquipmentList.createManyAndReturn({ 
+     *   select: { facility: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WorkOrderEquipmentListCreateManyAndReturnArgs>(args?: SelectSubset<T, WorkOrderEquipmentListCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkOrderEquipmentListPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a WorkOrderEquipmentList.
+     * @param {WorkOrderEquipmentListDeleteArgs} args - Arguments to delete one WorkOrderEquipmentList.
+     * @example
+     * // Delete one WorkOrderEquipmentList
+     * const WorkOrderEquipmentList = await prisma.workOrderEquipmentList.delete({
+     *   where: {
+     *     // ... filter to delete one WorkOrderEquipmentList
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WorkOrderEquipmentListDeleteArgs>(args: SelectSubset<T, WorkOrderEquipmentListDeleteArgs<ExtArgs>>): Prisma__WorkOrderEquipmentListClient<$Result.GetResult<Prisma.$WorkOrderEquipmentListPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one WorkOrderEquipmentList.
+     * @param {WorkOrderEquipmentListUpdateArgs} args - Arguments to update one WorkOrderEquipmentList.
+     * @example
+     * // Update one WorkOrderEquipmentList
+     * const workOrderEquipmentList = await prisma.workOrderEquipmentList.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WorkOrderEquipmentListUpdateArgs>(args: SelectSubset<T, WorkOrderEquipmentListUpdateArgs<ExtArgs>>): Prisma__WorkOrderEquipmentListClient<$Result.GetResult<Prisma.$WorkOrderEquipmentListPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more WorkOrderEquipmentLists.
+     * @param {WorkOrderEquipmentListDeleteManyArgs} args - Arguments to filter WorkOrderEquipmentLists to delete.
+     * @example
+     * // Delete a few WorkOrderEquipmentLists
+     * const { count } = await prisma.workOrderEquipmentList.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WorkOrderEquipmentListDeleteManyArgs>(args?: SelectSubset<T, WorkOrderEquipmentListDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkOrderEquipmentLists.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEquipmentListUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WorkOrderEquipmentLists
+     * const workOrderEquipmentList = await prisma.workOrderEquipmentList.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WorkOrderEquipmentListUpdateManyArgs>(args: SelectSubset<T, WorkOrderEquipmentListUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one WorkOrderEquipmentList.
+     * @param {WorkOrderEquipmentListUpsertArgs} args - Arguments to update or create a WorkOrderEquipmentList.
+     * @example
+     * // Update or create a WorkOrderEquipmentList
+     * const workOrderEquipmentList = await prisma.workOrderEquipmentList.upsert({
+     *   create: {
+     *     // ... data to create a WorkOrderEquipmentList
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WorkOrderEquipmentList we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WorkOrderEquipmentListUpsertArgs>(args: SelectSubset<T, WorkOrderEquipmentListUpsertArgs<ExtArgs>>): Prisma__WorkOrderEquipmentListClient<$Result.GetResult<Prisma.$WorkOrderEquipmentListPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of WorkOrderEquipmentLists.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEquipmentListCountArgs} args - Arguments to filter WorkOrderEquipmentLists to count.
+     * @example
+     * // Count the number of WorkOrderEquipmentLists
+     * const count = await prisma.workOrderEquipmentList.count({
+     *   where: {
+     *     // ... the filter for the WorkOrderEquipmentLists we want to count
+     *   }
+     * })
+    **/
+    count<T extends WorkOrderEquipmentListCountArgs>(
+      args?: Subset<T, WorkOrderEquipmentListCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WorkOrderEquipmentListCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WorkOrderEquipmentList.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEquipmentListAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WorkOrderEquipmentListAggregateArgs>(args: Subset<T, WorkOrderEquipmentListAggregateArgs>): Prisma.PrismaPromise<GetWorkOrderEquipmentListAggregateType<T>>
+
+    /**
+     * Group by WorkOrderEquipmentList.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkOrderEquipmentListGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WorkOrderEquipmentListGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WorkOrderEquipmentListGroupByArgs['orderBy'] }
+        : { orderBy?: WorkOrderEquipmentListGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WorkOrderEquipmentListGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWorkOrderEquipmentListGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WorkOrderEquipmentList model
+   */
+  readonly fields: WorkOrderEquipmentListFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WorkOrderEquipmentList.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WorkOrderEquipmentListClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WorkOrderEquipmentList model
+   */ 
+  interface WorkOrderEquipmentListFieldRefs {
+    readonly facility: FieldRef<"WorkOrderEquipmentList", 'String'>
+    readonly version: FieldRef<"WorkOrderEquipmentList", 'Int'>
+    readonly updatedById: FieldRef<"WorkOrderEquipmentList", 'String'>
+    readonly updatedAt: FieldRef<"WorkOrderEquipmentList", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WorkOrderEquipmentList findUnique
+   */
+  export type WorkOrderEquipmentListFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipmentList
+     */
+    select?: WorkOrderEquipmentListSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderEquipmentList to fetch.
+     */
+    where: WorkOrderEquipmentListWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderEquipmentList findUniqueOrThrow
+   */
+  export type WorkOrderEquipmentListFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipmentList
+     */
+    select?: WorkOrderEquipmentListSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderEquipmentList to fetch.
+     */
+    where: WorkOrderEquipmentListWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderEquipmentList findFirst
+   */
+  export type WorkOrderEquipmentListFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipmentList
+     */
+    select?: WorkOrderEquipmentListSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderEquipmentList to fetch.
+     */
+    where?: WorkOrderEquipmentListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderEquipmentLists to fetch.
+     */
+    orderBy?: WorkOrderEquipmentListOrderByWithRelationInput | WorkOrderEquipmentListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrderEquipmentLists.
+     */
+    cursor?: WorkOrderEquipmentListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderEquipmentLists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderEquipmentLists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrderEquipmentLists.
+     */
+    distinct?: WorkOrderEquipmentListScalarFieldEnum | WorkOrderEquipmentListScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderEquipmentList findFirstOrThrow
+   */
+  export type WorkOrderEquipmentListFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipmentList
+     */
+    select?: WorkOrderEquipmentListSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderEquipmentList to fetch.
+     */
+    where?: WorkOrderEquipmentListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderEquipmentLists to fetch.
+     */
+    orderBy?: WorkOrderEquipmentListOrderByWithRelationInput | WorkOrderEquipmentListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkOrderEquipmentLists.
+     */
+    cursor?: WorkOrderEquipmentListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderEquipmentLists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderEquipmentLists.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkOrderEquipmentLists.
+     */
+    distinct?: WorkOrderEquipmentListScalarFieldEnum | WorkOrderEquipmentListScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderEquipmentList findMany
+   */
+  export type WorkOrderEquipmentListFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipmentList
+     */
+    select?: WorkOrderEquipmentListSelect<ExtArgs> | null
+    /**
+     * Filter, which WorkOrderEquipmentLists to fetch.
+     */
+    where?: WorkOrderEquipmentListWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkOrderEquipmentLists to fetch.
+     */
+    orderBy?: WorkOrderEquipmentListOrderByWithRelationInput | WorkOrderEquipmentListOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WorkOrderEquipmentLists.
+     */
+    cursor?: WorkOrderEquipmentListWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkOrderEquipmentLists from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkOrderEquipmentLists.
+     */
+    skip?: number
+    distinct?: WorkOrderEquipmentListScalarFieldEnum | WorkOrderEquipmentListScalarFieldEnum[]
+  }
+
+  /**
+   * WorkOrderEquipmentList create
+   */
+  export type WorkOrderEquipmentListCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipmentList
+     */
+    select?: WorkOrderEquipmentListSelect<ExtArgs> | null
+    /**
+     * The data needed to create a WorkOrderEquipmentList.
+     */
+    data: XOR<WorkOrderEquipmentListCreateInput, WorkOrderEquipmentListUncheckedCreateInput>
+  }
+
+  /**
+   * WorkOrderEquipmentList createMany
+   */
+  export type WorkOrderEquipmentListCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WorkOrderEquipmentLists.
+     */
+    data: WorkOrderEquipmentListCreateManyInput | WorkOrderEquipmentListCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkOrderEquipmentList createManyAndReturn
+   */
+  export type WorkOrderEquipmentListCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipmentList
+     */
+    select?: WorkOrderEquipmentListSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many WorkOrderEquipmentLists.
+     */
+    data: WorkOrderEquipmentListCreateManyInput | WorkOrderEquipmentListCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WorkOrderEquipmentList update
+   */
+  export type WorkOrderEquipmentListUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipmentList
+     */
+    select?: WorkOrderEquipmentListSelect<ExtArgs> | null
+    /**
+     * The data needed to update a WorkOrderEquipmentList.
+     */
+    data: XOR<WorkOrderEquipmentListUpdateInput, WorkOrderEquipmentListUncheckedUpdateInput>
+    /**
+     * Choose, which WorkOrderEquipmentList to update.
+     */
+    where: WorkOrderEquipmentListWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderEquipmentList updateMany
+   */
+  export type WorkOrderEquipmentListUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WorkOrderEquipmentLists.
+     */
+    data: XOR<WorkOrderEquipmentListUpdateManyMutationInput, WorkOrderEquipmentListUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkOrderEquipmentLists to update
+     */
+    where?: WorkOrderEquipmentListWhereInput
+  }
+
+  /**
+   * WorkOrderEquipmentList upsert
+   */
+  export type WorkOrderEquipmentListUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipmentList
+     */
+    select?: WorkOrderEquipmentListSelect<ExtArgs> | null
+    /**
+     * The filter to search for the WorkOrderEquipmentList to update in case it exists.
+     */
+    where: WorkOrderEquipmentListWhereUniqueInput
+    /**
+     * In case the WorkOrderEquipmentList found by the `where` argument doesn't exist, create a new WorkOrderEquipmentList with this data.
+     */
+    create: XOR<WorkOrderEquipmentListCreateInput, WorkOrderEquipmentListUncheckedCreateInput>
+    /**
+     * In case the WorkOrderEquipmentList was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WorkOrderEquipmentListUpdateInput, WorkOrderEquipmentListUncheckedUpdateInput>
+  }
+
+  /**
+   * WorkOrderEquipmentList delete
+   */
+  export type WorkOrderEquipmentListDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipmentList
+     */
+    select?: WorkOrderEquipmentListSelect<ExtArgs> | null
+    /**
+     * Filter which WorkOrderEquipmentList to delete.
+     */
+    where: WorkOrderEquipmentListWhereUniqueInput
+  }
+
+  /**
+   * WorkOrderEquipmentList deleteMany
+   */
+  export type WorkOrderEquipmentListDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkOrderEquipmentLists to delete
+     */
+    where?: WorkOrderEquipmentListWhereInput
+  }
+
+  /**
+   * WorkOrderEquipmentList without action
+   */
+  export type WorkOrderEquipmentListDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkOrderEquipmentList
+     */
+    select?: WorkOrderEquipmentListSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -93091,6 +97467,88 @@ export namespace Prisma {
   };
 
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+  export const WorkOrderScalarFieldEnum: {
+    id: 'id',
+    reference: 'reference',
+    facility: 'facility',
+    requestType: 'requestType',
+    equipmentId: 'equipmentId',
+    equipmentName: 'equipmentName',
+    problem: 'problem',
+    priority: 'priority',
+    status: 'status',
+    dueDate: 'dueDate',
+    requestedById: 'requestedById',
+    requestedByName: 'requestedByName',
+    requestedAt: 'requestedAt',
+    assigneeId: 'assigneeId',
+    assigneeName: 'assigneeName',
+    startedAt: 'startedAt',
+    startDate: 'startDate',
+    startTime: 'startTime',
+    stopTime: 'stopTime',
+    repairedByKind: 'repairedByKind',
+    repairedByUserId: 'repairedByUserId',
+    repairedByName: 'repairedByName',
+    toolsAccounted: 'toolsAccounted',
+    workDescription: 'workDescription',
+    completedDate: 'completedDate',
+    signatureName: 'signatureName',
+    signedById: 'signedById',
+    signedAt: 'signedAt',
+    cancelledAt: 'cancelledAt',
+    cancelledById: 'cancelledById',
+    cancelReason: 'cancelReason',
+    taskInstanceId: 'taskInstanceId',
+    updatedById: 'updatedById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WorkOrderScalarFieldEnum = (typeof WorkOrderScalarFieldEnum)[keyof typeof WorkOrderScalarFieldEnum]
+
+
+  export const WorkOrderEventScalarFieldEnum: {
+    id: 'id',
+    workOrderId: 'workOrderId',
+    reference: 'reference',
+    action: 'action',
+    userId: 'userId',
+    userName: 'userName',
+    changes: 'changes',
+    note: 'note',
+    createdAt: 'createdAt'
+  };
+
+  export type WorkOrderEventScalarFieldEnum = (typeof WorkOrderEventScalarFieldEnum)[keyof typeof WorkOrderEventScalarFieldEnum]
+
+
+  export const WorkOrderEquipmentScalarFieldEnum: {
+    id: 'id',
+    facility: 'facility',
+    name: 'name',
+    sortOrder: 'sortOrder',
+    retiredAt: 'retiredAt',
+    retiredById: 'retiredById',
+    createdById: 'createdById',
+    updatedById: 'updatedById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WorkOrderEquipmentScalarFieldEnum = (typeof WorkOrderEquipmentScalarFieldEnum)[keyof typeof WorkOrderEquipmentScalarFieldEnum]
+
+
+  export const WorkOrderEquipmentListScalarFieldEnum: {
+    facility: 'facility',
+    version: 'version',
+    updatedById: 'updatedById',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WorkOrderEquipmentListScalarFieldEnum = (typeof WorkOrderEquipmentListScalarFieldEnum)[keyof typeof WorkOrderEquipmentListScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -101146,6 +105604,408 @@ export namespace Prisma {
     dedupeKey?: StringWithAggregatesFilter<"Notification"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
     readAt?: DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
+  }
+
+  export type WorkOrderWhereInput = {
+    AND?: WorkOrderWhereInput | WorkOrderWhereInput[]
+    OR?: WorkOrderWhereInput[]
+    NOT?: WorkOrderWhereInput | WorkOrderWhereInput[]
+    id?: StringFilter<"WorkOrder"> | string
+    reference?: StringFilter<"WorkOrder"> | string
+    facility?: StringFilter<"WorkOrder"> | string
+    requestType?: StringFilter<"WorkOrder"> | string
+    equipmentId?: StringNullableFilter<"WorkOrder"> | string | null
+    equipmentName?: StringFilter<"WorkOrder"> | string
+    problem?: StringFilter<"WorkOrder"> | string
+    priority?: StringFilter<"WorkOrder"> | string
+    status?: StringFilter<"WorkOrder"> | string
+    dueDate?: DateTimeFilter<"WorkOrder"> | Date | string
+    requestedById?: StringNullableFilter<"WorkOrder"> | string | null
+    requestedByName?: StringFilter<"WorkOrder"> | string
+    requestedAt?: DateTimeFilter<"WorkOrder"> | Date | string
+    assigneeId?: StringNullableFilter<"WorkOrder"> | string | null
+    assigneeName?: StringFilter<"WorkOrder"> | string
+    startedAt?: DateTimeNullableFilter<"WorkOrder"> | Date | string | null
+    startDate?: DateTimeNullableFilter<"WorkOrder"> | Date | string | null
+    startTime?: StringNullableFilter<"WorkOrder"> | string | null
+    stopTime?: StringNullableFilter<"WorkOrder"> | string | null
+    repairedByKind?: StringNullableFilter<"WorkOrder"> | string | null
+    repairedByUserId?: StringNullableFilter<"WorkOrder"> | string | null
+    repairedByName?: StringFilter<"WorkOrder"> | string
+    toolsAccounted?: BoolNullableFilter<"WorkOrder"> | boolean | null
+    workDescription?: StringFilter<"WorkOrder"> | string
+    completedDate?: DateTimeNullableFilter<"WorkOrder"> | Date | string | null
+    signatureName?: StringFilter<"WorkOrder"> | string
+    signedById?: StringNullableFilter<"WorkOrder"> | string | null
+    signedAt?: DateTimeNullableFilter<"WorkOrder"> | Date | string | null
+    cancelledAt?: DateTimeNullableFilter<"WorkOrder"> | Date | string | null
+    cancelledById?: StringNullableFilter<"WorkOrder"> | string | null
+    cancelReason?: StringNullableFilter<"WorkOrder"> | string | null
+    taskInstanceId?: StringNullableFilter<"WorkOrder"> | string | null
+    updatedById?: StringNullableFilter<"WorkOrder"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrder"> | Date | string
+  }
+
+  export type WorkOrderOrderByWithRelationInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    facility?: SortOrder
+    requestType?: SortOrder
+    equipmentId?: SortOrderInput | SortOrder
+    equipmentName?: SortOrder
+    problem?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    dueDate?: SortOrder
+    requestedById?: SortOrderInput | SortOrder
+    requestedByName?: SortOrder
+    requestedAt?: SortOrder
+    assigneeId?: SortOrderInput | SortOrder
+    assigneeName?: SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    startDate?: SortOrderInput | SortOrder
+    startTime?: SortOrderInput | SortOrder
+    stopTime?: SortOrderInput | SortOrder
+    repairedByKind?: SortOrderInput | SortOrder
+    repairedByUserId?: SortOrderInput | SortOrder
+    repairedByName?: SortOrder
+    toolsAccounted?: SortOrderInput | SortOrder
+    workDescription?: SortOrder
+    completedDate?: SortOrderInput | SortOrder
+    signatureName?: SortOrder
+    signedById?: SortOrderInput | SortOrder
+    signedAt?: SortOrderInput | SortOrder
+    cancelledAt?: SortOrderInput | SortOrder
+    cancelledById?: SortOrderInput | SortOrder
+    cancelReason?: SortOrderInput | SortOrder
+    taskInstanceId?: SortOrderInput | SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    reference?: string
+    AND?: WorkOrderWhereInput | WorkOrderWhereInput[]
+    OR?: WorkOrderWhereInput[]
+    NOT?: WorkOrderWhereInput | WorkOrderWhereInput[]
+    facility?: StringFilter<"WorkOrder"> | string
+    requestType?: StringFilter<"WorkOrder"> | string
+    equipmentId?: StringNullableFilter<"WorkOrder"> | string | null
+    equipmentName?: StringFilter<"WorkOrder"> | string
+    problem?: StringFilter<"WorkOrder"> | string
+    priority?: StringFilter<"WorkOrder"> | string
+    status?: StringFilter<"WorkOrder"> | string
+    dueDate?: DateTimeFilter<"WorkOrder"> | Date | string
+    requestedById?: StringNullableFilter<"WorkOrder"> | string | null
+    requestedByName?: StringFilter<"WorkOrder"> | string
+    requestedAt?: DateTimeFilter<"WorkOrder"> | Date | string
+    assigneeId?: StringNullableFilter<"WorkOrder"> | string | null
+    assigneeName?: StringFilter<"WorkOrder"> | string
+    startedAt?: DateTimeNullableFilter<"WorkOrder"> | Date | string | null
+    startDate?: DateTimeNullableFilter<"WorkOrder"> | Date | string | null
+    startTime?: StringNullableFilter<"WorkOrder"> | string | null
+    stopTime?: StringNullableFilter<"WorkOrder"> | string | null
+    repairedByKind?: StringNullableFilter<"WorkOrder"> | string | null
+    repairedByUserId?: StringNullableFilter<"WorkOrder"> | string | null
+    repairedByName?: StringFilter<"WorkOrder"> | string
+    toolsAccounted?: BoolNullableFilter<"WorkOrder"> | boolean | null
+    workDescription?: StringFilter<"WorkOrder"> | string
+    completedDate?: DateTimeNullableFilter<"WorkOrder"> | Date | string | null
+    signatureName?: StringFilter<"WorkOrder"> | string
+    signedById?: StringNullableFilter<"WorkOrder"> | string | null
+    signedAt?: DateTimeNullableFilter<"WorkOrder"> | Date | string | null
+    cancelledAt?: DateTimeNullableFilter<"WorkOrder"> | Date | string | null
+    cancelledById?: StringNullableFilter<"WorkOrder"> | string | null
+    cancelReason?: StringNullableFilter<"WorkOrder"> | string | null
+    taskInstanceId?: StringNullableFilter<"WorkOrder"> | string | null
+    updatedById?: StringNullableFilter<"WorkOrder"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrder"> | Date | string
+  }, "id" | "reference">
+
+  export type WorkOrderOrderByWithAggregationInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    facility?: SortOrder
+    requestType?: SortOrder
+    equipmentId?: SortOrderInput | SortOrder
+    equipmentName?: SortOrder
+    problem?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    dueDate?: SortOrder
+    requestedById?: SortOrderInput | SortOrder
+    requestedByName?: SortOrder
+    requestedAt?: SortOrder
+    assigneeId?: SortOrderInput | SortOrder
+    assigneeName?: SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    startDate?: SortOrderInput | SortOrder
+    startTime?: SortOrderInput | SortOrder
+    stopTime?: SortOrderInput | SortOrder
+    repairedByKind?: SortOrderInput | SortOrder
+    repairedByUserId?: SortOrderInput | SortOrder
+    repairedByName?: SortOrder
+    toolsAccounted?: SortOrderInput | SortOrder
+    workDescription?: SortOrder
+    completedDate?: SortOrderInput | SortOrder
+    signatureName?: SortOrder
+    signedById?: SortOrderInput | SortOrder
+    signedAt?: SortOrderInput | SortOrder
+    cancelledAt?: SortOrderInput | SortOrder
+    cancelledById?: SortOrderInput | SortOrder
+    cancelReason?: SortOrderInput | SortOrder
+    taskInstanceId?: SortOrderInput | SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WorkOrderCountOrderByAggregateInput
+    _max?: WorkOrderMaxOrderByAggregateInput
+    _min?: WorkOrderMinOrderByAggregateInput
+  }
+
+  export type WorkOrderScalarWhereWithAggregatesInput = {
+    AND?: WorkOrderScalarWhereWithAggregatesInput | WorkOrderScalarWhereWithAggregatesInput[]
+    OR?: WorkOrderScalarWhereWithAggregatesInput[]
+    NOT?: WorkOrderScalarWhereWithAggregatesInput | WorkOrderScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WorkOrder"> | string
+    reference?: StringWithAggregatesFilter<"WorkOrder"> | string
+    facility?: StringWithAggregatesFilter<"WorkOrder"> | string
+    requestType?: StringWithAggregatesFilter<"WorkOrder"> | string
+    equipmentId?: StringNullableWithAggregatesFilter<"WorkOrder"> | string | null
+    equipmentName?: StringWithAggregatesFilter<"WorkOrder"> | string
+    problem?: StringWithAggregatesFilter<"WorkOrder"> | string
+    priority?: StringWithAggregatesFilter<"WorkOrder"> | string
+    status?: StringWithAggregatesFilter<"WorkOrder"> | string
+    dueDate?: DateTimeWithAggregatesFilter<"WorkOrder"> | Date | string
+    requestedById?: StringNullableWithAggregatesFilter<"WorkOrder"> | string | null
+    requestedByName?: StringWithAggregatesFilter<"WorkOrder"> | string
+    requestedAt?: DateTimeWithAggregatesFilter<"WorkOrder"> | Date | string
+    assigneeId?: StringNullableWithAggregatesFilter<"WorkOrder"> | string | null
+    assigneeName?: StringWithAggregatesFilter<"WorkOrder"> | string
+    startedAt?: DateTimeNullableWithAggregatesFilter<"WorkOrder"> | Date | string | null
+    startDate?: DateTimeNullableWithAggregatesFilter<"WorkOrder"> | Date | string | null
+    startTime?: StringNullableWithAggregatesFilter<"WorkOrder"> | string | null
+    stopTime?: StringNullableWithAggregatesFilter<"WorkOrder"> | string | null
+    repairedByKind?: StringNullableWithAggregatesFilter<"WorkOrder"> | string | null
+    repairedByUserId?: StringNullableWithAggregatesFilter<"WorkOrder"> | string | null
+    repairedByName?: StringWithAggregatesFilter<"WorkOrder"> | string
+    toolsAccounted?: BoolNullableWithAggregatesFilter<"WorkOrder"> | boolean | null
+    workDescription?: StringWithAggregatesFilter<"WorkOrder"> | string
+    completedDate?: DateTimeNullableWithAggregatesFilter<"WorkOrder"> | Date | string | null
+    signatureName?: StringWithAggregatesFilter<"WorkOrder"> | string
+    signedById?: StringNullableWithAggregatesFilter<"WorkOrder"> | string | null
+    signedAt?: DateTimeNullableWithAggregatesFilter<"WorkOrder"> | Date | string | null
+    cancelledAt?: DateTimeNullableWithAggregatesFilter<"WorkOrder"> | Date | string | null
+    cancelledById?: StringNullableWithAggregatesFilter<"WorkOrder"> | string | null
+    cancelReason?: StringNullableWithAggregatesFilter<"WorkOrder"> | string | null
+    taskInstanceId?: StringNullableWithAggregatesFilter<"WorkOrder"> | string | null
+    updatedById?: StringNullableWithAggregatesFilter<"WorkOrder"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"WorkOrder"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WorkOrder"> | Date | string
+  }
+
+  export type WorkOrderEventWhereInput = {
+    AND?: WorkOrderEventWhereInput | WorkOrderEventWhereInput[]
+    OR?: WorkOrderEventWhereInput[]
+    NOT?: WorkOrderEventWhereInput | WorkOrderEventWhereInput[]
+    id?: StringFilter<"WorkOrderEvent"> | string
+    workOrderId?: StringFilter<"WorkOrderEvent"> | string
+    reference?: StringFilter<"WorkOrderEvent"> | string
+    action?: StringFilter<"WorkOrderEvent"> | string
+    userId?: StringNullableFilter<"WorkOrderEvent"> | string | null
+    userName?: StringFilter<"WorkOrderEvent"> | string
+    changes?: JsonFilter<"WorkOrderEvent">
+    note?: StringNullableFilter<"WorkOrderEvent"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderEvent"> | Date | string
+  }
+
+  export type WorkOrderEventOrderByWithRelationInput = {
+    id?: SortOrder
+    workOrderId?: SortOrder
+    reference?: SortOrder
+    action?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    userName?: SortOrder
+    changes?: SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type WorkOrderEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: WorkOrderEventWhereInput | WorkOrderEventWhereInput[]
+    OR?: WorkOrderEventWhereInput[]
+    NOT?: WorkOrderEventWhereInput | WorkOrderEventWhereInput[]
+    workOrderId?: StringFilter<"WorkOrderEvent"> | string
+    reference?: StringFilter<"WorkOrderEvent"> | string
+    action?: StringFilter<"WorkOrderEvent"> | string
+    userId?: StringNullableFilter<"WorkOrderEvent"> | string | null
+    userName?: StringFilter<"WorkOrderEvent"> | string
+    changes?: JsonFilter<"WorkOrderEvent">
+    note?: StringNullableFilter<"WorkOrderEvent"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderEvent"> | Date | string
+  }, "id">
+
+  export type WorkOrderEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    workOrderId?: SortOrder
+    reference?: SortOrder
+    action?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    userName?: SortOrder
+    changes?: SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: WorkOrderEventCountOrderByAggregateInput
+    _max?: WorkOrderEventMaxOrderByAggregateInput
+    _min?: WorkOrderEventMinOrderByAggregateInput
+  }
+
+  export type WorkOrderEventScalarWhereWithAggregatesInput = {
+    AND?: WorkOrderEventScalarWhereWithAggregatesInput | WorkOrderEventScalarWhereWithAggregatesInput[]
+    OR?: WorkOrderEventScalarWhereWithAggregatesInput[]
+    NOT?: WorkOrderEventScalarWhereWithAggregatesInput | WorkOrderEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WorkOrderEvent"> | string
+    workOrderId?: StringWithAggregatesFilter<"WorkOrderEvent"> | string
+    reference?: StringWithAggregatesFilter<"WorkOrderEvent"> | string
+    action?: StringWithAggregatesFilter<"WorkOrderEvent"> | string
+    userId?: StringNullableWithAggregatesFilter<"WorkOrderEvent"> | string | null
+    userName?: StringWithAggregatesFilter<"WorkOrderEvent"> | string
+    changes?: JsonWithAggregatesFilter<"WorkOrderEvent">
+    note?: StringNullableWithAggregatesFilter<"WorkOrderEvent"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"WorkOrderEvent"> | Date | string
+  }
+
+  export type WorkOrderEquipmentWhereInput = {
+    AND?: WorkOrderEquipmentWhereInput | WorkOrderEquipmentWhereInput[]
+    OR?: WorkOrderEquipmentWhereInput[]
+    NOT?: WorkOrderEquipmentWhereInput | WorkOrderEquipmentWhereInput[]
+    id?: StringFilter<"WorkOrderEquipment"> | string
+    facility?: StringFilter<"WorkOrderEquipment"> | string
+    name?: StringFilter<"WorkOrderEquipment"> | string
+    sortOrder?: IntFilter<"WorkOrderEquipment"> | number
+    retiredAt?: DateTimeNullableFilter<"WorkOrderEquipment"> | Date | string | null
+    retiredById?: StringNullableFilter<"WorkOrderEquipment"> | string | null
+    createdById?: StringNullableFilter<"WorkOrderEquipment"> | string | null
+    updatedById?: StringNullableFilter<"WorkOrderEquipment"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderEquipment"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrderEquipment"> | Date | string
+  }
+
+  export type WorkOrderEquipmentOrderByWithRelationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    name?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrderInput | SortOrder
+    retiredById?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderEquipmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: WorkOrderEquipmentWhereInput | WorkOrderEquipmentWhereInput[]
+    OR?: WorkOrderEquipmentWhereInput[]
+    NOT?: WorkOrderEquipmentWhereInput | WorkOrderEquipmentWhereInput[]
+    facility?: StringFilter<"WorkOrderEquipment"> | string
+    name?: StringFilter<"WorkOrderEquipment"> | string
+    sortOrder?: IntFilter<"WorkOrderEquipment"> | number
+    retiredAt?: DateTimeNullableFilter<"WorkOrderEquipment"> | Date | string | null
+    retiredById?: StringNullableFilter<"WorkOrderEquipment"> | string | null
+    createdById?: StringNullableFilter<"WorkOrderEquipment"> | string | null
+    updatedById?: StringNullableFilter<"WorkOrderEquipment"> | string | null
+    createdAt?: DateTimeFilter<"WorkOrderEquipment"> | Date | string
+    updatedAt?: DateTimeFilter<"WorkOrderEquipment"> | Date | string
+  }, "id">
+
+  export type WorkOrderEquipmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    name?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrderInput | SortOrder
+    retiredById?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WorkOrderEquipmentCountOrderByAggregateInput
+    _avg?: WorkOrderEquipmentAvgOrderByAggregateInput
+    _max?: WorkOrderEquipmentMaxOrderByAggregateInput
+    _min?: WorkOrderEquipmentMinOrderByAggregateInput
+    _sum?: WorkOrderEquipmentSumOrderByAggregateInput
+  }
+
+  export type WorkOrderEquipmentScalarWhereWithAggregatesInput = {
+    AND?: WorkOrderEquipmentScalarWhereWithAggregatesInput | WorkOrderEquipmentScalarWhereWithAggregatesInput[]
+    OR?: WorkOrderEquipmentScalarWhereWithAggregatesInput[]
+    NOT?: WorkOrderEquipmentScalarWhereWithAggregatesInput | WorkOrderEquipmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WorkOrderEquipment"> | string
+    facility?: StringWithAggregatesFilter<"WorkOrderEquipment"> | string
+    name?: StringWithAggregatesFilter<"WorkOrderEquipment"> | string
+    sortOrder?: IntWithAggregatesFilter<"WorkOrderEquipment"> | number
+    retiredAt?: DateTimeNullableWithAggregatesFilter<"WorkOrderEquipment"> | Date | string | null
+    retiredById?: StringNullableWithAggregatesFilter<"WorkOrderEquipment"> | string | null
+    createdById?: StringNullableWithAggregatesFilter<"WorkOrderEquipment"> | string | null
+    updatedById?: StringNullableWithAggregatesFilter<"WorkOrderEquipment"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"WorkOrderEquipment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WorkOrderEquipment"> | Date | string
+  }
+
+  export type WorkOrderEquipmentListWhereInput = {
+    AND?: WorkOrderEquipmentListWhereInput | WorkOrderEquipmentListWhereInput[]
+    OR?: WorkOrderEquipmentListWhereInput[]
+    NOT?: WorkOrderEquipmentListWhereInput | WorkOrderEquipmentListWhereInput[]
+    facility?: StringFilter<"WorkOrderEquipmentList"> | string
+    version?: IntFilter<"WorkOrderEquipmentList"> | number
+    updatedById?: StringNullableFilter<"WorkOrderEquipmentList"> | string | null
+    updatedAt?: DateTimeFilter<"WorkOrderEquipmentList"> | Date | string
+  }
+
+  export type WorkOrderEquipmentListOrderByWithRelationInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderEquipmentListWhereUniqueInput = Prisma.AtLeast<{
+    facility?: string
+    AND?: WorkOrderEquipmentListWhereInput | WorkOrderEquipmentListWhereInput[]
+    OR?: WorkOrderEquipmentListWhereInput[]
+    NOT?: WorkOrderEquipmentListWhereInput | WorkOrderEquipmentListWhereInput[]
+    version?: IntFilter<"WorkOrderEquipmentList"> | number
+    updatedById?: StringNullableFilter<"WorkOrderEquipmentList"> | string | null
+    updatedAt?: DateTimeFilter<"WorkOrderEquipmentList"> | Date | string
+  }, "facility">
+
+  export type WorkOrderEquipmentListOrderByWithAggregationInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    _count?: WorkOrderEquipmentListCountOrderByAggregateInput
+    _avg?: WorkOrderEquipmentListAvgOrderByAggregateInput
+    _max?: WorkOrderEquipmentListMaxOrderByAggregateInput
+    _min?: WorkOrderEquipmentListMinOrderByAggregateInput
+    _sum?: WorkOrderEquipmentListSumOrderByAggregateInput
+  }
+
+  export type WorkOrderEquipmentListScalarWhereWithAggregatesInput = {
+    AND?: WorkOrderEquipmentListScalarWhereWithAggregatesInput | WorkOrderEquipmentListScalarWhereWithAggregatesInput[]
+    OR?: WorkOrderEquipmentListScalarWhereWithAggregatesInput[]
+    NOT?: WorkOrderEquipmentListScalarWhereWithAggregatesInput | WorkOrderEquipmentListScalarWhereWithAggregatesInput[]
+    facility?: StringWithAggregatesFilter<"WorkOrderEquipmentList"> | string
+    version?: IntWithAggregatesFilter<"WorkOrderEquipmentList"> | number
+    updatedById?: StringNullableWithAggregatesFilter<"WorkOrderEquipmentList"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"WorkOrderEquipmentList"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -109952,6 +114812,496 @@ export namespace Prisma {
     readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type WorkOrderCreateInput = {
+    id?: string
+    reference: string
+    facility: string
+    requestType: string
+    equipmentId?: string | null
+    equipmentName: string
+    problem?: string
+    priority: string
+    status?: string
+    dueDate: Date | string
+    requestedById?: string | null
+    requestedByName?: string
+    requestedAt?: Date | string
+    assigneeId?: string | null
+    assigneeName?: string
+    startedAt?: Date | string | null
+    startDate?: Date | string | null
+    startTime?: string | null
+    stopTime?: string | null
+    repairedByKind?: string | null
+    repairedByUserId?: string | null
+    repairedByName?: string
+    toolsAccounted?: boolean | null
+    workDescription?: string
+    completedDate?: Date | string | null
+    signatureName?: string
+    signedById?: string | null
+    signedAt?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledById?: string | null
+    cancelReason?: string | null
+    taskInstanceId?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderUncheckedCreateInput = {
+    id?: string
+    reference: string
+    facility: string
+    requestType: string
+    equipmentId?: string | null
+    equipmentName: string
+    problem?: string
+    priority: string
+    status?: string
+    dueDate: Date | string
+    requestedById?: string | null
+    requestedByName?: string
+    requestedAt?: Date | string
+    assigneeId?: string | null
+    assigneeName?: string
+    startedAt?: Date | string | null
+    startDate?: Date | string | null
+    startTime?: string | null
+    stopTime?: string | null
+    repairedByKind?: string | null
+    repairedByUserId?: string | null
+    repairedByName?: string
+    toolsAccounted?: boolean | null
+    workDescription?: string
+    completedDate?: Date | string | null
+    signatureName?: string
+    signedById?: string | null
+    signedAt?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledById?: string | null
+    cancelReason?: string | null
+    taskInstanceId?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    requestType?: StringFieldUpdateOperationsInput | string
+    equipmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    equipmentName?: StringFieldUpdateOperationsInput | string
+    problem?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    requestedByName?: StringFieldUpdateOperationsInput | string
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: StringFieldUpdateOperationsInput | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: NullableStringFieldUpdateOperationsInput | string | null
+    stopTime?: NullableStringFieldUpdateOperationsInput | string | null
+    repairedByKind?: NullableStringFieldUpdateOperationsInput | string | null
+    repairedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    repairedByName?: StringFieldUpdateOperationsInput | string
+    toolsAccounted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    workDescription?: StringFieldUpdateOperationsInput | string
+    completedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    signatureName?: StringFieldUpdateOperationsInput | string
+    signedById?: NullableStringFieldUpdateOperationsInput | string | null
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledById?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    requestType?: StringFieldUpdateOperationsInput | string
+    equipmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    equipmentName?: StringFieldUpdateOperationsInput | string
+    problem?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    requestedByName?: StringFieldUpdateOperationsInput | string
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: StringFieldUpdateOperationsInput | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: NullableStringFieldUpdateOperationsInput | string | null
+    stopTime?: NullableStringFieldUpdateOperationsInput | string | null
+    repairedByKind?: NullableStringFieldUpdateOperationsInput | string | null
+    repairedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    repairedByName?: StringFieldUpdateOperationsInput | string
+    toolsAccounted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    workDescription?: StringFieldUpdateOperationsInput | string
+    completedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    signatureName?: StringFieldUpdateOperationsInput | string
+    signedById?: NullableStringFieldUpdateOperationsInput | string | null
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledById?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderCreateManyInput = {
+    id?: string
+    reference: string
+    facility: string
+    requestType: string
+    equipmentId?: string | null
+    equipmentName: string
+    problem?: string
+    priority: string
+    status?: string
+    dueDate: Date | string
+    requestedById?: string | null
+    requestedByName?: string
+    requestedAt?: Date | string
+    assigneeId?: string | null
+    assigneeName?: string
+    startedAt?: Date | string | null
+    startDate?: Date | string | null
+    startTime?: string | null
+    stopTime?: string | null
+    repairedByKind?: string | null
+    repairedByUserId?: string | null
+    repairedByName?: string
+    toolsAccounted?: boolean | null
+    workDescription?: string
+    completedDate?: Date | string | null
+    signatureName?: string
+    signedById?: string | null
+    signedAt?: Date | string | null
+    cancelledAt?: Date | string | null
+    cancelledById?: string | null
+    cancelReason?: string | null
+    taskInstanceId?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    requestType?: StringFieldUpdateOperationsInput | string
+    equipmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    equipmentName?: StringFieldUpdateOperationsInput | string
+    problem?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    requestedByName?: StringFieldUpdateOperationsInput | string
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: StringFieldUpdateOperationsInput | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: NullableStringFieldUpdateOperationsInput | string | null
+    stopTime?: NullableStringFieldUpdateOperationsInput | string | null
+    repairedByKind?: NullableStringFieldUpdateOperationsInput | string | null
+    repairedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    repairedByName?: StringFieldUpdateOperationsInput | string
+    toolsAccounted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    workDescription?: StringFieldUpdateOperationsInput | string
+    completedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    signatureName?: StringFieldUpdateOperationsInput | string
+    signedById?: NullableStringFieldUpdateOperationsInput | string | null
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledById?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    requestType?: StringFieldUpdateOperationsInput | string
+    equipmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    equipmentName?: StringFieldUpdateOperationsInput | string
+    problem?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    requestedById?: NullableStringFieldUpdateOperationsInput | string | null
+    requestedByName?: StringFieldUpdateOperationsInput | string
+    requestedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    assigneeName?: StringFieldUpdateOperationsInput | string
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startTime?: NullableStringFieldUpdateOperationsInput | string | null
+    stopTime?: NullableStringFieldUpdateOperationsInput | string | null
+    repairedByKind?: NullableStringFieldUpdateOperationsInput | string | null
+    repairedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    repairedByName?: StringFieldUpdateOperationsInput | string
+    toolsAccounted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    workDescription?: StringFieldUpdateOperationsInput | string
+    completedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    signatureName?: StringFieldUpdateOperationsInput | string
+    signedById?: NullableStringFieldUpdateOperationsInput | string | null
+    signedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cancelledById?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
+    taskInstanceId?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderEventCreateInput = {
+    id?: string
+    workOrderId: string
+    reference?: string
+    action: string
+    userId?: string | null
+    userName?: string
+    changes?: JsonNullValueInput | InputJsonValue
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type WorkOrderEventUncheckedCreateInput = {
+    id?: string
+    workOrderId: string
+    reference?: string
+    action: string
+    userId?: string | null
+    userName?: string
+    changes?: JsonNullValueInput | InputJsonValue
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type WorkOrderEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderId?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    userName?: StringFieldUpdateOperationsInput | string
+    changes?: JsonNullValueInput | InputJsonValue
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderId?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    userName?: StringFieldUpdateOperationsInput | string
+    changes?: JsonNullValueInput | InputJsonValue
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderEventCreateManyInput = {
+    id?: string
+    workOrderId: string
+    reference?: string
+    action: string
+    userId?: string | null
+    userName?: string
+    changes?: JsonNullValueInput | InputJsonValue
+    note?: string | null
+    createdAt?: Date | string
+  }
+
+  export type WorkOrderEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderId?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    userName?: StringFieldUpdateOperationsInput | string
+    changes?: JsonNullValueInput | InputJsonValue
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    workOrderId?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    userName?: StringFieldUpdateOperationsInput | string
+    changes?: JsonNullValueInput | InputJsonValue
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderEquipmentCreateInput = {
+    id?: string
+    facility: string
+    name: string
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderEquipmentUncheckedCreateInput = {
+    id?: string
+    facility: string
+    name: string
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderEquipmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderEquipmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderEquipmentCreateManyInput = {
+    id?: string
+    facility: string
+    name: string
+    sortOrder?: number
+    retiredAt?: Date | string | null
+    retiredById?: string | null
+    createdById?: string | null
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderEquipmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderEquipmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    facility?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    retiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    retiredById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderEquipmentListCreateInput = {
+    facility: string
+    version?: number
+    updatedById?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderEquipmentListUncheckedCreateInput = {
+    facility: string
+    version?: number
+    updatedById?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderEquipmentListUpdateInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderEquipmentListUncheckedUpdateInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderEquipmentListCreateManyInput = {
+    facility: string
+    version?: number
+    updatedById?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type WorkOrderEquipmentListUpdateManyMutationInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkOrderEquipmentListUncheckedUpdateManyInput = {
+    facility?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -115409,6 +120759,230 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumNotificationTypeFilter<$PrismaModel>
     _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
+  }
+
+  export type WorkOrderCountOrderByAggregateInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    facility?: SortOrder
+    requestType?: SortOrder
+    equipmentId?: SortOrder
+    equipmentName?: SortOrder
+    problem?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    dueDate?: SortOrder
+    requestedById?: SortOrder
+    requestedByName?: SortOrder
+    requestedAt?: SortOrder
+    assigneeId?: SortOrder
+    assigneeName?: SortOrder
+    startedAt?: SortOrder
+    startDate?: SortOrder
+    startTime?: SortOrder
+    stopTime?: SortOrder
+    repairedByKind?: SortOrder
+    repairedByUserId?: SortOrder
+    repairedByName?: SortOrder
+    toolsAccounted?: SortOrder
+    workDescription?: SortOrder
+    completedDate?: SortOrder
+    signatureName?: SortOrder
+    signedById?: SortOrder
+    signedAt?: SortOrder
+    cancelledAt?: SortOrder
+    cancelledById?: SortOrder
+    cancelReason?: SortOrder
+    taskInstanceId?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderMaxOrderByAggregateInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    facility?: SortOrder
+    requestType?: SortOrder
+    equipmentId?: SortOrder
+    equipmentName?: SortOrder
+    problem?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    dueDate?: SortOrder
+    requestedById?: SortOrder
+    requestedByName?: SortOrder
+    requestedAt?: SortOrder
+    assigneeId?: SortOrder
+    assigneeName?: SortOrder
+    startedAt?: SortOrder
+    startDate?: SortOrder
+    startTime?: SortOrder
+    stopTime?: SortOrder
+    repairedByKind?: SortOrder
+    repairedByUserId?: SortOrder
+    repairedByName?: SortOrder
+    toolsAccounted?: SortOrder
+    workDescription?: SortOrder
+    completedDate?: SortOrder
+    signatureName?: SortOrder
+    signedById?: SortOrder
+    signedAt?: SortOrder
+    cancelledAt?: SortOrder
+    cancelledById?: SortOrder
+    cancelReason?: SortOrder
+    taskInstanceId?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderMinOrderByAggregateInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    facility?: SortOrder
+    requestType?: SortOrder
+    equipmentId?: SortOrder
+    equipmentName?: SortOrder
+    problem?: SortOrder
+    priority?: SortOrder
+    status?: SortOrder
+    dueDate?: SortOrder
+    requestedById?: SortOrder
+    requestedByName?: SortOrder
+    requestedAt?: SortOrder
+    assigneeId?: SortOrder
+    assigneeName?: SortOrder
+    startedAt?: SortOrder
+    startDate?: SortOrder
+    startTime?: SortOrder
+    stopTime?: SortOrder
+    repairedByKind?: SortOrder
+    repairedByUserId?: SortOrder
+    repairedByName?: SortOrder
+    toolsAccounted?: SortOrder
+    workDescription?: SortOrder
+    completedDate?: SortOrder
+    signatureName?: SortOrder
+    signedById?: SortOrder
+    signedAt?: SortOrder
+    cancelledAt?: SortOrder
+    cancelledById?: SortOrder
+    cancelReason?: SortOrder
+    taskInstanceId?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    workOrderId?: SortOrder
+    reference?: SortOrder
+    action?: SortOrder
+    userId?: SortOrder
+    userName?: SortOrder
+    changes?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type WorkOrderEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    workOrderId?: SortOrder
+    reference?: SortOrder
+    action?: SortOrder
+    userId?: SortOrder
+    userName?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type WorkOrderEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    workOrderId?: SortOrder
+    reference?: SortOrder
+    action?: SortOrder
+    userId?: SortOrder
+    userName?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type WorkOrderEquipmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    name?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrder
+    retiredById?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderEquipmentAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type WorkOrderEquipmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    name?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrder
+    retiredById?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderEquipmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    facility?: SortOrder
+    name?: SortOrder
+    sortOrder?: SortOrder
+    retiredAt?: SortOrder
+    retiredById?: SortOrder
+    createdById?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderEquipmentSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type WorkOrderEquipmentListCountOrderByAggregateInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderEquipmentListAvgOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type WorkOrderEquipmentListMaxOrderByAggregateInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderEquipmentListMinOrderByAggregateInput = {
+    facility?: SortOrder
+    version?: SortOrder
+    updatedById?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WorkOrderEquipmentListSumOrderByAggregateInput = {
+    version?: SortOrder
   }
 
   export type FormCreateNestedManyWithoutCreatedByInput = {
@@ -160479,6 +166053,22 @@ export namespace Prisma {
      * @deprecated Use NotificationDefaultArgs instead
      */
     export type NotificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = NotificationDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use WorkOrderDefaultArgs instead
+     */
+    export type WorkOrderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = WorkOrderDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use WorkOrderEventDefaultArgs instead
+     */
+    export type WorkOrderEventArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = WorkOrderEventDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use WorkOrderEquipmentDefaultArgs instead
+     */
+    export type WorkOrderEquipmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = WorkOrderEquipmentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use WorkOrderEquipmentListDefaultArgs instead
+     */
+    export type WorkOrderEquipmentListArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = WorkOrderEquipmentListDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

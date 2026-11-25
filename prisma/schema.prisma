@@ -1848,3 +1848,93 @@ model Notification {
   @@map("notifications")
 }
 
+// ── Maintenance Work Orders ────────────────────────────────────────────────────
+// Foreign keys to users exist in the database (ON DELETE SET NULL); they are kept as plain ids here.
+// Reference numbers (WO-YYYY-NNN) come from quality_counters with kind 'WO'.
+
+model WorkOrder {
+  id               String    @id @default(cuid())
+  reference        String    @unique(map: "work_orders_reference_key")
+  facility         String
+  requestType      String // 'machinery_equipment' | 'facility'
+  equipmentId      String?
+  equipmentName    String
+  problem          String    @default("")
+  priority         String // 'high' | 'medium' | 'low'
+  status           String    @default("open") // 'open' | 'in_progress' | 'completed' | 'cancelled'
+  dueDate          DateTime  @db.Date
+  requestedById    String?
+  requestedByName  String    @default("")
+  requestedAt      DateTime  @default(now())
+  assigneeId       String?
+  assigneeName     String    @default("")
+  startedAt        DateTime?
+  startDate        DateTime? @db.Date
+  startTime        String?
+  stopTime         String?
+  repairedByKind   String? // 'internal' | 'external'
+  repairedByUserId String?
+  repairedByName   String    @default("")
+  toolsAccounted   Boolean?
+  workDescription  String    @default("")
+  completedDate    DateTime? @db.Date
+  signatureName    String    @default("")
+  signedById       String?
+  signedAt         DateTime?
+  cancelledAt      DateTime?
+  cancelledById    String?
+  cancelReason     String?
+  taskInstanceId   String?
+  updatedById      String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @default(now())
+
+  @@index([status, dueDate], map: "work_orders_status_idx")
+  @@index([requestedById], map: "work_orders_requested_idx")
+  @@index([assigneeId], map: "work_orders_assignee_idx")
+  @@index([facility, equipmentName], map: "work_orders_equipment_idx")
+  @@map("work_orders")
+}
+
+// The change log of a work order. A normal table: no trigger protects it.
+model WorkOrderEvent {
+  id          String   @id @default(cuid())
+  workOrderId String
+  reference   String   @default("")
+  action      String
+  userId      String?
+  userName    String   @default("")
+  changes     Json     @default("[]")
+  note        String?
+  createdAt   DateTime @default(now())
+
+  @@index([workOrderId, createdAt], map: "work_order_events_order_idx")
+  @@map("work_order_events")
+}
+
+// The equipment / area list, per facility. Items are retired, never deleted.
+model WorkOrderEquipment {
+  id          String    @id @default(cuid())
+  facility    String
+  name        String
+  sortOrder   Int       @default(0)
+  retiredAt   DateTime?
+  retiredById String?
+  createdById String?
+  updatedById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+
+  @@index([facility, sortOrder], map: "work_order_equipment_facility_idx")
+  @@map("work_order_equipment")
+}
+
+// One row per facility; version goes up on every change to its list.
+model WorkOrderEquipmentList {
+  facility    String   @id
+  version     Int      @default(1)
+  updatedById String?
+  updatedAt   DateTime @default(now())
+
+  @@map("work_order_equipment_lists")
+}

@@ -51,7 +51,7 @@ describe.each(variants)("Quality in %s", (_name, render) => {
     as("ADMIN");
     const html = render();
     expect(count(html, QUALITY_LINK)).toBe(1);
-    expect(topGroup(html)).toEqual(["Dashboard", "R&D", "Quality"]);
+    expect(topGroup(html)).toEqual(["Dashboard", "R&D", "Quality", "Work Orders"]);
     // the first section title comes only after it
     expect(html.indexOf(QUALITY_LINK)).toBeLessThan(html.indexOf("uppercase tracking-wider"));
     expect(headings(html)[0]).toBe("Forms");
@@ -75,7 +75,7 @@ describe.each(variants)("Quality in %s", (_name, render) => {
     as("SUPERVISOR");
     const html = render();
     expect(html).not.toContain(QUALITY_LINK);
-    expect(topGroup(html)).toEqual(["Dashboard"]);
+    expect(topGroup(html)).toEqual(["Dashboard", "Work Orders"]);
     expect(headings(html)).not.toContain("Quality");
     expect(html).toContain('href="/dashboard/supervisor/pre-op-624"'); // their own entries are still there
   });

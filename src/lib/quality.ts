@@ -38,7 +38,7 @@ export const isReadOnly = (status: string) => status === "closed" || status === 
 
 // ── Reference numbers ───────────────────────────────────────────────────────────
 
-export const REFERENCE_KIND: Record<"incident" | "capa", string> = { incident: "CI", capa: "CAPA" };
+export const REFERENCE_KIND: Record<"incident" | "capa" | "workOrder", string> = { incident: "CI", capa: "CAPA", workOrder: "WO" };
 /** CI-2026-001, CAPA-2026-012 … padded to three digits, growing past 999. */
 export const formatReference = (kind: string, year: number, n: number) => `${kind}-${year}-${String(n).padStart(3, "0")}`;
 

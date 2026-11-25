@@ -69,6 +69,12 @@ export const TASK_FORM_REGISTRY: Record<string, TaskFormEntry> = {
     label: "Review customer incidents and CAPAs",
     href: () => "/dashboard/admin/quality/review-task",
   },
+  // Maintenance work orders: one task per work order, for its assignee. "Start" opens the work order that holds the task.
+  work_order: {
+    label: "Maintenance work order",
+    href: () => "/dashboard/work-orders/task",
+    systemManaged: true,
+  },
   manual: {
     label: "Manual Task",
     href: () => null,

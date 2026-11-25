@@ -1331,6 +1331,76 @@ exports.Prisma.NotificationScalarFieldEnum = {
   readAt: 'readAt'
 };
 
+exports.Prisma.WorkOrderScalarFieldEnum = {
+  id: 'id',
+  reference: 'reference',
+  facility: 'facility',
+  requestType: 'requestType',
+  equipmentId: 'equipmentId',
+  equipmentName: 'equipmentName',
+  problem: 'problem',
+  priority: 'priority',
+  status: 'status',
+  dueDate: 'dueDate',
+  requestedById: 'requestedById',
+  requestedByName: 'requestedByName',
+  requestedAt: 'requestedAt',
+  assigneeId: 'assigneeId',
+  assigneeName: 'assigneeName',
+  startedAt: 'startedAt',
+  startDate: 'startDate',
+  startTime: 'startTime',
+  stopTime: 'stopTime',
+  repairedByKind: 'repairedByKind',
+  repairedByUserId: 'repairedByUserId',
+  repairedByName: 'repairedByName',
+  toolsAccounted: 'toolsAccounted',
+  workDescription: 'workDescription',
+  completedDate: 'completedDate',
+  signatureName: 'signatureName',
+  signedById: 'signedById',
+  signedAt: 'signedAt',
+  cancelledAt: 'cancelledAt',
+  cancelledById: 'cancelledById',
+  cancelReason: 'cancelReason',
+  taskInstanceId: 'taskInstanceId',
+  updatedById: 'updatedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkOrderEventScalarFieldEnum = {
+  id: 'id',
+  workOrderId: 'workOrderId',
+  reference: 'reference',
+  action: 'action',
+  userId: 'userId',
+  userName: 'userName',
+  changes: 'changes',
+  note: 'note',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.WorkOrderEquipmentScalarFieldEnum = {
+  id: 'id',
+  facility: 'facility',
+  name: 'name',
+  sortOrder: 'sortOrder',
+  retiredAt: 'retiredAt',
+  retiredById: 'retiredById',
+  createdById: 'createdById',
+  updatedById: 'updatedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WorkOrderEquipmentListScalarFieldEnum = {
+  facility: 'facility',
+  version: 'version',
+  updatedById: 'updatedById',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1524,7 +1594,11 @@ exports.Prisma.ModelName = {
   QualityAttachment: 'QualityAttachment',
   QualityEvent: 'QualityEvent',
   QualityReview: 'QualityReview',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  WorkOrder: 'WorkOrder',
+  WorkOrderEvent: 'WorkOrderEvent',
+  WorkOrderEquipment: 'WorkOrderEquipment',
+  WorkOrderEquipmentList: 'WorkOrderEquipmentList'
 };
 
 /**

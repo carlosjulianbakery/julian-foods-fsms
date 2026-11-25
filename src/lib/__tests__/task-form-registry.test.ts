@@ -79,10 +79,10 @@ describe("href values are stable for all existing formKeys", () => {
 describe("getFormKeyOptions", () => {
   it("returns exactly one option per registry entry that a person may choose — no hardcoded extras", () => {
     const opts = getFormKeyOptions();
-    // system-managed entries (the CAPA follow-up) are never offered in the dropdown
+    // system-managed entries (the CAPA follow-up, the maintenance work order) are never offered in the dropdown
     const registryKeys = Object.keys(TASK_FORM_REGISTRY).filter((k) => !TASK_FORM_REGISTRY[k].systemManaged);
     expect(opts.map((o) => o.value).sort()).toEqual(registryKeys.sort());
-    expect(Object.keys(TASK_FORM_REGISTRY).filter((k) => TASK_FORM_REGISTRY[k].systemManaged)).toEqual(["quality_capa"]);
+    expect(Object.keys(TASK_FORM_REGISTRY).filter((k) => TASK_FORM_REGISTRY[k].systemManaged)).toEqual(["quality_capa", "work_order"]);
   });
 
   it("each option label matches the registry entry label", () => {
